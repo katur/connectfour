@@ -1,0 +1,4 @@
+# Compiled and temporary files
+*.pyc
+*.swp
+*DS_Store
