@@ -10,7 +10,7 @@ class Disc(object):
         self.color = color
 
     def __str__(self):
-        return '{} Disc'.format(self.color)
+        return '{}'.format(self.color)
 
     def __repr__(self):
-        return self.__str__()
+        return '{} Disc'.format(self.color)

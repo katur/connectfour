@@ -13,6 +13,8 @@ class EmptyBoardTestCase(unittest.TestCase):
 
     def setUp(self):
         self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS)
+        self.bottom_left = (self.board.bottom_row, self.board.left_column)
+        self.bottom_right = (self.board.bottom_row, self.board.right_column)
 
     def test_board_dimensions(self):
         self.assertEqual(self.board.num_rows, TEST_NUM_ROWS)
@@ -32,14 +34,10 @@ class EmptyBoardTestCase(unittest.TestCase):
 
     def test_add_and_get_one_disc_left_column(self):
         self.board.add_disc(PINK, 0)
-        self.assertEqual(PINK, self.board.get_disc(
-            self.board.bottom_row, self.board.left_column))
-        self.assertIsNone(self.board.get_disc(
-            self.board.bottom_row, self.board.right_column))
+        self.assertEqual(PINK, self.board.get_disc(self.bottom_left))
+        self.assertIsNone(self.board.get_disc(self.bottom_right))
 
     def test_add_and_get_one_disc_right_column(self):
         self.board.add_disc(PINK, self.board.num_columns - 1)
-        self.assertEqual(PINK, self.board.get_disc(
-            self.board.bottom_row, self.board.right_column))
-        self.assertIsNone(self.board.get_disc(
-            self.board.bottom_row, self.board.left_column))
+        self.assertEqual(PINK, self.board.get_disc(self.bottom_right))
+        self.assertIsNone(self.board.get_disc(self.bottom_left))
