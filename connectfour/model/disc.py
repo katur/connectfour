@@ -1,9 +1,8 @@
 class Disc(object):
     """
-    A playing disc (aka token aka chip), used to insert into the
-    ConnectFour Board.
+    A Connect Four playing disc (aka token, or chip).
 
-    TODO: use a factory design pattern so that each player uses only
+    TODO: consider a factory design pattern so that each player uses only
     one chip object.
     """
     def __init__(self, color):

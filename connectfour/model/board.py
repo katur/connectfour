@@ -3,6 +3,9 @@ LEFT_COLUMN = 0
 
 
 class Board(object):
+    """
+    A Connect Four playing board.
+    """
     def __init__(self, num_rows, num_columns):
         self.num_rows = num_rows
         self.num_columns = num_columns
@@ -21,6 +24,9 @@ class Board(object):
         return self.__str__()
 
     def get_printable_grid(self):
+        """
+        Get a string of the grid meant for console printing.
+        """
         s = ''
         for row in self.grid:
             for column in row:
@@ -33,12 +39,21 @@ class Board(object):
         return s
 
     def get_disc(self, row, column):
+        """
+        Get the disc at this row and column.
+        """
         return self.grid[row][column]
 
     def is_column_full(self, column):
+        """
+        Determine if a column is full of discs.
+        """
         return self.grid[TOP_ROW][column] is not None
 
     def add_disc(self, disc, column):
+        """
+        Add a disc to a column.
+        """
         if (column < LEFT_COLUMN) or (column >= self.num_columns):
             raise ValueError('Column {} out of bounds'.format(column))
 
