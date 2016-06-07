@@ -15,13 +15,13 @@ class Board(object):
     def __init__(self, num_rows, num_columns):
         self.num_rows = num_rows
         self.num_columns = num_columns
-        self.grid = [[None for y in range(num_columns)]
-                     for x in range(num_rows)]
-
         self.top_row = TOP_ROW
         self.bottom_row = num_rows - 1
         self.left_column = LEFT_COLUMN
         self.right_column = num_columns - 1
+
+        self.grid = [[None for y in range(num_columns)]
+                     for x in range(num_rows)]
 
     def __str__(self):
         return '{} x {} Board'.format(self.num_rows, self.num_columns)
@@ -58,13 +58,13 @@ class Board(object):
         """
         Determine if a column is full of discs.
         """
-        return self.grid[TOP_ROW][column] is not None
+        return self.grid[self.top_row][column] is not None
 
     def add_disc(self, disc, column):
         """
         Add a disc to a column.
         """
-        if (column < LEFT_COLUMN) or (column >= self.num_columns):
+        if column < self.left_column or column > self.right_column:
             raise ValueError('Column {} out of bounds'.format(column))
 
         if self.is_column_full(column):
