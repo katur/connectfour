@@ -5,6 +5,7 @@ class Disc(object):
     TODO: consider a factory design pattern so that each player uses only
     one chip object.
     """
+
     def __init__(self, color):
         self.color = color
 

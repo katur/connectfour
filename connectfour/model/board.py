@@ -6,6 +6,7 @@ class Board(object):
     """
     A Connect Four playing board.
     """
+
     def __init__(self, num_rows, num_columns):
         self.num_rows = num_rows
         self.num_columns = num_columns
