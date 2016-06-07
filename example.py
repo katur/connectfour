@@ -1,5 +1,5 @@
-from model.board import Board
-from model.disc import Disc
+from connectfour.model.board import Board
+from connectfour.model.disc import Disc
 
 b = Board(4, 6)
 
