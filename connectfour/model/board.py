@@ -50,7 +50,8 @@ class Board(object):
 
         Position should be a 2-tuple in format (x, y).
         """
-        return self.grid[position[0]][position[1]]
+        x, y = position
+        return self.grid[x][y]
 
     def is_in_bounds(self, position):
         """
