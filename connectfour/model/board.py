@@ -86,7 +86,7 @@ class Board(object):
 
         self.grid[current_row][column] = disc
 
-    def get_num_outward_discs_1D(self, disc, position, step):
+    def count_consecutive_discs(self, disc, position, step):
         """
         Get the number of consecutive disc matches, stepping outward
         from position (exclusive) in a single direction.
@@ -105,7 +105,7 @@ class Board(object):
 
         return total
 
-    def get_num_outward_discs_2D(self, disc, position, step):
+    def count_consecutive_discs_mirrored(self, disc, position, step):
         """
         Get the number of consecutive disc matches, stepping outward
         from position (exclusive) in two directions.
@@ -120,17 +120,21 @@ class Board(object):
         """
         mirrored_step = (-step[0], -step[1])
 
-        a = self.get_num_outward_discs_1D(disc, position, step)
-        b = self.get_num_outward_discs_1D(disc, position, mirrored_step)
+        a = self.count_consecutive_discs(disc, position, step)
+        b = self.count_consecutive_discs(disc, position, mirrored_step)
 
         return a + b
 
     def check_for_win(self, disc, position, number_to_win):
         """
         Check for a win if disc were placed at position.
+
+        TODO: make disc an optional arg; otherwise use the chip at position
+
+        TODO: return list of all winning positions instead of True
         """
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
-            x = self.get_num_outward_discs_2D(disc, position, step)
+            x = self.count_consecutive_discs_mirrored(disc, position, step)
             if x + 1 >= number_to_win:
                 return True
 
