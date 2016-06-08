@@ -1,15 +1,14 @@
-import Disc
+from disc import Disc
 
 
 class Player(object):
     """
     A Connect Four player.
-    """
-    def __init__(self, name, color, order):
-        self.name = name
 
-        # TODO: set this automatically with a class-level variable
-        self.order = order
+    TODO: colors should be constants
+    """
+    def __init__(self, name, color):
+        self.name = name
         self.disc = Disc(color=color)
         self.number_of_wins = 0
 
