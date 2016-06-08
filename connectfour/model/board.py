@@ -1,3 +1,6 @@
+import operator
+
+
 TOP_ROW = 0
 LEFT_COLUMN = 0
 
@@ -102,11 +105,11 @@ class Board(object):
 
         positions = set()
         positions.add(start)
-        current = (start[0] + step[0], start[1] + step[1])
+        current = tuple(map(operator.add, start, step))
 
         while (self.is_in_bounds(current) and self.get_disc(current) == disc):
             positions.add(current)
-            current = (current[0] + step[0], current[1] + step[1])
+            current = tuple(map(operator.add, current, step))
 
         return positions
 
@@ -124,10 +127,10 @@ class Board(object):
         To check the up-right/down-left diagonal, step can be
         (1, 1) or (-1, -1).
         """
-        mirrored_step = (-step[0], -step[1])
+        flipped_step = tuple(-i for i in step)
 
         a = self.get_consecutive_matches(start, step, fake_disc=fake_disc)
-        b = self.get_consecutive_matches(start, mirrored_step,
+        b = self.get_consecutive_matches(start, flipped_step,
                                          fake_disc=fake_disc)
 
         return a | b
