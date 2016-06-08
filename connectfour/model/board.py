@@ -118,10 +118,10 @@ class Board(object):
         To check the up-right/down-left diagonal, step could be
         (1, 1) or (-1, -1).
         """
-        mirror_step = (-step[0], -step[1])
+        mirrored_step = (-step[0], -step[1])
 
         a = self.get_num_outward_discs_1D(disc, position, step)
-        b = self.get_num_outward_discs_1D(disc, position, mirror_step)
+        b = self.get_num_outward_discs_1D(disc, position, mirrored_step)
 
         return a + b
 
