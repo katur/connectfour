@@ -88,6 +88,14 @@ class Board(object):
 
         return True
 
+    def reset(self):
+        """
+        Set all positions in the grid to None.
+        """
+        for row in range(self.num_rows):
+            for column in range(self.num_columns):
+                self.grid[row][column] = None
+
     def get_disc(self, position):
         """
         Get the disc at this position.
