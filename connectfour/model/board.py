@@ -48,36 +48,66 @@ class Board(object):
 
         return s
 
+    def is_row_in_bounds(self, row):
+        """
+        Determine if row is in bounds.
+        """
+        return row >= self.top_row and row <= self.bottom_row
+
+    def is_column_in_bounds(self, column):
+        """
+        Determine if column is in bounds.
+        """
+        return column >= self.left_column and column <= self.right_column
+
+    def is_in_bounds(self, position):
+        """
+        Determine if position is in bounds.
+
+        Position should be a 2-tuple in format (row, column).
+        """
+        row, column = position
+        return self.is_row_in_bounds(row) and self.is_column_in_bounds(column)
+
+    def is_column_full(self, column):
+        """
+        Determine if a column is full of discs.
+        """
+        if not self.is_column_in_bounds(column):
+            raise ValueError('Column {} is out of bounds'.format(column))
+
+        return self.grid[self.top_row][column] is not None
+
+    def is_full(self):
+        """
+        Determine if the entire board is full of discs.
+        """
+        for i in range(self.num_columns):
+            if not self.is_column_full(i):
+                return False
+
+        return True
+
     def get_disc(self, position):
         """
         Get the disc at this position.
 
         Position should be a 2-tuple in format (row, column).
         """
+        if not self.is_in_bounds(position):
+            raise ValueError('Position {} is out of bounds'
+                             .format(position))
+
         row, column = position
         return self.grid[row][column]
-
-    def is_in_bounds(self, position):
-        """
-        Determine whether position is in bounds.
-
-        Position should be a 2-tuple in format (row, column).
-        """
-        row, column = position
-        return (row >= self.top_row and row <= self.bottom_row and
-                column >= self.left_column and column <= self.right_column)
-
-    def is_column_full(self, column):
-        """
-        Determine if a column is full of discs.
-        """
-        return self.grid[self.top_row][column] is not None
 
     def add_disc(self, disc, column):
         """
         Add a disc to a column.
+
+        Returns the row in which the disc ended up.
         """
-        if column < self.left_column or column > self.right_column:
+        if not self.is_column_in_bounds(column):
             raise ValueError('Column {} out of bounds'.format(column))
 
         if self.is_column_full(column):
@@ -89,6 +119,7 @@ class Board(object):
             current_row -= 1
 
         self.grid[current_row][column] = disc
+        return current_row
 
     def get_consecutive_matches(self, start, step, fake_disc=None):
         """
@@ -151,7 +182,7 @@ class Board(object):
             matches = self.get_consecutive_matches_mirrored(
                 origin, step, fake_disc=fake_disc)
 
-            # Check if these matches win
+            # Check if these matches are enough to win
             if len(matches) >= number_to_win:
                 winning_positions |= matches
 
