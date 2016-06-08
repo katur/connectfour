@@ -86,33 +86,37 @@ class Board(object):
 
         self.grid[current_row][column] = disc
 
-    def count_consecutive_discs(self, disc, position, step):
+    def get_consecutive_matches(self, disc, start, step):
         """
-        Get the number of consecutive disc matches, stepping outward
-        from position (exclusive) in a single direction.
+        Get a set of the consecutive positions matching disc,
+        stepping outward from start (exclusive)
+        in a single direction (indicated by step).
+
+        start should be a 2-tuple (x, y) of the starting position.
 
         step should be a 2-tuple, (horizontal_step, vertical_step).
-
         For example, to check upwards, step should be (0, 1).
         To check diagonally down-left, step should be (-1, -1).
         """
-        current = (position[0] + step[0], position[1] + step[1])
-        total = 0
+        current = (start[0] + step[0], start[1] + step[1])
+        positions = set()
 
         while (self.is_in_bounds(current) and self.get_disc(current) == disc):
-            total += 1
+            positions.add(current)
             current = (current[0] + step[0], current[1] + step[1])
 
-        return total
+        return positions
 
-    def count_consecutive_discs_mirrored(self, disc, position, step):
+    def get_consecutive_matches_mirrored(self, disc, start, step):
         """
-        Get the number of consecutive disc matches, stepping outward
-        from position (exclusive) in two directions.
+        Get a set of the consecutive positions matching disc,
+        stepping outward from start (exclusive)
+        in two directions (step and its mirror).
+
+        start should be a 2-tuple (x, y) of the starting position.
 
         step should be a 2-tuple, (horizontal_step, vertical_step),
-        and the mirror of this step is checked as well.
-
+        and the mirror of this step will be used as well.
         For example, to check the horizontal axis, step could be
         (0, 1) or (0, -1).
         To check the up-right/down-left diagonal, step could be
@@ -120,22 +124,39 @@ class Board(object):
         """
         mirrored_step = (-step[0], -step[1])
 
-        a = self.count_consecutive_discs(disc, position, step)
-        b = self.count_consecutive_discs(disc, position, mirrored_step)
+        a = self.get_consecutive_matches(disc, start, step)
+        b = self.get_consecutive_matches(disc, start, mirrored_step)
 
-        return a + b
+        return a | b
 
-    def check_for_win(self, disc, position, number_to_win):
+    def get_winning_positions(self, origin, number_to_win,
+                              fake_disc=None):
         """
-        Check for a win if disc were placed at position.
+        Get a set of winning positions including the disc
+        at origin.
 
-        TODO: make disc an optional arg; otherwise use the chip at position
+        Optionally supply argument fake_disc to pretend that that
+        disc were placed at origin.
 
-        TODO: return list of all winning positions instead of True
+        If a win including origin is not present, returns an empty set.
         """
+        winning_positions = set()
+
+        if fake_disc:
+            disc = fake_disc
+        else:
+            disc = self.get_disc(origin)
+
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
-            x = self.count_consecutive_discs_mirrored(disc, position, step)
-            if x + 1 >= number_to_win:
-                return True
+            matches = self.get_consecutive_matches_mirrored(
+                disc, origin, step)
 
-        return False
+            # Check if these matches, with the origin, wins
+            if len(matches) + 1 >= number_to_win:
+                winning_positions |= matches
+
+        # If any win was found, add origin to the set
+        if winning_positions:
+            winning_positions.add(origin)
+
+        return winning_positions
