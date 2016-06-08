@@ -20,11 +20,12 @@ class Board(object):
         self.left_column = LEFT_COLUMN
         self.right_column = num_columns - 1
 
-        self.grid = [[None for y in range(num_columns)]
-                     for x in range(num_rows)]
+        self.grid = [[None for column in range(num_columns)]
+                     for row in range(num_rows)]
 
     def __str__(self):
-        return '{} x {} Board'.format(self.num_rows, self.num_columns)
+        return '{} rows x {} column Board'.format(
+            self.num_rows, self.num_columns)
 
     def __repr__(self):
         return self.__str__()
@@ -48,20 +49,20 @@ class Board(object):
         """
         Get the disc at this position.
 
-        Position should be a 2-tuple in format (x, y).
+        Position should be a 2-tuple in format (row, column).
         """
-        x, y = position
-        return self.grid[x][y]
+        row, column = position
+        return self.grid[row][column]
 
     def is_in_bounds(self, position):
         """
         Determine whether position is in bounds.
 
-        Position should be a 2-tuple in format (x, y).
+        Position should be a 2-tuple in format (row, column).
         """
-        x, y = position
-        return (x >= self.top_row and x <= self.bottom_row and
-                y >= self.left_column and y <= self.right_column)
+        row, column = position
+        return (row >= self.top_row and row <= self.bottom_row and
+                column >= self.left_column and column <= self.right_column)
 
     def is_column_full(self, column):
         """
@@ -92,10 +93,10 @@ class Board(object):
         stepping outward from start (exclusive)
         in a single direction (indicated by step).
 
-        start should be a 2-tuple (x, y) of the starting position.
+        start should be a 2-tuple (row, column) of the starting position.
 
-        step should be a 2-tuple, (horizontal_step, vertical_step).
-        For example, to check upwards, step should be (0, 1).
+        step should be a 2-tuple, (vertical_step, horizontal_step).
+        For example, to check upwards, step should be (1, 0).
         To check diagonally down-left, step should be (-1, -1).
         """
         current = (start[0] + step[0], start[1] + step[1])
@@ -113,9 +114,9 @@ class Board(object):
         stepping outward from start (exclusive)
         in two directions (step and its mirror).
 
-        start should be a 2-tuple (x, y) of the starting position.
+        start should be a 2-tuple (row, column) of the starting position.
 
-        step should be a 2-tuple, (horizontal_step, vertical_step),
+        step should be a 2-tuple, (vertical_step, horizontal_step),
         and the mirror of this step will be used as well.
         For example, to check the horizontal axis, step could be
         (0, 1) or (0, -1).

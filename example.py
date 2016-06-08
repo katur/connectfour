@@ -29,13 +29,13 @@ b.add_disc(pink, 4)
 
 print b.get_printable_grid()
 
-print 'Browns up from [2,2]: {}'.format(
+print 'Browns right from [2,2]: {}'.format(
     b.get_consecutive_matches(brown, (2, 2), (0, 1)))
 
-print 'Browns down from [2,2]: {}'.format(
+print 'Browns left from [2,2]: {}'.format(
     b.get_consecutive_matches(brown, (2, 2), (0, -1)))
 
-print 'Browns up/down from [2,2]: {}'.format(
+print 'Browns right/left from [2,2]: {}'.format(
     b.get_consecutive_matches_mirrored(brown, (2, 2), (0, 1)))
 
 print 'Winning 4-positions with fake brown at [2,1]: {}'.format(
