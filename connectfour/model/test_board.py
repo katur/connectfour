@@ -1,4 +1,5 @@
 import unittest
+
 from board import Board
 from color import Color
 from disc import Disc

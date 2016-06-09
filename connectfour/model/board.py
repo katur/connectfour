@@ -1,6 +1,5 @@
 import operator
 
-
 TOP_ROW = 0
 LEFT_COLUMN = 0
 

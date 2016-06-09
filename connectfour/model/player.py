@@ -7,6 +7,7 @@ class Player(object):
 
     TODO: colors should be constants
     """
+
     def __init__(self, name, color):
         self.name = name
         self.disc = Disc(color=color)
