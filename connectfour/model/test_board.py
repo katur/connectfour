@@ -1,12 +1,13 @@
 import unittest
 from board import Board
+from color import Color
 from disc import Disc
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
 TEST_NUM_TO_WIN = 4
-PINK = Disc('pink')
-BROWN = Disc('brown')
+PINK = Disc(Color.pink)
+BROWN = Disc(Color.brown)
 
 
 class TestBoardBasics(unittest.TestCase):
