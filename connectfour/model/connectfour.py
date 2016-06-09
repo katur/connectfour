@@ -1,9 +1,19 @@
+from enum import Enum
 from board import Board
 from player import Player
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
 DEFAULT_TO_WIN = 4
+
+
+class TryAgainReason(Enum):
+    """
+    A reason that a player needs to try again, due to making an illegal move.
+    """
+
+    column_out_of_bounds = 1
+    column_full = 2
 
 
 class ConnectFour(object):
@@ -111,10 +121,10 @@ class ConnectFour(object):
             raise RuntimeError('Cannot play disc before game is started')
 
         if not self.board.is_column_in_bounds(column):
-            self.fire_try_again_event('Column is out of bounds')
+            self.fire_try_again_event(TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
-            self.fire_try_again_event('Column is full')
+            self.fire_try_again_event(TryAgainReason.column_full)
 
         else:
             self.process_play(column)
