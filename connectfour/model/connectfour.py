@@ -19,12 +19,7 @@ class TryAgainReason(Enum):
 
 
 class ConnectFour(object):
-    """Top-level model of the Connect Four game.
-
-    While inspired by the game Connect Four, this model accomodates
-    different numbers than Four (Connect Three, Connect Six, etc.),
-    and different board dimensions.
-    """
+    """Top-level model of the Connect Four game."""
 
     def __init__(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                  num_to_win=DEFAULT_TO_WIN):
