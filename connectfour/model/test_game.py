@@ -1,7 +1,7 @@
 import unittest
 
 from color import Color
-from connectfour import ConnectFour
+from game import Game
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
@@ -9,65 +9,65 @@ TEST_NUM_TO_WIN = 4
 
 
 def create_game():
-    c = ConnectFour(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
+    c = Game(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
     c.add_player('Sally', Color.brown)
     c.add_player('Fred', Color.pink)
     return c
 
 
-def populate_game(c):
+def make_plays(c):
     plays = [1, 2, 2, 2, 2, 3, 3, 0, 3, 4, 4, 3, 4, 4]
     for play in plays:
         c.play_disc(play)
     return c
 
 
-class TestGameNotYetStarted(unittest.TestCase):
+class TestRoundNotStarted(unittest.TestCase):
 
     def setUp(self):
         self.c = create_game()
 
-    def test_game_not_started_yet(self):
-        self.assertFalse(self.c.game_in_progress)
+    def test_round_not_in_progress_at_beginning(self):
+        self.assertFalse(self.c.round_in_progress)
 
     def test_get_num_players(self):
         self.assertEqual(self.c.get_num_players(), 2)
 
-    def test_first_player(self):
+    def test_first_player_before_round_started(self):
         self.assertEqual(self.c.get_current_player().name, 'Sally')
 
 
-class TestGameStarted(unittest.TestCase):
+class TestRoundStarted(unittest.TestCase):
 
     def setUp(self):
         self.c = create_game()
-        self.c.start_game()
+        self.c.start_round()
 
-    def test_game_in_progress(self):
-        self.assertTrue(self.c.game_in_progress)
+    def test_round_in_progress(self):
+        self.assertTrue(self.c.round_in_progress)
 
-    def test_first_player(self):
+    def test_first_player_after_round_started(self):
         self.assertEqual(self.c.get_current_player().name, 'Sally')
 
 
-class TestGameInProgress(unittest.TestCase):
+class TestRoundInProgress(unittest.TestCase):
 
     def setUp(self):
         self.c = create_game()
-        self.c.start_game()
-        populate_game(self.c)
+        self.c.start_round()
+        make_plays(self.c)
 
     def test_current_player(self):
         self.assertEqual(self.c.get_current_player().name, 'Sally')
 
 
-class TestGameWon(unittest.TestCase):
+class TestRoundWon(unittest.TestCase):
 
     def setUp(self):
         self.c = create_game()
-        self.c.start_game()
-        populate_game(self.c)
+        self.c.start_round()
+        make_plays(self.c)
         self.c.play_disc(5)
 
-    def test_game_no_longer_in_progress(self):
-        self.assertFalse(self.c.game_in_progress)
+    def test_round_not_in_progress_after_round_won(self):
+        self.assertFalse(self.c.round_in_progress)

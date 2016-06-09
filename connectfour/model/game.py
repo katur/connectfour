@@ -18,7 +18,7 @@ class TryAgainReason(Enum):
     column_full = 2
 
 
-class ConnectFour(object):
+class Game(object):
     """Top-level model of the Connect Four game."""
 
     def __init__(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
@@ -34,19 +34,19 @@ class ConnectFour(object):
 
         self.board = Board(num_rows, num_columns, num_to_win)
         self.session_in_progress = False
-        self.game_in_progress = False
-        self.game_number = 0
+        self.round_in_progress = False
+        self.round_number = 0
         self.listeners = []
         self.players = []
 
-        # Which player goes first in the next game
+        # Which player goes first in the next round
         self.first_turn_index = 0
 
-        # Which player goes next in the current game
+        # Which player goes next in the current round
         self.current_player_index = 0
 
     def __str__(self):
-        return 'ConnectFour [board:{}, num_players:{}]'.format(
+        return 'Game [board:{}, num_players:{}]'.format(
             self.board, self.get_num_players())
 
     def __repr__(self):
@@ -81,23 +81,23 @@ class ConnectFour(object):
         self.players.append(player)
         self._fire_player_added_event(player)
 
-    def start_game(self):
-        """Start a new game."""
-        if self.game_in_progress:
-            raise RuntimeError('Cannot start game while another game '
+    def start_round(self):
+        """Start a new round of the game."""
+        if self.round_in_progress:
+            raise RuntimeError('Cannot start a round while another '
                                'is in progress')
         if not self.players:
-            raise RuntimeError('Cannot start game with no players')
+            raise RuntimeError('Cannot start a round with no players')
 
         self.board.reset()
         self.session_in_progress = True
-        self.game_in_progress = True
-        self.game_number += 1
-        self._fire_game_in_progress_event(self.game_number)
+        self.round_in_progress = True
+        self.round_number += 1
+        self._fire_round_in_progress_event(self.round_number)
 
         self.current_player_index = self.first_turn_index
 
-        # Prepare first_turn_index for the next game
+        # Prep first_turn_index for the next round
         self.first_turn_index = ((self.first_turn_index + 1)
                                  % self.get_num_players())
 
@@ -108,8 +108,8 @@ class ConnectFour(object):
 
         Assumes the disc is played by the current player.
         """
-        if not self.game_in_progress:
-            raise RuntimeError('Cannot play disc before game is started')
+        if not self.round_in_progress:
+            raise RuntimeError('Cannot play disc before round has started')
 
         if not self.board.is_column_in_bounds(column):
             self._fire_try_again_event(TryAgainReason.column_out_of_bounds)
@@ -140,13 +140,13 @@ class ConnectFour(object):
             self._process_next_player()
 
     def _process_win(self, player, winning_positions):
-        self.game_in_progress = False
+        self.round_in_progress = False
         player.number_of_wins += 1
-        self._fire_game_won_event(player, winning_positions)
+        self._fire_round_won_event(player, winning_positions)
 
     def _process_draw(self):
-        self.game_in_progress = False
-        self._fire_game_draw_event()
+        self.round_in_progress = False
+        self._fire_round_draw_event()
 
     def _process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)
@@ -163,10 +163,10 @@ class ConnectFour(object):
         for listener in self.listeners:
             listener.player_added(player)
 
-    def _fire_game_in_progress_event(self, game_number):
-        """Alert listeners that a game was started."""
+    def _fire_round_in_progress_event(self, round_number):
+        """Alert listeners that a round was started."""
         for listener in self.listeners:
-            listener.game_in_progress(game_number)
+            listener.round_in_progress(round_number)
 
     def _fire_next_player_event(self, player):
         """Alert listeners who the next player is."""
@@ -183,15 +183,15 @@ class ConnectFour(object):
         for listener in self.listeners:
             listener.disc_played(player, position)
 
-    def _fire_game_won_event(self, player, winning_positions):
-        """Alert listeners that game was won by player."""
+    def _fire_round_won_event(self, player, winning_positions):
+        """Alert listeners that round was won by player."""
         for listener in self.listeners:
-            listener.game_won(player, winning_positions)
+            listener.round_won(player, winning_positions)
 
-    def _fire_game_draw_event(self):
-        """Alert listeners that game ended in a draw."""
+    def _fire_round_draw_event(self):
+        """Alert listeners that round ended in a draw."""
         for listener in self.listeners:
-            listener.game_draw()
+            listener.round_draw()
 
     ##################
     # Simple helpers #
