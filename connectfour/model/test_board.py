@@ -139,22 +139,22 @@ class TestMatchesAndWins(unittest.TestCase):
             self.board.add_disc(*play)
 
     def test_consecutive_matches(self):
-        m = self.board.get_consecutive_matches((2, 2), (0, 1))
+        m = self.board._get_consecutive_matches((2, 2), (0, 1))
         self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
 
     def test_consecutive_matches_one_only(self):
-        m = self.board.get_consecutive_matches((2, 2), (0, -1))
+        m = self.board._get_consecutive_matches((2, 2), (0, -1))
         self.assertEquals(m, {(2, 2)})
 
     def test_consecutive_matches_mirrored_both_dir_relevant(self):
-        m = self.board.get_consecutive_matches_mirrored((2, 3), (0, 1))
-        n = self.board.get_consecutive_matches_mirrored((2, 3), (0, -1))
+        m = self.board._get_consecutive_matches_mirrored((2, 3), (0, 1))
+        n = self.board._get_consecutive_matches_mirrored((2, 3), (0, -1))
         self.assertEquals(m, n)
         self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
 
     def test_consecutive_matches_mirrored_only_one_dir_relevant(self):
-        m = self.board.get_consecutive_matches_mirrored((2, 2), (0, 1))
-        n = self.board.get_consecutive_matches_mirrored((2, 2), (0, -1))
+        m = self.board._get_consecutive_matches_mirrored((2, 2), (0, 1))
+        n = self.board._get_consecutive_matches_mirrored((2, 2), (0, -1))
         self.assertEquals(m, n)
         self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
 

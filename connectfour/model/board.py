@@ -112,7 +112,7 @@ class Board(object):
         self.grid[current_row][column] = disc
         return current_row
 
-    def get_consecutive_matches(self, start, step, fake_disc=None):
+    def _get_consecutive_matches(self, start, step, fake_disc=None):
         """Get consecutive matching positions in a single direction.
 
         From a starting position, find positions with discs matching the
@@ -138,7 +138,7 @@ class Board(object):
 
         return positions
 
-    def get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
+    def _get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
         """Get consecutive matching positions in two directions.
 
         From a starting position, find positions with discs matching the
@@ -156,9 +156,9 @@ class Board(object):
         """
         flipped_step = tuple(-i for i in step)
 
-        a = self.get_consecutive_matches(start, step, fake_disc=fake_disc)
-        b = self.get_consecutive_matches(start, flipped_step,
-                                         fake_disc=fake_disc)
+        a = self._get_consecutive_matches(start, step, fake_disc=fake_disc)
+        b = self._get_consecutive_matches(start, flipped_step,
+                                          fake_disc=fake_disc)
 
         return a | b
 
@@ -173,7 +173,7 @@ class Board(object):
         winning_positions = set()
 
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
-            matches = self.get_consecutive_matches_mirrored(
+            matches = self._get_consecutive_matches_mirrored(
                 origin, step, fake_disc=fake_disc)
 
             # Check if these matches are enough to win
