@@ -6,7 +6,7 @@ class Player(object):
 
     def __init__(self, name, color):
         self.name = name
-        self.disc = Disc(color=color)
+        self.disc = Disc(color)
         self.number_of_wins = 0
 
     def __str__(self):
