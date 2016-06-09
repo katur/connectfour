@@ -25,8 +25,8 @@ class ConnectFour(object):
                              'and the number of columns')
 
         self.board = Board(num_rows, num_columns, num_to_win)
-        self.session_started = False
-        self.game_started = False
+        self.session_in_progress = False
+        self.game_in_progress = False
         self.game_number = 0
         self.listeners = []
         self.players = []
@@ -39,7 +39,7 @@ class ConnectFour(object):
 
     def __str__(self):
         return 'ConnectFour [board:{}, num_players:{}]'.format(
-            self.board, self.get_number_of_players())
+            self.board, self.get_num_players())
 
     def __repr__(self):
         return self.__str__()
@@ -70,7 +70,7 @@ class ConnectFour(object):
         """
         Add a player to the session.
         """
-        if self.session_started:
+        if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
 
         player = Player(name, color)
@@ -81,23 +81,23 @@ class ConnectFour(object):
         """
         Start a game.
         """
-        if self.game_started:
+        if self.game_in_progress:
             raise RuntimeError('Cannot start game while another game '
                                'is in progress')
         if not self.players:
             raise RuntimeError('Cannot start game with no players')
 
         self.board.reset()
-        self.session_started = True
-        self.game_started = True
+        self.session_in_progress = True
+        self.game_in_progress = True
         self.game_number += 1
-        self.fire_game_started_event(self.game_number)
+        self.fire_game_in_progress_event(self.game_number)
 
         self.current_player_index = self.first_turn_index
 
         # Prepare first_turn_index for the next game
         self.first_turn_index = ((self.first_turn_index + 1)
-                                 % self.get_number_of_players())
+                                 % self.get_num_players())
 
         self.fire_next_player_event(self.get_current_player())
 
@@ -107,7 +107,7 @@ class ConnectFour(object):
 
         Assumes the disc is played by the current player.
         """
-        if not self.game_started:
+        if not self.game_in_progress:
             raise RuntimeError('Cannot play disc before game is started')
 
         if not self.board.is_column_in_bounds(column):
@@ -138,17 +138,17 @@ class ConnectFour(object):
             self.process_next_player()
 
     def process_win(self, player, winning_positions):
-        self.game_started = False
+        self.game_in_progress = False
         player.number_of_wins += 1
         self.fire_game_won_event(player, winning_positions)
 
     def process_draw(self):
-        self.game_started = False
+        self.game_in_progress = False
         self.fire_game_draw_event()
 
     def process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)
-                                     % self.get_number_of_players())
+                                     % self.get_num_players())
 
         self.fire_next_player_event(self.get_current_player())
 
@@ -163,12 +163,12 @@ class ConnectFour(object):
         for listener in self.listeners:
             listener.player_added(player)
 
-    def fire_game_started_event(self, game_number):
+    def fire_game_in_progress_event(self, game_number):
         """
         Alert listeners that a game was started.
         """
         for listener in self.listeners:
-            listener.game_started(game_number)
+            listener.game_in_progress(game_number)
 
     def fire_next_player_event(self, player):
         """
@@ -209,11 +209,11 @@ class ConnectFour(object):
     # Simple helpers #
     ##################
 
-    def get_number_of_players(self):
+    def get_num_players(self):
         return len(self.players)
 
     def get_player(self, index):
-        if index < 0 or index >= self.get_number_of_players():
+        if index < 0 or index >= self.get_num_players():
             raise IndexError('Player index {} is out of bounds'.format(index))
         return self.players[index]
 
