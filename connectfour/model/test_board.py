@@ -5,6 +5,7 @@ from disc import Disc
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
+TEST_NUM_TO_WIN = 4
 PINK = Disc('pink')
 BROWN = Disc('brown')
 
@@ -12,7 +13,7 @@ BROWN = Disc('brown')
 class TestBoardBasics(unittest.TestCase):
 
     def setUp(self):
-        self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS)
+        self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
 
         self.bottom_row = self.board.bottom_row
         self.top_row = self.board.top_row

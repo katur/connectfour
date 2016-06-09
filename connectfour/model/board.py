@@ -15,9 +15,10 @@ class Board(object):
     A Connect Four playing board.
     """
 
-    def __init__(self, num_rows, num_columns):
+    def __init__(self, num_rows, num_columns, num_to_win):
         self.num_rows = num_rows
         self.num_columns = num_columns
+        self.num_to_win = num_to_win
         self.top_row = TOP_ROW
         self.bottom_row = num_rows - 1
         self.left_column = LEFT_COLUMN
@@ -142,8 +143,9 @@ class Board(object):
         """
         disc = fake_disc if fake_disc else self.get_disc(start)
 
-        positions = set()
-        positions.add(start)
+        # Initialize set with start position
+        positions = {start}
+
         current = tuple(map(operator.add, start, step))
 
         while (self.is_in_bounds(current) and self.get_disc(current) == disc):
@@ -174,7 +176,7 @@ class Board(object):
 
         return a | b
 
-    def get_winning_positions(self, origin, number_to_win, fake_disc=None):
+    def get_winning_positions(self, origin, fake_disc=None):
         """
         Get a set of winning positions including the disc
         at origin.
@@ -191,7 +193,7 @@ class Board(object):
                 origin, step, fake_disc=fake_disc)
 
             # Check if these matches are enough to win
-            if len(matches) >= number_to_win:
+            if len(matches) >= self.num_to_win:
                 winning_positions |= matches
 
         return winning_positions

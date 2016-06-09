@@ -1,7 +1,7 @@
 from connectfour.model.board import Board
 from connectfour.model.disc import Disc
 
-b = Board(4, 6)
+b = Board(num_rows=4, num_columns=6, num_to_win=4)
 
 print b.get_printable_grid()
 
@@ -41,10 +41,10 @@ print 'Matches right/left from (2, 2): {}'.format(
     b.get_consecutive_matches_mirrored((2, 2), (0, 1)))
 
 print 'Winning 4-positions from (3, 5): {}'.format(
-    b.get_winning_positions((3, 5), 4))
+    b.get_winning_positions((3, 5)))
 
 print 'Winning 4-positions from (2, 4): {}'.format(
-    b.get_winning_positions((3, 5), 4))
+    b.get_winning_positions((3, 5)))
 
 print 'Winning 4-positions with fake brown from (2, 1): {}'.format(
-    b.get_winning_positions((2, 1), 4, fake_disc=brown))
+    b.get_winning_positions((2, 1), fake_disc=brown))
