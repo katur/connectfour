@@ -1,6 +1,7 @@
 from enum import Enum
 
 from board import Board
+from color import Color
 from player import Player
 
 DEFAULT_ROWS = 6
@@ -76,6 +77,14 @@ class Game(object):
         """Add a player to the session."""
         if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
+
+        used_colors = self.get_used_colors()
+
+        if len(used_colors) >= len(Color):
+            raise RuntimeError('Game has reached max players')
+
+        if color in used_colors:
+            raise ValueError('Color {} is already taken'.format(color))
 
         player = Player(name, color)
         self.players.append(player)
@@ -194,19 +203,33 @@ class Game(object):
             listener.round_draw()
 
     ##################
-    # Simple helpers #
+    # Simple getters #
     ##################
-
-    def get_num_players(self):
-        return len(self.players)
-
-    def get_player(self, index):
-        if index < 0 or index >= self.get_num_players():
-            raise IndexError('Player index {} is out of bounds'.format(index))
-        return self.players[index]
 
     def get_current_player(self):
         if not self.players:
             raise RuntimeError('Cannot get current player if no '
                                'players have been added yet')
         return self.players[self.current_player_index]
+
+    def get_player(self, index):
+        if index < 0 or index >= self.get_num_players():
+            raise IndexError('Player index {} is out of bounds'.format(index))
+        return self.players[index]
+
+    def get_num_players(self):
+        return len(self.players)
+
+    def get_used_colors(self):
+        return {player.disc.color for player in self.players}
+
+    def get_remaining_colors(self):
+        return set(Color) - self.get_used_colors()
+
+
+if __name__ == '__main__':
+    game = Game(6, 7, 4)
+    game.add_player('a', Color.red)
+    game.add_player('b', Color.blue)
+    game.add_player('c', Color.yellow)
+    print game.get_remaining_colors()
