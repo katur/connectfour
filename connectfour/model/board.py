@@ -162,11 +162,10 @@ class Board(object):
         start should be a 2-tuple (row, column) of the starting position.
 
         step should be a 2-tuple, (vertical_step, horizontal_step),
-        and the mirror of this step will be used as well.
+        and the mirror of this step will be included as well.
         For example, to check the horizontal axis, step can be
-        (0, 1) or (0, -1).
-        To check the up-right/down-left diagonal, step can be
-        (1, 1) or (-1, -1).
+        (0, 1) or (0, -1). Likewise, to check the up-right/down-left
+        diagonal, step can be (1, 1) or (-1, -1).
         """
         flipped_step = tuple(-i for i in step)
 
@@ -178,11 +177,10 @@ class Board(object):
 
     def get_winning_positions(self, origin, fake_disc=None):
         """
-        Get a set of winning positions including the disc
-        at origin.
+        Get a set of winning positions that include the origin position.
 
-        Optionally supply argument fake_disc to pretend that that
-        disc were placed at origin.
+        Optionally supply argument fake_disc to pretend fake_disc were
+        placed at the origin origin.
 
         If a win including origin is not present, returns an empty set.
         """

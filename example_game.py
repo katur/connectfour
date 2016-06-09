@@ -1,4 +1,4 @@
-from connectfour.model.game import ConnectFour
+from connectfour.model.connectfour import ConnectFour
 
 c = ConnectFour(num_rows=4, num_columns=6, num_to_win=4)
 c.add_player('Sally', 'brown')
