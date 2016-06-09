@@ -2,7 +2,6 @@ import unittest
 from board import Board
 from disc import Disc
 
-
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
 TEST_NUM_TO_WIN = 4
@@ -110,3 +109,61 @@ class TestBoardBasics(unittest.TestCase):
         self.board.add_disc(PINK, self.right_column)
         self.assertEqual(PINK, self.board.get_disc(self.bottom_right))
         self.assertIsNone(self.board.get_disc(self.bottom_left))
+
+
+class TestMatchesAndWins(unittest.TestCase):
+
+    def setUp(self):
+        self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
+        test_plays = (
+            (BROWN, 1),
+            (PINK, 2),
+            (BROWN, 2),
+            (PINK, 2),
+            (BROWN, 2),
+            (PINK, 3),
+            (BROWN, 3),
+            (PINK, 0),
+            (BROWN, 3),
+            (PINK, 4),
+            (BROWN, 4),
+            (PINK, 3),
+            (BROWN, 4),
+            (PINK, 4),
+            (BROWN, 5),
+        )
+
+        for play in test_plays:
+            self.board.add_disc(*play)
+
+    def test_consecutive_matches(self):
+        m = self.board.get_consecutive_matches((2, 2), (0, 1))
+        self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
+
+    def test_consecutive_matches_one_only(self):
+        m = self.board.get_consecutive_matches((2, 2), (0, -1))
+        self.assertEquals(m, {(2, 2)})
+
+    def test_consecutive_matches_mirrored_both_dir_relevant(self):
+        m = self.board.get_consecutive_matches_mirrored((2, 3), (0, 1))
+        n = self.board.get_consecutive_matches_mirrored((2, 3), (0, -1))
+        self.assertEquals(m, n)
+        self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
+
+    def test_consecutive_matches_mirrored_only_one_dir_relevant(self):
+        m = self.board.get_consecutive_matches_mirrored((2, 2), (0, 1))
+        n = self.board.get_consecutive_matches_mirrored((2, 2), (0, -1))
+        self.assertEquals(m, n)
+        self.assertEquals(m, {(2, 2), (2, 3), (2, 4)})
+
+    def test_winning_positions_diagonal_both_dir_relevant(self):
+        w = self.board.get_winning_positions((2, 4))
+        self.assertEquals(w, {(0, 2), (1, 3), (2, 4), (3, 5)})
+
+    def test_winning_positions_diagonal_only_one_dir_relevant(self):
+        w = self.board.get_winning_positions((3, 5))
+        self.assertEquals(w, {(0, 2), (1, 3), (2, 4), (3, 5)})
+
+    def test_winning_positions_with_fake(self):
+        w = self.board.get_winning_positions((2, 1), fake_disc=BROWN)
+        self.assertEquals(w, {(2, 1), (2, 2), (2, 3), (2, 4)})
