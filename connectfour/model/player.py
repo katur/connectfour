@@ -10,7 +10,7 @@ class Player(object):
         self.number_of_wins = 0
 
     def __str__(self):
-        return '{} ()'.format(self.name, self.color)
+        return '{} ({})'.format(self.name, self.disc.color.name)
 
     def __repr__(self):
         return self.__str__()

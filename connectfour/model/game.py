@@ -102,7 +102,7 @@ class Game(object):
         self.session_in_progress = True
         self.round_in_progress = True
         self.round_number += 1
-        self._fire_round_in_progress_event(self.round_number)
+        self._fire_round_started_event(self.round_number)
 
         self.current_player_index = self.first_turn_index
 
@@ -172,10 +172,10 @@ class Game(object):
         for listener in self.listeners:
             listener.player_added(player)
 
-    def _fire_round_in_progress_event(self, round_number):
+    def _fire_round_started_event(self, round_number):
         """Alert listeners that a round was started."""
         for listener in self.listeners:
-            listener.round_in_progress(round_number)
+            listener.round_started(round_number)
 
     def _fire_next_player_event(self, player):
         """Alert listeners who the next player is."""
