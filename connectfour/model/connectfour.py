@@ -9,8 +9,9 @@ DEFAULT_TO_WIN = 4
 
 
 class TryAgainReason(Enum):
-    """
-    A reason that a player needs to try again, due to making an illegal move.
+    """Reason that a player needs to try again.
+
+    They need to try again if their previous move was illegal.
     """
 
     column_out_of_bounds = 1
@@ -18,10 +19,11 @@ class TryAgainReason(Enum):
 
 
 class ConnectFour(object):
-    """
-    A Connect Four model, complete with a Board and Players.
+    """Top-level model of the Connect Four game.
 
-    This session also broadcasts game events to Listeners.
+    While inspired by the game Connect Four, this model accomodates
+    different numbers than Four (Connect Three, Connect Six, etc.),
+    and different board dimensions.
     """
 
     def __init__(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
@@ -56,8 +58,7 @@ class ConnectFour(object):
         return self.__str__()
 
     def add_listener(self, listener):
-        """
-        Add a listener to receive events made by this model.
+        """Add a listener to receive events made by this model.
 
         Exits silently if listener is already subscribed.
         """
@@ -65,8 +66,7 @@ class ConnectFour(object):
             self.listeners.append(listener)
 
     def remove_listener(self, listener):
-        """
-        Remove a listener from receiving events made by this model.
+        """Remove a listener from receiving events made by this model.
 
         Exits silently if listener was not subscribed.
         """
@@ -78,9 +78,7 @@ class ConnectFour(object):
     #####################
 
     def add_player(self, name, color):
-        """
-        Add a player to the session.
-        """
+        """Add a player to the session."""
         if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
 
@@ -89,9 +87,7 @@ class ConnectFour(object):
         self.fire_player_added_event(player)
 
     def start_game(self):
-        """
-        Start a game.
-        """
+        """Start a new game."""
         if self.game_in_progress:
             raise RuntimeError('Cannot start game while another game '
                                'is in progress')
@@ -113,8 +109,7 @@ class ConnectFour(object):
         self.fire_next_player_event(self.get_current_player())
 
     def play_disc(self, column):
-        """
-        Play a disc in a column.
+        """Play a disc in a column.
 
         Assumes the disc is played by the current player.
         """
@@ -131,10 +126,11 @@ class ConnectFour(object):
             self.process_play(column)
             # TODO: could instead have listeners respond that render complete
 
+    ##########################
+    # Helpers to play_disc() #
+    ##########################
+
     def process_play(self, column):
-        """
-        Helper function to play a chip
-        """
         player = self.get_current_player()
         row = self.board.add_disc(player.disc, column)
         self.fire_disc_played_event(player, (row, column))
@@ -168,51 +164,37 @@ class ConnectFour(object):
     ############################
 
     def fire_player_added_event(self, player):
-        """
-        Alert listeners that a player was added.
-        """
+        """Alert listeners that a player was added."""
         for listener in self.listeners:
             listener.player_added(player)
 
     def fire_game_in_progress_event(self, game_number):
-        """
-        Alert listeners that a game was started.
-        """
+        """Alert listeners that a game was started."""
         for listener in self.listeners:
             listener.game_in_progress(game_number)
 
     def fire_next_player_event(self, player):
-        """
-        Alert listeners who the next player is.
-        """
+        """Alert listeners who the next player is."""
         for listener in self.listeners:
             listener.next_player(player)
 
     def fire_try_again_event(self, player, reason):
-        """
-        Alert listeners that player should try again, because of reason.
-        """
+        """Alert listeners that player should try again."""
         for listener in self.listeners:
             listener.try_again(player, reason)
 
     def fire_disc_played_event(self, player, position):
-        """
-        Alert listeners that a disc was played by player at position.
-        """
+        """Alert listeners that a disc was played by player at position."""
         for listener in self.listeners:
             listener.disc_played(player, position)
 
     def fire_game_won_event(self, player, winning_positions):
-        """
-        Alert listeners that game was won by player.
-        """
+        """Alert listeners that game was won by player."""
         for listener in self.listeners:
             listener.game_won(player, winning_positions)
 
     def fire_game_draw_event(self):
-        """
-        Alert listeners that game ended in a draw.
-        """
+        """Alert listeners that game ended in a draw."""
         for listener in self.listeners:
             listener.game_draw()
 

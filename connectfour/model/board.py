@@ -10,9 +10,7 @@ DOWN_RIGHT = (1, -1)
 
 
 class Board(object):
-    """
-    A Connect Four playing board.
-    """
+    """A Connect Four playing board."""
 
     def __init__(self, num_rows, num_columns, num_to_win):
         self.num_rows = num_rows
@@ -34,9 +32,7 @@ class Board(object):
         return self.__str__()
 
     def get_printable_grid(self):
-        """
-        Get a string of the grid meant for console printing.
-        """
+        """Get a string of the grid meant for console printing."""
         s = ''
         for row in self.grid:
             for column in row:
@@ -49,20 +45,15 @@ class Board(object):
         return s
 
     def is_row_in_bounds(self, row):
-        """
-        Determine if row is in bounds.
-        """
+        """Determine if row is in bounds."""
         return row >= self.top_row and row <= self.bottom_row
 
     def is_column_in_bounds(self, column):
-        """
-        Determine if column is in bounds.
-        """
+        """Determine if column is in bounds."""
         return column >= self.left_column and column <= self.right_column
 
     def is_in_bounds(self, position):
-        """
-        Determine if position is in bounds.
+        """Determine if position is in bounds.
 
         Position should be a 2-tuple in format (row, column).
         """
@@ -70,18 +61,14 @@ class Board(object):
         return self.is_row_in_bounds(row) and self.is_column_in_bounds(column)
 
     def is_column_full(self, column):
-        """
-        Determine if a column is full of discs.
-        """
+        """Determine if a column is full of discs."""
         if not self.is_column_in_bounds(column):
             raise ValueError('Column {} is out of bounds'.format(column))
 
         return self.grid[self.top_row][column] is not None
 
     def is_full(self):
-        """
-        Determine if the entire board is full of discs.
-        """
+        """Determine if the entire board is full of discs."""
         for i in range(self.num_columns):
             if not self.is_column_full(i):
                 return False
@@ -89,16 +76,13 @@ class Board(object):
         return True
 
     def reset(self):
-        """
-        Set all positions in the grid to None.
-        """
+        """Set all positions in the grid to None."""
         for row in range(self.num_rows):
             for column in range(self.num_columns):
                 self.grid[row][column] = None
 
     def get_disc(self, position):
-        """
-        Get the disc at this position.
+        """Get the disc at this position.
 
         Position should be a 2-tuple in format (row, column).
         """
@@ -110,8 +94,7 @@ class Board(object):
         return self.grid[row][column]
 
     def add_disc(self, disc, column):
-        """
-        Add a disc to a column.
+        """Add a disc to a column.
 
         Returns the row in which the disc ended up.
         """
@@ -130,9 +113,11 @@ class Board(object):
         return current_row
 
     def get_consecutive_matches(self, start, step, fake_disc=None):
-        """
-        Get a set of the consecutive positions matching start,
-        in a single direction (indicated by step).
+        """Get consecutive matching positions in a single direction.
+
+        From a starting position, find positions with discs matching the
+        starting position, outward in the direction indicated by step,
+        until a mismatch is found.
 
         start should be a 2-tuple (row, column) of starting position.
 
@@ -154,9 +139,12 @@ class Board(object):
         return positions
 
     def get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
-        """
-        Get a set of the consecutive positions matching start,
-        in two directions (step and its mirror).
+        """Get consecutive matching positions in two directions.
+
+        From a starting position, find positions with discs matching the
+        starting position, outward in the direction indicated by step,
+        as well as outward in the 180-flipped direction,
+        until a mismatch is found.
 
         start should be a 2-tuple (row, column) of the starting position.
 
@@ -175,8 +163,7 @@ class Board(object):
         return a | b
 
     def get_winning_positions(self, origin, fake_disc=None):
-        """
-        Get a set of winning positions that include the origin position.
+        """Get winning positions that include the origin position.
 
         Optionally supply argument fake_disc to pretend fake_disc were
         placed at the origin origin.

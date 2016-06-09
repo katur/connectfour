@@ -2,9 +2,7 @@ from enum import Enum
 
 
 class Color(Enum):
-    """
-    A disc color.
-    """
+    """A disc color."""
 
     black = 1
     red = 2
