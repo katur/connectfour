@@ -1,31 +1,13 @@
 import Tkinter as tk
 
-from connectfour.util.color import Color, get_color_list
+from connectfour import pubsub
 
-
-PADDING = 20
-
-SETUP_TITLE = (
-    'Welcome to Connect Four! '
-    'Please select game parameters and add players.'
+from connectfour.util.color import get_color_list
+from connectfour.views.gui_config import (
+    WINDOW_TITLE, SETUP_TITLE, GAME_TITLE, PLAYER_FEEDBACK_TEXT,
+    SLOT_COLOR, SLOT_SIZE, SLOT_BORDER_WIDTH,
+    COLOR_TO_TK, PADDING,
 )
-
-GAME_TITLE = (
-    'Welcome to Connect Four!'
-)
-
-COLOR_TO_TK = {
-    Color.black: 'Black',
-    Color.red: 'Red',
-    Color.blue: 'Blue',
-    Color.purple: 'Purple',
-    Color.orange: 'Orange',
-    Color.green: 'Green',
-    Color.pink: 'PeachPuff',
-    Color.dark_green: 'DarkGreen',
-    Color.brown: 'Brown',
-    Color.gray: 'Gray',
-}
 
 COLORS = get_color_list()
 
@@ -34,14 +16,14 @@ class GUIView(object):
 
     def __init__(self, game):
         self.game = game
-        game.add_listener(self)
-
         self.num_rows = game.get_num_rows()
         self.num_columns = game.get_num_columns()
 
+        self._create_subscriptions()
+
         # Initialize GUI wrappers
         window = tk.Tk()
-        window.title('Connect Four')
+        window.title(WINDOW_TITLE)
         self.main_frame = tk.Frame(window)
         self.main_frame.grid()
 
@@ -55,6 +37,19 @@ class GUIView(object):
         except Exception:
             # TODO: How to handle this?
             pass
+
+    def _create_subscriptions(self):
+        responses = {
+            pubsub.Action.player_added: self._on_player_added,
+            pubsub.Action.round_started: self._on_round_started,
+            pubsub.Action.next_player: self._on_next_player,
+            pubsub.Action.try_again: self._on_try_again,
+            pubsub.Action.disc_played: self._on_disc_played,
+            pubsub.Action.round_won: self._on_round_won,
+            pubsub.Action.round_draw: self._on_round_draw,
+        }
+        for action, response in responses.iteritems():
+            pubsub.subscribe(action, response)
 
     ###########################
     # Widgets for Setup Frame #
@@ -97,7 +92,7 @@ class GUIView(object):
 
     def _create_setup_control_row(self, row):
         self.launch_game_button = tk.Button(self.setup_frame,
-                                            text='Start Game',
+                                            text='Launch Game',
                                             command=self._launch_game,
                                             pady=PADDING)
         self.launch_game_button.grid(row=row, column=0)
@@ -146,10 +141,6 @@ class GUIView(object):
             self.column_buttons.append(button)
 
     def _create_game_grid(self, start_row):
-        SLOT_SIZE = 50
-        SLOT_BORDER_WIDTH = 5
-        SLOT_COLOR = 'Yellow'
-
         # Create 2D array to hold pointers to slot widgets
         self.slots = [[None for column in range(self.num_columns)]
                       for row in range(self.num_rows)]
@@ -213,37 +204,36 @@ class GUIView(object):
     # Respond to events from model #
     ################################
 
-    def player_added(self, player):
+    def _on_player_added(self, player):
         self.player_feedback.configure(text=(
-            'Welcome, {}\n'
-            'Total players added: {}'
+            PLAYER_FEEDBACK_TEXT
             .format(player, self.game.get_num_players())))
 
         # Only one player is needed to enable start button
         self.launch_game_button.configure(state=tk.NORMAL)
 
-    def round_started(self, round_number):
+    def _on_round_started(self, round_number):
         self.play_again_button.configure(state=tk.DISABLED)
         self._enable_column_buttons()
 
-    def next_player(self, player):
+    def _on_next_player(self, player):
         self.game_feedback.configure(text="{}'s turn".format(player))
 
-    def try_again(self, player, reason):
+    def _on_try_again(self, player, reason):
         self.game_feedback.configure(text='{} try again ({})'
-                                     .format(player, reason))
+                                     .format(player, reason.name))
 
-    def disc_played(self, player, position):
+    def _on_disc_played(self, player, position):
         row, column = position
         self.slots[row][column].configure(
             background=COLOR_TO_TK[player.disc.color])
 
-    def round_won(self, player, winning_positions):
+    def _on_round_won(self, player, winning_positions):
         self.game_feedback.configure(text='{} won the round'.format(player))
         self._disable_column_buttons()
         self.play_again_button.configure(state=tk.NORMAL)
 
-    def round_draw(self):
+    def _on_round_draw(self):
         self.game_feedback.configure(text='Round ended in a draw')
         self._disable_column_buttons()
         self.play_again_button.configure(state=tk.NORMAL)

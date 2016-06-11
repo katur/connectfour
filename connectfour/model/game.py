@@ -1,5 +1,6 @@
 from enum import Enum
 
+from connectfour import pubsub
 from connectfour.model.board import Board
 from connectfour.model.player import Player
 from connectfour.util.color import Color
@@ -37,7 +38,6 @@ class Game(object):
         self.session_in_progress = False
         self.round_in_progress = False
         self.round_number = 0
-        self.listeners = []
         self.players = []
 
         # Which player goes first in the next round
@@ -52,22 +52,6 @@ class Game(object):
 
     def __repr__(self):
         return self.__str__()
-
-    def add_listener(self, listener):
-        """Add a listener to receive events made by this model.
-
-        Exits silently if listener is already subscribed.
-        """
-        if listener not in self.listeners:
-            self.listeners.append(listener)
-
-    def remove_listener(self, listener):
-        """Remove a listener from receiving events made by this model.
-
-        Exits silently if listener was not subscribed.
-        """
-        if listener in self.listeners:
-            self.listeners.remove(listener)
 
     #####################
     # Game play methods #
@@ -88,7 +72,7 @@ class Game(object):
 
         player = Player(name, color)
         self.players.append(player)
-        self._fire_player_added_event(player)
+        pubsub.publish(pubsub.Action.player_added, player)
 
     def start_round(self):
         """Start a new round of the game."""
@@ -102,7 +86,7 @@ class Game(object):
         self.session_in_progress = True
         self.round_in_progress = True
         self.round_number += 1
-        self._fire_round_started_event(self.round_number)
+        pubsub.publish(pubsub.Action.round_started, self.round_number)
 
         self.current_player_index = self.first_turn_index
 
@@ -110,7 +94,7 @@ class Game(object):
         self.first_turn_index = ((self.first_turn_index + 1)
                                  % self.get_num_players())
 
-        self._fire_next_player_event(self.get_current_player())
+        pubsub.publish(pubsub.Action.next_player, self.get_current_player())
 
     def play_disc(self, column):
         """Play a disc in a column.
@@ -121,14 +105,17 @@ class Game(object):
             raise RuntimeError('Cannot play disc before round has started')
 
         if not self.board.is_column_in_bounds(column):
-            self._fire_try_again_event(TryAgainReason.column_out_of_bounds)
+            pubsub.publish(pubsub.Action.try_again,
+                           self.get_current_player(),
+                           TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
-            self._fire_try_again_event(TryAgainReason.column_full)
+            pubsub.publish(pubsub.Action.try_again,
+                           self.get_current_player(),
+                           TryAgainReason.column_full)
 
         else:
             self._process_play(column)
-            # TODO: could instead have listeners respond that render complete
 
     ##########################
     # Helpers to play_disc() #
@@ -137,7 +124,7 @@ class Game(object):
     def _process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_disc(player.disc, column)
-        self._fire_disc_played_event(player, (row, column))
+        pubsub.publish(pubsub.Action.disc_played, player, (row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -151,56 +138,17 @@ class Game(object):
     def _process_win(self, player, winning_positions):
         self.round_in_progress = False
         player.number_of_wins += 1
-        self._fire_round_won_event(player, winning_positions)
+        pubsub.publish(pubsub.Action.round_won, player, winning_positions)
 
     def _process_draw(self):
         self.round_in_progress = False
-        self._fire_round_draw_event()
+        pubsub.publish(pubsub.Action.round_draw)
 
     def _process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)
                                      % self.get_num_players())
 
-        self._fire_next_player_event(self.get_current_player())
-
-    ############################
-    # Fire events to listeners #
-    ############################
-
-    def _fire_player_added_event(self, player):
-        """Alert listeners that a player was added."""
-        for listener in self.listeners:
-            listener.player_added(player)
-
-    def _fire_round_started_event(self, round_number):
-        """Alert listeners that a round was started."""
-        for listener in self.listeners:
-            listener.round_started(round_number)
-
-    def _fire_next_player_event(self, player):
-        """Alert listeners who the next player is."""
-        for listener in self.listeners:
-            listener.next_player(player)
-
-    def _fire_try_again_event(self, player, reason):
-        """Alert listeners that player should try again."""
-        for listener in self.listeners:
-            listener.try_again(player, reason)
-
-    def _fire_disc_played_event(self, player, position):
-        """Alert listeners that a disc was played by player at position."""
-        for listener in self.listeners:
-            listener.disc_played(player, position)
-
-    def _fire_round_won_event(self, player, winning_positions):
-        """Alert listeners that round was won by player."""
-        for listener in self.listeners:
-            listener.round_won(player, winning_positions)
-
-    def _fire_round_draw_event(self):
-        """Alert listeners that round ended in a draw."""
-        for listener in self.listeners:
-            listener.round_draw()
+        pubsub.publish(pubsub.Action.next_player, self.get_current_player())
 
     ##################
     # Simple getters #
