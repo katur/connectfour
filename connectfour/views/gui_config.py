@@ -17,9 +17,9 @@ PLAYER_FEEDBACK_TEXT = (
     'Total players added: {1}'
 )
 
-SLOT_COLOR = 'Yellow'
-SLOT_SIZE = 50
-SLOT_BORDER_WIDTH = 5
+SQUARE_BACKGROUND = 'Yellow'
+SQUARE_SIZE = 50
+SQUARE_BORDER_WIDTH = 5
 
 COLOR_TO_TK = {
     Color.black: 'Black',

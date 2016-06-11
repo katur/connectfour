@@ -5,7 +5,7 @@ from connectfour import pubsub
 from connectfour.util.color import get_color_list
 from connectfour.views.gui_config import (
     WINDOW_TITLE, SETUP_TITLE, GAME_TITLE, PLAYER_FEEDBACK_TEXT,
-    SLOT_COLOR, SLOT_SIZE, SLOT_BORDER_WIDTH,
+    SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH,
     COLOR_TO_TK, PADDING,
 )
 
@@ -21,11 +21,13 @@ class GUIView(object):
 
         self._create_subscriptions()
 
-        # Initialize GUI wrappers
+        # Store widgets here
+        self.widgets = {}
+
+        # Initialize GUI window
         window = tk.Tk()
         window.title(WINDOW_TITLE)
-        self.main_frame = tk.Frame(window)
-        self.main_frame.grid()
+        self.widgets['window'] = window
 
         # Initialize and launch setup screen
         self._create_setup_frame()
@@ -48,6 +50,7 @@ class GUIView(object):
             pubsub.Action.round_won: self._on_round_won,
             pubsub.Action.round_draw: self._on_round_draw,
         }
+
         for action, response in responses.iteritems():
             pubsub.subscribe(action, response)
 
@@ -56,12 +59,13 @@ class GUIView(object):
     ###########################
 
     def _create_setup_frame(self):
-        self.setup_frame = tk.Frame(self.main_frame, padx=PADDING,
-                                    pady=PADDING)
-        self.setup_frame.grid()
-        self._create_setup_widgets()
+        setup_frame = tk.Frame(self.widgets['window'], padx=PADDING,
+                               pady=PADDING)
+        setup_frame.grid()
+        self.widgets['setup_frame'] = setup_frame
+        self._create_setup_components()
 
-    def _create_setup_widgets(self):
+    def _create_setup_components(self):
         TITLE_ROW = 0
         ADD_PLAYER_ROW = 1
         PLAYER_FEEDBACK_ROW = 2
@@ -73,45 +77,53 @@ class GUIView(object):
         self._create_setup_control_row(CONTROL_ROW)
 
     def _create_setup_title_row(self, row):
-        setup_title = tk.Label(self.setup_frame, text=SETUP_TITLE,
+        setup_title = tk.Label(self.widgets['setup_frame'], text=SETUP_TITLE,
                                pady=PADDING)
         setup_title.grid(row=row, columnspan=2)
+        self.widgets['setup_title'] = setup_title
 
     def _create_add_player_row(self, row):
-        self.player_entry = tk.Entry(self.setup_frame)
-        self.player_entry.grid(row=row, column=0, pady=PADDING)
+        player_entry = tk.Entry(self.widgets['setup_frame'])
+        player_entry.grid(row=row, column=0, pady=PADDING)
+        self.widgets['player_entry'] = player_entry
 
-        add_player_button = tk.Button(self.setup_frame, text='Add Player',
+        add_player_button = tk.Button(self.widgets['setup_frame'],
+                                      text='Add Player',
                                       command=self._add_player)
 
         add_player_button.grid(row=row, column=1)
+        self.widgets['add_player_button'] = add_player_button
 
     def _create_player_feedback_row(self, row):
-        self.player_feedback = tk.Message(self.setup_frame, width=500)
-        self.player_feedback.grid(row=row, columnspan=2)
+        player_feedback = tk.Message(self.widgets['setup_frame'], width=500)
+        player_feedback.grid(row=row, columnspan=2)
+        self.widgets['player_feedback'] = player_feedback
 
     def _create_setup_control_row(self, row):
-        self.launch_game_button = tk.Button(self.setup_frame,
-                                            text='Launch Game',
-                                            command=self._launch_game,
-                                            pady=PADDING)
-        self.launch_game_button.grid(row=row, column=0)
-        self.launch_game_button.configure(state=tk.DISABLED)
+        launch_game_button = tk.Button(self.widgets['setup_frame'],
+                                       text='Launch Game',
+                                       command=self._launch_game,
+                                       pady=PADDING, state=tk.DISABLED)
+        launch_game_button.grid(row=row, column=0)
+        self.widgets['launch_game_button'] = launch_game_button
 
-        setup_quit = tk.Button(self.setup_frame, text='Quit',
-                               command=self.main_frame.quit)
-        setup_quit.grid(row=row, column=1)
+        setup_quit_button = tk.Button(self.widgets['setup_frame'],
+                                      text='Quit',
+                                      command=self.widgets['window'].quit)
+        setup_quit_button.grid(row=row, column=1)
+        self.widgets['setup_quit_button'] = setup_quit_button
 
     ##########################
     # Widgets for Game Frame #
     ##########################
 
     def _create_game_frame(self):
-        self.game_frame = tk.Frame(self.main_frame)
-        self.game_frame.grid()
-        self._create_game_widgets()
+        game_frame = tk.Frame(self.widgets['window'])
+        game_frame.grid()
+        self.widgets['game_frame'] = game_frame
+        self._create_game_components()
 
-    def _create_game_widgets(self):
+    def _create_game_components(self):
         TITLE_ROW = 0
         FEEDBACK_ROW = 1
         COLUMN_BUTTONS_ROW = 2
@@ -125,55 +137,65 @@ class GUIView(object):
         self._create_game_control_row(CONTROL_ROW)
 
     def _create_game_title_row(self, row):
-        game_title = tk.Label(self.game_frame, text=GAME_TITLE)
+        game_title = tk.Label(self.widgets['game_frame'], text=GAME_TITLE)
         game_title.grid(row=row, columnspan=self.num_columns)
+        self.widgets['game_title'] = game_title
 
     def _create_game_feedback_row(self, row):
-        self.game_feedback = tk.Label(self.game_frame)
-        self.game_feedback.grid(row=row, columnspan=self.num_columns)
+        game_feedback = tk.Label(self.widgets['game_frame'])
+        game_feedback.grid(row=row, columnspan=self.num_columns)
+        self.widgets['game_feedback'] = game_feedback
 
     def _create_column_buttons_row(self, row):
-        self.column_buttons = []
+        column_buttons = []
+
         for column in range(self.num_columns):
-            button = tk.Button(self.game_frame, text='Play',
+            button = tk.Button(self.widgets['game_frame'], text='Play',
                                command=lambda i=column: self._play_disc(i))
             button.grid(row=row, column=column)
-            self.column_buttons.append(button)
+            column_buttons.append(button)
+
+        self.widgets['column_buttons'] = column_buttons
 
     def _create_game_grid(self, start_row):
         # Create 2D array to hold pointers to slot widgets
-        self.slots = [[None for column in range(self.num_columns)]
-                      for row in range(self.num_rows)]
+        squares = [[None for column in range(self.num_columns)]
+                   for row in range(self.num_rows)]
 
         for row in range(self.num_rows):
             for column in range(self.num_columns):
-                slot = tk.Frame(self.game_frame,
-                                width=SLOT_SIZE, height=SLOT_SIZE,
-                                background=SLOT_COLOR,
-                                borderwidth=SLOT_BORDER_WIDTH,
-                                relief=tk.RAISED)
-                slot.grid(row=row + start_row, column=column)
-                self.slots[row][column] = slot
+                square = tk.Frame(self.widgets['game_frame'],
+                                  width=SQUARE_SIZE, height=SQUARE_SIZE,
+                                  background=SQUARE_BACKGROUND,
+                                  borderwidth=SQUARE_BORDER_WIDTH,
+                                  relief=tk.RAISED)
+                square.grid(row=row + start_row, column=column)
+                squares[row][column] = square
+
+        self.widgets['squares'] = squares
 
     def _create_game_control_row(self, row):
-        self.play_again_button = tk.Button(self.game_frame,
-                                           text='Play Again',
-                                           command=self._play_again)
-        self.play_again_button.grid(row=row, column=0, columnspan=2)
+        play_again_button = tk.Button(self.widgets['game_frame'],
+                                      text='Play Again',
+                                      command=self._play_again)
+        play_again_button.grid(row=row, column=0, columnspan=2)
+        self.widgets['play_again_button'] = play_again_button
 
-        quit = tk.Button(self.game_frame, text='Quit',
-                         command=self.main_frame.quit)
-        quit.grid(row=row, column=2, columnspan=2)
+        game_quit_button = tk.Button(self.widgets['game_frame'],
+                                     text='Quit',
+                                     command=self.widgets['window'].quit)
+        game_quit_button.grid(row=row, column=2, columnspan=2)
+        self.widgets['game_quit_button'] = game_quit_button
 
     #################################
     # Button (de)activation helpers #
     #################################
     def _enable_column_buttons(self):
-        for button in self.column_buttons:
+        for button in self.widgets['column_buttons']:
             button.configure(state=tk.NORMAL)
 
     def _disable_column_buttons(self):
-        for button in self.column_buttons:
+        for button in self.widgets['column_buttons']:
             button.configure(state=tk.DISABLED)
 
     ###########################################
@@ -181,19 +203,19 @@ class GUIView(object):
     ###########################################
 
     def _add_player(self):
-        name = self.player_entry.get()
+        name = self.widgets['player_entry'].get()
         index = self.game.get_num_players()
         color = COLORS[index]
         self.game.add_player(name, color)
-        self.player_entry.delete(0, 'end')
+        self.widgets['player_entry'].delete(0, 'end')
 
     def _launch_game(self):
-        self.setup_frame.grid_forget()
+        self.widgets['setup_frame'].grid_forget()
         self._create_game_frame()
         self.game.start_round()
 
     def _play_again(self):
-        self.game_frame.grid_forget()
+        self.widgets['game_frame'].grid_forget()
         self._create_game_frame()
         self.game.start_round()
 
@@ -205,35 +227,36 @@ class GUIView(object):
     ################################
 
     def _on_player_added(self, player):
-        self.player_feedback.configure(text=(
-            PLAYER_FEEDBACK_TEXT
-            .format(player, self.game.get_num_players())))
+        self.widgets['player_feedback'].configure(text=(
+            PLAYER_FEEDBACK_TEXT.format(player, self.game.get_num_players())))
 
         # Only one player is needed to enable start button
-        self.launch_game_button.configure(state=tk.NORMAL)
+        self.widgets['launch_game_button'].configure(state=tk.NORMAL)
 
     def _on_round_started(self, round_number):
-        self.play_again_button.configure(state=tk.DISABLED)
+        self.widgets['play_again_button'].configure(state=tk.DISABLED)
         self._enable_column_buttons()
 
     def _on_next_player(self, player):
-        self.game_feedback.configure(text="{}'s turn".format(player))
+        self.widgets['game_feedback'].configure(
+            text="{}'s turn".format(player))
 
     def _on_try_again(self, player, reason):
-        self.game_feedback.configure(text='{} try again ({})'
-                                     .format(player, reason.name))
+        self.widgets['game_feedback'].configure(
+            text='{} try again ({})'.format(player, reason.name))
 
     def _on_disc_played(self, player, position):
         row, column = position
-        self.slots[row][column].configure(
+        self.widgets['squares'][row][column].configure(
             background=COLOR_TO_TK[player.disc.color])
 
     def _on_round_won(self, player, winning_positions):
-        self.game_feedback.configure(text='{} won the round'.format(player))
+        self.widgets['game_feedback'].configure(
+            text='{} won the round'.format(player))
         self._disable_column_buttons()
-        self.play_again_button.configure(state=tk.NORMAL)
+        self.widgets['play_again_button'].configure(state=tk.NORMAL)
 
     def _on_round_draw(self):
-        self.game_feedback.configure(text='Round ended in a draw')
+        self.widgets['game_feedback'].configure(text='Round ended in a draw')
         self._disable_column_buttons()
-        self.play_again_button.configure(state=tk.NORMAL)
+        self.widgets['play_again_button'].configure(state=tk.NORMAL)
