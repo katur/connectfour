@@ -250,10 +250,29 @@ class GUIView(object):
         self.widgets['squares'][row][column].configure(
             background=COLOR_TO_TK[player.disc.color])
 
+    def flash(self, element):
+        NUM_CYCLES = 10
+        CYCLE_TIME = 1000
+        WAIT_TIME = 500
+
+        original_color = element['bg']
+
+        for i in range(NUM_CYCLES):
+            self.widgets['window'].after(
+                WAIT_TIME + CYCLE_TIME * i,
+                lambda: element.config(bg=SQUARE_BACKGROUND))
+            self.widgets['window'].after(
+                WAIT_TIME + CYCLE_TIME * i + CYCLE_TIME / 2,
+                lambda: element.config(bg=original_color))
+
     def _on_round_won(self, player, winning_positions):
         self.widgets['game_feedback'].configure(
             text='{} won the round'.format(player))
         self._disable_column_buttons()
+
+        for row, column in winning_positions:
+            self.flash(self.widgets['squares'][row][column])
+
         self.widgets['play_again_button'].configure(state=tk.NORMAL)
 
     def _on_round_draw(self):
