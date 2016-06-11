@@ -226,6 +226,12 @@ class Game(object):
     def get_remaining_colors(self):
         return set(Color) - self.get_used_colors()
 
+    def get_num_rows(self):
+        return self.board.num_rows
+
+    def get_num_columns(self):
+        return self.board.num_columns
+
 
 if __name__ == '__main__':
     game = Game(6, 7, 4)
