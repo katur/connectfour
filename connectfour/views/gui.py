@@ -13,20 +13,18 @@ GAME_TITLE = (
 )
 
 
-def color_to_tk(color):
-    colors = {
-        Color.black: 'Black',
-        Color.red: 'Red',
-        Color.blue: 'Blue',
-        Color.purple: 'Purple',
-        Color.orange: 'Orange',
-        Color.green: 'Green',
-        Color.pink: 'Pink',
-        Color.dark_green: 'DarkGreen',
-        Color.brown: 'Brown',
-        Color.gray: 'Gray',
-    }
-    return colors[color]
+COLOR_TO_TK = {
+    Color.black: 'Black',
+    Color.red: 'Red',
+    Color.blue: 'Blue',
+    Color.purple: 'Purple',
+    Color.orange: 'Orange',
+    Color.green: 'Green',
+    Color.pink: 'PeachPuff',
+    Color.dark_green: 'DarkGreen',
+    Color.brown: 'Brown',
+    Color.gray: 'Gray',
+}
 
 
 class GUIView(object):
@@ -83,6 +81,7 @@ class GUIView(object):
 
         add_player_button = tk.Button(self.setup_frame, text='Add Player',
                                       command=self.add_player)
+
         add_player_button.grid(row=row, column=1)
 
     def _create_player_feedback_row(self, row):
@@ -90,7 +89,8 @@ class GUIView(object):
         self.player_feedback.grid(row=row, columnspan=2)
 
     def _create_setup_control_row(self, row):
-        self.start_game_button = tk.Button(self.setup_frame, text='Start Game',
+        self.start_game_button = tk.Button(self.setup_frame,
+                                           text='Start Game',
                                            command=self.start_game,
                                            pady=PADDING)
         self.start_game_button.grid(row=row, column=0)
@@ -158,7 +158,8 @@ class GUIView(object):
                 self.slots[row][column] = slot
 
     def _create_game_control_row(self, row):
-        self.play_again_button = tk.Button(self.game_frame, text='Play Again',
+        self.play_again_button = tk.Button(self.game_frame,
+                                           text='Play Again',
                                            command=self.play_again)
         self.play_again_button.grid(row=row, column=0, columnspan=2)
 
@@ -229,7 +230,7 @@ class GUIView(object):
     def disc_played(self, player, position):
         row, column = position
         self.slots[row][column].configure(
-            background=color_to_tk(player.disc.color))
+            background=COLOR_TO_TK[player.disc.color])
 
     def round_won(self, player, winning_positions):
         self.game_feedback.configure(text='{} won the round'.format(player))
