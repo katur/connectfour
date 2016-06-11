@@ -149,7 +149,7 @@ class Board(object):
         start should be a 2-tuple (row, column) of the starting position.
 
         step should be a 2-tuple, (vertical_step, horizontal_step),
-        and the mirror of this step will be included as well.
+        and the 180-degree rotation of this step will be included as well.
         For example, to check the horizontal axis, step can be
         (0, 1) or (0, -1). Likewise, to check the up-right/down-left
         diagonal, step can be (1, 1) or (-1, -1).
