@@ -4,14 +4,15 @@ from connectfour.util.color import Color, get_color_list
 
 
 PADDING = 20
+
 SETUP_TITLE = (
     'Welcome to Connect Four! '
     'Please select game parameters and add players.'
 )
+
 GAME_TITLE = (
     'Welcome to Connect Four!'
 )
-
 
 COLOR_TO_TK = {
     Color.black: 'Black',
