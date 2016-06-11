@@ -29,14 +29,6 @@ def color_to_tk(color):
     return colors[color]
 
 
-def enable_button(button):
-    button.configure(state=tk.NORMAL)
-
-
-def disable_button(button):
-    button.configure(state=tk.DISABLED)
-
-
 class GUIView(object):
 
     def __init__(self, game):
@@ -86,8 +78,8 @@ class GUIView(object):
         setup_title.grid(row=row, columnspan=2)
 
     def _create_add_player_row(self, row):
-        self.add_player_entry = tk.Entry(self.setup_frame)
-        self.add_player_entry.grid(row=row, column=0, pady=PADDING)
+        self.player_entry = tk.Entry(self.setup_frame)
+        self.player_entry.grid(row=row, column=0, pady=PADDING)
 
         add_player_button = tk.Button(self.setup_frame, text='Add Player',
                                       command=self.add_player)
@@ -102,7 +94,7 @@ class GUIView(object):
                                            command=self.start_game,
                                            pady=PADDING)
         self.start_game_button.grid(row=row, column=0)
-        disable_button(self.start_game_button)
+        self.start_game_button.configure(state=tk.DISABLED)
 
         setup_quit = tk.Button(self.setup_frame, text='Quit',
                                command=self.main_frame.quit)
@@ -180,18 +172,18 @@ class GUIView(object):
 
     def enable_column_buttons(self):
         for button in self.column_buttons:
-            enable_button(button)
+            button.configure(state=tk.NORMAL)
 
     def disable_column_buttons(self):
         for button in self.column_buttons:
-            disable_button(button)
+            button.configure(state=tk.DISABLED)
 
     ######################
     # Callbacks to model #
     ######################
 
     def add_player(self):
-        name = self.add_player_entry.get()
+        name = self.player_entry.get()
         color = self.colors[0]
         del self.colors[0]
         self.game.add_player(name, color)
@@ -214,16 +206,17 @@ class GUIView(object):
     ################################
 
     def player_added(self, player):
+        self.player_entry.delete(0, 'end')
         self.player_feedback.configure(text=(
             'Welcome, {}\n'
             'Total players added: {}'
             .format(player, self.game.get_num_players())))
 
         # Only one player is needed to enable start button
-        enable_button(self.start_game_button)
+        self.start_game_button.configure(state=tk.NORMAL)
 
     def round_started(self, round_number):
-        disable_button(self.play_again_button)
+        self.play_again_button.configure(state=tk.DISABLED)
         self.enable_column_buttons()
 
     def next_player(self, player):
@@ -241,9 +234,9 @@ class GUIView(object):
     def round_won(self, player, winning_positions):
         self.game_feedback.configure(text='{} won the round'.format(player))
         self.disable_column_buttons()
-        enable_button(self.play_again_button)
+        self.play_again_button.configure(state=tk.NORMAL)
 
     def round_draw(self):
         self.game_feedback.configure(text='Round ended in a draw')
         self.disable_column_buttons()
-        enable_button(self.play_again_button)
+        self.play_again_button.configure(state=tk.NORMAL)
