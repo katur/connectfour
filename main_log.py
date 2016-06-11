@@ -3,7 +3,8 @@ from connectfour.model.color import Color
 from connectfour.views.logger import LogView
 
 game = Game(num_rows=6, num_columns=7, num_to_win=4)
-logger = LogView(game)
+logger_view = LogView(game)
+
 game.add_player('tim', Color.black)
 game.add_player('xavier', Color.red)
 game.start_round()
