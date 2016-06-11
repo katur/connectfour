@@ -1,6 +1,6 @@
 import Tkinter as tk
 
-from connectfour.model.color import Color, get_color_list
+from connectfour.util.color import Color, get_color_list
 
 
 PADDING = 20

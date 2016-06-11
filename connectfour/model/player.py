@@ -1,4 +1,4 @@
-from disc import Disc
+from connectfour.model.disc import Disc
 
 
 class Player(object):

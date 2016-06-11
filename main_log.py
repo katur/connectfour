@@ -1,6 +1,7 @@
 from connectfour.model.game import Game
-from connectfour.model.color import Color
+from connectfour.util.color import Color
 from connectfour.views.logger import LogView
+
 
 game = Game(num_rows=6, num_columns=7, num_to_win=4)
 logger_view = LogView(game)

@@ -1,8 +1,8 @@
 from enum import Enum
 
-from board import Board
-from color import Color
-from player import Player
+from connectfour.model.board import Board
+from connectfour.model.player import Player
+from connectfour.util.color import Color
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
