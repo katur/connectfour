@@ -4,16 +4,8 @@ from enum import Enum
 class Color(Enum):
     """A disc color."""
 
-    black = 0
-    red = 1
-    yellow = 2
-    blue = 3
-    orange = 4
-    green = 5
-    purple = 6
-    pink = 7
-    light_green = 8
-    brown = 9
+    (black, red, blue, purple, brown, dark_green, pink, gray, orange,
+        green) = range(10)
 
 
 def get_color_dictionary():
