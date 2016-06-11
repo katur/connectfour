@@ -1,23 +1,12 @@
-from enum import Enum
-
 from connectfour import pubsub
 from connectfour.model.board import Board
 from connectfour.model.player import Player
 from connectfour.util.color import Color
+from connectfour.util.tryagainreason import TryAgainReason
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
 DEFAULT_TO_WIN = 4
-
-
-class TryAgainReason(Enum):
-    """Reason that a player needs to try again.
-
-    They need to try again if their previous move was illegal.
-    """
-
-    column_out_of_bounds = 1
-    column_full = 2
 
 
 class Game(object):
