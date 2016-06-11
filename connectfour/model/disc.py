@@ -3,9 +3,6 @@ class Disc(object):
 
     Each player creates just one disc, and plays the same disc repeatedly
     in different positions.
-
-    TODO: consider a factory design pattern so that each player instantiates
-    only one chip object.
     """
 
     def __init__(self, color):
