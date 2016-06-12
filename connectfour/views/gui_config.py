@@ -16,8 +16,8 @@ COLOR_TO_TK = {
 }
 
 REASON_TO_STR = {
-    TryAgainReason.column_out_of_bounds: 'Out of bounds',
-    TryAgainReason.column_full: 'Column full',
+    TryAgainReason.column_out_of_bounds: 'out of bounds',
+    TryAgainReason.column_full: 'column full',
 }
 
 WINDOW_TITLE_TEXT = 'Connect Four'
