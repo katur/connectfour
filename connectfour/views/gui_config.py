@@ -1,16 +1,19 @@
 from connectfour.util.color import Color
 
 
-WINDOW_TITLE = 'Connect Four'
-
-SETUP_TITLE = (
+WINDOW_TITLE_TEXT = 'Connect Four'
+GAME_TITLE_TEXT = 'Welcome to Connect Four!'
+SETUP_TITLE_TEXT = (
     'Welcome to Connect Four! '
     'Please select game parameters and add players.'
 )
 
-GAME_TITLE = (
-    'Welcome to Connect Four!'
-)
+
+ADD_PLAYER_TEXT = 'Add Player'
+LAUNCH_GAME_TEXT = 'Start'
+PLAY_AGAIN_TEXT = 'Play Again'
+COLUMN_TEXT = 'Play'
+QUIT_TEXT = 'Exit'
 
 PLAYER_FEEDBACK_TEXT = (
     'Welcome, {0}\n'
@@ -20,6 +23,10 @@ PLAYER_FEEDBACK_TEXT = (
 SQUARE_BACKGROUND = 'Yellow'
 SQUARE_SIZE = 50
 SQUARE_BORDER_WIDTH = 5
+
+FLASH_CYCLES = 10
+FLASH_CYCLE_TIME = 1000
+FLASH_WAIT_TIME = 500
 
 COLOR_TO_TK = {
     Color.black: 'Black',

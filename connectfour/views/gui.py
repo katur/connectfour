@@ -4,8 +4,11 @@ from connectfour import pubsub
 
 from connectfour.util.color import get_color_list
 from connectfour.views.gui_config import (
-    WINDOW_TITLE, SETUP_TITLE, GAME_TITLE, PLAYER_FEEDBACK_TEXT,
+    WINDOW_TITLE_TEXT, GAME_TITLE_TEXT, SETUP_TITLE_TEXT,
+    ADD_PLAYER_TEXT, LAUNCH_GAME_TEXT, PLAY_AGAIN_TEXT,
+    COLUMN_TEXT, QUIT_TEXT, PLAYER_FEEDBACK_TEXT,
     SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH,
+    FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME,
     COLOR_TO_TK, PADDING,
 )
 
@@ -26,7 +29,7 @@ class GUIView(object):
 
         # Initialize GUI window
         window = tk.Tk()
-        window.title(WINDOW_TITLE)
+        window.title(WINDOW_TITLE_TEXT)
         self.widgets['window'] = window
 
         # Initialize and launch setup screen
@@ -77,8 +80,8 @@ class GUIView(object):
         self._create_setup_control_row(CONTROL_ROW)
 
     def _create_setup_title_row(self, row):
-        setup_title = tk.Label(self.widgets['setup_frame'], text=SETUP_TITLE,
-                               pady=PADDING)
+        setup_title = tk.Label(self.widgets['setup_frame'],
+                               text=SETUP_TITLE_TEXT, pady=PADDING)
         setup_title.grid(row=row, columnspan=2)
         self.widgets['setup_title'] = setup_title
 
@@ -88,7 +91,7 @@ class GUIView(object):
         self.widgets['player_entry'] = player_entry
 
         add_player_button = tk.Button(self.widgets['setup_frame'],
-                                      text='Add Player',
+                                      text=ADD_PLAYER_TEXT,
                                       command=self._add_player)
 
         add_player_button.grid(row=row, column=1)
@@ -101,14 +104,14 @@ class GUIView(object):
 
     def _create_setup_control_row(self, row):
         launch_game_button = tk.Button(self.widgets['setup_frame'],
-                                       text='Launch Game',
+                                       text=LAUNCH_GAME_TEXT,
                                        command=self._launch_game,
                                        pady=PADDING, state=tk.DISABLED)
         launch_game_button.grid(row=row, column=0)
         self.widgets['launch_game_button'] = launch_game_button
 
         setup_quit_button = tk.Button(self.widgets['setup_frame'],
-                                      text='Quit',
+                                      text=QUIT_TEXT,
                                       command=self.widgets['window'].quit)
         setup_quit_button.grid(row=row, column=1)
         self.widgets['setup_quit_button'] = setup_quit_button
@@ -137,7 +140,7 @@ class GUIView(object):
         self._create_game_control_row(CONTROL_ROW)
 
     def _create_game_title_row(self, row):
-        game_title = tk.Label(self.widgets['game_frame'], text=GAME_TITLE)
+        game_title = tk.Label(self.widgets['game_frame'], text=GAME_TITLE_TEXT)
         game_title.grid(row=row, columnspan=self.num_columns)
         self.widgets['game_title'] = game_title
 
@@ -150,7 +153,7 @@ class GUIView(object):
         column_buttons = []
 
         for column in range(self.num_columns):
-            button = tk.Button(self.widgets['game_frame'], text='Play',
+            button = tk.Button(self.widgets['game_frame'], text=COLUMN_TEXT,
                                command=lambda i=column: self._play_disc(i))
             button.grid(row=row, column=column)
             column_buttons.append(button)
@@ -176,13 +179,13 @@ class GUIView(object):
 
     def _create_game_control_row(self, row):
         play_again_button = tk.Button(self.widgets['game_frame'],
-                                      text='Play Again',
+                                      text=PLAY_AGAIN_TEXT,
                                       command=self._play_again)
         play_again_button.grid(row=row, column=0, columnspan=2)
         self.widgets['play_again_button'] = play_again_button
 
         game_quit_button = tk.Button(self.widgets['game_frame'],
-                                     text='Quit',
+                                     text=QUIT_TEXT,
                                      command=self.widgets['window'].quit)
         game_quit_button.grid(row=row, column=2, columnspan=2)
         self.widgets['game_quit_button'] = game_quit_button
@@ -251,18 +254,14 @@ class GUIView(object):
             background=COLOR_TO_TK[player.disc.color])
 
     def flash(self, element):
-        NUM_CYCLES = 10
-        CYCLE_TIME = 1000
-        WAIT_TIME = 500
-
         original_color = element['bg']
 
-        for i in range(NUM_CYCLES):
+        for i in range(FLASH_CYCLES):
             self.widgets['window'].after(
-                WAIT_TIME + CYCLE_TIME * i,
+                FLASH_WAIT_TIME + FLASH_CYCLE_TIME * i,
                 lambda: element.config(bg=SQUARE_BACKGROUND))
             self.widgets['window'].after(
-                WAIT_TIME + CYCLE_TIME * i + CYCLE_TIME / 2,
+                int(FLASH_WAIT_TIME + FLASH_CYCLE_TIME * (i + 0.5)),
                 lambda: element.config(bg=original_color))
 
     def _on_round_won(self, player, winning_positions):
