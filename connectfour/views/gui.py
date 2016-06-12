@@ -93,9 +93,14 @@ class GUIView(object):
             entry.grid(row=0, column=1)
             self.widgets[widget_name] = entry
 
-        create_dimension_pair(0, 'Rows:', '6', 'row_entry')
-        create_dimension_pair(1, 'Columns:', '7', 'column_entry')
-        create_dimension_pair(2, 'To Win:', '4', 'to_win_entry')
+        create_dimension_pair(
+            column=0, text='Rows:', default='6', widget_name='row_entry')
+        create_dimension_pair(
+            column=1, text='Columns:', default='7',
+            widget_name='column_entry')
+        create_dimension_pair(
+            column=2, text='To Win:', default='4',
+            widget_name='to_win_entry')
 
     def _create_add_player_row(self, row):
         player_entry = tk.Entry(self.widgets['setup_frame'])
