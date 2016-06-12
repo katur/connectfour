@@ -41,4 +41,4 @@ COLOR_TO_TK = {
     Color.gray: 'Gray',
 }
 
-PADDING = 20
+PAD = 20

@@ -12,18 +12,8 @@ DEFAULT_TO_WIN = 4
 class Game(object):
     """Top-level model of the Connect Four game."""
 
-    def __init__(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
-                 num_to_win=DEFAULT_TO_WIN):
-        if num_rows < 1 or num_columns < 1:
-            raise ValueError('Row and column dimensions must be at least 1')
-
-        if (num_to_win < 1 or
-                (num_to_win > num_rows and num_to_win > num_columns)):
-            raise ValueError('Number to win must be at least 1, and '
-                             'cannot exceed both the number of rows '
-                             'and the number of columns')
-
-        self.board = Board(num_rows, num_columns, num_to_win)
+    def __init__(self):
+        self.board = None
         self.session_in_progress = False
         self.round_in_progress = False
         self.round_number = 0
@@ -42,9 +32,22 @@ class Game(object):
     def __repr__(self):
         return self.__str__()
 
-    #####################
-    # Game play methods #
-    #####################
+    ######################
+    # Game setup methods #
+    ######################
+
+    def add_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
+                  num_to_win=DEFAULT_TO_WIN):
+        if num_rows < 1 or num_columns < 1:
+            raise ValueError('Row and column dimensions must be at least 1')
+
+        if (num_to_win < 1 or
+                (num_to_win > num_rows and num_to_win > num_columns)):
+            raise ValueError('Number to win must be at least 1, and '
+                             'cannot exceed both the number of rows '
+                             'and the number of columns')
+
+        self.board = Board(num_rows, num_columns, num_to_win)
 
     def add_player(self, name, color):
         """Add a player to the session."""
@@ -62,6 +65,10 @@ class Game(object):
         player = Player(name, color)
         self.players.append(player)
         pubsub.publish(pubsub.Action.player_added, player)
+
+    #####################
+    # Game play methods #
+    #####################
 
     def start_round(self):
         """Start a new round of the game."""
@@ -171,7 +178,8 @@ class Game(object):
 
 
 if __name__ == '__main__':
-    game = Game(6, 7, 4)
+    game = Game()
+    game.add_board(6, 7, 4)
     game.add_player('a', Color.red)
     game.add_player('b', Color.blue)
     game.add_player('c', Color.yellow)
