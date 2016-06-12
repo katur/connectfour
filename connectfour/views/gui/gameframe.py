@@ -144,7 +144,16 @@ class GameFrame(object):
                   window=self.view.window, color=SQUARE_BACKGROUND)
 
     def reset_squares(self):
-        # Tkinter raises exceptions if destroy() while still flashing
+        '''
+        Calling .destroy() or .grid_forget() here, or even at the
+        end of _create_game_matrix(), causes the GUI screen to jump,
+        since the old matrix is removed faster than the new is drawn.
+
+        For now, I'm just letting the matrices pile up.
+
+        Possible solution:
+        Keep track of previous two games. Destroy game 2-ago.
+        '''
         # self.widgets['matrix_frame'].grid_forget()
 
         self._create_game_matrix()
