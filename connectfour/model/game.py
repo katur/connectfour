@@ -4,6 +4,7 @@ from connectfour.model.player import Player
 from connectfour.util.color import Color
 from connectfour.util.tryagainreason import TryAgainReason
 
+# TODO: these defaults should maybe be in higher class for use by view
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
 DEFAULT_TO_WIN = 4
@@ -14,10 +15,13 @@ class Game(object):
 
     def __init__(self):
         self.board = None
+        self.players = []
+        self.used_colors = set()
+        self.used_names = set()
+
         self.session_in_progress = False
         self.round_in_progress = False
         self.round_number = 0
-        self.players = []
 
         # Which player goes first in the next round
         self.first_turn_index = 0
@@ -38,6 +42,7 @@ class Game(object):
 
     def add_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                   num_to_win=DEFAULT_TO_WIN):
+        # TODO: these checks should maybe be in Board class?
         if num_rows < 1 or num_columns < 1:
             raise ValueError('Row and column dimensions must be at least 1')
 
@@ -51,20 +56,28 @@ class Game(object):
 
     def add_player(self, name, color):
         """Add a player to the session."""
+
+        # TODO: this check maybe unnecessary (just document)
+        # If do check for this, should also make sure game hasn't begun
         if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
 
+        # TODO: this check redundant with below, but should handle in view
+        if len(self.used_colors) >= len(Color):
+            raise RuntimeError('Game has reached max players')
+
+        if color in self.used_colors:
+            raise ValueError('Color {} is already used'.format(color))
+
+        # TODO: empty/unique string enforcement maybe just limit to view
         if not name:
             raise ValueError('Name is required and must be non-empty')
 
-        used_colors = self.get_used_colors()
+        if name in self.used_names:
+            raise ValueError('Name {} is already used')
 
-        if len(used_colors) >= len(Color):
-            raise RuntimeError('Game has reached max players')
-
-        if color in used_colors:
-            raise ValueError('Color {} is already taken'.format(color))
-
+        self.used_colors.add(color)
+        self.used_names.add(name)
         player = Player(name, color)
         self.players.append(player)
         pubsub.publish(pubsub.Action.player_added, player)
@@ -153,6 +166,12 @@ class Game(object):
     # Simple getters #
     ##################
 
+    def get_num_rows(self):
+        return self.board.num_rows
+
+    def get_num_columns(self):
+        return self.board.num_columns
+
     def get_current_player(self):
         if not self.players:
             raise RuntimeError('Cannot get current player if no '
@@ -167,23 +186,5 @@ class Game(object):
     def get_num_players(self):
         return len(self.players)
 
-    def get_used_colors(self):
-        return {player.disc.color for player in self.players}
-
     def get_remaining_colors(self):
-        return set(Color) - self.get_used_colors()
-
-    def get_num_rows(self):
-        return self.board.num_rows
-
-    def get_num_columns(self):
-        return self.board.num_columns
-
-
-if __name__ == '__main__':
-    game = Game()
-    game.add_board(6, 7, 4)
-    game.add_player('a', Color.red)
-    game.add_player('b', Color.blue)
-    game.add_player('c', Color.yellow)
-    print game.get_remaining_colors()
+        return set(Color) - self.used_colors
