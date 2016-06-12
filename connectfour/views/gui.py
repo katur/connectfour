@@ -37,11 +37,7 @@ class GUIView(object):
         window.mainloop()
 
         # Cleanup once main loop ends
-        try:
-            window.destroy()
-        except Exception:
-            # TODO: How to handle this?
-            pass
+        window.destroy()
 
     def _create_subscriptions(self):
         responses = {
@@ -169,8 +165,7 @@ class GUIView(object):
             for column in range(self.num_columns):
                 square = tk.Frame(self.widgets['game_frame'],
                                   width=SQUARE_SIZE, height=SQUARE_SIZE,
-                                  background=SQUARE_BACKGROUND,
-                                  borderwidth=SQUARE_BORDER_WIDTH,
+                                  bg=SQUARE_BACKGROUND, bd=SQUARE_BORDER_WIDTH,
                                   relief=tk.RAISED)
                 square.grid(row=row + start_row, column=column)
                 squares[row][column] = square
@@ -251,7 +246,7 @@ class GUIView(object):
     def _on_disc_played(self, player, position):
         row, column = position
         self.widgets['squares'][row][column].configure(
-            background=COLOR_TO_TK[player.disc.color])
+            bg=COLOR_TO_TK[player.disc.color])
 
     def flash(self, element):
         original_color = element['bg']
