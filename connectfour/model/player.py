@@ -14,3 +14,6 @@ class Player(object):
 
     def __repr__(self):
         return self.__str__()
+
+    def get_color(self):
+        return self.disc.color

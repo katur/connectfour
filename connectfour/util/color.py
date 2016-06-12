@@ -18,6 +18,4 @@ def get_color_dictionary():
     return colors
 
 
-def get_color_list():
-    """Get all colors as a list"""
-    return [color for color in Color]
+COLORS = [color for color in Color]

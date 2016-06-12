@@ -1,5 +1,5 @@
 from connectfour.model.game import Game
-from connectfour.views.gui import GUIView
+from connectfour.views.gui.view import GUIView
 from connectfour.views.logger import LogView
 
 

@@ -20,6 +20,8 @@ REASON_TO_STR = {
     TryAgainReason.column_full: 'column full',
 }
 
+PAD = 20
+
 WINDOW_TITLE_TEXT = 'Connect Four'
 GAME_TITLE_TEXT = 'Welcome to Connect Four!'
 SETUP_TITLE_TEXT = (
@@ -27,17 +29,12 @@ SETUP_TITLE_TEXT = (
     'Please select game parameters and add players.'
 )
 
-
 ADD_PLAYER_TEXT = 'Add Player'
 LAUNCH_GAME_TEXT = 'Start Game'
 PLAY_AGAIN_TEXT = 'Play Again'
 COLUMN_TEXT = 'Play'
 QUIT_TEXT = 'Exit'
-
-PLAYER_FEEDBACK_TEXT = (
-    'Welcome, {0}\n'
-    'Total players added: {1}'
-)
+PLAYER_FEEDBACK_TEXT = 'Welcome, {0}\nTotal players added: {1}'
 
 SQUARE_BACKGROUND = 'Yellow'
 SQUARE_SIZE = 50
@@ -46,5 +43,3 @@ SQUARE_BORDER_WIDTH = 5
 FLASH_CYCLES = 10
 FLASH_CYCLE_TIME = 1000
 FLASH_WAIT_TIME = 500
-
-PAD = 20
