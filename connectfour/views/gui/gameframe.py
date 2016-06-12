@@ -8,9 +8,8 @@ from config import (
 
 TITLE_ROW = 0
 FEEDBACK_ROW = 1
-COLUMN_BUTTONS_ROW = 2
-SQUARES_ROW = 3
-CONTROL_ROW = 4
+MATRIX_ROW = 2
+CONTROL_ROW = 3
 
 
 class GameFrame(object):
@@ -37,8 +36,7 @@ class GameFrame(object):
     def _create_widgets(self):
         self._create_game_title()
         self._create_game_feedback()
-        self._create_column_buttons()
-        self._create_game_squares()
+        self._create_game_matrix()
         self._create_game_control()
 
     def _create_game_title(self):
@@ -50,38 +48,40 @@ class GameFrame(object):
         game_feedback.grid(row=FEEDBACK_ROW)
         self.widgets['game_feedback'] = game_feedback
 
-    def _create_column_buttons(self):
-        column_buttons_frame = tk.Frame(self.frame)
-        column_buttons_frame.grid(row=COLUMN_BUTTONS_ROW)
+    def _create_game_matrix(self):
+        matrix_frame = tk.Frame(self.frame)
+        matrix_frame.grid(row=MATRIX_ROW)
+        self.widgets['matrix_frame'] = matrix_frame
 
+        self._create_column_buttons(matrix_frame)
+        self._create_game_squares(matrix_frame)
+
+    def _create_column_buttons(self, parent):
         column_buttons = []
         for column in range(self.num_columns):
             button = tk.Button(
-                column_buttons_frame, text=COLUMN_TEXT,
+                parent, text=COLUMN_TEXT,
                 command=lambda i=column: self.view.play_disc(i))
             button.grid(row=0, column=column)
+
             column_buttons.append(button)
 
         self.widgets['column_buttons'] = column_buttons
 
-    def _create_game_squares(self):
-        squares_frame = tk.Frame(self.frame)
-        squares_frame.grid(row=SQUARES_ROW)
-
+    def _create_game_squares(self, parent):
         # Create 2D array to hold pointers to slot widgets
         squares = [[None for column in range(self.num_columns)]
                    for row in range(self.num_rows)]
 
         for row in range(self.num_rows):
             for column in range(self.num_columns):
-                square = tk.Frame(squares_frame,
+                square = tk.Frame(parent,
                                   width=SQUARE_SIZE, height=SQUARE_SIZE,
                                   bg=SQUARE_BACKGROUND, bd=SQUARE_BORDER_WIDTH,
                                   relief=tk.RAISED)
-                square.grid(row=row, column=column)
+                square.grid(row=row + 1, column=column)
                 squares[row][column] = square
 
-        self.widgets['squares_frame'] = squares_frame
         self.widgets['squares'] = squares
 
     def _create_game_control(self):
@@ -142,4 +142,7 @@ class GameFrame(object):
                   window=self.view.window, color=SQUARE_BACKGROUND)
 
     def reset_squares(self):
-        self._create_game_squares()
+        # Tkinter raises exceptions if destroy() while still flashing
+        # self.widgets['matrix_frame'].grid_forget()
+
+        self._create_game_matrix()
