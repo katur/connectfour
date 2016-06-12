@@ -9,7 +9,7 @@ from connectfour.views.gui_config import (
     COLUMN_TEXT, QUIT_TEXT, PLAYER_FEEDBACK_TEXT,
     SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH,
     FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME,
-    COLOR_TO_TK, PAD,
+    COLOR_TO_TK, REASON_TO_STR, PAD,
 )
 
 COLORS = get_color_list()
@@ -269,7 +269,7 @@ class GUIView(object):
 
     def _on_try_again(self, player, reason):
         self.widgets['game_feedback'].configure(
-            text='{} try again ({})'.format(player, reason.name))
+            text='{} try again ({})'.format(player, REASON_TO_STR[reason]))
 
     def _on_disc_played(self, player, position):
         row, column = position

@@ -54,6 +54,9 @@ class Game(object):
         if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
 
+        if not name:
+            raise ValueError('Name is required and must be non-empty')
+
         used_colors = self.get_used_colors()
 
         if len(used_colors) >= len(Color):
