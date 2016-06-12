@@ -11,19 +11,19 @@ class Action(Enum):
     round_draw = 6
 
 
-callbacks = {}
+subscriptions = {}
 
 
 def subscribe(action, callback):
-    if action not in callbacks:
-        callbacks[action] = []
+    if action not in subscriptions:
+        subscriptions[action] = []
 
-    callbacks[action].append(callback)
+    subscriptions[action].append(callback)
 
 
 def publish(action, *args, **kwargs):
-    if action not in callbacks:
+    if action not in subscriptions:
         return
 
-    for callback in callbacks[action]:
+    for callback in subscriptions[action]:
         callback(*args, **kwargs)
