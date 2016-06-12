@@ -22,5 +22,5 @@ def subscribe(action, callback):
 
 
 def publish(action, *args, **kwargs):
-    for action in callbacks[action]:
-        action(*args, **kwargs)
+    for callback in callbacks[action]:
+        callback(*args, **kwargs)
