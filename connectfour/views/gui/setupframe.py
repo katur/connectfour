@@ -84,7 +84,7 @@ class SetupFrame(object):
 
     def _create_setup_control_row(self, row):
         setup_quit_button = tk.Button(self.frame, text=QUIT_TEXT,
-                                      command=self.view.window.quit)
+                                      command=self.view.quit)
         setup_quit_button.grid(row=row, column=0)
 
         launch_button = tk.Button(self.frame, text=LAUNCH_GAME_TEXT,

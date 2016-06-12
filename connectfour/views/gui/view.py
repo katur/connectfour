@@ -23,9 +23,6 @@ class GUIView(object):
         self.setup_frame = SetupFrame(self)
         self.window.mainloop()
 
-        # Cleanup once main loop ends
-        self.window.destroy()
-
     def _create_subscriptions(self):
         responses = {
             pubsub.Action.player_added: self.on_player_added,
@@ -40,9 +37,12 @@ class GUIView(object):
         for action, response in responses.iteritems():
             pubsub.subscribe(action, response)
 
-    ###########################################
-    # Button callbacks (which call the model) #
-    ###########################################
+    def quit(self):
+        self.window.quit()
+
+    ##########################################################
+    # Callbacks (call the model in response to user actions) #
+    ##########################################################
 
     def add_player(self):
         name = self.setup_frame.parse_player_entry()
@@ -74,9 +74,9 @@ class GUIView(object):
     def play_disc(self, column):
         self.model.play_disc(column)
 
-    ################################
-    # Respond to events from model #
-    ################################
+    ###########################
+    # Respond to model events #
+    ###########################
 
     def on_player_added(self, player):
         self.setup_frame.update_player_feedback(

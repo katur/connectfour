@@ -87,7 +87,7 @@ class GameFrame(object):
         self.widgets['play_again_button'] = play_again_button
 
         game_quit_button = tk.Button(self.frame, text=QUIT_TEXT,
-                                     command=self.view.window.quit)
+                                     command=self.view.quit)
         game_quit_button.grid(row=row, column=2, columnspan=2)
 
     ######################
