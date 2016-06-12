@@ -40,9 +40,9 @@ class GUIView(object):
     def quit(self):
         self.window.quit()
 
-    ##########################################################
-    # Callbacks (call the model in response to user actions) #
-    ##########################################################
+    ######################
+    # Calls to the model #
+    ######################
 
     def add_player(self):
         name = self.setup_frame.parse_player_entry()
@@ -63,7 +63,7 @@ class GUIView(object):
 
         # Move on to game frame
         self.setup_frame.remove()
-        self.game_frame = GameFrame(self)
+        self.game_frame = GameFrame(self, num_rows, num_columns)
         self.model.start_round()
 
     def play_again(self):
