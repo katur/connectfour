@@ -55,7 +55,11 @@ class Board(object):
     def is_in_bounds(self, position):
         """Determine if position is in bounds.
 
-        Position should be a 2-tuple in format (row, column).
+        Args:
+            position: a 2-tuple in format (row, column).
+
+        Returns:
+            bool: True if in bounds, False otherwise.
         """
         row, column = position
         return self.is_row_in_bounds(row) and self.is_column_in_bounds(column)
@@ -76,15 +80,23 @@ class Board(object):
         return True
 
     def reset(self):
-        """Set all positions in the grid to None."""
+        """Reset the board.
+
+        Sets all positions in the board to None.
+        """
         for row in range(self.num_rows):
             for column in range(self.num_columns):
                 self.grid[row][column] = None
 
     def get_disc(self, position):
-        """Get the disc at this position.
+        """Get a disc from the board.
 
-        Position should be a 2-tuple in format (row, column).
+        Args:
+            position: a 2-tuple in format (row, column).
+        Returns:
+            Disc: the disc at this position in the board.
+        Raises:
+            ValueError: if position is out of bounds.
         """
         if not self.is_in_bounds(position):
             raise ValueError('Position {} is out of bounds'
@@ -96,7 +108,13 @@ class Board(object):
     def add_disc(self, disc, column):
         """Add a disc to a column.
 
-        Returns the row in which the disc ended up.
+        Args:
+            disc: a Disc to add.
+            column: integer column to add the disc to.
+        Returns:
+            int: the row in which the disc landed.
+        Raises:
+            ValueError: if column is full or out of bounds.
         """
         if not self.is_column_in_bounds(column):
             raise ValueError('Column {} out of bounds'.format(column))
@@ -119,11 +137,19 @@ class Board(object):
         starting position, outward in the direction indicated by step,
         until a mismatch is found.
 
-        start should be a 2-tuple (row, column) of starting position.
+        Args:
+            start: a 2-tuple (row, column) of starting position.
+            step: a 2-tuple (vertical_step, horizontal_step), indicating
+                how far to move each step.
 
-        step should be a 2-tuple, (vertical_step, horizontal_step).
-        For example, to check upwards, step should be (1, 0).
-        To check diagonally down-left, step should be (-1, -1).
+                For example, to check upwards, step should be (1, 0).
+                To check diagonally down-left, step should be (-1, -1).
+
+            fake_disc (Optional): A disc to pretend to place at start. Might
+                be used to predict whether a win might occur.
+        Returns:
+            set: a set of 2-tuples in format (row, column) of the matching
+                positions.
         """
         disc = fake_disc if fake_disc else self.get_disc(start)
 
@@ -146,13 +172,20 @@ class Board(object):
         as well as outward in the 180-flipped direction,
         until a mismatch is found.
 
-        start should be a 2-tuple (row, column) of the starting position.
+        Args:
+            start: a 2-tuple (row, column) of starting position.
+            step: a 2-tuple (vertical_step, horizontal_step), indicating
+                how far to move each step; the 180-degree rotation of
+                this step will be included as well.
 
-        step should be a 2-tuple, (vertical_step, horizontal_step),
-        and the 180-degree rotation of this step will be included as well.
-        For example, to check the horizontal axis, step can be
-        (0, 1) or (0, -1). Likewise, to check the up-right/down-left
-        diagonal, step can be (1, 1) or (-1, -1).
+                For example, to check the horizontal axis, step can be (0, 1)
+                OR (0, -1)
+
+            fake_disc (Optional): A disc to pretend to place at start. Might
+                be used to predict whether a win might occur.
+        Returns:
+            set: a set of 2-tuples in format (row, column) of the matching
+                positions.
         """
         flipped_step = tuple(-i for i in step)
 
@@ -165,10 +198,13 @@ class Board(object):
     def get_winning_positions(self, origin, fake_disc=None):
         """Get winning positions that include the origin position.
 
-        Optionally supply argument fake_disc to pretend fake_disc were
-        placed at the origin origin.
-
-        If a win including origin is not present, returns an empty set.
+        Args:
+            origin: a 2-tuple (row, column)
+            fake_disc (Optional): A disc to pretend to place at start. Might
+                be used to predict whether a win might occur.
+        Returns:
+            set: a set of 2-tuples in format (row, column) of the winning
+                positions. Returns the empty set if no win found.
         """
         winning_positions = set()
 
