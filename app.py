@@ -1,6 +1,6 @@
 from connectfour.model.game import Game
 from connectfour.views.gui.view import GUIView
-from connectfour.views.logger import LogView
+from connectfour.views.logger.view import LogView
 
 
 game = Game()
