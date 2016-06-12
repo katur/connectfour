@@ -4,9 +4,8 @@ from connectfour import pubsub
 
 
 class LogView(object):
-    def __init__(self, game, stream=sys.stdout):
+    def __init__(self, stream=sys.stdout):
         self.stream = stream
-        self.game = game
         self._create_subscriptions()
 
     def _create_subscriptions(self):

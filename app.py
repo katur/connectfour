@@ -5,5 +5,5 @@ from connectfour.views.logger.view import LogView
 
 game = Game()
 
-log_view = LogView(model=game)
+log_view = LogView()
 gui_view = GUIView(model=game)
