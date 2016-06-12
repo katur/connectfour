@@ -122,21 +122,21 @@ class GameFrame(object):
         color = COLOR_TO_TK[player.get_color()]
         self.widgets['squares'][row][column].configure(bg=color)
 
-    def update_game_feedback(self, text):
-        self.widgets['game_feedback'].configure(text=text)
-
     def announce_next_player(self, player):
-        self.update_game_feedback("{}'s turn".format(player))
+        self._update_game_feedback("{}'s turn".format(player))
 
     def announce_try_again(self, player, reason):
         reason = REASON_TO_STR[reason]
-        self.update_game_feedback('{} try again ({})'.format(player, reason))
+        self._update_game_feedback('{} try again ({})'.format(player, reason))
 
     def announce_winner(self, player):
-        self.update_game_feedback('{} won the round'.format(player))
+        self._update_game_feedback('{} won the round'.format(player))
 
     def announce_draw(self):
-        self.update_game_feedback('Round ended in a draw')
+        self._update_game_feedback('Round ended in a draw')
+
+    def _update_game_feedback(self, text):
+        self.widgets['game_feedback'].configure(text=text)
 
     def flash_squares(self, winning_positions):
         for row, column in winning_positions:
