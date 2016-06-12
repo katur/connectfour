@@ -67,8 +67,7 @@ class GUIView(object):
         self.model.start_round()
 
     def play_again(self):
-        self.game_frame.remove()
-        self.game_frame = GameFrame(self)
+        self.game_frame.reset_squares()
         self.model.start_round()
 
     def play_disc(self, column):
