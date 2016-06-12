@@ -16,7 +16,15 @@ GUI uses Python's built-in Tkinter library.
 
 ## Tests
 
-To run all unit tests in the project:
+To run all unit tests (from root dir):
 ```
 python -m unittest discover -v
+```
+
+
+## App
+
+To launch app (from root dir):
+```
+python app.py
 ```
