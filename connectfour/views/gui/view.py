@@ -86,7 +86,7 @@ class GUIView(object):
 
     def on_round_started(self, round_number):
         self.game_frame.disable_play_again_button()
-        self.game_frame.enable_column_buttons()
+        self.game_frame.enable_play_buttons()
 
     def on_next_player(self, player):
         self.game_frame.announce_next_player(player)
@@ -99,11 +99,11 @@ class GUIView(object):
 
     def on_round_won(self, player, winning_positions):
         self.game_frame.announce_winner(player)
-        self.game_frame.disable_column_buttons()
+        self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
         self.game_frame.flash_squares(winning_positions)
 
     def on_round_draw(self):
         self.game_frame.announce_draw()
-        self.game_frame.disable_column_buttons()
+        self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()

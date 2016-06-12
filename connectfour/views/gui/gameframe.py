@@ -53,20 +53,20 @@ class GameFrame(object):
         matrix_frame.grid(row=MATRIX_ROW)
         self.widgets['matrix_frame'] = matrix_frame
 
-        self._create_column_buttons(matrix_frame)
+        self._create_play_buttons(matrix_frame)
         self._create_game_squares(matrix_frame)
 
-    def _create_column_buttons(self, parent):
-        column_buttons = []
+    def _create_play_buttons(self, parent):
+        play_buttons = []
         for column in range(self.num_columns):
             button = tk.Button(
                 parent, text=COLUMN_TEXT,
                 command=lambda i=column: self.view.play_disc(i))
             button.grid(row=0, column=column)
 
-            column_buttons.append(button)
+            play_buttons.append(button)
 
-        self.widgets['column_buttons'] = column_buttons
+        self.widgets['play_buttons'] = play_buttons
 
     def _create_game_squares(self, parent):
         # Create 2D array to hold pointers to slot widgets
@@ -79,6 +79,8 @@ class GameFrame(object):
                                   width=SQUARE_SIZE, height=SQUARE_SIZE,
                                   bg=SQUARE_BACKGROUND, bd=SQUARE_BORDER_WIDTH,
                                   relief=tk.RAISED)
+
+                # Add one to account for play buttons in matrix
                 square.grid(row=row + 1, column=column)
                 squares[row][column] = square
 
@@ -101,12 +103,12 @@ class GameFrame(object):
     # Widget interaction #
     ######################
 
-    def enable_column_buttons(self):
-        for button in self.widgets['column_buttons']:
+    def enable_play_buttons(self):
+        for button in self.widgets['play_buttons']:
             button.configure(state=tk.NORMAL)
 
-    def disable_column_buttons(self):
-        for button in self.widgets['column_buttons']:
+    def disable_play_buttons(self):
+        for button in self.widgets['play_buttons']:
             button.configure(state=tk.DISABLED)
 
     def enable_play_again_button(self):
