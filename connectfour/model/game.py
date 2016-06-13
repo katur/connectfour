@@ -42,12 +42,19 @@ class Game(object):
 
     def add_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                   num_to_win=DEFAULT_TO_WIN):
-        # TODO: these checks should maybe be in Board class?
-        if num_rows < 1 or num_columns < 1:
-            raise ValueError('Row and column dimensions must be at least 1')
+        """Create a playing board and add to the game.
 
-        if (num_to_win < 1 or
-                (num_to_win > num_rows and num_to_win > num_columns)):
+        This is not done in __init__ so that players can be added prior to
+        choosing the board dimensions.
+        """
+        # TODO: these checks should maybe be in Board class?
+        if num_rows < 1 or num_columns < 1 or num_to_win < 1:
+            raise ValueError('Board rows, columns, and num_to_win '
+                             'must be at least 1')
+
+        # TODO: maybe nix this check (no reason game can't proceed even
+        # if a draw is inevitable)
+        if num_to_win > num_rows and num_to_win > num_columns:
             raise ValueError('Number to win must be at least 1, and '
                              'cannot exceed both the number of rows '
                              'and the number of columns')
@@ -56,8 +63,7 @@ class Game(object):
 
     def add_player(self, name, color):
         """Add a player to the session."""
-
-        # TODO: this check maybe unnecessary (just document)
+        # TODO: this check may be unnecessary (just document)
         # If do check for this, should also make sure game hasn't begun
         if self.session_in_progress:
             raise RuntimeError('Cannot add player before session started')
@@ -112,6 +118,8 @@ class Game(object):
         """Play a disc in a column.
 
         Assumes the disc is played by the current player.
+
+        Cannot play a disc before a round is started.
         """
         if not self.round_in_progress:
             raise RuntimeError('Cannot play disc before round has started')

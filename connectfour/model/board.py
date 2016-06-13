@@ -32,7 +32,10 @@ class Board(object):
         return self.__str__()
 
     def get_printable_grid(self):
-        """Get a string of the grid meant for console printing."""
+        """Get a string of this board's grid.
+
+        Might be used for console printing.
+        """
         s = ''
         for row in self.grid:
             for column in row:
@@ -56,8 +59,7 @@ class Board(object):
         """Determine if position is in bounds.
 
         Args:
-            position: a 2-tuple in format (row, column).
-
+            position: A 2-tuple in format (row, column).
         Returns:
             bool: True if in bounds, False otherwise.
         """
@@ -65,14 +67,22 @@ class Board(object):
         return self.is_row_in_bounds(row) and self.is_column_in_bounds(column)
 
     def is_column_full(self, column):
-        """Determine if a column is full of discs."""
+        """Determine if a column is full of discs.
+
+        Args:
+            column: An integer of the column to check.
+        Returns:
+            bool: True if column is full, False otherwise.
+        Raises:
+            ValueError: If column is out of bounds.
+        """
         if not self.is_column_in_bounds(column):
             raise ValueError('Column {} is out of bounds'.format(column))
 
         return self.grid[self.top_row][column] is not None
 
     def is_full(self):
-        """Determine if the entire board is full of discs."""
+        """Determine if this board is entirely full of discs."""
         for i in range(self.num_columns):
             if not self.is_column_full(i):
                 return False
@@ -80,23 +90,23 @@ class Board(object):
         return True
 
     def reset(self):
-        """Reset the board.
+        """Reset this board for a new game.
 
-        Sets all positions in the board to None.
+        Sets all positions in the board's grid to None.
         """
         for row in range(self.num_rows):
             for column in range(self.num_columns):
                 self.grid[row][column] = None
 
     def get_disc(self, position):
-        """Get a disc from the board.
+        """Retrieve a disc from this board.
 
         Args:
-            position: a 2-tuple in format (row, column).
+            position: A 2-tuple in format (row, column).
         Returns:
-            Disc: the disc at this position in the board.
+            Disc: The disc at this position in the board.
         Raises:
-            ValueError: if position is out of bounds.
+            ValueError: If position is out of bounds.
         """
         if not self.is_in_bounds(position):
             raise ValueError('Position {} is out of bounds'
@@ -109,12 +119,12 @@ class Board(object):
         """Add a disc to a column.
 
         Args:
-            disc: a Disc to add.
-            column: integer column to add the disc to.
+            disc: The Disc to add.
+            column: An int of the column to add the disc to.
         Returns:
-            int: the row in which the disc landed.
+            int: The row in which the disc landed.
         Raises:
-            ValueError: if column is full or out of bounds.
+            ValueError: If column is full or out of bounds.
         """
         if not self.is_column_in_bounds(column):
             raise ValueError('Column {} out of bounds'.format(column))
@@ -133,23 +143,26 @@ class Board(object):
     def _get_consecutive_matches(self, start, step, fake_disc=None):
         """Get consecutive matching positions in a single direction.
 
-        From a starting position, find positions with discs matching the
-        starting position, outward in the direction indicated by step,
+        From a starting position, find positions with discs matching that
+        in the starting position, outward in the direction indicated by step,
         until a mismatch is found.
 
         Args:
-            start: a 2-tuple (row, column) of starting position.
-            step: a 2-tuple (vertical_step, horizontal_step), indicating
-                how far to move each step.
+            start: A 2-tuple (row, column) of starting position.
+            step: A 2-tuple (vertical_step, horizontal_step) indicating
+                the direction to move with each step.
 
                 For example, to check upwards, step should be (1, 0).
                 To check diagonally down-left, step should be (-1, -1).
 
-            fake_disc (Optional): A disc to pretend to place at start. Might
-                be used to predict whether a win might occur.
+            fake_disc (Optional): A disc to pretend to place at start.
+                Might be used to predict whether a win might occur before
+                actually playing the disc.
         Returns:
-            set: a set of 2-tuples in format (row, column) of the matching
-                positions.
+            set: A set of 2-tuples in format (row, column) of the matching
+                positions. This set includes the starting position. Thus,
+                if no matches are found, the set contains only the starting
+                position.
         """
         disc = fake_disc if fake_disc else self.get_disc(start)
 
@@ -169,23 +182,26 @@ class Board(object):
 
         From a starting position, find positions with discs matching the
         starting position, outward in the direction indicated by step,
-        as well as outward in the 180-flipped direction,
-        until a mismatch is found.
+        as well as outward in the 180-flipped direction, until a mismatch
+        is found.
 
         Args:
-            start: a 2-tuple (row, column) of starting position.
-            step: a 2-tuple (vertical_step, horizontal_step), indicating
-                how far to move each step; the 180-degree rotation of
-                this step will be included as well.
+            start: A 2-tuple (row, column) of starting position.
+            step: A 2-tuple (vertical_step, horizontal_step), indicating
+                the direction to move with each step. The 180-degree
+                rotation of this step will be included as well.
 
-                For example, to check the horizontal axis, step can be (0, 1)
-                OR (0, -1)
+                For example, to check the horizontal axis, step can be
+                either (0, 1) or (0, -1).
 
-            fake_disc (Optional): A disc to pretend to place at start. Might
-                be used to predict whether a win might occur.
+            fake_disc (Optional): A disc to pretend to place at start.
+                Might be used to predict whether a win might occur before
+                actually playing the disc.
         Returns:
-            set: a set of 2-tuples in format (row, column) of the matching
-                positions.
+            set: A set of 2-tuples in format (row, column) of the matching
+                positions. This set includes the starting position. Thus,
+                if no matches are found, the set contains only the starting
+                position.
         """
         flipped_step = tuple(-i for i in step)
 
@@ -199,11 +215,11 @@ class Board(object):
         """Get winning positions that include the origin position.
 
         Args:
-            origin: a 2-tuple (row, column)
+            origin: A 2-tuple (row, column)
             fake_disc (Optional): A disc to pretend to place at start. Might
                 be used to predict whether a win might occur.
         Returns:
-            set: a set of 2-tuples in format (row, column) of the winning
+            set: A set of 2-tuples in format (row, column) of the winning
                 positions. Returns the empty set if no win found.
         """
         winning_positions = set()
