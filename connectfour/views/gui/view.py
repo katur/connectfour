@@ -3,7 +3,7 @@ import Tkinter as tk
 from connectfour.config import COLORS
 from connectfour.pubsub import subscribe, Action
 
-from config import WINDOW_TITLE_TEXT
+from config import WINDOW_TITLE
 from gameframe import GameFrame
 from setupframe import SetupFrame
 
@@ -17,7 +17,7 @@ class GUIView(object):
 
         # Initialize GUI window
         self.window = tk.Tk()
-        self.window.title(WINDOW_TITLE_TEXT)
+        self.window.title(WINDOW_TITLE)
 
         # Initialize and launch setup screen
         self.setup_frame = SetupFrame(self)
@@ -78,8 +78,7 @@ class GUIView(object):
     ###########################
 
     def on_player_added(self, player):
-        self.setup_frame.update_player_feedback(
-            player, self.model.get_num_players())
+        self.setup_frame.update_feedback(player, self.model.get_num_players())
 
         # Enable launch once first player is added
         self.setup_frame.enable_launch_button()
@@ -98,7 +97,7 @@ class GUIView(object):
         self.game_frame.update_square(player, position)
 
     def on_round_won(self, player, winning_positions):
-        self.game_frame.announce_winner(player)
+        self.game_frame.announce_win(player)
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
         self.game_frame.flash_squares(winning_positions)

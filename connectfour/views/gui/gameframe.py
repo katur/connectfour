@@ -1,10 +1,8 @@
 import Tkinter as tk
 
 from util import flash
-from config import (
-    COLOR_TO_TK, REASON_TO_STR, GAME_TITLE_TEXT, PLAY_AGAIN_TEXT, QUIT_TEXT,
-    COLUMN_TEXT, SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH,
-)
+from config import (COLOR_TO_TK, REASON_TO_STR, GAME_TEXT,
+                    SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH)
 
 TITLE_ROW = 0
 FEEDBACK_ROW = 1
@@ -40,7 +38,7 @@ class GameFrame(object):
         self._create_game_control()
 
     def _create_game_title(self):
-        game_title = tk.Label(self.frame, text=GAME_TITLE_TEXT)
+        game_title = tk.Label(self.frame, text=GAME_TEXT['title'])
         game_title.grid(row=TITLE_ROW)
 
     def _create_game_feedback(self):
@@ -60,7 +58,7 @@ class GameFrame(object):
         play_buttons = []
         for column in range(self.num_columns):
             button = tk.Button(
-                parent, text=COLUMN_TEXT,
+                parent, text=GAME_TEXT['play'],
                 command=lambda i=column: self.view.play_disc(i))
             button.grid(row=0, column=column)
 
@@ -90,12 +88,13 @@ class GameFrame(object):
         control_frame = tk.Frame(self.frame)
         control_frame.grid(row=CONTROL_ROW)
 
-        play_again_button = tk.Button(control_frame, text=PLAY_AGAIN_TEXT,
-                                      command=self.view.play_again)
+        play_again_button = tk.Button(
+            control_frame, text=GAME_TEXT['play_again'],
+            command=self.view.play_again)
         play_again_button.grid(row=0, column=0)
         self.widgets['play_again_button'] = play_again_button
 
-        game_quit_button = tk.Button(control_frame, text=QUIT_TEXT,
+        game_quit_button = tk.Button(control_frame, text=GAME_TEXT['quit'],
                                      command=self.view.quit)
         game_quit_button.grid(row=0, column=1)
 
@@ -123,17 +122,18 @@ class GameFrame(object):
         self.widgets['squares'][row][column].configure(bg=color)
 
     def announce_next_player(self, player):
-        self._update_game_feedback("{}'s turn".format(player))
+        self._update_game_feedback(GAME_TEXT['next_player'].format(player))
 
     def announce_try_again(self, player, reason):
         reason = REASON_TO_STR[reason]
-        self._update_game_feedback('{} try again ({})'.format(player, reason))
+        self._update_game_feedback(GAME_TEXT['try_again']
+                                   .format(player, reason))
 
-    def announce_winner(self, player):
-        self._update_game_feedback('{} won the round'.format(player))
+    def announce_win(self, player):
+        self._update_game_feedback(GAME_TEXT['win'].format(player))
 
     def announce_draw(self):
-        self._update_game_feedback('Round ended in a draw')
+        self._update_game_feedback(GAME_TEXT['draw'])
 
     def _update_game_feedback(self, text):
         self.widgets['game_feedback'].configure(text=text)

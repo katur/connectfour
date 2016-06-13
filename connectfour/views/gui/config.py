@@ -21,20 +21,6 @@ REASON_TO_STR = {
 
 PAD = 20
 
-WINDOW_TITLE_TEXT = 'Connect Four'
-GAME_TITLE_TEXT = 'Welcome to Connect Four!'
-SETUP_TITLE_TEXT = (
-    'Welcome to Connect Four! '
-    'Please select game parameters and add players.'
-)
-
-ADD_PLAYER_TEXT = 'Add Player'
-LAUNCH_GAME_TEXT = 'Start Game'
-PLAY_AGAIN_TEXT = 'Play Again'
-COLUMN_TEXT = 'Play'
-QUIT_TEXT = 'Exit'
-PLAYER_FEEDBACK_TEXT = 'Welcome, {0}\nTotal players added: {1}'
-
 SQUARE_BACKGROUND = 'Yellow'
 SQUARE_SIZE = 60
 SQUARE_BORDER_WIDTH = 5
@@ -42,3 +28,28 @@ SQUARE_BORDER_WIDTH = 5
 FLASH_CYCLES = 10
 FLASH_CYCLE_TIME = 1000
 FLASH_WAIT_TIME = 500
+
+WINDOW_TITLE = 'Connect Four'
+
+SETUP_TEXT = {
+    'title': ('Welcome to Connect Four! Please select '
+              'game parameters and add players.'),
+    'rows': 'Rows:',
+    'columns': 'Columns:',
+    'to_win': 'To Win:',
+    'add_player': 'Add Player',
+    'feedback': 'Welcome, {0}\nTotal players added: {1}',
+    'launch': 'Start Game',
+    'quit': 'Exit',
+}
+
+GAME_TEXT = {
+    'title': 'Welcome to Connect Four!',
+    'play': 'Play',
+    'next_player': "{0}'s turn",
+    'try_again': '{0} try again ({1})',
+    'win': '{0} won the round',
+    'draw': 'Round ended in a draw',
+    'play_again': 'Play Again',
+    'quit': 'Exit',
+}
