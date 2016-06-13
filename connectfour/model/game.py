@@ -1,8 +1,8 @@
-from connectfour import pubsub
+from connectfour.pubsub import publish, Action
+from connectfour.config import Color
+from connectfour.config import TryAgainReason
 from connectfour.model.board import Board
 from connectfour.model.player import Player
-from connectfour.util.color import Color
-from connectfour.util.tryagainreason import TryAgainReason
 
 # TODO: these defaults should maybe be in higher class for use by view
 DEFAULT_ROWS = 6
@@ -86,7 +86,7 @@ class Game(object):
         self.used_names.add(name)
         player = Player(name, color)
         self.players.append(player)
-        pubsub.publish(pubsub.Action.player_added, player)
+        publish(Action.player_added, player)
 
     #####################
     # Game play methods #
@@ -104,7 +104,7 @@ class Game(object):
         self.session_in_progress = True
         self.round_in_progress = True
         self.round_number += 1
-        pubsub.publish(pubsub.Action.round_started, self.round_number)
+        publish(Action.round_started, self.round_number)
 
         self.current_player_index = self.first_turn_index
 
@@ -112,7 +112,7 @@ class Game(object):
         self.first_turn_index = ((self.first_turn_index + 1)
                                  % self.get_num_players())
 
-        pubsub.publish(pubsub.Action.next_player, self.get_current_player())
+        publish(Action.next_player, self.get_current_player())
 
     def play_disc(self, column):
         """Play a disc in a column.
@@ -125,14 +125,12 @@ class Game(object):
             raise RuntimeError('Cannot play disc before round has started')
 
         if not self.board.is_column_in_bounds(column):
-            pubsub.publish(pubsub.Action.try_again,
-                           self.get_current_player(),
-                           TryAgainReason.column_out_of_bounds)
+            publish(Action.try_again, self.get_current_player(),
+                    TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
-            pubsub.publish(pubsub.Action.try_again,
-                           self.get_current_player(),
-                           TryAgainReason.column_full)
+            publish(Action.try_again, self.get_current_player(),
+                    TryAgainReason.column_full)
 
         else:
             self._process_play(column)
@@ -144,7 +142,7 @@ class Game(object):
     def _process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_disc(player.disc, column)
-        pubsub.publish(pubsub.Action.disc_played, player, (row, column))
+        publish(Action.disc_played, player, (row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -158,17 +156,17 @@ class Game(object):
     def _process_win(self, player, winning_positions):
         self.round_in_progress = False
         player.number_of_wins += 1
-        pubsub.publish(pubsub.Action.round_won, player, winning_positions)
+        publish(Action.round_won, player, winning_positions)
 
     def _process_draw(self):
         self.round_in_progress = False
-        pubsub.publish(pubsub.Action.round_draw)
+        publish(Action.round_draw)
 
     def _process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)
                                      % self.get_num_players())
 
-        pubsub.publish(pubsub.Action.next_player, self.get_current_player())
+        publish(Action.next_player, self.get_current_player())
 
     ##################
     # Simple getters #

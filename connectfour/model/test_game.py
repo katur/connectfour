@@ -1,7 +1,7 @@
 import unittest
 
+from connectfour.config import Color
 from connectfour.model.game import Game
-from connectfour.util.color import Color
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6

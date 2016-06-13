@@ -1,5 +1,4 @@
-from connectfour.util.color import Color
-from connectfour.util.tryagainreason import TryAgainReason
+from connectfour.config import Color, TryAgainReason
 
 
 COLOR_TO_TK = {

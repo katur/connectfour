@@ -1,6 +1,6 @@
 import sys
 
-from connectfour import pubsub
+from connectfour.pubsub import subscribe, Action
 
 
 class LogView(object):
@@ -10,16 +10,16 @@ class LogView(object):
 
     def _create_subscriptions(self):
         responses = {
-            pubsub.Action.player_added: self.on_player_added,
-            pubsub.Action.round_started: self.on_round_started,
-            pubsub.Action.next_player: self.on_next_player,
-            pubsub.Action.try_again: self.on_try_again,
-            pubsub.Action.disc_played: self.on_disc_played,
-            pubsub.Action.round_won: self.on_round_won,
-            pubsub.Action.round_draw: self.on_round_draw,
+            Action.player_added: self.on_player_added,
+            Action.round_started: self.on_round_started,
+            Action.next_player: self.on_next_player,
+            Action.try_again: self.on_try_again,
+            Action.disc_played: self.on_disc_played,
+            Action.round_won: self.on_round_won,
+            Action.round_draw: self.on_round_draw,
         }
         for action, response in responses.iteritems():
-            pubsub.subscribe(action, response)
+            subscribe(action, response)
 
     def on_player_added(self, player):
         self.stream.write('Player added: {}\n'.format(player))
