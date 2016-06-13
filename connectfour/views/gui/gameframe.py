@@ -32,16 +32,16 @@ class GameFrame(object):
     ###################
 
     def _create_widgets(self):
-        self._create_game_title()
-        self._create_game_feedback()
+        self._create_title()
+        self._create_feedback_bar()
         self._create_game_matrix()
-        self._create_game_control()
+        self._create_controls()
 
-    def _create_game_title(self):
+    def _create_title(self):
         game_title = tk.Label(self.frame, text=GAME_TEXT['title'])
         game_title.grid(row=TITLE_ROW)
 
-    def _create_game_feedback(self):
+    def _create_feedback_bar(self):
         game_feedback = tk.Label(self.frame)
         game_feedback.grid(row=FEEDBACK_ROW)
         self.widgets['game_feedback'] = game_feedback
@@ -52,7 +52,7 @@ class GameFrame(object):
         self.widgets['matrix_frame'] = matrix_frame
 
         self._create_play_buttons(matrix_frame)
-        self._create_game_squares(matrix_frame)
+        self._create_squares(matrix_frame)
 
     def _create_play_buttons(self, parent):
         play_buttons = []
@@ -66,7 +66,7 @@ class GameFrame(object):
 
         self.widgets['play_buttons'] = play_buttons
 
-    def _create_game_squares(self, parent):
+    def _create_squares(self, parent):
         # Create 2D array to hold pointers to slot widgets
         squares = [[None for column in range(self.num_columns)]
                    for row in range(self.num_rows)]
@@ -78,13 +78,13 @@ class GameFrame(object):
                                   bg=SQUARE_BACKGROUND, bd=SQUARE_BORDER_WIDTH,
                                   relief=tk.RAISED)
 
-                # Add one to account for play buttons in matrix
+                # Add one to account for play buttons
                 square.grid(row=row + 1, column=column)
                 squares[row][column] = square
 
         self.widgets['squares'] = squares
 
-    def _create_game_control(self):
+    def _create_controls(self):
         control_frame = tk.Frame(self.frame)
         control_frame.grid(row=CONTROL_ROW)
 

@@ -4,7 +4,7 @@ from connectfour.config import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
 from config import PAD, SETUP_TEXT
 
 TITLE_ROW = 0
-DIMENSIONS_ROW = 1
+SETTINGS_ROW = 1
 ADD_PLAYER_ROW = 2
 FEEDBACK_ROW = 3
 CONTROL_ROW = 4
@@ -29,30 +29,30 @@ class SetupFrame(object):
     ###################
 
     def _create_widgets(self):
-        self._create_setup_title_row()
-        self._create_dimensions_row()
-        self._create_add_player_row()
-        self._create_feedback_row()
-        self._create_setup_control_row()
+        self._create_title()
+        self._create_settings_admin()
+        self._create_add_player_admin()
+        self._create_feedback_bar()
+        self._create_controls()
 
-    def _create_setup_title_row(self):
+    def _create_title(self):
         setup_title = tk.Label(self.frame, text=SETUP_TEXT['title'])
         setup_title.grid(row=TITLE_ROW, columnspan=3)
 
-    def _create_dimensions_row(self):
-        self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 0), text=SETUP_TEXT['rows'],
+    def _create_settings_admin(self):
+        self._create_labelled_entry(
+            position=(SETTINGS_ROW, 0), text=SETUP_TEXT['rows'],
             default=str(DEFAULT_ROWS), widget_name='row_entry')
 
-        self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 1), text=SETUP_TEXT['columns'],
+        self._create_labelled_entry(
+            position=(SETTINGS_ROW, 1), text=SETUP_TEXT['columns'],
             default=str(DEFAULT_COLUMNS), widget_name='column_entry')
 
-        self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 2), text=SETUP_TEXT['to_win'],
+        self._create_labelled_entry(
+            position=(SETTINGS_ROW, 2), text=SETUP_TEXT['to_win'],
             default=str(DEFAULT_TO_WIN), widget_name='to_win_entry')
 
-    def _create_dimension_pair(self, position, text, default, widget_name):
+    def _create_labelled_entry(self, position, text, default, widget_name):
         row, column = position
 
         frame = tk.Frame(self.frame)
@@ -66,7 +66,7 @@ class SetupFrame(object):
         entry.grid(row=0, column=1)
         self.widgets[widget_name] = entry
 
-    def _create_add_player_row(self):
+    def _create_add_player_admin(self):
         player_entry = tk.Entry(self.frame)
         player_entry.grid(row=ADD_PLAYER_ROW, column=0, columnspan=2, pady=PAD)
         self.widgets['player_entry'] = player_entry
@@ -77,15 +77,15 @@ class SetupFrame(object):
         add_player_button.grid(row=ADD_PLAYER_ROW, column=2)
         self.widgets['add_player_button'] = add_player_button
 
-    def _create_feedback_row(self):
+    def _create_feedback_bar(self):
         feedback = tk.Message(self.frame, width=500)
         feedback.grid(row=FEEDBACK_ROW, columnspan=3, pady=PAD)
         self.widgets['feedback'] = feedback
 
-    def _create_setup_control_row(self):
-        setup_quit_button = tk.Button(self.frame, text=SETUP_TEXT['quit'],
-                                      command=self.view.quit)
-        setup_quit_button.grid(row=CONTROL_ROW, column=0)
+    def _create_controls(self):
+        quit_button = tk.Button(self.frame, text=SETUP_TEXT['quit'],
+                                command=self.view.quit)
+        quit_button.grid(row=CONTROL_ROW, column=0)
 
         launch_button = tk.Button(self.frame, text=SETUP_TEXT['launch'],
                                   state=tk.DISABLED,
