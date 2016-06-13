@@ -8,6 +8,7 @@ SETTINGS_ROW = 1
 ADD_PLAYER_ROW = 2
 FEEDBACK_ROW = 3
 CONTROL_ROW = 4
+FRAME_COLSPAN = 3
 
 
 class SetupFrame(object):
@@ -32,12 +33,12 @@ class SetupFrame(object):
         self._create_title()
         self._create_settings_admin()
         self._create_add_player_admin()
-        self._create_feedback_bar()
+        self._create_feedback_area()
         self._create_controls()
 
     def _create_title(self):
         setup_title = tk.Label(self.frame, text=SETUP_TEXT['title'])
-        setup_title.grid(row=TITLE_ROW, columnspan=3)
+        setup_title.grid(row=TITLE_ROW, columnspan=FRAME_COLSPAN)
 
     def _create_settings_admin(self):
         self._create_labelled_entry(
@@ -68,18 +69,19 @@ class SetupFrame(object):
 
     def _create_add_player_admin(self):
         player_entry = tk.Entry(self.frame)
-        player_entry.grid(row=ADD_PLAYER_ROW, column=0, columnspan=2, pady=PAD)
+        player_entry.grid(row=ADD_PLAYER_ROW, column=0,
+                          columnspan=FRAME_COLSPAN-1, pady=PAD)
         self.widgets['player_entry'] = player_entry
 
         add_player_button = tk.Button(self.frame,
                                       text=SETUP_TEXT['add_player'],
                                       command=self.view.add_player)
-        add_player_button.grid(row=ADD_PLAYER_ROW, column=2)
+        add_player_button.grid(row=ADD_PLAYER_ROW, column=FRAME_COLSPAN-1)
         self.widgets['add_player_button'] = add_player_button
 
-    def _create_feedback_bar(self):
+    def _create_feedback_area(self):
         feedback = tk.Message(self.frame, width=500)
-        feedback.grid(row=FEEDBACK_ROW, columnspan=3, pady=PAD)
+        feedback.grid(row=FEEDBACK_ROW, columnspan=FRAME_COLSPAN, pady=PAD)
         self.widgets['feedback'] = feedback
 
     def _create_controls(self):
@@ -90,7 +92,7 @@ class SetupFrame(object):
         launch_button = tk.Button(self.frame, text=SETUP_TEXT['launch'],
                                   state=tk.DISABLED,
                                   command=self.view.launch_game)
-        launch_button.grid(row=CONTROL_ROW, column=2)
+        launch_button.grid(row=CONTROL_ROW, column=FRAME_COLSPAN-1)
         self.widgets['launch_button'] = launch_button
 
     ######################

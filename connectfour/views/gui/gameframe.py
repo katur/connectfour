@@ -8,6 +8,7 @@ TITLE_ROW = 0
 FEEDBACK_ROW = 1
 MATRIX_ROW = 2
 CONTROL_ROW = 3
+FRAME_COLSPAN = 3
 
 
 class GameFrame(object):
@@ -39,16 +40,16 @@ class GameFrame(object):
 
     def _create_title(self):
         game_title = tk.Label(self.frame, text=GAME_TEXT['title'])
-        game_title.grid(row=TITLE_ROW)
+        game_title.grid(row=TITLE_ROW, columnspan=FRAME_COLSPAN)
 
     def _create_feedback_bar(self):
         game_feedback = tk.Label(self.frame)
-        game_feedback.grid(row=FEEDBACK_ROW)
+        game_feedback.grid(row=FEEDBACK_ROW, columnspan=FRAME_COLSPAN)
         self.widgets['game_feedback'] = game_feedback
 
     def _create_game_matrix(self):
         matrix_frame = tk.Frame(self.frame)
-        matrix_frame.grid(row=MATRIX_ROW)
+        matrix_frame.grid(row=MATRIX_ROW, columnspan=FRAME_COLSPAN)
         self.widgets['matrix_frame'] = matrix_frame
 
         self._create_play_buttons(matrix_frame)
@@ -79,23 +80,20 @@ class GameFrame(object):
                                   relief=tk.RAISED)
 
                 # Add one to account for play buttons
-                square.grid(row=row + 1, column=column)
+                square.grid(row=row+1, column=column)
                 squares[row][column] = square
 
         self.widgets['squares'] = squares
 
     def _create_controls(self):
-        control_frame = tk.Frame(self.frame)
-        control_frame.grid(row=CONTROL_ROW)
-
-        quit_button = tk.Button(control_frame, text=GAME_TEXT['quit'],
+        quit_button = tk.Button(self.frame, text=GAME_TEXT['quit'],
                                 command=self.view.quit)
-        quit_button.grid(row=0, column=0)
+        quit_button.grid(row=CONTROL_ROW, column=0)
 
         play_again_button = tk.Button(
-            control_frame, text=GAME_TEXT['play_again'],
+            self.frame, text=GAME_TEXT['play_again'],
             command=self.view.play_again)
-        play_again_button.grid(row=0, column=1)
+        play_again_button.grid(row=CONTROL_ROW, column=FRAME_COLSPAN-1)
         self.widgets['play_again_button'] = play_again_button
 
     ######################
@@ -152,7 +150,7 @@ class GameFrame(object):
         For now, I'm just letting the matrices pile up.
 
         Possible solution:
-        Keep track of previous two games. Destroy game 2-ago.
+        Keep track of previous two games. Destroy 2-ago game.
         '''
         # self.widgets['matrix_frame'].grid_forget()
 
