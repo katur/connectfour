@@ -21,7 +21,14 @@ subscriptions = {}
 
 
 def subscribe(action, callback):
-    """Subscribe so that callback is called when action occurs."""
+    """Subscribe to a particular action.
+
+    This results in callback being called whenever action occurs.
+
+    Args:
+        action: The Action to subscribe to.
+        callback: Function that will be called when action occurs.
+    """
     if action not in subscriptions:
         subscriptions[action] = []
 
@@ -31,8 +38,12 @@ def subscribe(action, callback):
 def publish(action, *args, **kwargs):
     """Publish that an action occurred.
 
-    Any *args and **kwargs are passed along to all subscribed
-    callbacks for this action.
+    This results in any callbacks being called that are subscribed to
+    the action.
+
+    Args:
+        action: The Action that occurred.
+        *args, **kwargs: Will be passed along to any subscribed callbacks.
     """
     if action not in subscriptions:
         return
