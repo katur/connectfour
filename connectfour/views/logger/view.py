@@ -4,6 +4,8 @@ from connectfour.pubsub import subscribe, Action
 
 
 class LogView(object):
+    """Simple view that simply logs when actions occur."""
+
     def __init__(self, stream=sys.stdout):
         self.stream = stream
         self._create_subscriptions()
