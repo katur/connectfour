@@ -88,15 +88,15 @@ class GameFrame(object):
         control_frame = tk.Frame(self.frame)
         control_frame.grid(row=CONTROL_ROW)
 
+        quit_button = tk.Button(control_frame, text=GAME_TEXT['quit'],
+                                command=self.view.quit)
+        quit_button.grid(row=0, column=0)
+
         play_again_button = tk.Button(
             control_frame, text=GAME_TEXT['play_again'],
             command=self.view.play_again)
-        play_again_button.grid(row=0, column=0)
+        play_again_button.grid(row=0, column=1)
         self.widgets['play_again_button'] = play_again_button
-
-        game_quit_button = tk.Button(control_frame, text=GAME_TEXT['quit'],
-                                     command=self.view.quit)
-        game_quit_button.grid(row=0, column=1)
 
     ######################
     # Widget interaction #
