@@ -1,7 +1,7 @@
 import Tkinter as tk
 
-from connectfour.pubsub import subscribe, Action
 from connectfour.config import COLORS
+from connectfour.pubsub import subscribe, Action
 
 from config import WINDOW_TITLE_TEXT
 from gameframe import GameFrame

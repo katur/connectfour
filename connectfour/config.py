@@ -1,5 +1,9 @@
 from enum import Enum
 
+DEFAULT_ROWS = 6
+DEFAULT_COLUMNS = 7
+DEFAULT_TO_WIN = 4
+
 
 class TryAgainReason(Enum):
     """Reason that a player needs to try again.

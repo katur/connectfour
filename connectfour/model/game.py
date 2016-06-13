@@ -1,13 +1,8 @@
 from connectfour.pubsub import publish, Action
-from connectfour.config import Color
-from connectfour.config import TryAgainReason
+from connectfour.config import (
+    Color, TryAgainReason, DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.model.board import Board
 from connectfour.model.player import Player
-
-# TODO: these defaults should maybe be in higher class for use by view
-DEFAULT_ROWS = 6
-DEFAULT_COLUMNS = 7
-DEFAULT_TO_WIN = 4
 
 
 class Game(object):

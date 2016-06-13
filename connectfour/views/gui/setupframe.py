@@ -1,5 +1,6 @@
 import Tkinter as tk
 
+from connectfour.config import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
 from config import (
     PAD, SETUP_TITLE_TEXT, ADD_PLAYER_TEXT, PLAYER_FEEDBACK_TEXT,
     LAUNCH_GAME_TEXT, QUIT_TEXT,
@@ -43,16 +44,16 @@ class SetupFrame(object):
 
     def _create_dimensions_row(self):
         self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 0), text='Rows:', default='6',
-            widget_name='row_entry')
+            position=(DIMENSIONS_ROW, 0), text='Rows:',
+            default=str(DEFAULT_ROWS), widget_name='row_entry')
 
         self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 1), text='Columns:', default='7',
-            widget_name='column_entry')
+            position=(DIMENSIONS_ROW, 1), text='Columns:',
+            default=str(DEFAULT_COLUMNS), widget_name='column_entry')
 
         self._create_dimension_pair(
-            position=(DIMENSIONS_ROW, 2), text='To Win:', default='4',
-            widget_name='to_win_entry')
+            position=(DIMENSIONS_ROW, 2), text='To Win:',
+            default=str(DEFAULT_TO_WIN), widget_name='to_win_entry')
 
     def _create_dimension_pair(self, position, text, default, widget_name):
         row, column = position
@@ -101,7 +102,7 @@ class SetupFrame(object):
 
     def parse_player_entry(self):
         name = self.widgets['player_entry'].get()
-        self.widgets['player_entry'].delete(0, 'end')
+        self.widgets['player_entry'].delete(0, tk.END)
         return name
 
     def parse_row_entry(self):
