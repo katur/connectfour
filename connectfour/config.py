@@ -16,20 +16,15 @@ class TryAgainReason(Enum):
 
 
 class Color(Enum):
-    """A color."""
+    """A color to use for discs in the game.
+
+    Yellow is not included because it should serve as the board background
+    color, as in the real Connect Four game.
+    """
 
     (black, red, blue, purple, brown, dark_green, pink, gray, orange,
         green) = range(10)
 
 
-def get_color_dictionary():
-    """Get a dictionary mapping integers to colors."""
-    colors = {}
-
-    for color in Color:
-        colors[color.value] = color
-
-    return colors
-
-
+# List of all colors. May be used by a view to assign colors incrementally.
 COLORS = [color for color in Color]
