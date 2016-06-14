@@ -13,6 +13,7 @@ class LogView(object):
     def _create_subscriptions(self):
         responses = {
             Action.player_added: self.on_player_added,
+            Action.board_created: self.on_board_created,
             Action.round_started: self.on_round_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
@@ -25,6 +26,9 @@ class LogView(object):
 
     def on_player_added(self, player):
         self.stream.write('Player added: {}\n'.format(player))
+
+    def on_board_created(self, board):
+        self.stream.write('Board created: {}\n'.format(board))
 
     def on_round_started(self, round_number):
         self.stream.write('Round started: {}\n'.format(round_number))

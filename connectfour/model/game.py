@@ -1,18 +1,38 @@
 from connectfour.pubsub import publish, Action
-from connectfour.config import (
-    Color, TryAgainReason, DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
+from connectfour.config import (Color, TryAgainReason, DEFAULT_ROWS,
+                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.model.board import Board
 from connectfour.model.player import Player
 
 
 class Game(object):
-    """Top-level model of the Connect Four game."""
+    """Top-level model of the Connect Four game.
+
+    Core method dependencies:
+
+        create_board() and add_player() must both be called at least
+        once before calling start_round().
+
+        add_player() should be called multiple times to add multiple
+        players.
+
+        If create_board() is called more than once, the old board is
+        replaced with the new board.
+
+        After calling start_round() the first time, a gaming session
+        has begun, and neither create_board() or add_player() can be
+        called again.
+
+        start_round() can only be called again after a win or draw is
+        announced.
+
+        play_chip() can only be called while a round is in session.
+    """
 
     def __init__(self):
         self.board = None
         self.players = []
         self.used_colors = set()
-        self.used_names = set()
 
         self.session_in_progress = False
         self.round_in_progress = False
@@ -31,69 +51,86 @@ class Game(object):
     def __repr__(self):
         return self.__str__()
 
-    ######################
-    # Game setup methods #
-    ######################
+    ################
+    # Core methods #
+    ################
 
-    def add_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
-                  num_to_win=DEFAULT_TO_WIN):
-        """Create a playing board and add to the game.
+    def create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
+                     num_to_win=DEFAULT_TO_WIN):
+        """Create a playing board and add it to the game.
 
-        This is not done in __init__ so that players can be added prior to
+        A board_added Action is published.
+
+        This is called after __init__ so that players can be added prior to
         choosing the board dimensions.
-        """
-        # TODO: these checks should maybe be in Board class?
-        if num_rows < 1 or num_columns < 1 or num_to_win < 1:
-            raise ValueError('Board rows, columns, and num_to_win '
-                             'must be at least 1')
 
-        # TODO: maybe nix this check (no reason game can't proceed even
-        # if a draw is inevitable)
-        if num_to_win > num_rows and num_to_win > num_columns:
-            raise ValueError('Number to win must be at least 1, and '
-                             'cannot exceed both the number of rows '
-                             'and the number of columns')
+        Args:
+            num_rows (Optional): int of number of rows in the board.
+                Must be at least 1. Default defined in connectfour.config.
+            num_columns (Optional): int of number of columns in the board.
+                Must be at least 1. Default defined in connectfour.config.
+            num_to_win (Optional): int of number in a row needed to win.
+                Must be at least 1. Default defined in connectfour.config.
+        Raises:
+            RuntimeError: If gaming session has already started.
+            ValueError: If either dimension or the num_to_win is less than 1.
+        """
+        if self.session_in_progress:
+            raise RuntimeError('Cannot add board once session is started')
+
+        if num_rows < 1 or num_columns < 1 or num_to_win < 1:
+            raise ValueError('Board dimensions and num_to_win must '
+                             'be at least 1')
 
         self.board = Board(num_rows, num_columns, num_to_win)
+        publish(Action.board_added, self.board)
 
     def add_player(self, name, color):
-        """Add a player to the session."""
-        # TODO: this check may be unnecessary (just document)
-        # If do check for this, should also make sure game hasn't begun
-        if self.session_in_progress:
-            raise RuntimeError('Cannot add player before session started')
+        """Add a player.
 
-        # TODO: this check redundant with below, but should handle in view
-        if len(self.used_colors) >= len(Color):
-            raise RuntimeError('Game has reached max players')
+        A player_added Action is published.
+
+        Args:
+            name: str of the player's name. Must be non-empty. Does not have
+                to be unique (two Marys are distinguishable by disc color).
+            color: Color for this player's discs. Must be unique.
+        Raises:
+            RuntimeError: If gaming session has already started.
+            ValueError: If name is empty or if color is already in use by
+                another player.
+        """
+        if self.session_in_progress:
+            raise RuntimeError('Cannot add player once session is started')
+
+        if not name:
+            raise ValueError('Name is required and must be non-empty')
 
         if color in self.used_colors:
             raise ValueError('Color {} is already used'.format(color))
 
-        # TODO: empty/unique string enforcement maybe just limit to view
-        if not name:
-            raise ValueError('Name is required and must be non-empty')
-
-        if name in self.used_names:
-            raise ValueError('Name {} is already used')
-
         self.used_colors.add(color)
-        self.used_names.add(name)
         player = Player(name, color)
         self.players.append(player)
         publish(Action.player_added, player)
 
-    #####################
-    # Game play methods #
-    #####################
-
     def start_round(self):
-        """Start a new round of the game."""
+        """Start a new round of the game.
+
+        A round_started Action is published, followed by a next_player
+        Action to indicate the first player.
+
+        Raises:
+            RuntimeError: If another round is already in progress, if
+                there is no board, or if there are no players.
+        """
         if self.round_in_progress:
-            raise RuntimeError('Cannot start a round while another '
-                               'is in progress')
+            raise RuntimeError('Cannot start a round with another in progress')
+
         if not self.players:
             raise RuntimeError('Cannot start a round with no players')
+
+        if not self.board:
+            raise RuntimeError('Cannot start a round with no board')
 
         self.board.reset()
         self.session_in_progress = True
@@ -112,9 +149,16 @@ class Game(object):
     def play_disc(self, column):
         """Play a disc in a column.
 
-        Assumes the disc is played by the current player.
+        Disc is assumed to be played by the current player. If the column
+        is out of bounds or full, a try_again Action is published.
+        Otherwise, a disc_played Action is published, followed by one
+        of the following Actions (depending on the outcome of that disc
+        being played): round_won, round_draw, or next_player.
 
-        Cannot play a disc before a round is started.
+        Args:
+            column: An int of the column to play the disc in.
+        Raises:
+            RuntimeError: If a round is not currently in progress.
         """
         if not self.round_in_progress:
             raise RuntimeError('Cannot play disc before round has started')
@@ -168,24 +212,30 @@ class Game(object):
     ##################
 
     def get_num_rows(self):
+        """Get the number of rows in the board."""
         return self.board.num_rows
 
     def get_num_columns(self):
+        """Get the number of columns in the board."""
         return self.board.num_columns
 
-    def get_current_player(self):
-        if not self.players:
-            raise RuntimeError('Cannot get current player if no '
-                               'players have been added yet')
-        return self.players[self.current_player_index]
-
-    def get_player(self, index):
-        if index < 0 or index >= self.get_num_players():
-            raise IndexError('Player index {} is out of bounds'.format(index))
-        return self.players[index]
-
     def get_num_players(self):
+        """Get the number of players."""
         return len(self.players)
 
+    def get_current_player(self):
+        """Get the current player.
+
+        Returns None if no players have been added yet.
+        """
+        if not self.players:
+            return None
+
+        return self.players[self.current_player_index]
+
     def get_remaining_colors(self):
+        """Get a set of the Colors that have not been used yet.
+
+        If all colors have been used, returns the empty set.
+        """
         return set(Color) - self.used_colors

@@ -25,8 +25,8 @@ class Board(object):
                      for row in range(num_rows)]
 
     def __str__(self):
-        return '{} rows x {} column Board'.format(
-            self.num_rows, self.num_columns)
+        return '{} rows x {} column Board ({} to win)'.format(
+            self.num_rows, self.num_columns, self.num_to_win)
 
     def __repr__(self):
         return self.__str__()
@@ -70,7 +70,7 @@ class Board(object):
         """Determine if a column is full of discs.
 
         Args:
-            column: An integer of the column to check.
+            column: An int of the column to check.
         Returns:
             bool: True if column is full, False otherwise.
         Raises:

@@ -8,12 +8,13 @@ class Action(Enum):
     may subscribe to.
     """
     player_added = 0
-    round_started = 1
-    next_player = 2
-    try_again = 3
-    disc_played = 4
-    round_won = 5
-    round_draw = 6
+    board_created = 1
+    round_started = 2
+    next_player = 3
+    try_again = 4
+    disc_played = 5
+    round_won = 6
+    round_draw = 7
 
 
 # Master dictionary to store all subscribed callbacks, keyed on Action
