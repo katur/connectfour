@@ -10,23 +10,23 @@ class Game(object):
 
     Core method dependencies:
 
-        create_board() and add_player() must both be called at least
+    -   create_board() and add_player() must both be called at least
         once before calling start_round().
 
-        add_player() should be called multiple times to add multiple
+    -   add_player() should be called multiple times to add multiple
         players.
 
-        If create_board() is called more than once, the old board is
+    -   If create_board() is called more than once, the old board is
         replaced with the new board.
 
-        After calling start_round() the first time, a gaming session
+    -   After calling start_round() the first time, a gaming session
         has begun, and neither create_board() or add_player() can be
         called again.
 
-        start_round() can only be called again after a win or draw is
+    -   start_round() can only be called again after a win or draw is
         announced.
 
-        play_chip() can only be called while a round is in session.
+    -   play_chip() can only be called while a round is in progress.
     """
 
     def __init__(self):
@@ -65,11 +65,11 @@ class Game(object):
         choosing the board dimensions.
 
         Args:
-            num_rows (Optional): int of number of rows in the board.
+            num_rows (Optional[int]): Number of rows in the board.
                 Must be at least 1. Default defined in connectfour.config.
-            num_columns (Optional): int of number of columns in the board.
+            num_columns (Optional[int]): Number of columns in the board.
                 Must be at least 1. Default defined in connectfour.config.
-            num_to_win (Optional): int of number in a row needed to win.
+            num_to_win (Optional[int]): Number of discs in a row to win.
                 Must be at least 1. Default defined in connectfour.config.
         Raises:
             RuntimeError: If gaming session has already started.
@@ -91,9 +91,9 @@ class Game(object):
         A player_added Action is published.
 
         Args:
-            name: str of the player's name. Must be non-empty. Does not have
+            name (str): The player's name. Must be non-empty. Does not need
                 to be unique (two Marys are distinguishable by disc color).
-            color: Color for this player's discs. Must be unique.
+            color (Color): Color for this player's discs. Must be unique.
         Raises:
             RuntimeError: If gaming session has already started.
             ValueError: If name is empty or if color is already in use by
@@ -156,7 +156,7 @@ class Game(object):
         being played): round_won, round_draw, or next_player.
 
         Args:
-            column: An int of the column to play the disc in.
+            column (int): The column to play the disc in.
         Raises:
             RuntimeError: If a round is not currently in progress.
         """
@@ -212,21 +212,34 @@ class Game(object):
     ##################
 
     def get_num_rows(self):
-        """Get the number of rows in the board."""
+        """Get the number of rows in the board.
+
+        Returns:
+            int: The number of rows.
+        """
         return self.board.num_rows
 
     def get_num_columns(self):
-        """Get the number of columns in the board."""
+        """Get the number of columns in the board.
+
+        Returns:
+            int: The number of columns.
+        """
         return self.board.num_columns
 
     def get_num_players(self):
-        """Get the number of players."""
+        """Get the total number of players.
+
+        Returns:
+            int: The number of players.
+        """
         return len(self.players)
 
     def get_current_player(self):
         """Get the current player.
 
-        Returns None if no players have been added yet.
+        Returns:
+            A Player, or None if no players have been added yet.
         """
         if not self.players:
             return None
@@ -234,8 +247,10 @@ class Game(object):
         return self.players[self.current_player_index]
 
     def get_remaining_colors(self):
-        """Get a set of the Colors that have not been used yet.
+        """Get the Colors that have not been used yet.
 
-        If all colors have been used, returns the empty set.
+        Returns:
+            set: A set of unused colors, or the empty set if all colors
+                have been used.
         """
         return set(Color) - self.used_colors

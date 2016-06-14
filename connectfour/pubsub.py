@@ -4,7 +4,7 @@ from enum import Enum
 class Action(Enum):
     """An action that occurs in the game.
 
-    These are the actions that the model publishes and which the views
+    These are the actions that the model publishes, and which the views
     may subscribe to.
     """
     player_added = 0
@@ -17,18 +17,18 @@ class Action(Enum):
     round_draw = 7
 
 
-# Master dictionary to store all subscribed callbacks, keyed on Action
+"""
+Dictionary to store all subscribed callback functions, keyed on Action.
+"""
 subscriptions = {}
 
 
 def subscribe(action, callback):
     """Subscribe to a particular action.
 
-    This results in callback being called whenever action occurs.
-
     Args:
-        action: The Action to subscribe to.
-        callback: Function that will be called when action occurs.
+        action (Action): The action to subscribe to.
+        callback (function): Will be called when action occurs.
     """
     if action not in subscriptions:
         subscriptions[action] = []
@@ -43,8 +43,8 @@ def publish(action, *args, **kwargs):
     the action.
 
     Args:
-        action: The Action that occurred.
-        *args, **kwargs: Will be passed along to any subscribed callbacks.
+        action (Action): The action that occurred.
+        *args, **kwargs: Will be passed to any subscribed callbacks.
     """
     if action not in subscriptions:
         return

@@ -12,7 +12,7 @@ FRAME_COLSPAN = 3
 
 
 class SetupFrame(object):
-    """Initial screen, for setting up game."""
+    """Full-window frame for setting up game."""
 
     def __init__(self, view):
         self.view = view

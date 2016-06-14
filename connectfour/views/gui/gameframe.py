@@ -12,7 +12,7 @@ FRAME_COLSPAN = 3
 
 
 class GameFrame(object):
-    """Screen for actually playing game."""
+    """Full-window frame for actually playing game."""
 
     def __init__(self, view, num_rows, num_columns):
         self.view = view
@@ -55,11 +55,11 @@ class GameFrame(object):
         self._create_play_buttons(matrix_frame)
         self._create_squares(matrix_frame)
 
-    def _create_play_buttons(self, parent):
+    def _create_play_buttons(self):
         play_buttons = []
         for column in range(self.num_columns):
             button = tk.Button(
-                parent, text=GAME_TEXT['play'],
+                self.widgets['matrix_frame'], text=GAME_TEXT['play'],
                 command=lambda i=column: self.view.play_disc(i))
             button.grid(row=0, column=column)
 
@@ -67,14 +67,14 @@ class GameFrame(object):
 
         self.widgets['play_buttons'] = play_buttons
 
-    def _create_squares(self, parent):
+    def _create_squares(self):
         # Create 2D array to hold pointers to slot widgets
         squares = [[None for column in range(self.num_columns)]
                    for row in range(self.num_rows)]
 
         for row in range(self.num_rows):
             for column in range(self.num_columns):
-                square = tk.Frame(parent,
+                square = tk.Frame(self.widgets['matrix_frame'],
                                   width=SQUARE_SIZE, height=SQUARE_SIZE,
                                   bg=SQUARE_BACKGROUND, bd=SQUARE_BORDER_WIDTH,
                                   relief=tk.RAISED)

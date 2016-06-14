@@ -32,9 +32,12 @@ class Board(object):
         return self.__str__()
 
     def get_printable_grid(self):
-        """Get a string of this board's grid.
+        """Get a pretty string of the board's grid.
 
         Might be used for console printing.
+
+        Returns:
+            str: A tab- and newline-delimited string of the board.
         """
         s = ''
         for row in self.grid:
@@ -48,11 +51,23 @@ class Board(object):
         return s
 
     def is_row_in_bounds(self, row):
-        """Determine if row is in bounds."""
+        """Determine if a row is in bounds.
+
+        Args:
+            row (int): The row to check.
+        Returns:
+            bool: True if in bounds, False otherwise.
+        """
         return row >= self.top_row and row <= self.bottom_row
 
     def is_column_in_bounds(self, column):
-        """Determine if column is in bounds."""
+        """Determine if a column is in bounds.
+
+        Args:
+            column (int): The column to check.
+        Returns:
+            bool: True if in bounds, False otherwise.
+        """
         return column >= self.left_column and column <= self.right_column
 
     def is_in_bounds(self, position):
@@ -70,7 +85,7 @@ class Board(object):
         """Determine if a column is full of discs.
 
         Args:
-            column: An int of the column to check.
+            column (int): The column to check.
         Returns:
             bool: True if column is full, False otherwise.
         Raises:
@@ -82,7 +97,11 @@ class Board(object):
         return self.grid[self.top_row][column] is not None
 
     def is_full(self):
-        """Determine if this board is entirely full of discs."""
+        """Determine if this board is entirely full of discs.
+
+        Returns:
+            bool: True if the board is full, False otherwise.
+        """
         for i in range(self.num_columns):
             if not self.is_column_full(i):
                 return False
@@ -119,8 +138,8 @@ class Board(object):
         """Add a disc to a column.
 
         Args:
-            disc: The Disc to add.
-            column: An int of the column to add the disc to.
+            disc (Disc): The disc to add.
+            column (int): The column to add the disc to.
         Returns:
             int: The row in which the disc landed.
         Raises:
@@ -140,42 +159,32 @@ class Board(object):
         self.grid[current_row][column] = disc
         return current_row
 
-    def _get_consecutive_matches(self, start, step, fake_disc=None):
-        """Get consecutive matching positions in a single direction.
-
-        From a starting position, find positions with discs matching that
-        in the starting position, outward in the direction indicated by step,
-        until a mismatch is found.
+    def get_winning_positions(self, origin, fake_disc=None):
+        """Get winning positions that include the origin position.
 
         Args:
-            start: A 2-tuple (row, column) of starting position.
-            step: A 2-tuple (vertical_step, horizontal_step) indicating
-                the direction to move with each step.
-
-                For example, to check upwards, step should be (1, 0).
-                To check diagonally down-left, step should be (-1, -1).
-
-            fake_disc (Optional): A disc to pretend to place at start.
-                Might be used to predict whether a win might occur before
-                actually playing the disc.
+            origin: A 2-tuple (row, column)
+            fake_disc (Optional[Disc]): A disc to pretend to place at start.
+                Might be used to predict whether a win might occur..
         Returns:
-            set: A set of 2-tuples in format (row, column) of the matching
-                positions. This set includes the starting position. Thus,
-                if no matches are found, the set contains only the starting
-                position.
+            set: A set of 2-tuples in format (row, column) of the winning
+                positions. Returns the empty set if no win found.
         """
-        disc = fake_disc if fake_disc else self.get_disc(start)
+        winning_positions = set()
 
-        # Initialize set with start position
-        positions = {start}
+        for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
+            matches = self._get_consecutive_matches_mirrored(
+                origin, step, fake_disc=fake_disc)
 
-        current = tuple(map(operator.add, start, step))
+            # Check if these matches are enough to win
+            if len(matches) >= self.num_to_win:
+                winning_positions |= matches
 
-        while (self.is_in_bounds(current) and self.get_disc(current) == disc):
-            positions.add(current)
-            current = tuple(map(operator.add, current, step))
+        return winning_positions
 
-        return positions
+    #######################################
+    # Helpers for get_winning_positions() #
+    #######################################
 
     def _get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
         """Get consecutive matching positions in two directions.
@@ -194,9 +203,7 @@ class Board(object):
                 For example, to check the horizontal axis, step can be
                 either (0, 1) or (0, -1).
 
-            fake_disc (Optional): A disc to pretend to place at start.
-                Might be used to predict whether a win might occur before
-                actually playing the disc.
+            fake_disc (Optional[Disc]): See get_winning_positions docstring.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
                 positions. This set includes the starting position. Thus,
@@ -211,25 +218,37 @@ class Board(object):
 
         return a | b
 
-    def get_winning_positions(self, origin, fake_disc=None):
-        """Get winning positions that include the origin position.
+    def _get_consecutive_matches(self, start, step, fake_disc=None):
+        """Get consecutive matching positions in a single direction.
+
+        From a starting position, find positions with discs matching that
+        in the starting position, outward in the direction indicated by step,
+        until a mismatch is found.
 
         Args:
-            origin: A 2-tuple (row, column)
-            fake_disc (Optional): A disc to pretend to place at start. Might
-                be used to predict whether a win might occur.
+            start: A 2-tuple (row, column) of starting position.
+            step: A 2-tuple (vertical_step, horizontal_step) indicating
+                the direction to move with each step.
+
+                For example, to check upwards, step should be (1, 0).
+                To check diagonally down-left, step should be (-1, -1).
+
+            fake_disc (Optional[Disc]): See get_winning_positions docstring.
         Returns:
-            set: A set of 2-tuples in format (row, column) of the winning
-                positions. Returns the empty set if no win found.
+            set: A set of 2-tuples in format (row, column) of the matching
+                positions. This set includes the starting position. Thus,
+                if no matches are found, the set contains only the starting
+                position.
         """
-        winning_positions = set()
+        disc = fake_disc if fake_disc else self.get_disc(start)
 
-        for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
-            matches = self._get_consecutive_matches_mirrored(
-                origin, step, fake_disc=fake_disc)
+        # Initialize set with start position
+        positions = {start}
 
-            # Check if these matches are enough to win
-            if len(matches) >= self.num_to_win:
-                winning_positions |= matches
+        current = tuple(map(operator.add, start, step))
 
-        return winning_positions
+        while (self.is_in_bounds(current) and self.get_disc(current) == disc):
+            positions.add(current)
+            current = tuple(map(operator.add, current, step))
+
+        return positions
