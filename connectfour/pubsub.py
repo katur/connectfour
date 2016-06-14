@@ -17,10 +17,8 @@ class Action(Enum):
     round_draw = 7
 
 
-"""
-Dictionary to store all subscribed callback functions, keyed on Action.
-"""
 subscriptions = {}
+"""dict: To store all subscribed callback functions, keyed on Action."""
 
 
 def subscribe(action, callback):
