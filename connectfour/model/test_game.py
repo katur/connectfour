@@ -12,7 +12,7 @@ def create_game():
     c = Game()
     c.add_player('Sally', Color.brown)
     c.add_player('Fred', Color.pink)
-    c.add_board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
+    c.create_board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
     return c
 
 

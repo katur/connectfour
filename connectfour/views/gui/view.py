@@ -55,7 +55,7 @@ class GUIView(object):
             num_rows = self.setup_frame.parse_row_entry()
             num_columns = self.setup_frame.parse_column_entry()
             num_to_win = self.setup_frame.parse_to_win_entry()
-            self.model.add_board(num_rows, num_columns, num_to_win)
+            self.model.create_board(num_rows, num_columns, num_to_win)
 
         except ValueError:
             # TODO: handle erroneous row/column/to_win

@@ -52,8 +52,8 @@ class GameFrame(object):
         matrix_frame.grid(row=MATRIX_ROW, columnspan=FRAME_COLSPAN)
         self.widgets['matrix_frame'] = matrix_frame
 
-        self._create_play_buttons(matrix_frame)
-        self._create_squares(matrix_frame)
+        self._create_play_buttons()
+        self._create_squares()
 
     def _create_play_buttons(self):
         play_buttons = []

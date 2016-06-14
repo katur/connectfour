@@ -59,7 +59,7 @@ class Game(object):
                      num_to_win=DEFAULT_TO_WIN):
         """Create a playing board and add it to the game.
 
-        A board_added Action is published.
+        A board_created Action is published.
 
         This is called after __init__ so that players can be added prior to
         choosing the board dimensions.
@@ -83,7 +83,7 @@ class Game(object):
                              'be at least 1')
 
         self.board = Board(num_rows, num_columns, num_to_win)
-        publish(Action.board_added, self.board)
+        publish(Action.board_created, self.board)
 
     def add_player(self, name, color):
         """Add a player.
