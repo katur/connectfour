@@ -19,9 +19,7 @@ class Disc(object):
         return '{} Disc'.format(self.color)
 
     def __eq__(self, other):
-        if type(other) is type(self):
-            return self.color == other.color
-        return False
+        return type(other) is type(self) and self.color == other.color
 
     def __ne__(self, other):
         return not self.__eq__(other)

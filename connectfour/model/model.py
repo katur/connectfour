@@ -62,8 +62,8 @@ class ConnectFourModel(object):
 
         Publishes a board_created Action.
 
-        Board creation is separated from __init__ so that players can be
-        added prior to choosing the board dimensions.
+        This function is separate from __init__ so that players can be
+        added before finalizing the board dimensions.
 
         Args:
             num_rows (Optional[int]): Number of rows in the board.
@@ -93,7 +93,7 @@ class ConnectFourModel(object):
 
         Args:
             name (str): The player's name. Must be non-empty. Does not need
-                to be unique (two Marys are distinguishable by disc color).
+                to be unique (two Emilys are distinguishable by disc color).
             color (Color): Color for this player's discs. Must be unique.
         Raises:
             RuntimeError: If gaming session has already started.
@@ -118,7 +118,7 @@ class ConnectFourModel(object):
         """Start a new round of the game.
 
         Publishes a round_started Action, followed by a next_player Action
-        to indicate the round's first player.
+        to indicate which player should go first.
 
         Raises:
             RuntimeError: If another round is already in progress, if
@@ -127,11 +127,11 @@ class ConnectFourModel(object):
         if self.round_in_progress:
             raise RuntimeError('Cannot start a round with another in progress')
 
-        if not self.players:
-            raise RuntimeError('Cannot start a round with no players')
-
         if not self.board:
             raise RuntimeError('Cannot start a round with no board')
+
+        if not self.players:
+            raise RuntimeError('Cannot start a round with no players')
 
         self.board.reset()
         self.session_in_progress = True
@@ -152,9 +152,9 @@ class ConnectFourModel(object):
 
         Disc is assumed to be played by the current player.
 
-        If the column is out of bounds or full, publishes a try_again Action.
-        Otherwise, publishes a disc_played Action, followed by one of the
-        following Actions (depending on the outcome of the played disc):
+        If the play is illegal, publishes a try_again Action.
+        Otherwise, publishes a disc_played Action, followed by one of
+        the following Actions (depending on the outcome of the play);
         round_won, round_draw, or next_player.
 
         Args:
@@ -229,6 +229,14 @@ class ConnectFourModel(object):
         """
         return self.board.num_columns
 
+    def get_num_to_win(self):
+        """Get the number needed to win.
+
+        Returns:
+            int: The number to win.
+        """
+        return self.board.num_to_win
+
     def get_num_players(self):
         """Get the total number of players.
 
@@ -241,7 +249,7 @@ class ConnectFourModel(object):
         """Get the current player.
 
         Returns:
-            A Player, or None if no players have been added yet.
+            Player: Current player, or None if no players have been added yet.
         """
         if not self.players:
             return None
@@ -249,10 +257,10 @@ class ConnectFourModel(object):
         return self.players[self.current_player_index]
 
     def get_remaining_colors(self):
-        """Get the Colors that have not been used yet.
+        """Get the colors that have not been used yet.
 
         Returns:
-            set: A set of unused colors, or the empty set if all colors
+            set: A set of unused Colors, or the empty set if all colors
                 have been used.
         """
         return set(Color) - self.used_colors

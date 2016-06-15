@@ -22,7 +22,7 @@ class Player(object):
         return self.__str__()
 
     def get_color(self):
-        """Get the color of this player's disc.
+        """Get this player's disc color.
 
         Returns:
             Color: The color of this player's disc.

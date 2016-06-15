@@ -47,6 +47,11 @@ class GUIView(object):
     ######################
 
     def add_player(self):
+        """Tell the model to add a player.
+
+        This method parses player attributes from user input. If input is
+        invalid, a popup appears alerting the user to fix the error.
+        """
         name = self.setup_frame.parse_player_entry()
         if not len(name):
             tkMessageBox.showerror('Error', 'Name must be non-empty')
@@ -62,6 +67,14 @@ class GUIView(object):
         self.model.add_player(name, color)
 
     def launch_game(self):
+        """Tell the model to create the board and start the first game.
+
+        This method parses board parameters from user input. If input is
+        invalid, a popup appears alerting the user to fix the error.
+
+        This method also transitions the window from the setup_frame to the
+        game_frame.
+        """
         # Create the board
         try:
             self._create_board()
@@ -75,7 +88,6 @@ class GUIView(object):
         self.model.start_round()
 
     def _create_board(self):
-        """Helper for launch_game."""
         num_rows = get_positive_int(
             self.setup_frame.parse_row_entry(),
             name='Rows', max_value=MAX_ROWS)
@@ -89,10 +101,21 @@ class GUIView(object):
         self.model.create_board(num_rows, num_columns, num_to_win)
 
     def play_again(self):
+        """Tell the model to start a new game.
+
+        This method also clears the game squares for the new game.
+        """
         self.game_frame.reset_squares()
         self.model.start_round()
 
     def play_disc(self, column):
+        """Tell the model that a disc was played in a column.
+
+        Disc is assumed to be played by the current player.
+
+        Args:
+            column (int): The column to play the disc in.
+        """
         self.model.play_disc(column)
 
     ###########################
@@ -100,31 +123,66 @@ class GUIView(object):
     ###########################
 
     def on_player_added(self, player):
+        """Respond to the model reporting that a player was added to the game.
+
+        Args:
+            player (Player): The player that was added.
+        """
         self.setup_frame.update_feedback(player, self.model.get_num_players())
 
         # Enable launch once first player is added
         self.setup_frame.enable_launch_button()
 
     def on_round_started(self, round_number):
+        """Respond to the model reporting that a new round started.
+
+        Args:
+            round_number (int): The number of the round that started.
+        """
         self.game_frame.disable_play_again_button()
         self.game_frame.enable_play_buttons()
 
     def on_next_player(self, player):
+        """Respond to the model reporting the next player.
+
+        Args:
+            player (Player): The player who should play next.
+        """
         self.game_frame.announce_next_player(player)
 
     def on_try_again(self, player, reason):
+        """Respond to the model reporting a try again event.
+
+        Args:
+            player (Player): The player who should try again.
+            reason (TryAgainReason): The reason the player should try again.
+        """
         self.game_frame.announce_try_again(player, reason)
 
     def on_disc_played(self, player, position):
+        """Respond to the model reporting that a disc was played.
+
+        Args:
+            player (Player): The player who played the disc.
+            position: A 2-tuple in format (row, column) of the position the
+                disc was played.
+        """
         self.game_frame.update_square(player, position)
 
     def on_round_won(self, player, winning_positions):
+        """Respond to the model reporting that a round was won.
+
+        Args:
+            player (Player): The winner.
+            winning_positions: The positions that resulted in the win.
+        """
         self.game_frame.announce_win(player)
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
         self.game_frame.flash_squares(winning_positions)
 
     def on_round_draw(self):
+        """Respond to the model reporting that a round ended in a draw."""
         self.game_frame.announce_draw()
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()

@@ -21,6 +21,7 @@ class LogView(object):
             Action.round_won: self.on_round_won,
             Action.round_draw: self.on_round_draw,
         }
+
         for action, response in responses.iteritems():
             subscribe(action, response)
 

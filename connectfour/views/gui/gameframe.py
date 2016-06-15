@@ -16,6 +16,11 @@ class GameFrame(object):
     """Full-window frame for actually playing the game."""
 
     def __init__(self, view):
+        """Create the frame, including all its widgets.
+
+        Args:
+            view (GUIView): The view that this frame is for.
+        """
         self.view = view
         self.num_rows = view.model.get_num_rows()
         self.num_columns = view.model.get_num_columns()
@@ -57,7 +62,9 @@ class GameFrame(object):
         self._create_squares()
 
     def _create_play_buttons(self):
+        # 1D array of pointers to the disc-playing buttons (one per column)
         play_buttons = []
+
         for column in range(self.num_columns):
             button = tk.Button(
                 self.widgets['matrix_frame'], text=GAME_TEXT['play'],
@@ -69,7 +76,7 @@ class GameFrame(object):
         self.widgets['play_buttons'] = play_buttons
 
     def _create_squares(self):
-        # Create 2D array to hold pointers to slot widgets
+        # 2D array of pointers to the square widgets making up game board
         squares = [[None for column in range(self.num_columns)]
                    for row in range(self.num_rows)]
 
@@ -102,47 +109,84 @@ class GameFrame(object):
     ######################
 
     def enable_play_buttons(self):
+        """Enable the buttons to play discs in specific columns."""
         for button in self.widgets['play_buttons']:
             button.configure(state=tk.NORMAL)
 
     def disable_play_buttons(self):
+        """Disable the buttons to play discs in specific columns."""
         for button in self.widgets['play_buttons']:
             button.configure(state=tk.DISABLED)
 
     def enable_play_again_button(self):
+        """Enable the button to play another round."""
         self.widgets['play_again_button'].configure(state=tk.NORMAL)
 
     def disable_play_again_button(self):
+        """Disable the button to play another round."""
         self.widgets['play_again_button'].configure(state=tk.DISABLED)
 
-    def update_square(self, player, position):
-        row, column = position
-        color = COLOR_TO_TK[player.get_color()]
-        self.widgets['squares'][row][column].configure(bg=color)
-
     def announce_next_player(self, player):
+        """Update feedback bar to announce the next player.
+
+        Args:
+            player (Player): The player who should play next.
+        """
         self._update_game_feedback(GAME_TEXT['next_player'].format(player))
 
     def announce_try_again(self, player, reason):
+        """Update feedback bar to announce that a player should try again.
+
+        Args:
+            player (Player): The player who needs to try again.
+            reason (TryAgainReason): The reason player needs to try again.
+        """
         reason = REASON_TO_STR[reason]
         self._update_game_feedback(GAME_TEXT['try_again']
                                    .format(player, reason))
 
     def announce_win(self, player):
+        """Update feedback bar to announce that the round was won.
+
+        Args:
+            player (Player): The winner.
+        """
         self._update_game_feedback(GAME_TEXT['win'].format(player))
 
     def announce_draw(self):
+        """Update feedback bar to announce the the round ended in a draw."""
+
         self._update_game_feedback(GAME_TEXT['draw'])
 
     def _update_game_feedback(self, text):
         self.widgets['game_feedback'].configure(text=text)
 
-    def flash_squares(self, winning_positions):
-        for row, column in winning_positions:
+    def update_square(self, player, position):
+        """Paint a game square to reflect a disc played in that position.
+
+        Args:
+            player (Player): The player who played a disc here. This is
+                used to determine what color to paint the square.
+            position: A 2-tuple in format (row, column).
+        """
+        row, column = position
+        color = COLOR_TO_TK[player.get_color()]
+        self.widgets['squares'][row][column].configure(bg=color)
+
+    def flash_squares(self, positions):
+        """Flash some of the game squares.
+
+        Args:
+            positions (set): A set of 2-tuples in format (row, column)
+                of the positions to flash.
+        """
+        for row, column in positions:
             flash(element=self.widgets['squares'][row][column],
                   window=self.view.window, color=SQUARE_BACKGROUND)
 
     def reset_squares(self):
+        """Recreate the game matrix to start a new round."""
+        # self.widgets['matrix_frame'].grid_forget()
         '''
         Calling .destroy() or .grid_forget() here, or even at the
         end of _create_game_matrix(), causes the GUI screen to jump,
@@ -153,6 +197,4 @@ class GameFrame(object):
         Possible solution:
         Keep track of previous two games. Destroy 2-ago game.
         '''
-        # self.widgets['matrix_frame'].grid_forget()
-
         self._create_game_matrix()

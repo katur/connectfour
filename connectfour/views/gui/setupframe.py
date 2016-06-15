@@ -12,9 +12,14 @@ FRAME_COLSPAN = 3
 
 
 class SetupFrame(object):
-    """Full-window frame for setting up game."""
+    """Full-window frame for game setup."""
 
     def __init__(self, view):
+        """Create the frame, including all its widgets.
+
+        Args:
+            view (GUIView): The view that this frame is for.
+        """
         self.view = view
         self.frame = tk.Frame(view.window)
         self.frame.grid(padx=PAD, pady=PAD)
@@ -99,24 +104,56 @@ class SetupFrame(object):
     # Widget interaction #
     ######################
 
+    def enable_launch_button(self):
+        """Enable the button to start the game."""
+        self.widgets['launch_button'].configure(state=tk.NORMAL)
+
+    def parse_row_entry(self):
+        """Get the contents of the row entry field.
+
+        Returns:
+            str: Text entered into the row field, or empty string if
+                nothing entered.
+        """
+        # Do not cast to int here, to give caller more flexibility
+        # in error checking or casting
+        return self.widgets['row_entry'].get()
+
+    def parse_column_entry(self):
+        """Get the contents of the column entry field.
+
+        Returns:
+            str: Text entered into the column field, or empty string if
+                nothing entered.
+        """
+        return self.widgets['column_entry'].get()
+
+    def parse_to_win_entry(self):
+        """Get the contents of the "to win" entry field.
+
+        Returns:
+            str: Text entered into the "to win" field, or empty string if
+                nothing entered.
+        """
+        return self.widgets['to_win_entry'].get()
+
     def parse_player_entry(self):
+        """Get the contents of the player entry field, and clear the field.
+
+        Returns:
+            str: Text entered into the player field, or empty string if
+                nothing entered.
+        """
         name = self.widgets['player_entry'].get()
         self.widgets['player_entry'].delete(0, tk.END)
         return name
 
-    def parse_row_entry(self):
-        # Don't cast to int to give caller more error checking flexibility
-        return self.widgets['row_entry'].get()
-
-    def parse_column_entry(self):
-        return self.widgets['column_entry'].get()
-
-    def parse_to_win_entry(self):
-        return self.widgets['to_win_entry'].get()
-
     def update_feedback(self, player, num_players):
+        """Update the feedback to reflect that a new player was added.
+
+        Args:
+            player (Player): A new player that was added to the game.
+            num_players (int): The current player count.
+        """
         self.widgets['feedback'].configure(
             text=SETUP_TEXT['feedback'].format(player, num_players))
-
-    def enable_launch_button(self):
-        self.widgets['launch_button'].configure(state=tk.NORMAL)

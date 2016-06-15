@@ -8,7 +8,7 @@ DEFAULT_TO_WIN = 4
 class TryAgainReason(Enum):
     """Reason that a player needs to try again.
 
-    A player needs to try again if their previous move was illegal.
+    A player needs to try again if their previous play was illegal.
     """
 
     column_out_of_bounds = 1
@@ -16,7 +16,7 @@ class TryAgainReason(Enum):
 
 
 class Color(Enum):
-    """A color to use for game discs..
+    """A color to use for game discs.
 
     Yellow is not included because it should serve as the board background
     color (as in the original Connect Four game).
