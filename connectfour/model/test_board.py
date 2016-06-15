@@ -1,20 +1,21 @@
 import unittest
 
-from connectfour.config import Color
-from connectfour.model.board import Board
-from connectfour.model.disc import Disc
+from connectfour.config import ConnectFourColor
+from connectfour.model.board import ConnectFourBoard
+from connectfour.model.disc import ConnectFourDisc
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
 TEST_NUM_TO_WIN = 4
-PINK = Disc(Color.pink)
-BROWN = Disc(Color.brown)
+PINK = ConnectFourDisc(ConnectFourColor.pink)
+BROWN = ConnectFourDisc(ConnectFourColor.brown)
 
 
-class TestBoardBasics(unittest.TestCase):
+class TestConnectFourBoardBasics(unittest.TestCase):
 
     def setUp(self):
-        self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
+        self.board = ConnectFourBoard(TEST_NUM_ROWS, TEST_NUM_COLUMNS,
+                                      TEST_NUM_TO_WIN)
 
         self.bottom_row = self.board.bottom_row
         self.top_row = self.board.top_row
@@ -116,7 +117,8 @@ class TestBoardBasics(unittest.TestCase):
 class TestMatchesAndWins(unittest.TestCase):
 
     def setUp(self):
-        self.board = Board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)
+        self.board = ConnectFourBoard(TEST_NUM_ROWS, TEST_NUM_COLUMNS,
+                                      TEST_NUM_TO_WIN)
         test_plays = (
             (BROWN, 1),
             (PINK, 2),

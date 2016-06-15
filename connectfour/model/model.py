@@ -1,7 +1,7 @@
-from connectfour.config import (Color, TryAgainReason, DEFAULT_ROWS,
-                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
-from connectfour.model.board import Board
-from connectfour.model.player import Player
+from connectfour.config import (ConnectFourColor, TryAgainReason,
+                                DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
+from connectfour.model.board import ConnectFourBoard
+from connectfour.model.player import ConnectFourPlayer
 from connectfour.pubsub import Action, publish
 
 
@@ -80,10 +80,9 @@ class ConnectFourModel(object):
             raise RuntimeError('Cannot add board once session is started')
 
         if num_rows < 1 or num_columns < 1 or num_to_win < 1:
-            raise ValueError('Board dimensions and num_to_win must '
-                             'be at least 1')
+            raise ValueError('Board dimensions and num_to_win must be >= 1')
 
-        self.board = Board(num_rows, num_columns, num_to_win)
+        self.board = ConnectFourBoard(num_rows, num_columns, num_to_win)
         publish(Action.board_created, self.board)
 
     def add_player(self, name, color):
@@ -94,7 +93,8 @@ class ConnectFourModel(object):
         Args:
             name (str): The player's name. Must be non-empty. Does not need
                 to be unique (two Emilys are distinguishable by disc color).
-            color (Color): Color for this player's discs. Must be unique.
+            color (ConnectFourColor): Color of this player's discs. Must be
+                unique.
         Raises:
             RuntimeError: If gaming session has already started.
             ValueError: If name is empty or if color is already in use by
@@ -110,7 +110,7 @@ class ConnectFourModel(object):
             raise ValueError('Color {} is already used'.format(color))
 
         self.used_colors.add(color)
-        player = Player(name, color)
+        player = ConnectFourPlayer(name, color)
         self.players.append(player)
         publish(Action.player_added, player)
 
@@ -150,7 +150,7 @@ class ConnectFourModel(object):
     def play_disc(self, column):
         """Play a disc in a column.
 
-        Disc is assumed to be played by the current player.
+        The disc is assumed to be played by the current player.
 
         If the play is illegal, publishes a try_again Action.
         Otherwise, publishes a disc_played Action, followed by one of
@@ -249,7 +249,7 @@ class ConnectFourModel(object):
         """Get the current player.
 
         Returns:
-            Player: Current player, or None if no players have been added yet.
+            ConnectFourPlayer: Current player, or None if no players added.
         """
         if not self.players:
             return None
@@ -260,7 +260,7 @@ class ConnectFourModel(object):
         """Get the colors that have not been used yet.
 
         Returns:
-            set: A set of unused Colors, or the empty set if all colors
-                have been used.
+            set: A set of unused ConnectFourColors, or the empty set if all
+                colors are in use.
         """
-        return set(Color) - self.used_colors
+        return set(ConnectFourColor) - self.used_colors

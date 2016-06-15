@@ -1,7 +1,7 @@
-from connectfour.model.disc import Disc
+from connectfour.model.disc import ConnectFourDisc
 
 
-class Player(object):
+class ConnectFourPlayer(object):
     """A Connect Four player."""
 
     def __init__(self, name, color):
@@ -9,10 +9,10 @@ class Player(object):
 
         Args:
             name (str): This player's name.
-            color (Color): The color of this player's disc.
+            color (ConnectFourColor): The color of this player's discs.
         """
         self.name = name
-        self.disc = Disc(color)
+        self.disc = ConnectFourDisc(color)
         self.number_of_wins = 0
 
     def __str__(self):
@@ -25,6 +25,6 @@ class Player(object):
         """Get this player's disc color.
 
         Returns:
-            Color: The color of this player's disc.
+            ConnectFourColor: The color of this player's discs.
         """
         return self.disc.color

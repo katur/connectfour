@@ -9,7 +9,7 @@ UP_RIGHT = (1, 1)
 DOWN_RIGHT = (1, -1)
 
 
-class Board(object):
+class ConnectFourBoard(object):
     """A Connect Four playing board."""
 
     def __init__(self, num_rows, num_columns, num_to_win):
@@ -33,7 +33,7 @@ class Board(object):
                      for row in range(num_rows)]
 
     def __str__(self):
-        return '{} rows x {} column Board ({} to win)'.format(
+        return '{} rows x {} column ConnectFourBoard ({} to win)'.format(
             self.num_rows, self.num_columns, self.num_to_win)
 
     def __repr__(self):
@@ -128,7 +128,8 @@ class Board(object):
         Args:
             position: A 2-tuple in format (row, column).
         Returns:
-            Disc: The disc at this position, or None if this position is empty.
+            ConnectFourDisc: The disc at this position, or None if this
+                position is empty.
         Raises:
             ValueError: If position is out of bounds.
         """
@@ -143,7 +144,7 @@ class Board(object):
         """Add a disc to a column.
 
         Args:
-            disc (Disc): The disc to add.
+            disc (ConnectFourDisc): The disc to add.
             column (int): The column to add the disc to.
         Returns:
             int: The row in which the disc landed.
@@ -170,9 +171,9 @@ class Board(object):
         Args:
             origin: A 2-tuple (row, column) that will be part of any
                 wins found.
-            fake_disc (Optional[Disc]): A disc to pretend to place at start.
-                Might be used to predict whether a win might occur without
-                actually playing the disc.
+            fake_disc (Optional[ConnectFourDisc]): A disc to pretend is
+                at start. Might be used to predict whether a win might
+                occur without actually playing the disc.
         Returns:
             set: A set of 2-tuples in format (row, column) of the positions
                 that result in a win, or the empty set if no win found.
@@ -209,7 +210,8 @@ class Board(object):
                 For example, to check the horizontal axis, step can be
                 either (0, 1) or (0, -1).
 
-            fake_disc (Optional[Disc]): See get_winning_positions docstring.
+            fake_disc (Optional[ConnectFourDisc]): See docstring for
+                get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
                 positions, including the starting position.
@@ -237,7 +239,8 @@ class Board(object):
                 For example, to check straight up, step should be (1, 0).
                 To check diagonally down-left, step should be (-1, -1).
 
-            fake_disc (Optional[Disc]): See get_winning_positions docstring.
+            fake_disc (Optional[ConnectFourDisc]): See docstring for
+                get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
                 positions, including the starting position.

@@ -1,4 +1,4 @@
-class Disc(object):
+class ConnectFourDisc(object):
     """A Connect Four playing disc (aka token, or chip).
 
     Two discs are considered equal if they are the same color.
@@ -8,7 +8,7 @@ class Disc(object):
         """Create a disc.
 
         Args:
-            color (Color): This disc's color.
+            color (ConnectFourColor): This disc's color.
         """
         self.color = color
 
@@ -16,7 +16,7 @@ class Disc(object):
         return '{}'.format(self.color)
 
     def __repr__(self):
-        return '{} Disc'.format(self.color)
+        return '{} ConnectFourDisc'.format(self.color)
 
     def __eq__(self, other):
         return type(other) is type(self) and self.color == other.color

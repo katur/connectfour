@@ -111,7 +111,7 @@ class GUIView(object):
     def play_disc(self, column):
         """Tell the model that a disc was played in a column.
 
-        Disc is assumed to be played by the current player.
+        The disc is assumed to be played by the current player.
 
         Args:
             column (int): The column to play the disc in.
@@ -126,7 +126,7 @@ class GUIView(object):
         """Respond to the model reporting that a player was added to the game.
 
         Args:
-            player (Player): The player that was added.
+            player (ConnectFourPlayer): The player that was added.
         """
         self.setup_frame.update_feedback(player, self.model.get_num_players())
 
@@ -146,7 +146,7 @@ class GUIView(object):
         """Respond to the model reporting the next player.
 
         Args:
-            player (Player): The player who should play next.
+            player (ConnectFourPlayer): The player who should play next.
         """
         self.game_frame.announce_next_player(player)
 
@@ -154,7 +154,7 @@ class GUIView(object):
         """Respond to the model reporting a try again event.
 
         Args:
-            player (Player): The player who should try again.
+            player (ConnectFourPlayer): The player who should try again.
             reason (TryAgainReason): The reason the player should try again.
         """
         self.game_frame.announce_try_again(player, reason)
@@ -163,7 +163,7 @@ class GUIView(object):
         """Respond to the model reporting that a disc was played.
 
         Args:
-            player (Player): The player who played the disc.
+            player (ConnectFourPlayer): The player who played the disc.
             position: A 2-tuple in format (row, column) of the position the
                 disc was played.
         """
@@ -173,7 +173,7 @@ class GUIView(object):
         """Respond to the model reporting that a round was won.
 
         Args:
-            player (Player): The winner.
+            player (ConnectFourPlayer): The winner.
             winning_positions: The positions that resulted in the win.
         """
         self.game_frame.announce_win(player)

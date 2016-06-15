@@ -152,7 +152,7 @@ class SetupFrame(object):
         """Update the feedback to reflect that a new player was added.
 
         Args:
-            player (Player): A new player that was added to the game.
+            player (ConnectFourPlayer): The player that was added to the game.
             num_players (int): The current player count.
         """
         self.widgets['feedback'].configure(
