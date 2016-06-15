@@ -1,8 +1,7 @@
 class Disc(object):
     """A Connect Four playing disc (aka token, or chip).
 
-    Each player creates just one disc, and plays the same disc repeatedly
-    in different positions.
+    Two discs are considered equal if they are the same color.
     """
 
     def __init__(self, color):
@@ -18,3 +17,11 @@ class Disc(object):
 
     def __repr__(self):
         return '{} Disc'.format(self.color)
+
+    def __eq__(self, other):
+        if type(other) is type(self):
+            return self.color == other.color
+        return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
