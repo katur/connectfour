@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import Color
-from connectfour.model.game import Game
+from model import ConnectFourModel
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6
@@ -9,7 +9,7 @@ TEST_NUM_TO_WIN = 4
 
 
 def create_game():
-    c = Game()
+    c = ConnectFourModel()
     c.add_player('Sally', Color.brown)
     c.add_player('Fred', Color.pink)
     c.create_board(TEST_NUM_ROWS, TEST_NUM_COLUMNS, TEST_NUM_TO_WIN)

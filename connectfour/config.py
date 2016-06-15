@@ -16,10 +16,10 @@ class TryAgainReason(Enum):
 
 
 class Color(Enum):
-    """A color to use for discs in the game.
+    """A color to use for game discs..
 
     Yellow is not included because it should serve as the board background
-    color, as in the real Connect Four game.
+    color (as in the original Connect Four game).
     """
 
     (black, red, blue, purple, brown, dark_green, pink, gray, orange,

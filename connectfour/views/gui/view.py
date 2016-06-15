@@ -58,7 +58,7 @@ class GUIView(object):
         self.model.add_player(name, color)
 
     def launch_game(self):
-        # Create the game board
+        # Create the board
         try:
             num_rows = self.setup_frame.parse_row_entry()
             num_columns = self.setup_frame.parse_column_entry()

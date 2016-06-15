@@ -12,7 +12,7 @@ FRAME_COLSPAN = 3
 
 
 class GameFrame(object):
-    """Full-window frame for actually playing game."""
+    """Full-window frame for actually playing the game."""
 
     def __init__(self, view, num_rows, num_columns):
         self.view = view

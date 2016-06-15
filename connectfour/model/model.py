@@ -5,7 +5,7 @@ from connectfour.model.board import Board
 from connectfour.model.player import Player
 
 
-class Game(object):
+class ConnectFourModel(object):
     """Top-level model of the Connect Four game.
 
     Core method dependencies:
@@ -45,7 +45,7 @@ class Game(object):
         self.current_player_index = 0
 
     def __str__(self):
-        return 'Game [board:{}, num_players:{}]'.format(
+        return 'ConnectFourModel [board:{}, num_players:{}]'.format(
             self.board, self.get_num_players())
 
     def __repr__(self):
@@ -57,7 +57,7 @@ class Game(object):
 
     def create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                      num_to_win=DEFAULT_TO_WIN):
-        """Create a playing board and add it to the game.
+        """Create a playing board and add it to the model.
 
         A board_created Action is published.
 
