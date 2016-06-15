@@ -6,6 +6,11 @@ class Disc(object):
     """
 
     def __init__(self, color):
+        """Create a disc.
+
+        Args:
+            color (Color): This disc's color.
+        """
         self.color = color
 
     def __str__(self):

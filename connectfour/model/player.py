@@ -5,6 +5,12 @@ class Player(object):
     """A Connect Four player."""
 
     def __init__(self, name, color):
+        """Create a player.
+
+        Args:
+            name (str): This player's name.
+            color (Color): The color of this player's disc.
+        """
         self.name = name
         self.disc = Disc(color)
         self.number_of_wins = 0

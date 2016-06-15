@@ -13,9 +13,17 @@ class Board(object):
     """A Connect Four playing board."""
 
     def __init__(self, num_rows, num_columns, num_to_win):
+        """Create a board.
+
+        Args:
+            num_rows (int): The number of rows in this board's grid.
+            num_columns (int): The number of columns in this board's grid.
+            num_to_win (int): The number of adjacent discs needed to win.
+        """
         self.num_rows = num_rows
         self.num_columns = num_columns
         self.num_to_win = num_to_win
+
         self.top_row = TOP_ROW
         self.bottom_row = num_rows - 1
         self.left_column = LEFT_COLUMN
@@ -32,12 +40,12 @@ class Board(object):
         return self.__str__()
 
     def get_printable_grid(self):
-        """Get a pretty string of the board's grid.
+        """Get a "pretty" string of this board's grid.
 
         Might be used for console printing.
 
         Returns:
-            str: A tab- and newline-delimited string of the board.
+            str: A tab- and new-line formatted string of the grid.
         """
         s = ''
         for row in self.grid:
@@ -100,7 +108,7 @@ class Board(object):
         """Determine if this board is entirely full of discs.
 
         Returns:
-            bool: True if the board is full, False otherwise.
+            bool: True if this board is full, False otherwise.
         """
         for i in range(self.num_columns):
             if not self.is_column_full(i):
@@ -111,7 +119,7 @@ class Board(object):
     def reset(self):
         """Reset this board for a new game.
 
-        Sets all positions in the board's grid to None.
+        Sets all positions in this board's grid to None.
         """
         for row in range(self.num_rows):
             for column in range(self.num_columns):
@@ -123,7 +131,7 @@ class Board(object):
         Args:
             position: A 2-tuple in format (row, column).
         Returns:
-            Disc: The disc at this position in the board.
+            Disc: The disc at this position.
         Raises:
             ValueError: If position is out of bounds.
         """
@@ -160,12 +168,13 @@ class Board(object):
         return current_row
 
     def get_winning_positions(self, origin, fake_disc=None):
-        """Get winning positions that include the origin position.
+        """Get winning positions that include an origin position.
 
         Args:
             origin: A 2-tuple (row, column)
             fake_disc (Optional[Disc]): A disc to pretend to place at start.
-                Might be used to predict whether a win might occur..
+                Might be used to predict whether a win might occur before
+                actually playing the disc.
         Returns:
             set: A set of 2-tuples in format (row, column) of the winning
                 positions. Returns the empty set if no win found.
@@ -189,10 +198,9 @@ class Board(object):
     def _get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
         """Get consecutive matching positions in two directions.
 
-        From a starting position, find positions with discs matching the
-        starting position, outward in the direction indicated by step,
-        as well as outward in the 180-flipped direction, until a mismatch
-        is found.
+        From a starting position, find positions with a disc matching the
+        starting position, outward in the direction indicated by step
+        as well as in the 180-flipped direction, until a mismatch is found.
 
         Args:
             start: A 2-tuple (row, column) of starting position.
@@ -206,9 +214,7 @@ class Board(object):
             fake_disc (Optional[Disc]): See get_winning_positions docstring.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
-                positions. This set includes the starting position. Thus,
-                if no matches are found, the set contains only the starting
-                position.
+                positions. Includes the starting position.
         """
         flipped_step = tuple(-i for i in step)
 
@@ -221,8 +227,8 @@ class Board(object):
     def _get_consecutive_matches(self, start, step, fake_disc=None):
         """Get consecutive matching positions in a single direction.
 
-        From a starting position, find positions with discs matching that
-        in the starting position, outward in the direction indicated by step,
+        From a starting position, find positions with a disc matching the
+        starting position, outward in the direction indicated by step,
         until a mismatch is found.
 
         Args:
@@ -236,9 +242,7 @@ class Board(object):
             fake_disc (Optional[Disc]): See get_winning_positions docstring.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
-                positions. This set includes the starting position. Thus,
-                if no matches are found, the set contains only the starting
-                position.
+                positions. Includes the starting position.
         """
         disc = fake_disc if fake_disc else self.get_disc(start)
 

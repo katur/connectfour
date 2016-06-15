@@ -30,6 +30,7 @@ class ConnectFourModel(object):
     """
 
     def __init__(self):
+        """Create the model."""
         self.board = None
         self.players = []
         self.used_colors = set()
@@ -59,10 +60,10 @@ class ConnectFourModel(object):
                      num_to_win=DEFAULT_TO_WIN):
         """Create a playing board and add it to the model.
 
-        A board_created Action is published.
+        Publishes a board_created Action.
 
-        This is called after __init__ so that players can be added prior to
-        choosing the board dimensions.
+        Board creation is separated from __init__ so that players can be
+        added prior to choosing the board dimensions.
 
         Args:
             num_rows (Optional[int]): Number of rows in the board.
@@ -88,7 +89,7 @@ class ConnectFourModel(object):
     def add_player(self, name, color):
         """Add a player.
 
-        A player_added Action is published.
+        Publishes a player_added Action.
 
         Args:
             name (str): The player's name. Must be non-empty. Does not need
@@ -116,8 +117,8 @@ class ConnectFourModel(object):
     def start_round(self):
         """Start a new round of the game.
 
-        A round_started Action is published, followed by a next_player
-        Action to indicate the first player.
+        Publishes a round_started Action, followed by a next_player Action
+        to indicate the round's first player.
 
         Raises:
             RuntimeError: If another round is already in progress, if
@@ -149,11 +150,12 @@ class ConnectFourModel(object):
     def play_disc(self, column):
         """Play a disc in a column.
 
-        Disc is assumed to be played by the current player. If the column
-        is out of bounds or full, a try_again Action is published.
-        Otherwise, a disc_played Action is published, followed by one
-        of the following Actions (depending on the outcome of that disc
-        being played): round_won, round_draw, or next_player.
+        Disc is assumed to be played by the current player.
+
+        If the column is out of bounds or full, publishes a try_again Action.
+        Otherwise, publishes a disc_played Action, followed by one of the
+        following Actions (depending on the outcome of the played disc):
+        round_won, round_draw, or next_player.
 
         Args:
             column (int): The column to play the disc in.
