@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import Color
-from model import ConnectFourModel
+from connectfour.model.model import ConnectFourModel
 
 TEST_NUM_ROWS = 4
 TEST_NUM_COLUMNS = 6

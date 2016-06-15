@@ -1,7 +1,7 @@
 import Tkinter as tk
 
 from connectfour.config import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
-from config import PAD, SETUP_TEXT
+from connectfour.views.gui.config import PAD, SETUP_TEXT
 
 TITLE_ROW = 0
 SETTINGS_ROW = 1

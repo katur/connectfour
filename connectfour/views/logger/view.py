@@ -1,6 +1,6 @@
 import sys
 
-from connectfour.pubsub import subscribe, Action
+from connectfour.pubsub import Action, subscribe
 
 
 class LogView(object):

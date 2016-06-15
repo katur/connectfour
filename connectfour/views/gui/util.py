@@ -1,4 +1,5 @@
-from config import FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME
+from connectfour.views.gui.config import (
+    FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME)
 
 
 def _set_color(element, color):

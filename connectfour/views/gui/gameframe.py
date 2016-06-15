@@ -1,8 +1,9 @@
 import Tkinter as tk
 
-from util import flash
-from config import (COLOR_TO_TK, REASON_TO_STR, GAME_TEXT,
-                    SQUARE_BACKGROUND, SQUARE_SIZE, SQUARE_BORDER_WIDTH)
+from connectfour.views.gui.config import (
+    COLOR_TO_TK, REASON_TO_STR, GAME_TEXT, SQUARE_BACKGROUND, SQUARE_SIZE,
+    SQUARE_BORDER_WIDTH)
+from connectfour.views.gui.util import flash
 
 TITLE_ROW = 0
 FEEDBACK_ROW = 1

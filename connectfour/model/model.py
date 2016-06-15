@@ -1,8 +1,8 @@
-from connectfour.pubsub import publish, Action
 from connectfour.config import (Color, TryAgainReason, DEFAULT_ROWS,
                                 DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.model.board import Board
 from connectfour.model.player import Player
+from connectfour.pubsub import Action, publish
 
 
 class ConnectFourModel(object):

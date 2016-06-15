@@ -2,10 +2,9 @@ import Tkinter as tk
 
 from connectfour.config import COLORS
 from connectfour.pubsub import subscribe, Action
-
-from config import WINDOW_TITLE
-from gameframe import GameFrame
-from setupframe import SetupFrame
+from connectfour.views.gui.config import WINDOW_TITLE
+from connectfour.views.gui.gameframe import GameFrame
+from connectfour.views.gui.setupframe import SetupFrame
 
 
 class GUIView(object):
