@@ -2,18 +2,34 @@ from connectfour.views.gui.config import (
     FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME)
 
 
-def _set_color(element, color):
-    """Set an element's background color, ignoring exceptions raised.
+def get_positive_int(num, name='Number', max_value=None):
+    """Convert num to an int.
+
+    Raises an error if num is not convertible to a positive int.
 
     Args:
-        element: A Tkinter element.
-        color: Color to set the background to. Can be any color format
-            accepted by Tkinter.
+        num (str): The value to cast to an int.
+        name (Optional[str]): The name of num (e.g. 'Days'), to print in
+            error messages.
+        max_value (Optional[int]): Maximum value for num.
+    Returns:
+        int: The num cast to an int, if meets criteria.
+    Raises:
+        ValueError: If num is not convertible to an int; if num is not
+            positive; or if num exceeds max_value.
     """
     try:
-        element.config(bg=color)
-    except Exception:
-        pass
+        num = int(num)
+    except ValueError:
+        raise ValueError('{} must be convertible to integer'.format(name))
+
+    if num <= 0:
+        raise ValueError('{} must be positive'.format(name))
+
+    if max_value and num > max_value:
+        raise ValueError("{} can't exceed {}".format(name, max_value))
+
+    return num
 
 
 def flash(window, element, color, num_cycles=FLASH_CYCLES,
@@ -23,8 +39,8 @@ def flash(window, element, color, num_cycles=FLASH_CYCLES,
     Flashing is between color and the element's original color. After
     flashing ceases, element will be its original color.
 
-    Destroying elements while they are still flashing is okay, since
-    any exceptions raised when setting the color are caught and ignored.
+    Any errors raised while changing element color are ignored. So,
+    it is okay to destroying elements while they are still flashing.
 
     Args:
         window: A root Tkinter widget, to which timer events are added.
@@ -37,6 +53,13 @@ def flash(window, element, color, num_cycles=FLASH_CYCLES,
         wait_time(Optional[int]): Time in ms to wait before starting to flash.
     """
     original_color = element['bg']
+
+    def _set_color(element, color):
+        """Set element to color, ignoring errors."""
+        try:
+            element.config(bg=color)
+        except Exception:
+            pass
 
     for i in range(num_cycles):
         window.after(wait_time + cycle_time * i,

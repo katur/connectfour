@@ -1,10 +1,13 @@
 import Tkinter as tk
+import tkMessageBox
 
 from connectfour.config import COLORS
 from connectfour.pubsub import subscribe, Action
-from connectfour.views.gui.config import WINDOW_TITLE
+from connectfour.views.gui.config import (
+    WINDOW_TITLE, MAX_NAME_LENGTH, MAX_ROWS, MAX_COLUMNS, MAX_TO_WIN)
 from connectfour.views.gui.gameframe import GameFrame
 from connectfour.views.gui.setupframe import SetupFrame
+from connectfour.views.gui.util import get_positive_int
 
 
 class GUIView(object):
@@ -46,12 +49,14 @@ class GUIView(object):
     def add_player(self):
         name = self.setup_frame.parse_player_entry()
         if not len(name):
-            # TODO: handle empty string, and return
-            pass
+            tkMessageBox.showerror('Error', 'Name must be non-empty')
+            return
 
-        if len(name) > 50:
-            # TODO: handle long string, and return
-            pass
+        if len(name) > MAX_NAME_LENGTH:
+            tkMessageBox.showerror(
+                'Error', "Name can't exceed {} characters"
+                .format(MAX_NAME_LENGTH))
+            return
 
         color = COLORS[self.model.get_num_players()]
         self.model.add_player(name, color)
@@ -59,20 +64,29 @@ class GUIView(object):
     def launch_game(self):
         # Create the board
         try:
-            num_rows = self.setup_frame.parse_row_entry()
-            num_columns = self.setup_frame.parse_column_entry()
-            num_to_win = self.setup_frame.parse_to_win_entry()
-
-        except ValueError:
-            # TODO: handle non-int, negative, 0, and too-big row/column/to_win
+            self._create_board()
+        except ValueError as e:
+            tkMessageBox.showerror('Error', e)
             return
-
-        self.model.create_board(num_rows, num_columns, num_to_win)
 
         # Move on to game frame
         self.setup_frame.remove()
-        self.game_frame = GameFrame(self, num_rows, num_columns)
+        self.game_frame = GameFrame(self)
         self.model.start_round()
+
+    def _create_board(self):
+        """Helper for launch_game."""
+        num_rows = get_positive_int(
+            self.setup_frame.parse_row_entry(),
+            name='Rows', max_value=MAX_ROWS)
+        num_columns = get_positive_int(
+            self.setup_frame.parse_column_entry(),
+            name='Columns', max_value=MAX_COLUMNS)
+        num_to_win = get_positive_int(
+            self.setup_frame.parse_to_win_entry(),
+            name='To Win', max_value=MAX_TO_WIN)
+
+        self.model.create_board(num_rows, num_columns, num_to_win)
 
     def play_again(self):
         self.game_frame.reset_squares()

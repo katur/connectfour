@@ -15,10 +15,10 @@ FRAME_COLSPAN = 3
 class GameFrame(object):
     """Full-window frame for actually playing the game."""
 
-    def __init__(self, view, num_rows, num_columns):
+    def __init__(self, view):
         self.view = view
-        self.num_rows = num_rows
-        self.num_columns = num_columns
+        self.num_rows = view.model.get_num_rows()
+        self.num_columns = view.model.get_num_columns()
 
         self.frame = tk.Frame(self.view.window)
         self.frame.grid()

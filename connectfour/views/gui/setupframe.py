@@ -105,13 +105,14 @@ class SetupFrame(object):
         return name
 
     def parse_row_entry(self):
-        return int(self.widgets['row_entry'].get())
+        # Don't cast to int to give caller more error checking flexibility
+        return self.widgets['row_entry'].get()
 
     def parse_column_entry(self):
-        return int(self.widgets['column_entry'].get())
+        return self.widgets['column_entry'].get()
 
     def parse_to_win_entry(self):
-        return int(self.widgets['to_win_entry'].get())
+        return self.widgets['to_win_entry'].get()
 
     def update_feedback(self, player, num_players):
         self.widgets['feedback'].configure(

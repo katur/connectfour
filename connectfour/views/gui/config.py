@@ -1,6 +1,12 @@
 from connectfour.config import Color, TryAgainReason
 
 
+MAX_NAME_LENGTH = 50
+MAX_ROWS = 10
+MAX_COLUMNS = 20
+MAX_TO_WIN = 20
+PAD = 20
+
 COLOR_TO_TK = {
     Color.black: 'Black',
     Color.red: 'Red',
@@ -18,8 +24,6 @@ REASON_TO_STR = {
     TryAgainReason.column_out_of_bounds: 'out of bounds',
     TryAgainReason.column_full: 'column full',
 }
-
-PAD = 20
 
 SQUARE_BACKGROUND = 'Yellow'
 SQUARE_SIZE = 60
