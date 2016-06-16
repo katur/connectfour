@@ -13,7 +13,7 @@ class ConnectFourPlayer(object):
         """
         self.name = name
         self.disc = ConnectFourDisc(color)
-        self.number_of_wins = 0
+        self.num_wins = 0
 
     def __str__(self):
         return '{} ({})'.format(self.name, self.disc.color.name)

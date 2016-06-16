@@ -48,7 +48,7 @@ SETUP_TEXT = {
 }
 
 GAME_TEXT = {
-    'title': 'Welcome to Connect Four!',
+    'title': 'Try to connect {0} in a row!',
     'play': 'Play',
     'next_player': "{0}'s turn",
     'try_again': '{0} try again ({1})',

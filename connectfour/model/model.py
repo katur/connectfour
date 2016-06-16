@@ -196,7 +196,7 @@ class ConnectFourModel(object):
 
     def _process_win(self, player, winning_positions):
         self.round_in_progress = False
-        player.number_of_wins += 1
+        player.num_wins += 1
         publish(Action.round_won, player, winning_positions)
 
     def _process_draw(self):
@@ -217,24 +217,33 @@ class ConnectFourModel(object):
         """Get the number of rows in the board.
 
         Returns:
-            int: The number of rows.
+            int: The number of rows, or None if there is no board.
         """
+        if not self.board:
+            return None
+
         return self.board.num_rows
 
     def get_num_columns(self):
         """Get the number of columns in the board.
 
         Returns:
-            int: The number of columns.
+            int: The number of columns, or None if there is no board.
         """
+        if not self.board:
+            return None
+
         return self.board.num_columns
 
     def get_num_to_win(self):
         """Get the number needed to win.
 
         Returns:
-            int: The number to win.
+            int: The number to win, or None if there is no board.
         """
+        if not self.board:
+            return None
+
         return self.board.num_to_win
 
     def get_num_players(self):

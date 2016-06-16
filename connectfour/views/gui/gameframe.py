@@ -24,6 +24,7 @@ class GameFrame(object):
         self.view = view
         self.num_rows = view.model.get_num_rows()
         self.num_columns = view.model.get_num_columns()
+        self.num_to_win = view.model.get_num_to_win()
 
         self.frame = tk.Frame(self.view.window)
         self.frame.grid()
@@ -45,7 +46,8 @@ class GameFrame(object):
         self._create_controls()
 
     def _create_title(self):
-        game_title = tk.Label(self.frame, text=GAME_TEXT['title'])
+        game_title = tk.Label(self.frame,
+                              text=GAME_TEXT['title'].format(self.num_to_win))
         game_title.grid(row=TITLE_ROW, columnspan=FRAME_COLSPAN)
 
     def _create_feedback_bar(self):

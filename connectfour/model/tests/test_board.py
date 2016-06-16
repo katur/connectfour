@@ -4,18 +4,18 @@ from connectfour.config import ConnectFourColor
 from connectfour.model.board import ConnectFourBoard
 from connectfour.model.disc import ConnectFourDisc
 
-TEST_NUM_ROWS = 4
-TEST_NUM_COLUMNS = 6
-TEST_NUM_TO_WIN = 4
-PINK = ConnectFourDisc(ConnectFourColor.pink)
+TEST_ROWS = 4
+TEST_COLUMNS = 6
+TEST_TO_WIN = 4
+
 BROWN = ConnectFourDisc(ConnectFourColor.brown)
+PINK = ConnectFourDisc(ConnectFourColor.pink)
 
 
-class TestConnectFourBoardBasics(unittest.TestCase):
+class TestBoardBasics(unittest.TestCase):
 
     def setUp(self):
-        self.board = ConnectFourBoard(TEST_NUM_ROWS, TEST_NUM_COLUMNS,
-                                      TEST_NUM_TO_WIN)
+        self.board = ConnectFourBoard(TEST_ROWS, TEST_COLUMNS, TEST_TO_WIN)
 
         self.bottom_row = self.board.bottom_row
         self.top_row = self.board.top_row
@@ -27,26 +27,45 @@ class TestConnectFourBoardBasics(unittest.TestCase):
         self.top_left = (self.top_row, self.left_column)
         self.top_right = (self.top_row, self.right_column)
 
+    ###########
+    # Helpers #
+    ###########
+
+    def _is_empty(self):
+        for row in range(self.board.num_rows):
+            for column in range(self.board.num_columns):
+                if self.board.grid[row][column]:
+                    return False
+        return True
+
+    def _fill_board(self):
+        for column in range(self.board.num_columns):
+            for row in range(self.board.num_rows):
+                self.board.add_disc(PINK, column)
+
+    def test_board_to_win(self):
+        self.assertEqual(self.board.num_to_win, TEST_TO_WIN)
+
     def test_board_dimensions(self):
-        self.assertEqual(self.board.num_rows, TEST_NUM_ROWS)
-        self.assertEqual(self.board.num_columns, TEST_NUM_COLUMNS)
+        self.assertEqual(self.board.num_rows, TEST_ROWS)
+        self.assertEqual(self.board.num_columns, TEST_COLUMNS)
 
     def test_grid_dimensions(self):
-        self.assertEqual(len(self.board.grid), TEST_NUM_ROWS)
-        self.assertEqual(len(self.board.grid[0]), TEST_NUM_COLUMNS)
+        self.assertEqual(len(self.board.grid), TEST_ROWS)
+        self.assertEqual(len(self.board.grid[0]), TEST_COLUMNS)
 
     def test_board_extremes(self):
         self.assertEqual(self.left_column, 0)
-        self.assertEqual(self.right_column, TEST_NUM_COLUMNS - 1)
+        self.assertEqual(self.right_column, TEST_COLUMNS - 1)
         self.assertEqual(self.top_row, 0)
-        self.assertEqual(self.bottom_row, TEST_NUM_ROWS - 1)
+        self.assertEqual(self.bottom_row, TEST_ROWS - 1)
 
     def test_grid_size(self):
         num_positions = 0
         for i in self.board.grid:
             for j in i:
                 num_positions += 1
-        self.assertEqual(num_positions, TEST_NUM_ROWS * TEST_NUM_COLUMNS)
+        self.assertEqual(num_positions, TEST_ROWS * TEST_COLUMNS)
 
     def test_is_row_in_bounds(self):
         self.assertTrue(self.board.is_row_in_bounds(self.top_row))
@@ -75,34 +94,6 @@ class TestConnectFourBoardBasics(unittest.TestCase):
         self.assertFalse(self.board.is_in_bounds(
             (self.top_row - 1, self.left_column)))
 
-    def test_is_column_full_out_of_bounds_left(self):
-        with self.assertRaises(ValueError):
-            self.board.is_column_full(self.left_column - 1)
-
-    def test_is_column_full_out_of_bounds_right(self):
-        with self.assertRaises(ValueError):
-            self.board.is_column_full(self.right_column + 1)
-
-    def test_is_column_full_when_empty(self):
-        self.assertFalse(self.board.is_column_full(self.left_column))
-
-    def test_is_column_full_when_only_one(self):
-        self.board.add_disc(PINK, self.left_column)
-        self.assertFalse(self.board.is_column_full(self.left_column))
-
-    def test_is_column_full_when_full(self):
-        for i in range(self.board.num_rows):
-            self.board.add_disc(PINK, self.left_column)
-        self.assertTrue(self.board.is_column_full(self.left_column))
-
-    def test_add_disc_out_of_bounds_left(self):
-        with self.assertRaises(ValueError):
-            self.board.add_disc(PINK, self.left_column - 1)
-
-    def test_add_disc_out_of_bounds_right(self):
-        with self.assertRaises(ValueError):
-            self.board.add_disc(PINK, self.right_column + 1)
-
     def test_add_and_get_one_disc_left_column(self):
         self.board.add_disc(PINK, self.left_column)
         self.assertEqual(PINK, self.board.get_disc(self.bottom_left))
@@ -113,12 +104,88 @@ class TestConnectFourBoardBasics(unittest.TestCase):
         self.assertEqual(PINK, self.board.get_disc(self.bottom_right))
         self.assertIsNone(self.board.get_disc(self.bottom_left))
 
+    def test_add_disc_out_of_bounds_left(self):
+        with self.assertRaises(ValueError):
+            self.board.add_disc(PINK, self.left_column - 1)
+
+    def test_add_disc_out_of_bounds_right(self):
+        with self.assertRaises(ValueError):
+            self.board.add_disc(PINK, self.right_column + 1)
+
+    def test_is_column_full_when_empty(self):
+        self.assertFalse(self.board.is_column_full(self.left_column))
+
+    def test_is_column_full_when_only_one(self):
+        self.board.add_disc(PINK, self.left_column)
+        self.assertFalse(self.board.is_column_full(self.left_column))
+
+    def test_is_column_full_when_missing_one(self):
+        for i in range(self.board.num_rows - 1):
+            self.board.add_disc(PINK, self.left_column)
+        self.assertFalse(self.board.is_column_full(self.left_column))
+
+    def test_is_column_full_when_full(self):
+        for i in range(self.board.num_rows):
+            self.board.add_disc(PINK, self.left_column)
+        self.assertTrue(self.board.is_column_full(self.left_column))
+
+    def test_is_column_full_out_of_bounds_left(self):
+        with self.assertRaises(ValueError):
+            self.board.is_column_full(self.left_column - 1)
+
+    def test_is_column_full_out_of_bounds_right(self):
+        with self.assertRaises(ValueError):
+            self.board.is_column_full(self.right_column + 1)
+
+    def test_is_board_full_when_empty(self):
+        self.assertFalse(self.board.is_full())
+
+    def test_is_board_full_when_only_one(self):
+        self.board.add_disc(PINK, self.left_column)
+        self.assertFalse(self.board.is_full())
+
+    def test_is_board_full_when_missing_one(self):
+        # Fill entire board except last column
+        for column in range(self.board.num_columns - 1):
+            for row in range(self.board.num_rows):
+                self.board.add_disc(PINK, column)
+
+        # Fill last column except for top row
+        for row in range(self.board.num_rows - 1):
+            self.board.add_disc(PINK, self.right_column)
+
+        self.assertFalse(self.board.is_full())
+
+    def test_is_board_full_when_full(self):
+        self._fill_board()
+        self.assertTrue(self.board.is_full())
+
+    def test_reset_empty_board(self):
+        self.assertTrue(self._is_empty())
+        self.board.reset()
+        self.assertTrue(self._is_empty())
+
+    def test_reset_partial_board(self):
+        # Fill left and right columns (to get all corners)
+        for row in range(self.board.num_rows):
+            self.board.add_disc(PINK, self.left_column)
+            self.board.add_disc(PINK, self.right_column)
+
+        self.assertFalse(self._is_empty())
+        self.board.reset()
+        self.assertTrue(self._is_empty())
+
+    def test_reset_full_board(self):
+        self._fill_board()
+        self.assertFalse(self._is_empty())
+        self.board.reset()
+        self.assertTrue(self._is_empty())
+
 
 class TestMatchesAndWins(unittest.TestCase):
 
     def setUp(self):
-        self.board = ConnectFourBoard(TEST_NUM_ROWS, TEST_NUM_COLUMNS,
-                                      TEST_NUM_TO_WIN)
+        self.board = ConnectFourBoard(TEST_ROWS, TEST_COLUMNS, TEST_TO_WIN)
         test_plays = (
             (BROWN, 1),
             (PINK, 2),
