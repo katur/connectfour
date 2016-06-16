@@ -11,9 +11,15 @@ from connectfour.views.gui.util import get_positive_int
 
 
 class GUIView(object):
-    """Top-level GUI control."""
+    """Tkinter GUI View of the Connect Four game."""
 
     def __init__(self, model):
+        """Create this view, launching a Tkinter GUI in a new window.
+
+        Args:
+            model (ConnectFourModel): The model that this view will
+                interact with.
+        """
         self.model = model
         self._create_subscriptions()
 
@@ -40,6 +46,7 @@ class GUIView(object):
             subscribe(action, response)
 
     def quit(self):
+        """Quit the game."""
         self.window.quit()
 
     ######################

@@ -6,9 +6,9 @@ from connectfour.pubsub import Action, publish
 
 
 class ConnectFourModel(object):
-    """Top-level model of the Connect Four game.
+    """Top-level model for the Connect Four game.
 
-    Core method dependencies:
+    Dependencies between the Core methods:
 
     -   create_board() and add_player() must both be called at least
         once before calling start_round().
@@ -30,7 +30,7 @@ class ConnectFourModel(object):
     """
 
     def __init__(self):
-        """Create the model."""
+        """Create this model."""
         self.board = None
         self.players = []
         self.used_colors = set()
