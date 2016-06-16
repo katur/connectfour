@@ -55,7 +55,6 @@ def flash(window, element, color, num_cycles=FLASH_CYCLES,
     original_color = element['bg']
 
     def _set_color(element, color):
-        """Set element to color, ignoring errors."""
         try:
             element.config(bg=color)
         except Exception:
