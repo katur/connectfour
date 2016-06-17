@@ -27,22 +27,6 @@ class TestBoardBasics(unittest.TestCase):
         self.top_left = (self.top_row, self.left_column)
         self.top_right = (self.top_row, self.right_column)
 
-    ###########
-    # Helpers #
-    ###########
-
-    def _is_empty(self):
-        for row in range(self.board.num_rows):
-            for column in range(self.board.num_columns):
-                if self.board.grid[row][column]:
-                    return False
-        return True
-
-    def _fill_board(self):
-        for column in range(self.board.num_columns):
-            for row in range(self.board.num_rows):
-                self.board.add_disc(PINK, column)
-
     def test_board_to_win(self):
         self.assertEqual(self.board.num_to_win, TEST_TO_WIN)
 
@@ -180,6 +164,22 @@ class TestBoardBasics(unittest.TestCase):
         self.assertFalse(self._is_empty())
         self.board.reset()
         self.assertTrue(self._is_empty())
+
+    ###########
+    # Helpers #
+    ###########
+
+    def _is_empty(self):
+        for row in range(self.board.num_rows):
+            for column in range(self.board.num_columns):
+                if self.board.grid[row][column]:
+                    return False
+        return True
+
+    def _fill_board(self):
+        for column in range(self.board.num_columns):
+            for row in range(self.board.num_rows):
+                self.board.add_disc(PINK, column)
 
 
 class TestMatchesAndWins(unittest.TestCase):
