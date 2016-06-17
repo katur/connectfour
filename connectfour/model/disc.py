@@ -13,7 +13,7 @@ class ConnectFourDisc(object):
         self.color = color
 
     def __str__(self):
-        return '{}'.format(self.color)
+        return '{}'.format(self.color.name)
 
     def __repr__(self):
         return '{} ConnectFourDisc'.format(self.color)
