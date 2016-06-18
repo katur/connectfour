@@ -1,7 +1,7 @@
 import Tkinter as tk
 
 from connectfour.views.gui.config import (
-    COLOR_TO_TK, REASON_TO_STR, GAME_TEXT, SQUARE_BACKGROUND, SQUARE_SIZE,
+    COLOR_TO_TK, REASON_TEXT, GAME_TEXT, SQUARE_BACKGROUND, SQUARE_SIZE,
     SQUARE_BORDER_WIDTH)
 from connectfour.views.gui.util import flash
 
@@ -9,6 +9,7 @@ TITLE_ROW = 0
 FEEDBACK_ROW = 1
 MATRIX_ROW = 2
 CONTROL_ROW = 3
+
 FRAME_COLSPAN = 3
 
 
@@ -143,7 +144,7 @@ class GameFrame(object):
             player (ConnectFourPlayer): The player who needs to try again.
             reason (TryAgainReason): The reason player needs to try again.
         """
-        reason = REASON_TO_STR[reason]
+        reason = REASON_TEXT[reason]
         self._update_game_feedback(GAME_TEXT['try_again']
                                    .format(player, reason))
 

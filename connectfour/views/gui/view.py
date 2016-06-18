@@ -4,7 +4,8 @@ import tkMessageBox
 from connectfour.config import COLORS
 from connectfour.pubsub import subscribe, Action
 from connectfour.views.gui.config import (
-    WINDOW_TITLE, MAX_NAME_LENGTH, MAX_ROWS, MAX_COLUMNS, MAX_TO_WIN)
+    WINDOW_TITLE, MAX_NAME_LENGTH, MAX_ROWS, MAX_COLUMNS, MAX_TO_WIN,
+    ALERT_TEXT)
 from connectfour.views.gui.gameframe import GameFrame
 from connectfour.views.gui.setupframe import SetupFrame
 from connectfour.views.gui.util import get_positive_int
@@ -27,8 +28,10 @@ class GUIView(object):
         self.window = tk.Tk()
         self.window.title(WINDOW_TITLE)
 
-        # Initialize and launch setup screen
+        # Initialize setup screen
         self.setup_frame = SetupFrame(self)
+
+        # Launch program
         self.window.mainloop()
 
     def _create_subscriptions(self):
@@ -61,13 +64,13 @@ class GUIView(object):
         """
         name = self.setup_frame.parse_player_entry()
         if not len(name):
-            tkMessageBox.showerror('Error', 'Name must be non-empty')
+            tkMessageBox.showerror(ALERT_TEXT['title'],
+                                   ALERT_TEXT['name_empty'])
             return
 
         if len(name) > MAX_NAME_LENGTH:
-            tkMessageBox.showerror(
-                'Error', "Name can't exceed {} characters"
-                .format(MAX_NAME_LENGTH))
+            tkMessageBox.showerror(ALERT_TEXT['title'],
+                                   ALERT_TEXT['name_too_long'])
             return
 
         color = COLORS[self.model.get_num_players()]
@@ -86,7 +89,7 @@ class GUIView(object):
         try:
             self._create_board()
         except ValueError as e:
-            tkMessageBox.showerror('Error', e)
+            tkMessageBox.showerror(ALERT_TEXT['title'], e)
             return
 
         # Move on to game frame

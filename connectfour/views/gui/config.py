@@ -20,11 +20,6 @@ COLOR_TO_TK = {
     ConnectFourColor.gray: 'Gray',
 }
 
-REASON_TO_STR = {
-    TryAgainReason.column_out_of_bounds: 'out of bounds',
-    TryAgainReason.column_full: 'column full',
-}
-
 SQUARE_BACKGROUND = 'Yellow'
 SQUARE_SIZE = 60
 SQUARE_BORDER_WIDTH = 5
@@ -47,6 +42,12 @@ SETUP_TEXT = {
     'quit': 'Exit',
 }
 
+ALERT_TEXT = {
+    'title': 'Error',
+    'name_empty': 'Name must be non-empty',
+    'name_too_long': "Name can't exceed {} characters".format(MAX_NAME_LENGTH),
+}
+
 GAME_TEXT = {
     'title': 'Try to connect {0} in a row!',
     'play': 'Play',
@@ -56,4 +57,9 @@ GAME_TEXT = {
     'draw': 'Round ended in a draw',
     'play_again': 'Play Again',
     'quit': 'Exit',
+}
+
+REASON_TEXT = {
+    TryAgainReason.column_out_of_bounds: 'out of bounds',
+    TryAgainReason.column_full: 'column full',
 }
