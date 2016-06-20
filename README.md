@@ -11,7 +11,8 @@ as well as variable board dimensions.
 
 Code is in Python.
 
-Package dependencies are listed in `requirements.txt`. To install:
+Package dependencies are listed in
+[requirements.txt](requirements.txt). To install:
 ```
 pip install -r requirements.txt
 ```
