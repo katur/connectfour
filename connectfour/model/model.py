@@ -26,7 +26,7 @@ class ConnectFourModel(object):
     -   start_round() can only be called again after a win or draw is
         announced.
 
-    -   play_chip() can only be called while a round is in progress.
+    -   play_disc() can only be called while a round is in progress.
     """
 
     def __init__(self):
