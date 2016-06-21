@@ -174,9 +174,9 @@ class ConnectFourModel(object):
         else:
             self._process_play(column)
 
-    ##########################
-    # Helpers to play_disc() #
-    ##########################
+    ###########################
+    # Helpers for play_disc() #
+    ###########################
 
     def _process_play(self, column):
         player = self.get_current_player()
@@ -208,7 +208,7 @@ class ConnectFourModel(object):
         publish(Action.next_player, self.get_current_player())
 
     ##################
-    # Simple getters #
+    # Simple helpers #
     ##################
 
     def get_num_rows(self):
