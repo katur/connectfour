@@ -2,14 +2,13 @@ import unittest
 
 from connectfour.config import Color
 from connectfour.model import Board
-from connectfour.model import Disc
 
 TEST_ROWS = 4
 TEST_COLUMNS = 6
 TEST_TO_WIN = 4
 
-BROWN = Disc(Color.brown)
-PINK = Disc(Color.pink)
+BROWN = Color.brown
+PINK = Color.pink
 
 
 class TestBoardBasics(unittest.TestCase):
@@ -78,39 +77,39 @@ class TestBoardBasics(unittest.TestCase):
         self.assertFalse(self.board.is_in_bounds(
             (self.top_row - 1, self.left_column)))
 
-    def test_add_and_get_one_disc_left_column(self):
-        self.board.add_disc(PINK, self.left_column)
-        self.assertEqual(PINK, self.board.get_disc(self.bottom_left))
-        self.assertIsNone(self.board.get_disc(self.bottom_right))
+    def test_add_and_get_one_color_left_column(self):
+        self.board.add_color(PINK, self.left_column)
+        self.assertEqual(PINK, self.board.get_color(self.bottom_left))
+        self.assertIsNone(self.board.get_color(self.bottom_right))
 
-    def test_add_and_get_one_disc_right_column(self):
-        self.board.add_disc(PINK, self.right_column)
-        self.assertEqual(PINK, self.board.get_disc(self.bottom_right))
-        self.assertIsNone(self.board.get_disc(self.bottom_left))
+    def test_add_and_get_one_color_right_column(self):
+        self.board.add_color(PINK, self.right_column)
+        self.assertEqual(PINK, self.board.get_color(self.bottom_right))
+        self.assertIsNone(self.board.get_color(self.bottom_left))
 
-    def test_add_disc_out_of_bounds_left(self):
+    def test_add_color_out_of_bounds_left(self):
         with self.assertRaises(ValueError):
-            self.board.add_disc(PINK, self.left_column - 1)
+            self.board.add_color(PINK, self.left_column - 1)
 
-    def test_add_disc_out_of_bounds_right(self):
+    def test_add_color_out_of_bounds_right(self):
         with self.assertRaises(ValueError):
-            self.board.add_disc(PINK, self.right_column + 1)
+            self.board.add_color(PINK, self.right_column + 1)
 
     def test_is_column_full_when_empty(self):
         self.assertFalse(self.board.is_column_full(self.left_column))
 
     def test_is_column_full_when_only_one(self):
-        self.board.add_disc(PINK, self.left_column)
+        self.board.add_color(PINK, self.left_column)
         self.assertFalse(self.board.is_column_full(self.left_column))
 
     def test_is_column_full_when_missing_one(self):
         for i in range(self.board.num_rows - 1):
-            self.board.add_disc(PINK, self.left_column)
+            self.board.add_color(PINK, self.left_column)
         self.assertFalse(self.board.is_column_full(self.left_column))
 
     def test_is_column_full_when_full(self):
         for i in range(self.board.num_rows):
-            self.board.add_disc(PINK, self.left_column)
+            self.board.add_color(PINK, self.left_column)
         self.assertTrue(self.board.is_column_full(self.left_column))
 
     def test_is_column_full_out_of_bounds_left(self):
@@ -125,18 +124,18 @@ class TestBoardBasics(unittest.TestCase):
         self.assertFalse(self.board.is_full())
 
     def test_is_board_full_when_only_one(self):
-        self.board.add_disc(PINK, self.left_column)
+        self.board.add_color(PINK, self.left_column)
         self.assertFalse(self.board.is_full())
 
     def test_is_board_full_when_missing_one(self):
         # Fill entire board except last column
         for column in range(self.board.num_columns - 1):
             for row in range(self.board.num_rows):
-                self.board.add_disc(PINK, column)
+                self.board.add_color(PINK, column)
 
         # Fill last column except for top row
         for row in range(self.board.num_rows - 1):
-            self.board.add_disc(PINK, self.right_column)
+            self.board.add_color(PINK, self.right_column)
 
         self.assertFalse(self.board.is_full())
 
@@ -152,8 +151,8 @@ class TestBoardBasics(unittest.TestCase):
     def test_reset_partial_board(self):
         # Fill left and right columns (to get all corners)
         for row in range(self.board.num_rows):
-            self.board.add_disc(PINK, self.left_column)
-            self.board.add_disc(PINK, self.right_column)
+            self.board.add_color(PINK, self.left_column)
+            self.board.add_color(PINK, self.right_column)
 
         self.assertFalse(self._is_empty())
         self.board.reset()
@@ -179,7 +178,7 @@ class TestBoardBasics(unittest.TestCase):
     def _fill_board(self):
         for column in range(self.board.num_columns):
             for row in range(self.board.num_rows):
-                self.board.add_disc(PINK, column)
+                self.board.add_color(PINK, column)
 
 
 class TestMatchesAndWins(unittest.TestCase):
@@ -205,7 +204,7 @@ class TestMatchesAndWins(unittest.TestCase):
         )
 
         for play in test_plays:
-            self.board.add_disc(*play)
+            self.board.add_color(*play)
 
     def test_consecutive_matches(self):
         m = self.board._get_consecutive_matches((2, 2), (0, 1))
@@ -236,5 +235,5 @@ class TestMatchesAndWins(unittest.TestCase):
         self.assertEquals(w, {(0, 2), (1, 3), (2, 4), (3, 5)})
 
     def test_winning_positions_with_fake(self):
-        w = self.board.get_winning_positions((2, 1), fake_disc=BROWN)
+        w = self.board.get_winning_positions((2, 1), fake_color=BROWN)
         self.assertEquals(w, {(2, 1), (2, 2), (2, 3), (2, 4)})

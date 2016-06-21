@@ -12,7 +12,7 @@ class Action(Enum):
     game_started = 2
     next_player = 3
     try_again = 4
-    disc_played = 5
+    color_played = 5
     game_won = 6
     game_draw = 7
 

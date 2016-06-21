@@ -22,7 +22,7 @@ class LogView(object):
             Action.game_started: self.on_game_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
-            Action.disc_played: self.on_disc_played,
+            Action.color_played: self.on_color_played,
             Action.game_won: self.on_game_won,
             Action.game_draw: self.on_game_draw,
         }
@@ -45,9 +45,9 @@ class LogView(object):
     def on_try_again(self, player, reason):
         self.out.write('Try again: {}\n'.format(player, reason))
 
-    def on_disc_played(self, player, position):
-        self.out.write('Disc played by: {}, position: {}\n'
-                       .format(player, position))
+    def on_color_played(self, color, position):
+        self.out.write('{} played in position: {}\n'
+                       .format(color.name, position))
 
     def on_game_won(self, player, winning_positions):
         self.out.write('Game won by: {}, winning positions: {}\n'

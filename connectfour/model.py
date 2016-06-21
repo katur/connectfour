@@ -91,8 +91,8 @@ class ConnectFourModel(object):
 
         Args:
             name (str): The player's name. Must be non-empty. Does not need
-                to be unique (two Emilys are distinguishable by disc color).
-            color (Color): Color of this player's discs. Must be unique.
+                to be unique (two Emilys are distinguishable by color).
+            color (Color): This player's playing color. Must be unique.
         Raises:
             RuntimeError: If gaming session has already started.
             ValueError: If name is empty or if color is already in use by
@@ -151,7 +151,7 @@ class ConnectFourModel(object):
         The play is assumed to be by the current player.
 
         If the play is illegal, publishes a try_again Action.
-        Otherwise, publishes a disc_played Action, followed by one of
+        Otherwise, publishes a color_played Action, followed by one of
         the following Actions (depending on the outcome of the play);
         game_won, game_draw, or next_player.
 
@@ -180,8 +180,8 @@ class ConnectFourModel(object):
 
     def _process_play(self, column):
         player = self.get_current_player()
-        row = self.board.add_disc(player.disc, column)
-        publish(Action.disc_played, player, (row, column))
+        row = self.board.add_color(player.color, column)
+        publish(Action.color_played, player.color, (row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -281,52 +281,17 @@ class Player(object):
 
         Args:
             name (str): This player's name.
-            color (Color): The color of this player's discs.
+            color (Color): This player's playing color.
         """
         self.name = name
-        self.disc = Disc(color)
+        self.color = color
         self.num_wins = 0
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.disc.color.name)
+        return '{} ({})'.format(self.name, self.color.name)
 
     def __repr__(self):
         return self.__str__()
-
-    def get_color(self):
-        """Get this player's disc color.
-
-        Returns:
-            Color: The color of this player's discs.
-        """
-        return self.disc.color
-
-
-class Disc(object):
-    """A Connect Four playing disc (aka token, or chip).
-
-    Two discs are considered equal if they are the same color.
-    """
-
-    def __init__(self, color):
-        """Create a disc.
-
-        Args:
-            color (Color): This disc's color.
-        """
-        self.color = color
-
-    def __str__(self):
-        return '{}'.format(self.color.name)
-
-    def __repr__(self):
-        return '{} Disc'.format(self.color)
-
-    def __eq__(self, other):
-        return type(other) is type(self) and self.color == other.color
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
 
 
 class Board(object):
@@ -378,7 +343,7 @@ class Board(object):
 
         for row in self.grid:
             for column in row:
-                el = column if column else '-'
+                el = column.name if column else '-'
                 output += '{0:{width}}'.format(el, width=field_width)
             output += '\n'
 
@@ -393,14 +358,14 @@ class Board(object):
             for column in range(self.num_columns):
                 self.grid[row][column] = None
 
-    def add_disc(self, disc, column):
-        """Add a disc to a column.
+    def add_color(self, color, column):
+        """Add a color to a column.
 
         Args:
-            disc (Disc): The disc to add.
-            column (int): The column to add the disc to.
+            color (Color): The color to add.
+            column (int): The column to add the color to.
         Returns:
-            int: The row in which the disc landed.
+            int: The row in which the color landed.
         Raises:
             ValueError: If column is full or out of bounds.
         """
@@ -412,21 +377,21 @@ class Board(object):
 
         current_row = self.bottom_row
 
-        while self.get_disc((current_row, column)) is not None:
+        while self.get_color((current_row, column)) is not None:
             current_row -= 1
 
-        self.grid[current_row][column] = disc
+        self.grid[current_row][column] = color
         return current_row
 
-    def get_winning_positions(self, origin, fake_disc=None):
+    def get_winning_positions(self, origin, fake_color=None):
         """Get winning positions that include some origin position.
 
         Args:
             origin: A 2-tuple (row, column) that will be part of any
                 wins found.
-            fake_disc (Optional[Disc]): A disc to pretend is
+            fake_color (Optional[Color]): A color to pretend is
                 at start. Might be used to predict whether a win might
-                occur without actually playing the disc.
+                occur without actually playing the color.
         Returns:
             set: A set of 2-tuples in format (row, column) of the positions
                 that result in a win, or the empty set if no win found.
@@ -440,7 +405,7 @@ class Board(object):
 
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
             matches = self._get_consecutive_matches_mirrored(
-                origin, step, fake_disc=fake_disc)
+                origin, step, fake_color=fake_color)
 
             # Check if these matches are enough to win
             if len(matches) >= self.num_to_win:
@@ -452,10 +417,10 @@ class Board(object):
     # Helpers for get_winning_positions() #
     #######################################
 
-    def _get_consecutive_matches_mirrored(self, start, step, fake_disc=None):
+    def _get_consecutive_matches_mirrored(self, start, step, fake_color=None):
         """Get consecutive matches in two directions.
 
-        From a starting position, find positions with discs matching the
+        From a starting position, find positions with colors matching the
         starting position, outward in the direction indicated by step
         as well as in the 180-flipped direction, until a mismatch is found.
 
@@ -468,7 +433,7 @@ class Board(object):
                 For example, to check the horizontal axis, step can be
                 either (0, 1) or (0, -1).
 
-            fake_disc (Optional[Disc]): See docstring for
+            fake_color (Optional[Color]): See docstring for
                 get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
@@ -476,16 +441,16 @@ class Board(object):
         """
         flipped_step = tuple(-i for i in step)
 
-        a = self._get_consecutive_matches(start, step, fake_disc=fake_disc)
+        a = self._get_consecutive_matches(start, step, fake_color=fake_color)
         b = self._get_consecutive_matches(start, flipped_step,
-                                          fake_disc=fake_disc)
+                                          fake_color=fake_color)
 
         return a | b
 
-    def _get_consecutive_matches(self, start, step, fake_disc=None):
+    def _get_consecutive_matches(self, start, step, fake_color=None):
         """Get consecutive matches in a single direction.
 
-        From a starting position, find positions with discs matching the
+        From a starting position, find positions with colors matching the
         starting position, outward in the direction indicated by step,
         until a mismatch is found.
 
@@ -497,20 +462,21 @@ class Board(object):
                 For example, to check straight up, step should be (1, 0).
                 To check diagonally down-left, step should be (-1, -1).
 
-            fake_disc (Optional[Disc]): See docstring for
+            fake_color (Optional[Color]): See docstring for
                 get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
                 positions, including the starting position.
         """
-        disc = fake_disc if fake_disc else self.get_disc(start)
+        color = fake_color if fake_color else self.get_color(start)
 
         # Initialize set with start position
         positions = {start}
 
         current = tuple(map(operator.add, start, step))
 
-        while (self.is_in_bounds(current) and self.get_disc(current) == disc):
+        while (self.is_in_bounds(current) and
+                self.get_color(current) == color):
             positions.add(current)
             current = tuple(map(operator.add, current, step))
 
@@ -520,13 +486,13 @@ class Board(object):
     # Simple helpers #
     ##################
 
-    def get_disc(self, position):
-        """Retrieve a disc from this board.
+    def get_color(self, position):
+        """Retrieve the color at a position in this board.
 
         Args:
             position: A 2-tuple in format (row, column).
         Returns:
-            Disc: The disc at this position, or None if this
+            Color: The color at this position, or None if this
                 position is empty.
         Raises:
             ValueError: If position is out of bounds.

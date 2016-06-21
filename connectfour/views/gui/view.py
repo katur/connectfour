@@ -37,7 +37,7 @@ class GUIView(object):
             Action.game_started: self.on_game_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
-            Action.disc_played: self.on_disc_played,
+            Action.color_played: self.on_color_played,
             Action.game_won: self.on_game_won,
             Action.game_draw: self.on_game_draw,
         }
@@ -163,15 +163,15 @@ class GUIView(object):
         """
         self.game_frame.announce_try_again(player, reason)
 
-    def on_disc_played(self, player, position):
-        """Respond to the model reporting that a disc was played.
+    def on_color_played(self, color, position):
+        """Respond to the model reporting that a color was played.
 
         Args:
-            player (Player): The player who played the disc.
+            color (Color): The color that was played.
             position: A 2-tuple in format (row, column) of the position the
-                disc was played.
+                color was played.
         """
-        self.game_frame.update_square(player, position)
+        self.game_frame.update_square(color, position)
 
     def on_game_won(self, player, winning_positions):
         """Respond to the model reporting that a game was won.
@@ -504,16 +504,15 @@ class GameFrame(object):
     def _update_game_feedback(self, text):
         self.widgets['game_feedback'].configure(text=text)
 
-    def update_square(self, player, position):
-        """Paint a game square to reflect a disc played in that position.
+    def update_square(self, color, position):
+        """Paint a game square to reflect a color played in that position.
 
         Args:
-            player (Player): The player who played here. Used to
-                determine what color to paint the square.
+            color (Color): The color that was played.
             position: A 2-tuple in format (row, column).
         """
         row, column = position
-        color = config.COLOR_TO_TK[player.get_color()]
+        color = config.COLOR_TO_TK[color]
         self.widgets['squares'][row][column].configure(bg=color)
 
     def flash_squares(self, positions):

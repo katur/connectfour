@@ -15,8 +15,8 @@ class TestPlayerBasics(unittest.TestCase):
     def test_name(self):
         self.assertEqual(self.alice.name, ALICE)
 
+    def test_color(self):
+        self.assertEqual(self.alice.color, ORANGE)
+
     def test_num_wins(self):
         self.assertEqual(self.alice.num_wins, 0)
-
-    def test_get_color(self):
-        self.assertEqual(self.alice.get_color(), ORANGE)
