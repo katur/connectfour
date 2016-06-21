@@ -359,26 +359,27 @@ class Board(object):
     def __repr__(self):
         return self.__str__()
 
-    def get_printable_grid(self, field_width=None):
+    def get_printable_grid(self, field_width=8):
         """Get a "pretty" string of this board's grid.
 
         Might be used for console printing.
 
         Args:
             field_width (Optional[int]): The number of spaces each disc
-                should take up. If this is not set, a tab is used.
+                should take up. Defaults to 8 characters
 
         Returns:
-            str: A tab- and new-line formatted string of the grid.
+            str: A formatted string of the grid.
         """
         output = ''
+        for i in range(self.num_columns):
+            output += '{0:<{width}}'.format(i, width=field_width)
+        output += '\n'
+
         for row in self.grid:
             for column in row:
                 el = column if column else '-'
-                if field_width:
-                    output += '{0:{width}}'.format(el, width=field_width)
-                else:
-                    output += '{0}\t'.format(el)
+                output += '{0:{width}}'.format(el, width=field_width)
             output += '\n'
 
         return output

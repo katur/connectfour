@@ -4,6 +4,11 @@ from connectfour.config import COLORS
 from connectfour.pubsub import Action, subscribe
 from connectfour.views.util import get_positive_int, get_nonempty_string
 
+MAX_NAME_LENGTH = 50
+MAX_ROWS = 100
+MAX_COLUMNS = 100
+MAX_TO_WIN = 100
+
 
 class CommandLineView(object):
     """Simple view that simply logs when actions occur."""
@@ -32,13 +37,13 @@ class CommandLineView(object):
             subscribe(action, response)
 
     def on_board_created(self, board):
-        self.stream.write('Board created: {}\n'.format(board))
+        self.stream.write('Board created: {}\n\n'.format(board))
 
     def on_player_added(self, player):
-        self.stream.write('Welcome, {}!\n'.format(player))
+        self.stream.write('Welcome, {}!\n\n'.format(player))
 
     def on_round_started(self, round_number):
-        self.stream.write('Round started: {}\n'.format(round_number))
+        self.stream.write('Round started: {}\n\n'.format(round_number))
 
     def on_next_player(self, player):
         self._prompt_play_disc(player)
@@ -51,12 +56,12 @@ class CommandLineView(object):
         self._print_grid()
 
     def on_round_won(self, player, winning_positions):
-        self.stream.write('Round won by: {}, winning discs: {}\n'
+        self.stream.write('Round won by: {}, winning discs: {}\n\n'
                           .format(player, winning_positions))
         self._prompt_play_again()
 
     def on_round_draw(self):
-        self.stream.write('Round ended in a draw.\n')
+        self.stream.write('Round ended in a draw.\n\n')
         self._prompt_play_again()
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
@@ -68,11 +73,14 @@ class CommandLineView(object):
 
     def _prompt_create_board(self):
         num_rows = self._prompt_until_valid(
-            'Num rows: ', get_positive_int, name='Rows', max_value=100)
+            'Num rows: ', get_positive_int, name='Rows',
+            max_value=MAX_ROWS)
         num_columns = self._prompt_until_valid(
-            'Num colums: ', get_positive_int, name='Columns', max_value=100)
+            'Num colums: ', get_positive_int, name='Columns',
+            max_value=MAX_COLUMNS)
         num_to_win = self._prompt_until_valid(
-            'Num to win: ', get_positive_int, name='To Win', max_value=100)
+            'Num to win: ', get_positive_int, name='To Win',
+            max_value=MAX_TO_WIN)
 
         self.model.create_board(num_rows, num_columns, num_to_win)
 
@@ -100,4 +108,4 @@ class CommandLineView(object):
         max_color_len = max(len(color.name) for color in COLORS)
         width = max_color_len + 1
         grid = self.model.board.get_printable_grid(field_width=width)
-        self.stream.write(grid)
+        self.stream.write(grid + '\n')
