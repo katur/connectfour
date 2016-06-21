@@ -63,3 +63,22 @@ REASON_TEXT = {
     TryAgainReason.column_out_of_bounds: 'out of bounds',
     TryAgainReason.column_full: 'column full',
 }
+
+SETUP_ROWS = {
+    'title': 0,
+    'settings': 1,
+    'add_player': 2,
+    'feedback': 3,
+    'control': 4,
+}
+
+SETUP_COLSPAN = 3
+
+GAME_ROWS = {
+    'title': 0,
+    'feedback': 1,
+    'matrix': 2,
+    'control': 3,
+}
+
+GAME_COLSPAN = 3
