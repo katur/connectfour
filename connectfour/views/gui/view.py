@@ -104,7 +104,7 @@ class GUIView(object):
 
         self.model.create_board(num_rows, num_columns, num_to_win)
 
-    def play_again(self):
+    def start_new_game(self):
         """Tell the model to start a new game.
 
         This method also clears the game squares for the new game.
@@ -112,7 +112,7 @@ class GUIView(object):
         self.game_frame.reset_squares()
         self.model.start_game()
 
-    def play_disc(self, column):
+    def play(self, column):
         """Tell the model that a disc was played in a column.
 
         The disc is assumed to be played by the current player.
@@ -120,7 +120,7 @@ class GUIView(object):
         Args:
             column (int): The column to play the disc in.
         """
-        self.model.play_disc(column)
+        self.model.play(column)
 
     ###########################
     # Respond to model events #
@@ -409,7 +409,7 @@ class GameFrame(object):
         for column in range(self.num_columns):
             button = tk.Button(
                 self.widgets['matrix_frame'], text=config.GAME_TEXT['play'],
-                command=lambda i=column: self.view.play_disc(i))
+                command=lambda i=column: self.view.play(i))
             button.grid(row=0, column=column)
 
             play_buttons.append(button)
@@ -442,7 +442,7 @@ class GameFrame(object):
 
         play_again_button = tk.Button(
             self.frame, text=config.GAME_TEXT['play_again'],
-            command=self.view.play_again)
+            command=self.view.start_new_game)
         play_again_button.grid(row=row, column=config.GAME_COLSPAN-1)
         self.widgets['play_again_button'] = play_again_button
 

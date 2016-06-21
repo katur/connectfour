@@ -53,11 +53,11 @@ class CommandLineView(object):
         self._print_grid()
 
     def on_next_player(self, player):
-        self._prompt_play_disc(player)
+        self._prompt_play(player)
 
     def on_try_again(self, player, reason):
         self.out.write('Illegal move: {}\n'.format(reason))
-        self._prompt_play_disc(player)
+        self._prompt_play(player)
 
     def on_disc_played(self, player, position):
         self._print_grid()
@@ -70,13 +70,6 @@ class CommandLineView(object):
     def on_game_draw(self):
         self.out.write('Game ended in a draw.\n\n')
         self._prompt_play_again()
-
-    def _prompt_until_valid(self, prompt, condition, **kwargs):
-        while True:
-            try:
-                return condition(raw_input(prompt), **kwargs)
-            except ValueError as e:
-                self.out.write('Try again: {}\n'.format(e))
 
     def _prompt_create_board(self):
         num_rows = self._prompt_until_valid(
@@ -104,10 +97,17 @@ class CommandLineView(object):
             if response != 'Y':
                 return
 
-    def _prompt_play_disc(self, player):
+    def _prompt_until_valid(self, prompt, condition, **kwargs):
+        while True:
+            try:
+                return condition(raw_input(prompt), **kwargs)
+            except ValueError as e:
+                self.out.write('Try again: {}\n'.format(e))
+
+    def _prompt_play(self, player):
         column = int(raw_input('Where would you like to play, {}? '
                                .format(player)))
-        self.model.play_disc(column)
+        self.model.play(column)
 
     def _prompt_play_again(self):
         response = raw_input('Play again? [Y/n]: ')

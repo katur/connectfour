@@ -116,7 +116,7 @@ class TestModelAfterFirstPlay(unittest.TestCase):
     def setUp(self):
         self.model = create_test_model()
         self.model.start_game()
-        self.model.play_disc(FIRST_PLAY)
+        self.model.play(FIRST_PLAY)
 
     def test_current_player(self):
         self.assertEqual(self.model.get_current_player().name, BOB)
@@ -127,8 +127,8 @@ class TestModelGameInProgress(unittest.TestCase):
     def setUp(self):
         self.model = create_test_model()
         self.model.start_game()
-        for play in [FIRST_PLAY] + MORE_PLAYS:
-            self.model.play_disc(play)
+        for column in [FIRST_PLAY] + MORE_PLAYS:
+            self.model.play(column)
 
     def test_current_player(self):
         self.assertEqual(self.model.get_current_player().name, ALICE)
@@ -139,8 +139,8 @@ class TestGameWon(unittest.TestCase):
     def setUp(self):
         self.model = create_test_model()
         self.model.start_game()
-        for play in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
-            self.model.play_disc(play)
+        for column in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
+            self.model.play(column)
 
     def test_game_not_in_progress_after_win(self):
         self.assertFalse(self.model.game_in_progress)
@@ -164,8 +164,8 @@ class TestNextGameStarted(unittest.TestCase):
     def setUp(self):
         self.model = create_test_model()
         self.model.start_game()
-        for play in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
-            self.model.play_disc(play)
+        for column in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
+            self.model.play(column)
         self.model.start_game()
 
     def test_game_in_progress_second_game(self):

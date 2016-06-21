@@ -25,7 +25,7 @@ class ConnectFourModel(object):
     -   start_game() can only be called again after a win or draw is
         announced.
 
-    -   play_disc() can only be called while a game is in progress.
+    -   play() can only be called while a game is in progress.
     """
 
     def __init__(self):
@@ -145,7 +145,7 @@ class ConnectFourModel(object):
 
         publish(Action.next_player, self.get_current_player())
 
-    def play_disc(self, column):
+    def play(self, column):
         """Play a disc in a column.
 
         The disc is assumed to be played by the current player.
@@ -174,9 +174,9 @@ class ConnectFourModel(object):
         else:
             self._process_play(column)
 
-    ###########################
-    # Helpers for play_disc() #
-    ###########################
+    ######################
+    # Helpers for play() #
+    ######################
 
     def _process_play(self, column):
         player = self.get_current_player()
