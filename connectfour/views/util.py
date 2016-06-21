@@ -26,3 +26,13 @@ def get_positive_int(num, name='Number', max_value=None):
         raise ValueError("{} can't exceed {}".format(name, max_value))
 
     return num
+
+
+def get_nonempty_string(s, name='String', max_len=None):
+    if not len(s):
+        raise ValueError('{} must be non-empty'.format(name))
+
+    if max_len and len(s) > max_len:
+        raise ValueError("{} can't exceed {} characters".format(name, max_len))
+
+    return s

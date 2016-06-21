@@ -6,7 +6,7 @@ from connectfour.config import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
 from connectfour.pubsub import Action, subscribe
 from connectfour.views.gui import config
 from connectfour.views.gui.util import flash
-from connectfour.views.util import get_positive_int
+from connectfour.views.util import get_nonempty_string, get_positive_int
 
 
 class GUIView(object):
@@ -60,15 +60,12 @@ class GUIView(object):
         This method parses player attributes from user input. If input is
         invalid, a popup appears alerting the user to fix the error.
         """
-        name = self.setup_frame.parse_player_entry()
-        if not len(name):
-            tkMessageBox.showerror(config.ALERT_TEXT['title'],
-                                   config.ALERT_TEXT['name_empty'])
-            return
-
-        if len(name) > config.MAX_NAME_LENGTH:
-            tkMessageBox.showerror(config.ALERT_TEXT['title'],
-                                   config.ALERT_TEXT['name_too_long'])
+        try:
+            name = get_nonempty_string(
+                self.setup_frame.parse_player_entry(),
+                name='Name', max_len=config.MAX_NAME_LENGTH)
+        except ValueError as e:
+            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
             return
 
         color = COLORS[self.model.get_num_players()]
