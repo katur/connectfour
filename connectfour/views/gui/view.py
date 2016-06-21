@@ -136,7 +136,7 @@ class GUIView(object):
         """Respond to the model reporting that a player was added to the game.
 
         Args:
-            player (ConnectFourPlayer): The player that was added.
+            player (Player): The player that was added.
         """
         self.setup_frame.update_feedback(player, self.model.get_num_players())
 
@@ -156,7 +156,7 @@ class GUIView(object):
         """Respond to the model reporting the next player.
 
         Args:
-            player (ConnectFourPlayer): The player who should play next.
+            player (Player): The player who should play next.
         """
         self.game_frame.announce_next_player(player)
 
@@ -164,7 +164,7 @@ class GUIView(object):
         """Respond to the model reporting a try again event.
 
         Args:
-            player (ConnectFourPlayer): The player who should try again.
+            player (Player): The player who should try again.
             reason (TryAgainReason): The reason the player should try again.
         """
         self.game_frame.announce_try_again(player, reason)
@@ -173,7 +173,7 @@ class GUIView(object):
         """Respond to the model reporting that a disc was played.
 
         Args:
-            player (ConnectFourPlayer): The player who played the disc.
+            player (Player): The player who played the disc.
             position: A 2-tuple in format (row, column) of the position the
                 disc was played.
         """
@@ -183,7 +183,7 @@ class GUIView(object):
         """Respond to the model reporting that a round was won.
 
         Args:
-            player (ConnectFourPlayer): The winner.
+            player (Player): The winner.
             winning_positions: The positions that resulted in the win.
         """
         self.game_frame.announce_win(player)

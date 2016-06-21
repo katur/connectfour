@@ -133,7 +133,7 @@ class GameFrame(object):
         """Update feedback bar to announce the next player.
 
         Args:
-            player (ConnectFourPlayer): The player who should play next.
+            player (Player): The player who should play next.
         """
         self._update_game_feedback(GAME_TEXT['next_player'].format(player))
 
@@ -141,7 +141,7 @@ class GameFrame(object):
         """Update feedback bar to announce that a player should try again.
 
         Args:
-            player (ConnectFourPlayer): The player who needs to try again.
+            player (Player): The player who needs to try again.
             reason (TryAgainReason): The reason player needs to try again.
         """
         reason = REASON_TEXT[reason]
@@ -152,7 +152,7 @@ class GameFrame(object):
         """Update feedback bar to announce that the round was won.
 
         Args:
-            player (ConnectFourPlayer): The winner.
+            player (Player): The winner.
         """
         self._update_game_feedback(GAME_TEXT['win'].format(player))
 
@@ -168,7 +168,7 @@ class GameFrame(object):
         """Paint a game square to reflect a disc played in that position.
 
         Args:
-            player (ConnectFourPlayer): The player who played a disc here.
+            player (Player): The player who played a disc here.
                 Used to determine what color to paint the square.
             position: A 2-tuple in format (row, column).
         """

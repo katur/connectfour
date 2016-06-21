@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import Color
-from connectfour.model import ConnectFourPlayer
+from connectfour.model import Player
 
 ALICE = 'Alice'
 ORANGE = Color.orange
@@ -10,7 +10,7 @@ ORANGE = Color.orange
 class TestPlayerBasics(unittest.TestCase):
 
     def setUp(self):
-        self.alice = ConnectFourPlayer(ALICE, ORANGE)
+        self.alice = Player(ALICE, ORANGE)
 
     def test_name(self):
         self.assertEqual(self.alice.name, ALICE)

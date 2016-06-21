@@ -108,7 +108,7 @@ class ConnectFourModel(object):
             raise ValueError('Color {} is already used'.format(color))
 
         self.used_colors.add(color)
-        player = ConnectFourPlayer(name, color)
+        player = Player(name, color)
         self.players.append(player)
         publish(Action.player_added, player)
 
@@ -256,7 +256,7 @@ class ConnectFourModel(object):
         """Get the current player.
 
         Returns:
-            ConnectFourPlayer: Current player, or None if no players added.
+            Player: Current player, or None if no players added.
         """
         if not self.players:
             return None
@@ -273,7 +273,7 @@ class ConnectFourModel(object):
         return set(Color) - self.used_colors
 
 
-class ConnectFourPlayer(object):
+class Player(object):
     """A Connect Four player."""
 
     def __init__(self, name, color):
