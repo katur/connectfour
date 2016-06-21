@@ -22,9 +22,14 @@ GUI uses Python's built-in Tkinter library.
 
 ## App
 
-To launch app (from root dir):
+To launch GUI app (from root dir):
 ```
-python app.py
+python gui_app.py
+```
+
+To launch command line app (from root dir):
+```
+python commandline_app.py
 ```
 
 
