@@ -8,7 +8,7 @@ from connectfour.views.gui.config import (
     ALERT_TEXT)
 from connectfour.views.gui.gameframe import GameFrame
 from connectfour.views.gui.setupframe import SetupFrame
-from connectfour.views.gui.util import get_positive_int
+from connectfour.views.util import get_positive_int
 
 
 class GUIView(object):
