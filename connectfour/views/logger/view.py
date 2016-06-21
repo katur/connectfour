@@ -50,7 +50,7 @@ class LogView(object):
                        .format(player, position))
 
     def on_game_won(self, player, winning_positions):
-        self.out.write('Game won by: {}, winning discs: {}\n'
+        self.out.write('Game won by: {}, winning positions: {}\n'
                        .format(player, winning_positions))
 
     def on_game_draw(self):

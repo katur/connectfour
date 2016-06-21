@@ -69,7 +69,7 @@ class ConnectFourModel(object):
                 Must be at least 1. Default defined in connectfour.config.
             num_columns (Optional[int]): Number of columns in the board.
                 Must be at least 1. Default defined in connectfour.config.
-            num_to_win (Optional[int]): Number of discs in a row to win.
+            num_to_win (Optional[int]): Number in a row to win.
                 Must be at least 1. Default defined in connectfour.config.
         Raises:
             RuntimeError: If gaming session has already started.
@@ -146,9 +146,9 @@ class ConnectFourModel(object):
         publish(Action.next_player, self.get_current_player())
 
     def play(self, column):
-        """Play a disc in a column.
+        """Play in a column.
 
-        The disc is assumed to be played by the current player.
+        The play is assumed to be by the current player.
 
         If the play is illegal, publishes a try_again Action.
         Otherwise, publishes a disc_played Action, followed by one of
@@ -156,12 +156,12 @@ class ConnectFourModel(object):
         game_won, game_draw, or next_player.
 
         Args:
-            column (int): The column to play the disc in.
+            column (int): The column to play in.
         Raises:
             RuntimeError: If a game is not currently in progress.
         """
         if not self.game_in_progress:
-            raise RuntimeError('Cannot play disc before game has started')
+            raise RuntimeError('Cannot play before game has started')
 
         if not self.board.is_column_in_bounds(column):
             publish(Action.try_again, self.get_current_player(),
@@ -336,9 +336,9 @@ class Board(object):
         """Create a board.
 
         Args:
-            num_rows (int): The number of rows in this board's grid.
-            num_columns (int): The number of columns in this board's grid.
-            num_to_win (int): The number of adjacent discs needed to win.
+            num_rows (int): Number of rows in this board's grid.
+            num_columns (int): Number of columns in this board's grid.
+            num_to_win (int): Number in a row needed to win.
         """
         self.num_rows = num_rows
         self.num_columns = num_columns
@@ -365,7 +365,7 @@ class Board(object):
         Might be used for console printing.
 
         Args:
-            field_width (Optional[int]): The number of spaces each disc
+            field_width (Optional[int]): The number of spaces each position
                 should take up. Defaults to 8 characters
 
         Returns:
@@ -570,7 +570,7 @@ class Board(object):
         return self.is_row_in_bounds(row) and self.is_column_in_bounds(column)
 
     def is_column_full(self, column):
-        """Determine if a column is full of discs.
+        """Determine if a column is full.
 
         Args:
             column (int): The column to check.
@@ -585,7 +585,7 @@ class Board(object):
         return self.grid[self.top_row][column] is not None
 
     def is_full(self):
-        """Determine if this board is entirely full of discs.
+        """Determine if this board is entirely full.
 
         Returns:
             bool: True if this board is full, False otherwise.

@@ -113,12 +113,12 @@ class GUIView(object):
         self.model.start_game()
 
     def play(self, column):
-        """Tell the model that a disc was played in a column.
+        """Tell the model to make a play in a column.
 
-        The disc is assumed to be played by the current player.
+        The play is assumed to be by the current player.
 
         Args:
-            column (int): The column to play the disc in.
+            column (int): The column to play in.
         """
         self.model.play(column)
 
@@ -403,7 +403,7 @@ class GameFrame(object):
         self._create_squares()
 
     def _create_play_buttons(self):
-        # 1D array of pointers to the disc-playing buttons (one per column)
+        # 1D array of pointers to the play buttons (one per column)
         play_buttons = []
 
         for column in range(self.num_columns):
@@ -451,12 +451,12 @@ class GameFrame(object):
     ######################
 
     def enable_play_buttons(self):
-        """Enable the buttons to play discs in specific columns."""
+        """Enable the buttons to play in specific columns."""
         for button in self.widgets['play_buttons']:
             button.configure(state=tk.NORMAL)
 
     def disable_play_buttons(self):
-        """Disable the buttons to play discs in specific columns."""
+        """Disable the buttons to play in specific columns."""
         for button in self.widgets['play_buttons']:
             button.configure(state=tk.DISABLED)
 
@@ -508,8 +508,8 @@ class GameFrame(object):
         """Paint a game square to reflect a disc played in that position.
 
         Args:
-            player (Player): The player who played a disc here.
-                Used to determine what color to paint the square.
+            player (Player): The player who played here. Used to
+                determine what color to paint the square.
             position: A 2-tuple in format (row, column).
         """
         row, column = position

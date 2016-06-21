@@ -63,7 +63,7 @@ class CommandLineView(object):
         self._print_grid()
 
     def on_game_won(self, player, winning_positions):
-        self.out.write('Game won by: {}, winning discs: {}\n\n'
+        self.out.write('Game won by: {}, winning positions: {}\n\n'
                        .format(player, winning_positions))
         self._prompt_play_again()
 
