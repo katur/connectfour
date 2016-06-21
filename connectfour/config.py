@@ -22,8 +22,8 @@ class Color(Enum):
     color (as in the original Connect Four game).
     """
 
-    (black, red, blue, purple, brown, dark_green, pink, gray, orange,
-        green) = range(10)
+    (black, red, blue, purple, brown, green, pink, gray, orange,
+        lime) = range(10)
 
 
 # List of all colors. May be used by a view to assign colors incrementally.

@@ -12,12 +12,12 @@ COLOR_TO_TK = {
     Color.red: 'Red',
     Color.blue: 'Blue',
     Color.purple: 'Purple',
-    Color.orange: 'Orange',
-    Color.green: 'Green',
-    Color.pink: 'PeachPuff',
-    Color.dark_green: 'DarkGreen',
     Color.brown: 'Brown',
+    Color.green: 'DarkGreen',
+    Color.pink: 'PeachPuff',
     Color.gray: 'Gray',
+    Color.orange: 'Orange',
+    Color.lime: 'Green',
 }
 
 SQUARE_BACKGROUND = 'Yellow'

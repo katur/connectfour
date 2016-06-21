@@ -111,6 +111,6 @@ class CommandLineView(object):
 
     def _print_grid(self):
         max_color_len = max(len(color.name) for color in COLORS)
-        width = max_color_len + 1
+        width = max_color_len + 2
         grid = self.model.board.get_printable_grid(field_width=width)
         self.stream.write('\n' + grid + '\n')
