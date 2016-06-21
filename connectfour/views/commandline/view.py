@@ -12,7 +12,7 @@ MAX_TO_WIN = 100
 
 
 class CommandLineView(object):
-    """Simple view that simply logs when actions occur."""
+    """View to play Connect Four from the command line."""
 
     def __init__(self, model, stream=sys.stdout):
         self.stream = stream
@@ -20,18 +20,18 @@ class CommandLineView(object):
         self._create_subscriptions()
         self._prompt_create_board()
         self._prompt_add_players()
-        self.model.start_round()
+        self.model.start_game()
 
     def _create_subscriptions(self):
         responses = {
             Action.player_added: self.on_player_added,
             Action.board_created: self.on_board_created,
-            Action.round_started: self.on_round_started,
+            Action.game_started: self.on_game_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
             Action.disc_played: self.on_disc_played,
-            Action.round_won: self.on_round_won,
-            Action.round_draw: self.on_round_draw,
+            Action.game_won: self.on_game_won,
+            Action.game_draw: self.on_game_draw,
         }
 
         for action, response in responses.iteritems():
@@ -43,8 +43,8 @@ class CommandLineView(object):
     def on_player_added(self, player):
         self.stream.write('Welcome, {}!\n\n'.format(player))
 
-    def on_round_started(self, round_number):
-        self.stream.write('Round started: {}\n'.format(round_number))
+    def on_game_started(self, game_number):
+        self.stream.write('Game {} started\n'.format(game_number))
         self._print_grid()
 
     def on_next_player(self, player):
@@ -57,13 +57,13 @@ class CommandLineView(object):
     def on_disc_played(self, player, position):
         self._print_grid()
 
-    def on_round_won(self, player, winning_positions):
-        self.stream.write('Round won by: {}, winning discs: {}\n\n'
+    def on_game_won(self, player, winning_positions):
+        self.stream.write('Game won by: {}, winning discs: {}\n\n'
                           .format(player, winning_positions))
         self._prompt_play_again()
 
-    def on_round_draw(self):
-        self.stream.write('Round ended in a draw.\n\n')
+    def on_game_draw(self):
+        self.stream.write('Game ended in a draw.\n\n')
         self._prompt_play_again()
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
@@ -107,7 +107,7 @@ class CommandLineView(object):
     def _prompt_play_again(self):
         response = raw_input('Play again? [Y/n]: ')
         if response == 'Y':
-            self.model.start_round()
+            self.model.start_game()
 
     def _print_grid(self):
         max_color_len = max(len(color.name) for color in COLORS)

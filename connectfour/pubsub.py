@@ -9,12 +9,12 @@ class Action(Enum):
     """
     player_added = 0
     board_created = 1
-    round_started = 2
+    game_started = 2
     next_player = 3
     try_again = 4
     disc_played = 5
-    round_won = 6
-    round_draw = 7
+    game_won = 6
+    game_draw = 7
 
 
 subscriptions = {}

@@ -10,7 +10,7 @@ from connectfour.views.util import get_nonempty_string, get_positive_int
 
 
 class GUIView(object):
-    """Tkinter GUI View of the Connect Four game."""
+    """View to play Connect Four in a Tkinter GUI."""
 
     def __init__(self, model):
         """Create this view, launching a Tkinter GUI in a new window.
@@ -35,12 +35,12 @@ class GUIView(object):
     def _create_subscriptions(self):
         responses = {
             Action.player_added: self.on_player_added,
-            Action.round_started: self.on_round_started,
+            Action.game_started: self.on_game_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
             Action.disc_played: self.on_disc_played,
-            Action.round_won: self.on_round_won,
-            Action.round_draw: self.on_round_draw,
+            Action.game_won: self.on_game_won,
+            Action.game_draw: self.on_game_draw,
         }
 
         for action, response in responses.iteritems():
@@ -71,7 +71,7 @@ class GUIView(object):
         color = COLORS[self.model.get_num_players()]
         self.model.add_player(name, color)
 
-    def launch_game(self):
+    def launch_game_frame(self):
         """Tell the model to create the board and start the first game.
 
         This method parses board parameters from user input. If input is
@@ -90,7 +90,7 @@ class GUIView(object):
         # Move on to game frame
         self.setup_frame.remove()
         self.game_frame = GameFrame(self)
-        self.model.start_round()
+        self.model.start_game()
 
     def _create_board(self):
         num_rows = get_positive_int(
@@ -111,7 +111,7 @@ class GUIView(object):
         This method also clears the game squares for the new game.
         """
         self.game_frame.reset_squares()
-        self.model.start_round()
+        self.model.start_game()
 
     def play_disc(self, column):
         """Tell the model that a disc was played in a column.
@@ -138,11 +138,11 @@ class GUIView(object):
         # Enable launch once first player is added
         self.setup_frame.enable_launch_button()
 
-    def on_round_started(self, round_number):
-        """Respond to the model reporting that a new round started.
+    def on_game_started(self, game_number):
+        """Respond to the model reporting that a new game started.
 
         Args:
-            round_number (int): The number of the round that started.
+            game_number (int): The number of the game that started.
         """
         self.game_frame.disable_play_again_button()
         self.game_frame.enable_play_buttons()
@@ -174,8 +174,8 @@ class GUIView(object):
         """
         self.game_frame.update_square(player, position)
 
-    def on_round_won(self, player, winning_positions):
-        """Respond to the model reporting that a round was won.
+    def on_game_won(self, player, winning_positions):
+        """Respond to the model reporting that a game was won.
 
         Args:
             player (Player): The winner.
@@ -186,8 +186,8 @@ class GUIView(object):
         self.game_frame.enable_play_again_button()
         self.game_frame.flash_squares(winning_positions)
 
-    def on_round_draw(self):
-        """Respond to the model reporting that a round ended in a draw."""
+    def on_game_draw(self):
+        """Respond to the model reporting that a game ended in a draw."""
         self.game_frame.announce_draw()
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
@@ -282,7 +282,8 @@ class SetupFrame(object):
                                 text=config.SETUP_TEXT['quit'])
         quit_button.grid(row=row, column=0)
 
-        launch_button = tk.Button(self.frame, command=self.view.launch_game,
+        launch_button = tk.Button(self.frame,
+                                  command=self.view.launch_game_frame,
                                   text=config.SETUP_TEXT['launch'],
                                   state=tk.DISABLED)
         launch_button.grid(row=row, column=config.SETUP_COLSPAN-1)
@@ -461,11 +462,11 @@ class GameFrame(object):
             button.configure(state=tk.DISABLED)
 
     def enable_play_again_button(self):
-        """Enable the button to play another round."""
+        """Enable the button to play another game."""
         self.widgets['play_again_button'].configure(state=tk.NORMAL)
 
     def disable_play_again_button(self):
-        """Disable the button to play another round."""
+        """Disable the button to play another game."""
         self.widgets['play_again_button'].configure(state=tk.DISABLED)
 
     def announce_next_player(self, player):
@@ -489,7 +490,7 @@ class GameFrame(object):
                                    .format(player, reason))
 
     def announce_win(self, player):
-        """Update feedback bar to announce that the round was won.
+        """Update feedback bar to announce that the game was won.
 
         Args:
             player (Player): The winner.
@@ -497,7 +498,7 @@ class GameFrame(object):
         self._update_game_feedback(config.GAME_TEXT['win'].format(player))
 
     def announce_draw(self):
-        """Update feedback bar to announce the the round ended in a draw."""
+        """Update feedback bar to announce the the game ended in a draw."""
 
         self._update_game_feedback(config.GAME_TEXT['draw'])
 
@@ -528,7 +529,7 @@ class GameFrame(object):
                   window=self.view.window, color=config.SQUARE_BACKGROUND)
 
     def reset_squares(self):
-        """Recreate the game matrix to start a new round."""
+        """Recreate the game matrix to start a new game."""
         # self.widgets['matrix_frame'].grid_forget()
         '''
         Calling .destroy() or .grid_forget() here, or even at the

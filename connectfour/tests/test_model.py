@@ -28,19 +28,19 @@ MORE_PLAYS = [2, 2, 2, 2, 3, 3, 0, 3, 4, 4, 3, 4, 4]
 WINNING_PLAY = 5
 
 
-class TestModelBeforeFirstRoundStarted(unittest.TestCase):
+class TestModelBeforeFirstGameStarted(unittest.TestCase):
 
     def setUp(self):
         self.model = create_test_model()
 
-    def test_session_in_progress_before_first_round(self):
+    def test_session_in_progress_before_first_game(self):
         self.assertFalse(self.model.session_in_progress)
 
-    def test_round_in_progress_before_first_round(self):
-        self.assertFalse(self.model.round_in_progress)
+    def test_game_in_progress_before_first_game(self):
+        self.assertFalse(self.model.game_in_progress)
 
-    def test_round_number_before_first_round(self):
-        self.assertEqual(self.model.round_number, 0)
+    def test_game_number_before_first_game(self):
+        self.assertEqual(self.model.game_number, 0)
 
     def test_get_num_rows(self):
         self.assertEqual(self.model.get_num_rows(), TEST_ROWS)
@@ -54,7 +54,7 @@ class TestModelBeforeFirstRoundStarted(unittest.TestCase):
     def test_get_num_players(self):
         self.assertEqual(self.model.get_num_players(), 2)
 
-    def test_get_current_player_before_first_round(self):
+    def test_get_current_player_before_first_game(self):
         self.assertEqual(self.model.get_current_player().name, ALICE)
 
     def test_used_colors(self):
@@ -95,19 +95,19 @@ class TestModelWithoutBoardOrPlayers(unittest.TestCase):
         self.assertEqual(len(Color), len(self.model.get_remaining_colors()))
 
 
-class TestModelAfterFirstRoundStarted(unittest.TestCase):
+class TestModelAfterFirstGameStarted(unittest.TestCase):
 
     def setUp(self):
         self.model = create_test_model()
-        self.model.start_round()
+        self.model.start_game()
 
     def test_session_in_progress(self):
         self.assertTrue(self.model.session_in_progress)
 
-    def test_round_in_progress(self):
-        self.assertTrue(self.model.round_in_progress)
+    def test_game_in_progress(self):
+        self.assertTrue(self.model.game_in_progress)
 
-    def test_first_player_after_round_started(self):
+    def test_first_player_after_game_started(self):
         self.assertEqual(self.model.get_current_player().name, ALICE)
 
 
@@ -115,18 +115,18 @@ class TestModelAfterFirstPlay(unittest.TestCase):
 
     def setUp(self):
         self.model = create_test_model()
-        self.model.start_round()
+        self.model.start_game()
         self.model.play_disc(FIRST_PLAY)
 
     def test_current_player(self):
         self.assertEqual(self.model.get_current_player().name, BOB)
 
 
-class TestModelRoundInProgress(unittest.TestCase):
+class TestModelGameInProgress(unittest.TestCase):
 
     def setUp(self):
         self.model = create_test_model()
-        self.model.start_round()
+        self.model.start_game()
         for play in [FIRST_PLAY] + MORE_PLAYS:
             self.model.play_disc(play)
 
@@ -134,16 +134,16 @@ class TestModelRoundInProgress(unittest.TestCase):
         self.assertEqual(self.model.get_current_player().name, ALICE)
 
 
-class TestRoundWon(unittest.TestCase):
+class TestGameWon(unittest.TestCase):
 
     def setUp(self):
         self.model = create_test_model()
-        self.model.start_round()
+        self.model.start_game()
         for play in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
             self.model.play_disc(play)
 
-    def test_round_not_in_progress_after_win(self):
-        self.assertFalse(self.model.round_in_progress)
+    def test_game_not_in_progress_after_win(self):
+        self.assertFalse(self.model.game_in_progress)
 
     def test_session_still_in_progress_after_win(self):
         self.assertTrue(self.model.session_in_progress)
@@ -160,16 +160,16 @@ class TestRoundWon(unittest.TestCase):
         self.assertEqual(bob.num_wins, 0)
 
 
-class TestNextRoundStarted(unittest.TestCase):
+class TestNextGameStarted(unittest.TestCase):
     def setUp(self):
         self.model = create_test_model()
-        self.model.start_round()
+        self.model.start_game()
         for play in [FIRST_PLAY] + MORE_PLAYS + [WINNING_PLAY]:
             self.model.play_disc(play)
-        self.model.start_round()
+        self.model.start_game()
 
-    def test_round_in_progress_second_game(self):
-        self.assertTrue(self.model.round_in_progress)
+    def test_game_in_progress_second_game(self):
+        self.assertTrue(self.model.game_in_progress)
 
     def test_first_player_rotates(self):
         self.assertEqual(self.model.get_current_player().name, BOB)

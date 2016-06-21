@@ -10,7 +10,7 @@ class ConnectFourModel(object):
     Dependencies between the Core methods:
 
     -   create_board() and add_player() must both be called at least
-        once before calling start_round().
+        once before calling start_game().
 
     -   add_player() should be called multiple times to add multiple
         players.
@@ -18,14 +18,14 @@ class ConnectFourModel(object):
     -   If create_board() is called more than once, the old board is
         replaced with the new board.
 
-    -   After calling start_round() the first time, a gaming session
+    -   After calling start_game() the first time, a gaming session
         has begun, and neither create_board() or add_player() can be
         called again.
 
-    -   start_round() can only be called again after a win or draw is
+    -   start_game() can only be called again after a win or draw is
         announced.
 
-    -   play_disc() can only be called while a round is in progress.
+    -   play_disc() can only be called while a game is in progress.
     """
 
     def __init__(self):
@@ -35,13 +35,13 @@ class ConnectFourModel(object):
         self.used_colors = set()
 
         self.session_in_progress = False
-        self.round_in_progress = False
-        self.round_number = 0
+        self.game_in_progress = False
+        self.game_number = 0
 
-        # Which player goes first in the next round
+        # Which player goes first in the next game
         self.first_turn_index = 0
 
-        # Which player goes next in the current round
+        # Which player goes next in the current game
         self.current_player_index = 0
 
     def __str__(self):
@@ -112,34 +112,34 @@ class ConnectFourModel(object):
         self.players.append(player)
         publish(Action.player_added, player)
 
-    def start_round(self):
-        """Start a new round of the game.
+    def start_game(self):
+        """Start a new game.
 
-        Publishes a round_started Action, followed by a next_player Action
+        Publishes a game_started Action, followed by a next_player Action
         to indicate which player should go first.
 
         Raises:
-            RuntimeError: If another round is already in progress, if
+            RuntimeError: If another game is already in progress, if
                 there is no board, or if there are no players.
         """
-        if self.round_in_progress:
-            raise RuntimeError('Cannot start a round with another in progress')
+        if self.game_in_progress:
+            raise RuntimeError('Cannot start a game with another in progress')
 
         if not self.board:
-            raise RuntimeError('Cannot start a round with no board')
+            raise RuntimeError('Cannot start a game with no board')
 
         if not self.players:
-            raise RuntimeError('Cannot start a round with no players')
+            raise RuntimeError('Cannot start a game with no players')
 
         self.board.reset()
         self.session_in_progress = True
-        self.round_in_progress = True
-        self.round_number += 1
-        publish(Action.round_started, self.round_number)
+        self.game_in_progress = True
+        self.game_number += 1
+        publish(Action.game_started, self.game_number)
 
         self.current_player_index = self.first_turn_index
 
-        # Prep first_turn_index for the next round
+        # Prep first_turn_index for the next game
         self.first_turn_index = ((self.first_turn_index + 1)
                                  % self.get_num_players())
 
@@ -153,15 +153,15 @@ class ConnectFourModel(object):
         If the play is illegal, publishes a try_again Action.
         Otherwise, publishes a disc_played Action, followed by one of
         the following Actions (depending on the outcome of the play);
-        round_won, round_draw, or next_player.
+        game_won, game_draw, or next_player.
 
         Args:
             column (int): The column to play the disc in.
         Raises:
-            RuntimeError: If a round is not currently in progress.
+            RuntimeError: If a game is not currently in progress.
         """
-        if not self.round_in_progress:
-            raise RuntimeError('Cannot play disc before round has started')
+        if not self.game_in_progress:
+            raise RuntimeError('Cannot play disc before game has started')
 
         if not self.board.is_column_in_bounds(column):
             publish(Action.try_again, self.get_current_player(),
@@ -193,13 +193,13 @@ class ConnectFourModel(object):
             self._process_next_player()
 
     def _process_win(self, player, winning_positions):
-        self.round_in_progress = False
+        self.game_in_progress = False
         player.num_wins += 1
-        publish(Action.round_won, player, winning_positions)
+        publish(Action.game_won, player, winning_positions)
 
     def _process_draw(self):
-        self.round_in_progress = False
-        publish(Action.round_draw)
+        self.game_in_progress = False
+        publish(Action.game_draw)
 
     def _process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)

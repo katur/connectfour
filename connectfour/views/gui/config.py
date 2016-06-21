@@ -53,8 +53,8 @@ GAME_TEXT = {
     'play': 'Play',
     'next_player': "{0}'s turn",
     'try_again': '{0} try again ({1})',
-    'win': '{0} won the round',
-    'draw': 'Round ended in a draw',
+    'win': '{0} won the game',
+    'draw': 'Game ended in a draw',
     'play_again': 'Play Again',
     'quit': 'Exit',
 }

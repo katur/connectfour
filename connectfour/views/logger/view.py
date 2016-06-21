@@ -4,7 +4,7 @@ from connectfour.pubsub import Action, subscribe
 
 
 class LogView(object):
-    """Simple view that simply logs when actions occur."""
+    """View that simply logs when Connect Four events occur."""
 
     def __init__(self, stream=sys.stdout):
         self.stream = stream
@@ -14,12 +14,12 @@ class LogView(object):
         responses = {
             Action.player_added: self.on_player_added,
             Action.board_created: self.on_board_created,
-            Action.round_started: self.on_round_started,
+            Action.game_started: self.on_game_started,
             Action.next_player: self.on_next_player,
             Action.try_again: self.on_try_again,
             Action.disc_played: self.on_disc_played,
-            Action.round_won: self.on_round_won,
-            Action.round_draw: self.on_round_draw,
+            Action.game_won: self.on_game_won,
+            Action.game_draw: self.on_game_draw,
         }
 
         for action, response in responses.iteritems():
@@ -31,8 +31,8 @@ class LogView(object):
     def on_board_created(self, board):
         self.stream.write('Board created: {}\n'.format(board))
 
-    def on_round_started(self, round_number):
-        self.stream.write('Round started: {}\n'.format(round_number))
+    def on_game_started(self, game_number):
+        self.stream.write('Game {} started\n'.format(game_number))
 
     def on_next_player(self, player):
         self.stream.write('Next turn: {}\n'.format(player))
@@ -44,9 +44,9 @@ class LogView(object):
         self.stream.write('Disc played by: {}, position: {}\n'
                           .format(player, position))
 
-    def on_round_won(self, player, winning_positions):
-        self.stream.write('Round won by: {}, winning discs: {}\n'
+    def on_game_won(self, player, winning_positions):
+        self.stream.write('Game won by: {}, winning discs: {}\n'
                           .format(player, winning_positions))
 
-    def on_round_draw(self):
-        self.stream.write('Round ended in a draw.\n')
+    def on_game_draw(self):
+        self.stream.write('Game ended in a draw.\n')
