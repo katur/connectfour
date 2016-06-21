@@ -2,6 +2,7 @@ import sys
 
 from connectfour.config import COLORS
 from connectfour.pubsub import Action, subscribe
+from connectfour.views.util import get_positive_int, get_nonempty_string
 
 
 class CommandLineView(object):
@@ -58,20 +59,32 @@ class CommandLineView(object):
         self.stream.write('Round ended in a draw.\n')
         self._prompt_play_again()
 
+    def _prompt_until_valid(self, prompt, condition, **kwargs):
+        while True:
+            try:
+                return condition(raw_input(prompt), **kwargs)
+            except ValueError as e:
+                self.stream.write('Try again: {}\n'.format(e))
+
     def _prompt_create_board(self):
-        num_rows = int(raw_input('Num rows: '))
-        num_columns = int(raw_input('Num cols: '))
-        num_to_win = int(raw_input('Num to win: '))
+        num_rows = self._prompt_until_valid(
+            'Num rows: ', get_positive_int, name='Rows', max_value=100)
+        num_columns = self._prompt_until_valid(
+            'Num colums: ', get_positive_int, name='Columns', max_value=100)
+        num_to_win = self._prompt_until_valid(
+            'Num to win: ', get_positive_int, name='To Win', max_value=100)
+
         self.model.create_board(num_rows, num_columns, num_to_win)
 
     def _prompt_add_players(self):
         while True:
-            name = raw_input('Player name: ')
+            name = self._prompt_until_valid(
+                'Player name: ', get_nonempty_string, name='Name', max_len=50)
             index = self.model.get_num_players()
             self.model.add_player(name, COLORS[index])
             response = raw_input('Add another player? [Y/n]: ')
             if response != 'Y':
-                break
+                return
 
     def _prompt_play_disc(self, player):
         column = int(raw_input('Where would you like to play, {}? '
