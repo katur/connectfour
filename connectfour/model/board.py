@@ -33,16 +33,20 @@ class ConnectFourBoard(object):
                      for row in range(num_rows)]
 
     def __str__(self):
-        return '{} rows x {} column ConnectFourBoard ({} to win)'.format(
+        return '{} rows x {} columns ({} to win)'.format(
             self.num_rows, self.num_columns, self.num_to_win)
 
     def __repr__(self):
         return self.__str__()
 
-    def get_printable_grid(self):
+    def get_printable_grid(self, field_width=None):
         """Get a "pretty" string of this board's grid.
 
         Might be used for console printing.
+
+        Args:
+            field_width (Optional[int]): The number of spaces each disc
+                should take up.
 
         Returns:
             str: A tab- and new-line formatted string of the grid.
@@ -50,7 +54,11 @@ class ConnectFourBoard(object):
         output = ''
         for row in self.grid:
             for column in row:
-                output += '{}\t'.format(column if column else '-')
+                el = column if column else '-'
+                if field_width:
+                    output += '{0:{width}}'.format(el, width=field_width)
+                else:
+                    output += '{0}\t'.format(el)
             output += '\n'
 
         return output
