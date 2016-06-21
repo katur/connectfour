@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import ConnectFourColor
-from connectfour.model.disc import ConnectFourDisc
+from connectfour.model import ConnectFourDisc
 
 GREEN = ConnectFourColor.green
 ORANGE = ConnectFourColor.orange

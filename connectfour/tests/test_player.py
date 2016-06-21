@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import ConnectFourColor
-from connectfour.model.player import ConnectFourPlayer
+from connectfour.model import ConnectFourPlayer
 
 ALICE = 'Alice'
 ORANGE = ConnectFourColor.orange

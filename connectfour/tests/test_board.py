@@ -1,8 +1,8 @@
 import unittest
 
 from connectfour.config import ConnectFourColor
-from connectfour.model.board import ConnectFourBoard
-from connectfour.model.disc import ConnectFourDisc
+from connectfour.model import ConnectFourBoard
+from connectfour.model import ConnectFourDisc
 
 TEST_ROWS = 4
 TEST_COLUMNS = 6
