@@ -81,7 +81,7 @@ class ConnectFourModel(object):
         if num_rows < 1 or num_columns < 1 or num_to_win < 1:
             raise ValueError('Board dimensions and num_to_win must be >= 1')
 
-        self.board = ConnectFourBoard(num_rows, num_columns, num_to_win)
+        self.board = Board(num_rows, num_columns, num_to_win)
         publish(Action.board_created, self.board)
 
     def add_player(self, name, color):
@@ -285,7 +285,7 @@ class ConnectFourPlayer(object):
             color (ConnectFourColor): The color of this player's discs.
         """
         self.name = name
-        self.disc = ConnectFourDisc(color)
+        self.disc = Disc(color)
         self.num_wins = 0
 
     def __str__(self):
@@ -303,7 +303,7 @@ class ConnectFourPlayer(object):
         return self.disc.color
 
 
-class ConnectFourDisc(object):
+class Disc(object):
     """A Connect Four playing disc (aka token, or chip).
 
     Two discs are considered equal if they are the same color.
@@ -321,7 +321,7 @@ class ConnectFourDisc(object):
         return '{}'.format(self.color.name)
 
     def __repr__(self):
-        return '{} ConnectFourDisc'.format(self.color)
+        return '{} Disc'.format(self.color)
 
     def __eq__(self, other):
         return type(other) is type(self) and self.color == other.color
@@ -330,7 +330,7 @@ class ConnectFourDisc(object):
         return not self.__eq__(other)
 
 
-class ConnectFourBoard(object):
+class Board(object):
     """A Connect Four playing board."""
 
     def __init__(self, num_rows, num_columns, num_to_win):
@@ -457,7 +457,7 @@ class ConnectFourBoard(object):
         Args:
             position: A 2-tuple in format (row, column).
         Returns:
-            ConnectFourDisc: The disc at this position, or None if this
+            Disc: The disc at this position, or None if this
                 position is empty.
         Raises:
             ValueError: If position is out of bounds.
@@ -473,7 +473,7 @@ class ConnectFourBoard(object):
         """Add a disc to a column.
 
         Args:
-            disc (ConnectFourDisc): The disc to add.
+            disc (Disc): The disc to add.
             column (int): The column to add the disc to.
         Returns:
             int: The row in which the disc landed.
@@ -500,7 +500,7 @@ class ConnectFourBoard(object):
         Args:
             origin: A 2-tuple (row, column) that will be part of any
                 wins found.
-            fake_disc (Optional[ConnectFourDisc]): A disc to pretend is
+            fake_disc (Optional[Disc]): A disc to pretend is
                 at start. Might be used to predict whether a win might
                 occur without actually playing the disc.
         Returns:
@@ -544,7 +544,7 @@ class ConnectFourBoard(object):
                 For example, to check the horizontal axis, step can be
                 either (0, 1) or (0, -1).
 
-            fake_disc (Optional[ConnectFourDisc]): See docstring for
+            fake_disc (Optional[Disc]): See docstring for
                 get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching
@@ -573,7 +573,7 @@ class ConnectFourBoard(object):
                 For example, to check straight up, step should be (1, 0).
                 To check diagonally down-left, step should be (-1, -1).
 
-            fake_disc (Optional[ConnectFourDisc]): See docstring for
+            fake_disc (Optional[Disc]): See docstring for
                 get_winning_positions.
         Returns:
             set: A set of 2-tuples in format (row, column) of the matching

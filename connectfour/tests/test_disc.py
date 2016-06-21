@@ -1,7 +1,7 @@
 import unittest
 
 from connectfour.config import ConnectFourColor
-from connectfour.model import ConnectFourDisc
+from connectfour.model import Disc
 
 GREEN = ConnectFourColor.green
 ORANGE = ConnectFourColor.orange
@@ -10,15 +10,15 @@ ORANGE = ConnectFourColor.orange
 class TestDiscBasics(unittest.TestCase):
 
     def setUp(self):
-        self.orange_disc = ConnectFourDisc(ORANGE)
+        self.orange_disc = Disc(ORANGE)
 
     def test_color(self):
         self.assertEqual(self.orange_disc.color, ORANGE)
 
     def test_equals(self):
-        other = ConnectFourDisc(ORANGE)
+        other = Disc(ORANGE)
         self.assertEqual(self.orange_disc, other)
 
     def test_not_equal(self):
-        other = ConnectFourDisc(GREEN)
+        other = Disc(GREEN)
         self.assertNotEqual(self.orange_disc, other)
