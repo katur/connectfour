@@ -2,7 +2,7 @@ import Tkinter as tk
 import tkMessageBox
 
 from connectfour.config import COLORS
-from connectfour.pubsub import subscribe, Action
+from connectfour.pubsub import Action, subscribe
 from connectfour.views.gui.config import (
     WINDOW_TITLE, MAX_NAME_LENGTH, MAX_ROWS, MAX_COLUMNS, MAX_TO_WIN,
     ALERT_TEXT)
