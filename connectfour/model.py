@@ -60,15 +60,6 @@ class ConnectFourPlayer(object):
         return self.disc.color
 
 
-TOP_ROW = 0
-LEFT_COLUMN = 0
-
-HORIZONTAL = (0, 1)
-VERTICAL = (1, 0)
-UP_RIGHT = (1, 1)
-DOWN_RIGHT = (1, -1)
-
-
 class ConnectFourBoard(object):
     """A Connect Four playing board."""
 
@@ -84,9 +75,9 @@ class ConnectFourBoard(object):
         self.num_columns = num_columns
         self.num_to_win = num_to_win
 
-        self.top_row = TOP_ROW
+        self.top_row = 0
         self.bottom_row = num_rows - 1
-        self.left_column = LEFT_COLUMN
+        self.left_column = 0
         self.right_column = num_columns - 1
 
         self.grid = [[None for column in range(num_columns)]
@@ -246,6 +237,11 @@ class ConnectFourBoard(object):
             set: A set of 2-tuples in format (row, column) of the positions
                 that result in a win, or the empty set if no win found.
         """
+        HORIZONTAL = (0, 1)
+        VERTICAL = (1, 0)
+        UP_RIGHT = (1, 1)
+        DOWN_RIGHT = (1, -1)
+
         winning_positions = set()
 
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
