@@ -13,11 +13,10 @@ class GUIView(object):
     """View to play Connect Four in a Tkinter GUI."""
 
     def __init__(self, model):
-        """Create this view, launching a Tkinter GUI in a new window.
+        """Create this view, which creates a Tkinter GUI in a new window.
 
         Args:
-            model (ConnectFourModel): The model that this view will
-                interact with.
+            model (ConnectFourModel): The model this view interacts with.
         """
         self.model = model
         self._create_subscriptions()
@@ -29,7 +28,7 @@ class GUIView(object):
         # Initialize setup screen
         self.setup_frame = SetupFrame(self)
 
-        # Launch program
+        # Start program
         self.window.mainloop()
 
     def _create_subscriptions(self):

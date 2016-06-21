@@ -14,8 +14,13 @@ MAX_TO_WIN = 100
 class CommandLineView(object):
     """View to play Connect Four from the command line."""
 
-    def __init__(self, model, stream=sys.stdout):
-        self.stream = stream
+    def __init__(self, model):
+        """Create this view.
+
+        Args:
+            model (ConnectFourModel): The model this view interacts with.
+        """
+        self.out = sys.stdout
         self.model = model
         self._create_subscriptions()
         self._prompt_create_board()
@@ -38,32 +43,32 @@ class CommandLineView(object):
             subscribe(action, response)
 
     def on_board_created(self, board):
-        self.stream.write('Board created: {}\n\n'.format(board))
+        self.out.write('Board created: {}\n\n'.format(board))
 
     def on_player_added(self, player):
-        self.stream.write('Welcome, {}!\n\n'.format(player))
+        self.out.write('Welcome, {}!\n\n'.format(player))
 
     def on_game_started(self, game_number):
-        self.stream.write('Game {} started\n'.format(game_number))
+        self.out.write('Game {} started\n'.format(game_number))
         self._print_grid()
 
     def on_next_player(self, player):
         self._prompt_play_disc(player)
 
     def on_try_again(self, player, reason):
-        self.stream.write('Illegal move: {}\n'.format(reason))
+        self.out.write('Illegal move: {}\n'.format(reason))
         self._prompt_play_disc(player)
 
     def on_disc_played(self, player, position):
         self._print_grid()
 
     def on_game_won(self, player, winning_positions):
-        self.stream.write('Game won by: {}, winning discs: {}\n\n'
-                          .format(player, winning_positions))
+        self.out.write('Game won by: {}, winning discs: {}\n\n'
+                       .format(player, winning_positions))
         self._prompt_play_again()
 
     def on_game_draw(self):
-        self.stream.write('Game ended in a draw.\n\n')
+        self.out.write('Game ended in a draw.\n\n')
         self._prompt_play_again()
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
@@ -71,7 +76,7 @@ class CommandLineView(object):
             try:
                 return condition(raw_input(prompt), **kwargs)
             except ValueError as e:
-                self.stream.write('Try again: {}\n'.format(e))
+                self.out.write('Try again: {}\n'.format(e))
 
     def _prompt_create_board(self):
         num_rows = self._prompt_until_valid(
@@ -113,4 +118,4 @@ class CommandLineView(object):
         max_color_len = max(len(color.name) for color in COLORS)
         width = max_color_len + 2
         grid = self.model.board.get_printable_grid(field_width=width)
-        self.stream.write('\n' + grid + '\n')
+        self.out.write('\n' + grid + '\n')
