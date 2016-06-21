@@ -1,4 +1,5 @@
-def get_positive_int(num, name='Number', max_value=None):
+def get_positive_int(num, name='Number', max_value=None,
+                     default_if_blank=None):
     """Convert a string to an int, enforcing that it is positive.
 
     Raises an error if num is not convertible to a positive int.
@@ -14,6 +15,9 @@ def get_positive_int(num, name='Number', max_value=None):
         ValueError: If number is not convertible to an int, if it is
             not positive, or if it exceeds max_value.
     """
+    if default_if_blank and len(num) == 0:
+        return default_if_blank
+
     try:
         num = int(num)
     except ValueError:
