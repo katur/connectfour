@@ -1,4 +1,4 @@
-from connectfour.config import ConnectFourColor, TryAgainReason
+from connectfour.config import Color, TryAgainReason
 
 
 MAX_NAME_LENGTH = 50
@@ -8,16 +8,16 @@ MAX_TO_WIN = 20
 PAD = 20
 
 COLOR_TO_TK = {
-    ConnectFourColor.black: 'Black',
-    ConnectFourColor.red: 'Red',
-    ConnectFourColor.blue: 'Blue',
-    ConnectFourColor.purple: 'Purple',
-    ConnectFourColor.orange: 'Orange',
-    ConnectFourColor.green: 'Green',
-    ConnectFourColor.pink: 'PeachPuff',
-    ConnectFourColor.dark_green: 'DarkGreen',
-    ConnectFourColor.brown: 'Brown',
-    ConnectFourColor.gray: 'Gray',
+    Color.black: 'Black',
+    Color.red: 'Red',
+    Color.blue: 'Blue',
+    Color.purple: 'Purple',
+    Color.orange: 'Orange',
+    Color.green: 'Green',
+    Color.pink: 'PeachPuff',
+    Color.dark_green: 'DarkGreen',
+    Color.brown: 'Brown',
+    Color.gray: 'Gray',
 }
 
 SQUARE_BACKGROUND = 'Yellow'

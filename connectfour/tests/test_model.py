@@ -1,6 +1,6 @@
 import unittest
 
-from connectfour.config import ConnectFourColor
+from connectfour.config import Color
 from connectfour.model import ConnectFourModel
 
 TEST_ROWS = 4
@@ -10,9 +10,9 @@ TEST_TO_WIN = 4
 ALICE = 'Alice'
 BOB = 'Bob'
 
-BROWN = ConnectFourColor.brown
-GREEN = ConnectFourColor.green
-PINK = ConnectFourColor.pink
+BROWN = Color.brown
+GREEN = Color.green
+PINK = Color.pink
 
 
 def create_test_model():
@@ -65,7 +65,7 @@ class TestModelBeforeFirstRoundStarted(unittest.TestCase):
         self.assertNotIn(PINK, remaining)
         self.assertNotIn(BROWN, remaining)
         self.assertIn(GREEN, remaining)
-        self.assertEqual(len(remaining), len(ConnectFourColor) - 2)
+        self.assertEqual(len(remaining), len(Color) - 2)
 
 
 class TestModelWithoutBoardOrPlayers(unittest.TestCase):
@@ -92,8 +92,7 @@ class TestModelWithoutBoardOrPlayers(unittest.TestCase):
         self.assertEqual(len(self.model.used_colors), 0)
 
     def test_get_remaining_colors_when_all_remaining(self):
-        self.assertEqual(len(ConnectFourColor),
-                         len(self.model.get_remaining_colors()))
+        self.assertEqual(len(Color), len(self.model.get_remaining_colors()))
 
 
 class TestModelAfterFirstRoundStarted(unittest.TestCase):

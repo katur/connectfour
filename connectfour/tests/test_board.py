@@ -1,6 +1,6 @@
 import unittest
 
-from connectfour.config import ConnectFourColor
+from connectfour.config import Color
 from connectfour.model import Board
 from connectfour.model import Disc
 
@@ -8,8 +8,8 @@ TEST_ROWS = 4
 TEST_COLUMNS = 6
 TEST_TO_WIN = 4
 
-BROWN = Disc(ConnectFourColor.brown)
-PINK = Disc(ConnectFourColor.pink)
+BROWN = Disc(Color.brown)
+PINK = Disc(Color.pink)
 
 
 class TestBoardBasics(unittest.TestCase):

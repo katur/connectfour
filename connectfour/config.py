@@ -15,7 +15,7 @@ class TryAgainReason(Enum):
     column_full = 2
 
 
-class ConnectFourColor(Enum):
+class Color(Enum):
     """A color to use for game discs.
 
     Yellow is not included because it should serve as the board background
@@ -27,4 +27,4 @@ class ConnectFourColor(Enum):
 
 
 # List of all colors. May be used by a view to assign colors incrementally.
-COLORS = [color for color in ConnectFourColor]
+COLORS = [color for color in Color]

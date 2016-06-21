@@ -1,10 +1,10 @@
 import unittest
 
-from connectfour.config import ConnectFourColor
+from connectfour.config import Color
 from connectfour.model import ConnectFourPlayer
 
 ALICE = 'Alice'
-ORANGE = ConnectFourColor.orange
+ORANGE = Color.orange
 
 
 class TestPlayerBasics(unittest.TestCase):

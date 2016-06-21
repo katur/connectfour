@@ -1,6 +1,6 @@
 import operator
-from connectfour.config import (ConnectFourColor, TryAgainReason,
-                                DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
+from connectfour.config import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
+                                Color, TryAgainReason)
 from connectfour.pubsub import Action, publish
 
 
@@ -92,8 +92,7 @@ class ConnectFourModel(object):
         Args:
             name (str): The player's name. Must be non-empty. Does not need
                 to be unique (two Emilys are distinguishable by disc color).
-            color (ConnectFourColor): Color of this player's discs. Must be
-                unique.
+            color (Color): Color of this player's discs. Must be unique.
         Raises:
             RuntimeError: If gaming session has already started.
             ValueError: If name is empty or if color is already in use by
@@ -268,10 +267,10 @@ class ConnectFourModel(object):
         """Get the colors that have not been used yet.
 
         Returns:
-            set: A set of unused ConnectFourColors, or the empty set if all
-                colors are in use.
+            set: A set of unused Colors, or the empty set if all colors are
+                in use.
         """
-        return set(ConnectFourColor) - self.used_colors
+        return set(Color) - self.used_colors
 
 
 class ConnectFourPlayer(object):
@@ -282,7 +281,7 @@ class ConnectFourPlayer(object):
 
         Args:
             name (str): This player's name.
-            color (ConnectFourColor): The color of this player's discs.
+            color (Color): The color of this player's discs.
         """
         self.name = name
         self.disc = Disc(color)
@@ -298,7 +297,7 @@ class ConnectFourPlayer(object):
         """Get this player's disc color.
 
         Returns:
-            ConnectFourColor: The color of this player's discs.
+            Color: The color of this player's discs.
         """
         return self.disc.color
 
@@ -313,7 +312,7 @@ class Disc(object):
         """Create a disc.
 
         Args:
-            color (ConnectFourColor): This disc's color.
+            color (Color): This disc's color.
         """
         self.color = color
 

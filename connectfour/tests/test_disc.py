@@ -1,10 +1,10 @@
 import unittest
 
-from connectfour.config import ConnectFourColor
+from connectfour.config import Color
 from connectfour.model import Disc
 
-GREEN = ConnectFourColor.green
-ORANGE = ConnectFourColor.orange
+GREEN = Color.green
+ORANGE = Color.orange
 
 
 class TestDiscBasics(unittest.TestCase):
