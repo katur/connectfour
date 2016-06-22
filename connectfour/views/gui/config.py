@@ -1,4 +1,4 @@
-from connectfour.config import Color, TryAgainReason
+from connectfour.model import Color, TryAgainReason
 
 
 MAX_NAME_LENGTH = 50

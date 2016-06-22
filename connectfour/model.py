@@ -17,8 +17,8 @@ class ConnectFourModel(object):
         once before calling start_game().
 
     -   add_player() should be called multiple times to add multiple
-        players. Since each must have a distinct color, the number of
-        players is capped at len(Color).
+        players. Since each player must have a distinct color, the
+        number of players is capped at len(Color).
 
     -   If create_board() is called more than once, the old board is
         replaced with the new board.
@@ -63,16 +63,13 @@ class ConnectFourModel(object):
 
         Publishes a board_created Action.
 
-        This function is separate from __init__ so that players can be
-        added before finalizing the board dimensions.
-
         Args:
             num_rows (Optional[int]): Number of rows in the board.
-                Must be at least 1. Default defined in connectfour.config.
+                Must be positive.
             num_columns (Optional[int]): Number of columns in the board.
-                Must be at least 1. Default defined in connectfour.config.
+                Must be positive.
             num_to_win (Optional[int]): Number in a row to win.
-                Must be at least 1. Default defined in connectfour.config.
+                Must be positive.
         Raises:
             RuntimeError: If gaming session has already started.
             ValueError: If either dimension or the num_to_win is less than 1.
@@ -205,7 +202,6 @@ class ConnectFourModel(object):
     def _process_next_player(self):
         self.current_player_index = ((self.current_player_index + 1)
                                      % self.get_num_players())
-
         publish(Action.next_player, self.get_current_player())
 
     ##################
