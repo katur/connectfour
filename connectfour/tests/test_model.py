@@ -403,8 +403,8 @@ class TestModel_GameWon(unittest.TestCase):
         self.assertTrue(self.model.session_in_progress)
 
     def test_win_recorded_in_player(self):
-        alice = self.model.players[0]
-        bob = self.model.players[1]
+        alice = self.model.get_player(0)
+        bob = self.model.get_player(1)
         if alice.name != ALICE:
             unittest.TestCase.fail('Alice should be index 0')
         if bob.name != BOB:

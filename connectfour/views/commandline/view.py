@@ -10,6 +10,8 @@ MAX_ROWS = 100
 MAX_COLUMNS = 100
 MAX_TO_WIN = 100
 
+YES_RESPONSES = ['y', 'Y']
+
 
 class CommandLineView(object):
     """View to play Connect Four from the command line."""
@@ -23,8 +25,9 @@ class CommandLineView(object):
         self.out = sys.stdout
         self.model = model
         self._create_subscriptions()
-        self._prompt_create_board()
-        self._prompt_add_players()
+
+        self.prompt_create_board()
+        self.prompt_add_players()
         self.model.start_game()
 
     def _create_subscriptions(self):
@@ -42,44 +45,11 @@ class CommandLineView(object):
         for action, response in responses.iteritems():
             subscribe(action, response)
 
-    ###########################
-    # Respond to model events #
-    ###########################
-
-    def on_board_created(self, board):
-        self.out.write('Board created: {}\n\n'.format(board))
-
-    def on_player_added(self, player):
-        self.out.write('Welcome, {}!\n\n'.format(player))
-
-    def on_game_started(self, game_number):
-        self.out.write('Game {} started\n'.format(game_number))
-        self._print_grid()
-
-    def on_next_player(self, player):
-        self._prompt_play(player)
-
-    def on_try_again(self, player, reason):
-        self.out.write('Illegal move: {}\n'.format(reason))
-        self._prompt_play(player)
-
-    def on_color_played(self, color, position):
-        self._print_grid()
-
-    def on_game_won(self, player, winning_positions):
-        self.out.write('Game won by: {}, winning positions: {}\n\n'
-                       .format(player, winning_positions))
-        self._prompt_play_again()
-
-    def on_game_draw(self):
-        self.out.write('Game ended in a draw.\n\n')
-        self._prompt_play_again()
-
     ##################
     # Call the model #
     ##################
 
-    def _prompt_create_board(self):
+    def prompt_create_board(self):
         num_rows = self._prompt_until_valid(
             'Num rows ({} if blank): '.format(DEFAULT_ROWS),
             get_positive_int, name='Rows', max_value=MAX_ROWS,
@@ -95,29 +65,26 @@ class CommandLineView(object):
 
         self.model.create_board(num_rows, num_columns, num_to_win)
 
-    def _prompt_add_players(self):
+    def prompt_add_players(self):
         while True:
             name = self._prompt_until_valid(
                 'Player name: ', get_nonempty_string, name='Name', max_len=50)
             index = self.model.get_num_players()
-            self.model.add_player(name, Color(index))
-            response = raw_input('Add another player? [Y/n]: ')
-            if response != 'Y':
+            self.model.add_player(name.strip(), Color(index))
+            response = raw_input('Add another player? [y/n]: ')
+
+            if response.strip() not in YES_RESPONSES:
                 return
 
-    def _prompt_play(self, player):
+    def prompt_play(self, player):
         column = int(raw_input('Where would you like to play, {}? '
                                .format(player)))
         self.model.play(column)
 
-    def _prompt_play_again(self):
-        response = raw_input('Play again? [Y/n]: ')
-        if response == 'Y':
+    def prompt_play_again(self):
+        response = raw_input('Play again? [y/n]: ')
+        if response.strip() in YES_RESPONSES:
             self.model.start_game()
-
-    ###########
-    # Helpers #
-    ###########
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
         while True:
@@ -126,8 +93,39 @@ class CommandLineView(object):
             except ValueError as e:
                 self.out.write('Try again: {}\n'.format(e))
 
-    def _print_grid(self):
-        max_color_len = max(len(color.name) for color in Color)
-        width = max_color_len + 2
-        grid = self.model.board.get_printable_grid(field_width=width)
+    ###########################
+    # Respond to model events #
+    ###########################
+
+    def on_board_created(self, board):
+        self.out.write('Board created: {}\n\n'.format(board))
+
+    def on_player_added(self, player):
+        self.out.write('Welcome, {}!\n\n'.format(player))
+
+    def on_game_started(self, game_number):
+        self.out.write('Game {} started\n'.format(game_number))
+        self._print_grid()
+
+    def on_next_player(self, player):
+        self.prompt_play(player)
+
+    def on_try_again(self, player, reason):
+        self.out.write('Illegal move: {}\n'.format(reason))
+        self.prompt_play(player)
+
+    def on_color_played(self, color, position):
+        self._print_grid()
+
+    def on_game_won(self, player, winning_positions):
+        self.out.write('Game won by: {}. Winning positions:\n'.format(player))
+        self._print_grid(limit_positions=winning_positions)
+        self.prompt_play_again()
+
+    def on_game_draw(self):
+        self.out.write('Game ended in a draw.\n\n')
+        self.prompt_play_again()
+
+    def _print_grid(self, **kwargs):
+        grid = self.model.get_printable_grid(show_columns=True, **kwargs)
         self.out.write('\n' + grid + '\n')

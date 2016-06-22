@@ -6,8 +6,8 @@ def get_positive_int(num, name='Number', max_value=None,
 
     Args:
         num (str): The value to cast to an int.
-        name (Optional[str]): A name describing the number (e.g. 'Days'),
-            for printing in error messages.
+        name (Optional[str]): Description of the number (e.g. 'Days'),
+            to print in error messages.
         max_value (Optional[int]): Maximum value that the number can be.
     Returns:
         int: The number cast to an int, if it meets all criteria.
@@ -37,7 +37,7 @@ def get_nonempty_string(s, name='String', max_len=None):
 
     Args:
         s (str): The string to check.
-        name (Optional[str]): A name describing the string for printing in
+        name (Optional[str]): Description of the string, to print in
             error messages.
         max_len (Optional[int]): Maximum length that the string can be.
     Returns:

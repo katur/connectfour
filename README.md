@@ -2,9 +2,8 @@
 
 While inspired by
 [Connect Four](https://en.wikipedia.org/wiki/Connect_Four),
-this game accommodates other numbers
-(Connect Three, Connect Six, etc.),
-as well as variable board dimensions.
+this game accommodates other numbers (Connect Three, Connect Six, etc.),
+as well as variable board dimensions and a variable number of players.
 
 
 ## Code

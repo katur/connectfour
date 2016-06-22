@@ -11,6 +11,10 @@ DEFAULT_TO_WIN = 4
 class ConnectFourModel(object):
     """Top-level model for the Connect Four game.
 
+    This model supports numbers other than Four (Connect Three,
+    Connect Six, etc.), as well as variable board dimensions and
+    a variable number of players.
+
     Dependencies between the core methods:
 
     -   create_board() and add_player() must both be called at least
@@ -44,7 +48,7 @@ class ConnectFourModel(object):
         self.game_number = 0
 
         # Which player goes first in the next game
-        self.first_turn_index = 0
+        self.first_player_index = 0
 
         # Which player goes next in the current game
         self.current_player_index = 0
@@ -52,10 +56,6 @@ class ConnectFourModel(object):
     def __repr__(self):
         return 'ConnectFourModel board={}, num_players={}'.format(
             self.board, self.get_num_players())
-
-    ################
-    # Core methods #
-    ################
 
     def create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                      num_to_win=DEFAULT_TO_WIN):
@@ -136,12 +136,8 @@ class ConnectFourModel(object):
         self.game_number += 1
         publish(Action.game_started, self.game_number)
 
-        self.current_player_index = self.first_turn_index
-
-        # Prep first_turn_index for the next game
-        self.first_turn_index = ((self.first_turn_index + 1)
-                                 % self.get_num_players())
-
+        self.current_player_index = self.first_player_index
+        self._increment_first_player_index()  # Prep for next game
         publish(Action.next_player, self.get_current_player())
 
     def play(self, column):
@@ -172,10 +168,6 @@ class ConnectFourModel(object):
         else:
             self._process_play(column)
 
-    ######################
-    # Helpers for play() #
-    ######################
-
     def _process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
@@ -200,13 +192,16 @@ class ConnectFourModel(object):
         publish(Action.game_draw)
 
     def _process_next_player(self):
-        self.current_player_index = ((self.current_player_index + 1)
-                                     % self.get_num_players())
+        self._increment_current_player_index()
         publish(Action.next_player, self.get_current_player())
 
-    ##################
-    # Simple helpers #
-    ##################
+    def _increment_current_player_index(self):
+        self.current_player_index = ((self.current_player_index + 1)
+                                     % self.get_num_players())
+
+    def _increment_first_player_index(self):
+        self.first_player_index = ((self.first_player_index + 1)
+                                   % self.get_num_players())
 
     def get_num_rows(self):
         """Get the number of rows in the board.
@@ -249,6 +244,17 @@ class ConnectFourModel(object):
         """
         return len(self.players)
 
+    def get_player(self, index):
+        """Get the player at a particular playing index.
+
+        Returns:
+            Player: The player at index, or None if no player at that index.
+        """
+        if index >= self.get_num_players():
+            return None
+
+        return self.players[index]
+
     def get_current_player(self):
         """Get the current player.
 
@@ -258,7 +264,32 @@ class ConnectFourModel(object):
         if not self.players:
             return None
 
-        return self.players[self.current_player_index]
+        return self.get_player(self.current_player_index)
+
+    def get_printable_grid(self, **kwargs):
+        """Get a printable grid of the board.
+
+        Returns:
+            str: Formatted string of the board.
+        """
+        return self.board.get_printable_grid(**kwargs)
+
+
+class Color(Enum):
+    """A color for a player to play in the board.
+
+    Yellow omitted so it can be the background color (as in the classic game).
+    """
+
+    (black, red, blue, purple, brown, green, pink, gray, orange,
+        lime) = range(10)
+
+
+class TryAgainReason(Enum):
+    """Reason that a player needs to try again."""
+
+    column_out_of_bounds = 1
+    column_full = 2
 
 
 class Player(object):
@@ -314,29 +345,6 @@ class Board(object):
     def __str__(self):
         return '{} rows x {} columns ({} to win)'.format(
             self.num_rows, self.num_columns, self.num_to_win)
-
-    def get_printable_grid(self, field_width=8):
-        """Get a "pretty" string of this board's grid.
-
-        Args:
-            field_width (Optional[int]): The number of spaces each position
-                should take up. Defaults to 8 characters
-
-        Returns:
-            str: A formatted string of the grid.
-        """
-        output = ''
-        for i in range(self.num_columns):
-            output += '{0:<{width}}'.format(i, width=field_width)
-        output += '\n'
-
-        for row in self.grid:
-            for column in row:
-                el = column.name if column else '-'
-                output += '{0:{width}}'.format(el, width=field_width)
-            output += '\n'
-
-        return output
 
     def reset(self):
         """Reset this board for a new game.
@@ -401,10 +409,6 @@ class Board(object):
                 winning_positions |= matches
 
         return winning_positions
-
-    #######################################
-    # Helpers for get_winning_positions() #
-    #######################################
 
     def _get_consecutive_matches_mirrored(self, start, step, fake_color=None):
         """Get consecutive matches in two directions.
@@ -471,28 +475,6 @@ class Board(object):
 
         return positions
 
-    ##################
-    # Simple helpers #
-    ##################
-
-    def get_color(self, position):
-        """Retrieve the color at a position in this board.
-
-        Args:
-            position: A 2-tuple in format (row, column).
-        Returns:
-            Color: The color at this position, or None if this
-                position is empty.
-        Raises:
-            ValueError: If position is out of bounds.
-        """
-        if not self.is_in_bounds(position):
-            raise ValueError('Position {} is out of bounds'
-                             .format(position))
-
-        row, column = position
-        return self.grid[row][column]
-
     def is_row_in_bounds(self, row):
         """Determine if a row is in bounds.
 
@@ -551,19 +533,59 @@ class Board(object):
 
         return True
 
+    def get_color(self, position):
+        """Retrieve the color at a position in this board.
 
-class Color(Enum):
-    """A color for a player to play in the board.
+        Args:
+            position: A 2-tuple in format (row, column).
+        Returns:
+            Color: The color at this position, or None if this
+                position is empty.
+        Raises:
+            ValueError: If position is out of bounds.
+        """
+        if not self.is_in_bounds(position):
+            raise ValueError('Position {} is out of bounds'
+                             .format(position))
 
-    Yellow omitted so it can be the background color (as in the classic game).
-    """
+        row, column = position
+        return self.grid[row][column]
 
-    (black, red, blue, purple, brown, green, pink, gray, orange,
-        lime) = range(10)
+    def get_printable_grid(self, width=None, show_columns=False,
+                           limit_positions=None):
+        """Get a "pretty" string of this board's grid.
+
+        Args:
+            width (Optional[int]): Number of characters for each grid position.
+            show_columns (Optional[bool]): Whether to show column numbers.
+            limit_positions (Optional[set]): Include colors only in these
+                positions.
 
 
-class TryAgainReason(Enum):
-    """Reason that a player needs to try again."""
+        Returns:
+            str: A formatted string of the grid.
+        """
 
-    column_out_of_bounds = 1
-    column_full = 2
+        if not width:
+            width = max(len(color.name) for color in Color) + 2
+
+        output = ''
+
+        if show_columns:
+            for i in range(self.num_columns):
+                output += '{0:<{width}}'.format(i, width=width)
+            output += '\n'
+
+        for row in range(self.num_rows):
+            for column in range(self.num_columns):
+                position = (row, column)
+                color = self.get_color(position)
+                if color and (not limit_positions or
+                              position in limit_positions):
+                    s = color.name
+                else:
+                    s = '-'
+                output += '{0:{width}}'.format(s, width=width)
+            output += '\n'
+
+        return output
