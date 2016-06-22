@@ -1,19 +1,24 @@
 import operator
-from connectfour.config import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                                Color, TryAgainReason)
+from enum import Enum
+
 from connectfour.pubsub import Action, publish
+
+DEFAULT_ROWS = 6
+DEFAULT_COLUMNS = 7
+DEFAULT_TO_WIN = 4
 
 
 class ConnectFourModel(object):
     """Top-level model for the Connect Four game.
 
-    Dependencies between the Core methods:
+    Dependencies between the core methods:
 
     -   create_board() and add_player() must both be called at least
         once before calling start_game().
 
     -   add_player() should be called multiple times to add multiple
-        players.
+        players. Since each must have a distinct color, the number of
+        players is capped at len(Color).
 
     -   If create_board() is called more than once, the old board is
         replaced with the new board.
@@ -44,12 +49,9 @@ class ConnectFourModel(object):
         # Which player goes next in the current game
         self.current_player_index = 0
 
-    def __str__(self):
-        return 'ConnectFourModel [board:{}, num_players:{}]'.format(
-            self.board, self.get_num_players())
-
     def __repr__(self):
-        return self.__str__()
+        return 'ConnectFourModel board={}, num_players={}'.format(
+            self.board, self.get_num_players())
 
     ################
     # Core methods #
@@ -150,10 +152,9 @@ class ConnectFourModel(object):
 
         The play is assumed to be by the current player.
 
-        If the play is illegal, publishes a try_again Action.
-        Otherwise, publishes a color_played Action, followed by one of
-        the following Actions (depending on the outcome of the play);
-        game_won, game_draw, or next_player.
+        If the play is illegal, publishes a try_again Action. Otherwise,
+        publishes a color_played Action, followed by one of the following
+        (depending on the outcome): game_won, game_draw, or next_player.
 
         Args:
             column (int): The column to play in.
@@ -263,15 +264,6 @@ class ConnectFourModel(object):
 
         return self.players[self.current_player_index]
 
-    def get_remaining_colors(self):
-        """Get the colors that have not been used yet.
-
-        Returns:
-            set: A set of unused Colors, or the empty set if all colors are
-                in use.
-        """
-        return set(Color) - self.used_colors
-
 
 class Player(object):
     """A Connect Four player."""
@@ -287,11 +279,12 @@ class Player(object):
         self.color = color
         self.num_wins = 0
 
+    def __repr__(self):
+        return '{} name={} color={}'.format(
+            self.__class__.__name__, self.name, self.color)
+
     def __str__(self):
         return '{} ({})'.format(self.name, self.color.name)
-
-    def __repr__(self):
-        return self.__str__()
 
 
 class Board(object):
@@ -317,17 +310,17 @@ class Board(object):
         self.grid = [[None for column in range(num_columns)]
                      for row in range(num_rows)]
 
+    def __repr__(self):
+        return '{} num_rows={} num_columns={} num_to_win={}'.format(
+            self.__class__.__name__, self.num_rows, self.num_columns,
+            self.num_to_win)
+
     def __str__(self):
         return '{} rows x {} columns ({} to win)'.format(
             self.num_rows, self.num_columns, self.num_to_win)
 
-    def __repr__(self):
-        return self.__str__()
-
     def get_printable_grid(self, field_width=8):
         """Get a "pretty" string of this board's grid.
-
-        Might be used for console printing.
 
         Args:
             field_width (Optional[int]): The number of spaces each position
@@ -420,7 +413,7 @@ class Board(object):
     def _get_consecutive_matches_mirrored(self, start, step, fake_color=None):
         """Get consecutive matches in two directions.
 
-        From a starting position, find positions with colors matching the
+        From a starting position, find positions with color matching the
         starting position, outward in the direction indicated by step
         as well as in the 180-flipped direction, until a mismatch is found.
 
@@ -450,7 +443,7 @@ class Board(object):
     def _get_consecutive_matches(self, start, step, fake_color=None):
         """Get consecutive matches in a single direction.
 
-        From a starting position, find positions with colors matching the
+        From a starting position, find positions with color matching the
         starting position, outward in the direction indicated by step,
         until a mismatch is found.
 
@@ -561,3 +554,20 @@ class Board(object):
                 return False
 
         return True
+
+
+class Color(Enum):
+    """A color for a player to play in the board.
+
+    Yellow omitted so it can be the background color (as in the classic game).
+    """
+
+    (black, red, blue, purple, brown, green, pink, gray, orange,
+        lime) = range(10)
+
+
+class TryAgainReason(Enum):
+    """Reason that a player needs to try again."""
+
+    column_out_of_bounds = 1
+    column_full = 2

@@ -1,8 +1,8 @@
 import Tkinter as tk
 import tkMessageBox
 
-from connectfour.config import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                                COLORS)
+from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
+                               Color)
 from connectfour.pubsub import Action, subscribe
 from connectfour.views.gui import config
 from connectfour.views.gui.util import flash
@@ -49,9 +49,9 @@ class GUIView(object):
         """Quit the game."""
         self.window.quit()
 
-    ######################
-    # Calls to the model #
-    ######################
+    ##################
+    # Call the model #
+    ##################
 
     def add_player(self):
         """Tell the model to add a player.
@@ -67,7 +67,7 @@ class GUIView(object):
             tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
             return
 
-        color = COLORS[self.model.get_num_players()]
+        color = Color(self.model.get_num_players())
         self.model.add_player(name, color)
 
     def launch_game_frame(self):

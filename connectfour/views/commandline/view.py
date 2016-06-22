@@ -1,7 +1,7 @@
 import sys
 
-from connectfour.config import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                                COLORS)
+from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
+                               Color)
 from connectfour.pubsub import Action, subscribe
 from connectfour.views.util import get_positive_int, get_nonempty_string
 
@@ -42,6 +42,10 @@ class CommandLineView(object):
         for action, response in responses.iteritems():
             subscribe(action, response)
 
+    ###########################
+    # Respond to model events #
+    ###########################
+
     def on_board_created(self, board):
         self.out.write('Board created: {}\n\n'.format(board))
 
@@ -71,6 +75,10 @@ class CommandLineView(object):
         self.out.write('Game ended in a draw.\n\n')
         self._prompt_play_again()
 
+    ##################
+    # Call the model #
+    ##################
+
     def _prompt_create_board(self):
         num_rows = self._prompt_until_valid(
             'Num rows ({} if blank): '.format(DEFAULT_ROWS),
@@ -92,17 +100,10 @@ class CommandLineView(object):
             name = self._prompt_until_valid(
                 'Player name: ', get_nonempty_string, name='Name', max_len=50)
             index = self.model.get_num_players()
-            self.model.add_player(name, COLORS[index])
+            self.model.add_player(name, Color(index))
             response = raw_input('Add another player? [Y/n]: ')
             if response != 'Y':
                 return
-
-    def _prompt_until_valid(self, prompt, condition, **kwargs):
-        while True:
-            try:
-                return condition(raw_input(prompt), **kwargs)
-            except ValueError as e:
-                self.out.write('Try again: {}\n'.format(e))
 
     def _prompt_play(self, player):
         column = int(raw_input('Where would you like to play, {}? '
@@ -114,8 +115,19 @@ class CommandLineView(object):
         if response == 'Y':
             self.model.start_game()
 
+    ###########
+    # Helpers #
+    ###########
+
+    def _prompt_until_valid(self, prompt, condition, **kwargs):
+        while True:
+            try:
+                return condition(raw_input(prompt), **kwargs)
+            except ValueError as e:
+                self.out.write('Try again: {}\n'.format(e))
+
     def _print_grid(self):
-        max_color_len = max(len(color.name) for color in COLORS)
+        max_color_len = max(len(color.name) for color in Color)
         width = max_color_len + 2
         grid = self.model.board.get_printable_grid(field_width=width)
         self.out.write('\n' + grid + '\n')

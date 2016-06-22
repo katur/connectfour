@@ -33,6 +33,18 @@ def get_positive_int(num, name='Number', max_value=None,
 
 
 def get_nonempty_string(s, name='String', max_len=None):
+    """Return s if nonempty, raising an error otherwise.
+
+    Args:
+        s (str): The string to check.
+        name (Optional[str]): A name describing the string for printing in
+            error messages.
+        max_len (Optional[int]): Maximum length that the string can be.
+    Returns:
+        str: The string, if it met all criteria.
+    Raises:
+        ValueError: If string is empty or exceeds max_len.
+    """
     if not len(s):
         raise ValueError('{} must be non-empty'.format(name))
 
