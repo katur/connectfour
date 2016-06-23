@@ -2,7 +2,7 @@
 
 While inspired by
 [Connect Four](https://en.wikipedia.org/wiki/Connect_Four),
-this game accommodates other numbers (Connect Three, Connect Six, etc.),
+this game accommodates other numbers (Connect Three, Six, etc.),
 as well as variable board dimensions and a variable number of players.
 
 
@@ -16,19 +16,19 @@ Package dependencies are listed in
 pip install -r requirements.txt
 ```
 
-GUI uses Python's built-in Tkinter library.
+GUI view uses Python's built-in Tkinter library.
 
 
 ## App
 
-To launch GUI app (from root dir):
-```
-python gui_app.py
-```
-
 To launch command line app (from root dir):
 ```
 python commandline_app.py
+```
+
+To launch GUI app (from root dir):
+```
+python gui_app.py
 ```
 
 

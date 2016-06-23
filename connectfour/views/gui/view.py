@@ -6,7 +6,8 @@ from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
 from connectfour.pubsub import Action, subscribe
 from connectfour.views.gui import config
 from connectfour.views.gui.util import flash
-from connectfour.views.util import get_nonempty_string, get_positive_int
+from connectfour.views.util import (get_stripped_nonempty_string,
+                                    get_positive_int)
 
 
 class GUIView(object):
@@ -48,79 +49,6 @@ class GUIView(object):
     def quit(self):
         """Quit the game."""
         self.window.quit()
-
-    ##################
-    # Call the model #
-    ##################
-
-    def add_player(self):
-        """Tell the model to add a player.
-
-        This method parses player attributes from user input. If input is
-        invalid, a popup appears alerting the user to fix the error.
-        """
-        try:
-            name = get_nonempty_string(
-                self.setup_frame.parse_player_entry(),
-                name='Name', max_len=config.MAX_NAME_LENGTH)
-        except ValueError as e:
-            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
-            return
-
-        color = Color(self.model.get_num_players())
-        self.model.add_player(name, color)
-
-    def launch_game_frame(self):
-        """Tell the model to create the board and start the first game.
-
-        This method parses board parameters from user input. If input is
-        invalid, a popup appears alerting the user to fix the error.
-
-        This method also transitions the window from the setup_frame to the
-        game_frame.
-        """
-        # Create the board
-        try:
-            self._create_board()
-        except ValueError as e:
-            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
-            return
-
-        # Move on to game frame
-        self.setup_frame.remove()
-        self.game_frame = GameFrame(self)
-        self.model.start_game()
-
-    def _create_board(self):
-        num_rows = get_positive_int(
-            self.setup_frame.parse_row_entry(),
-            name='Rows', max_value=config.MAX_ROWS)
-        num_columns = get_positive_int(
-            self.setup_frame.parse_column_entry(),
-            name='Columns', max_value=config.MAX_COLUMNS)
-        num_to_win = get_positive_int(
-            self.setup_frame.parse_to_win_entry(),
-            name='To Win', max_value=config.MAX_TO_WIN)
-
-        self.model.create_board(num_rows, num_columns, num_to_win)
-
-    def start_new_game(self):
-        """Tell the model to start a new game.
-
-        This method also clears the game squares for the new game.
-        """
-        self.game_frame.reset_squares()
-        self.model.start_game()
-
-    def play(self, column):
-        """Tell the model to make a play in a column.
-
-        The play is assumed to be by the current player.
-
-        Args:
-            column (int): The column to play in.
-        """
-        self.model.play(column)
 
     ###########################
     # Respond to model events #
@@ -190,6 +118,79 @@ class GUIView(object):
         self.game_frame.announce_draw()
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
+
+    ##################
+    # Call the model #
+    ##################
+
+    def add_player(self):
+        """Tell the model to add a player.
+
+        This method parses player attributes from user input. If input is
+        invalid, a popup appears alerting the user to fix the error.
+        """
+        try:
+            name = get_stripped_nonempty_string(
+                self.setup_frame.parse_player_entry(),
+                name='Name', max_len=config.MAX_NAME_LENGTH)
+        except ValueError as e:
+            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
+            return
+
+        color = Color(self.model.get_num_players())
+        self.model.add_player(name, color)
+
+    def launch_game_frame(self):
+        """Tell the model to create the board and start the first game.
+
+        This method parses board parameters from user input. If input is
+        invalid, a popup appears alerting the user to fix the error.
+
+        This method also transitions the window from the setup_frame to the
+        game_frame.
+        """
+        # Create the board
+        try:
+            self._create_board()
+        except ValueError as e:
+            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
+            return
+
+        # Move on to game frame
+        self.setup_frame.remove()
+        self.game_frame = GameFrame(self)
+        self.model.start_game()
+
+    def _create_board(self):
+        num_rows = get_positive_int(
+            self.setup_frame.parse_row_entry(),
+            name='Rows', max_value=config.MAX_ROWS)
+        num_columns = get_positive_int(
+            self.setup_frame.parse_column_entry(),
+            name='Columns', max_value=config.MAX_COLUMNS)
+        num_to_win = get_positive_int(
+            self.setup_frame.parse_to_win_entry(),
+            name='To Win', max_value=config.MAX_TO_WIN)
+
+        self.model.create_board(num_rows, num_columns, num_to_win)
+
+    def start_new_game(self):
+        """Tell the model to start a new game.
+
+        This method also clears the game squares for the new game.
+        """
+        self.game_frame.reset_squares()
+        self.model.start_game()
+
+    def play(self, column):
+        """Tell the model to make a play in a column.
+
+        The play is assumed to be by the current player.
+
+        Args:
+            column (int): The column to play in.
+        """
+        self.model.play(column)
 
 
 class SetupFrame(object):

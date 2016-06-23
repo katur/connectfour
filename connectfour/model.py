@@ -11,28 +11,22 @@ DEFAULT_TO_WIN = 4
 class ConnectFourModel(object):
     """Top-level model for the Connect Four game.
 
-    This model supports numbers other than Four (Connect Three,
-    Connect Six, etc.), as well as variable board dimensions and
-    a variable number of players.
+    This model supports numbers other than Four (Connect Three, Six, etc.), as
+    well as variable board dimensions and a variable number of players.
 
     Dependencies between the core methods:
 
-    -   create_board() and add_player() must both be called at least
-        once before calling start_game().
+    -   create_board() and add_player() must be called at least once before
+        calling start_game(), and cannot be called after calling start_game().
 
-    -   add_player() should be called multiple times to add multiple
-        players. Since each player must have a distinct color, the
-        number of players is capped at len(Color).
+    -   add_player() should be called multiple times to add multiple players.
+        Since each player must have a distinct color, the number of players is
+        capped at len(Color).
 
-    -   If create_board() is called more than once, the old board is
-        replaced with the new board.
+    -   If create_board() is called more than once, the old board is replaced
+        with the new board.
 
-    -   After calling start_game() the first time, a gaming session
-        has begun, and neither create_board() or add_player() can be
-        called again.
-
-    -   start_game() can only be called again after a win or draw is
-        announced.
+    -   start_game() can only be called again after a win or draw is announced.
 
     -   play() can only be called while a game is in progress.
     """
@@ -94,8 +88,7 @@ class ConnectFourModel(object):
             color (Color): This player's playing color. Must be unique.
         Raises:
             RuntimeError: If gaming session has already started.
-            ValueError: If name is empty or if color is already in use by
-                another player.
+            ValueError: If name is empty or if color is already in use.
         """
         if self.session_in_progress:
             raise RuntimeError('Cannot add player once session is started')
@@ -118,8 +111,8 @@ class ConnectFourModel(object):
         to indicate which player should go first.
 
         Raises:
-            RuntimeError: If another game is already in progress, if
-                there is no board, or if there are no players.
+            RuntimeError: If another game is already in progress, if there is
+                no board, or if there are no players.
         """
         if self.game_in_progress:
             raise RuntimeError('Cannot start a game with another in progress')
@@ -276,11 +269,9 @@ class ConnectFourModel(object):
 
 
 class Color(Enum):
-    """A color for a player to play in the board.
+    """A color for a player to play in the board."""
 
-    Yellow omitted so it can be the background color (as in the classic game).
-    """
-
+    # Yellow omitted to serve as background color (as in the classic game).
     (black, red, blue, purple, brown, green, pink, gray, orange,
         lime) = range(10)
 
@@ -288,8 +279,7 @@ class Color(Enum):
 class TryAgainReason(Enum):
     """Reason that a player needs to try again."""
 
-    column_out_of_bounds = 1
-    column_full = 2
+    column_out_of_bounds, column_full = range(2)
 
 
 class Player(object):
@@ -401,7 +391,7 @@ class Board(object):
         winning_positions = set()
 
         for step in (HORIZONTAL, VERTICAL, UP_RIGHT, DOWN_RIGHT):
-            matches = self._get_consecutive_matches_mirrored(
+            matches = self._get_matches_mirrored(
                 origin, step, fake_color=fake_color)
 
             # Check if these matches are enough to win
@@ -410,56 +400,24 @@ class Board(object):
 
         return winning_positions
 
-    def _get_consecutive_matches_mirrored(self, start, step, fake_color=None):
-        """Get consecutive matches in two directions.
-
-        From a starting position, find positions with color matching the
-        starting position, outward in the direction indicated by step
-        as well as in the 180-flipped direction, until a mismatch is found.
-
-        Args:
-            start: A 2-tuple (row, column) of the starting position.
-            step: A 2-tuple (vertical_step, horizontal_step), indicating
-                the direction to move with each step. The 180-degree
-                rotation of this step will be included as well.
-
-                For example, to check the horizontal axis, step can be
-                either (0, 1) or (0, -1).
-
-            fake_color (Optional[Color]): See docstring for
-                get_winning_positions.
-        Returns:
-            set: A set of 2-tuples in format (row, column) of the matching
-                positions, including the starting position.
+    def _get_matches_mirrored(self, start, step, **kwargs):
+        """
+        From start position, find positions with matching color outward in the
+        direction indicated by step as well as in the 180-flipped direction.
+        Returns a set of the matching positions, including start.
         """
         flipped_step = tuple(-i for i in step)
 
-        a = self._get_consecutive_matches(start, step, fake_color=fake_color)
-        b = self._get_consecutive_matches(start, flipped_step,
-                                          fake_color=fake_color)
+        a = self._get_matches(start, step, **kwargs)
+        b = self._get_matches(start, flipped_step, **kwargs)
 
         return a | b
 
-    def _get_consecutive_matches(self, start, step, fake_color=None):
-        """Get consecutive matches in a single direction.
-
-        From a starting position, find positions with color matching the
-        starting position, outward in the direction indicated by step,
-        until a mismatch is found.
-
-        Args:
-            start: A 2-tuple (row, column) of the starting position.
-            step: A 2-tuple (vertical_step, horizontal_step) indicating
-                the direction to move with each step.
-
-                For example, to check straight up, step should be (1, 0).
-                To check diagonally down-left, step should be (-1, -1).
-
-            fake_color (Optional[Color]): See docstring for
-                get_winning_positions.
-        Returns:
-            set: A set of 2-tuples in format (row, column) of the matching
-                positions, including the starting position.
+    def _get_matches(self, start, step, fake_color=None):
+        """
+        From start position, find positions with matching color outward in the
+        direction indicated by step. Returns a set of the matching positions,
+        including start.
         """
         color = fake_color if fake_color else self.get_color(start)
 
@@ -539,8 +497,7 @@ class Board(object):
         Args:
             position: A 2-tuple in format (row, column).
         Returns:
-            Color: The color at this position, or None if this
-                position is empty.
+            Color: The color at this position, or None if empty.
         Raises:
             ValueError: If position is out of bounds.
         """
@@ -551,16 +508,14 @@ class Board(object):
         row, column = position
         return self.grid[row][column]
 
-    def get_printable_grid(self, width=None, show_columns=False,
-                           limit_positions=None):
+    def get_printable_grid(self, width=None, show_labels=False,
+                           show_only=None):
         """Get a "pretty" string of this board's grid.
 
         Args:
             width (Optional[int]): Number of characters for each grid position.
-            show_columns (Optional[bool]): Whether to show column numbers.
-            limit_positions (Optional[set]): Include colors only in these
-                positions.
-
+            show_labels (Optional[bool]): Whether to show column numbers.
+            show_only (Optional[set]): Show colors only in these positions.
 
         Returns:
             str: A formatted string of the grid.
@@ -571,21 +526,24 @@ class Board(object):
 
         output = ''
 
-        if show_columns:
+        if show_labels:
             for i in range(self.num_columns):
                 output += '{0:<{width}}'.format(i, width=width)
+
             output += '\n'
 
         for row in range(self.num_rows):
             for column in range(self.num_columns):
                 position = (row, column)
                 color = self.get_color(position)
-                if color and (not limit_positions or
-                              position in limit_positions):
+
+                if color and (not show_only or position in show_only):
                     s = color.name
                 else:
                     s = '-'
+
                 output += '{0:{width}}'.format(s, width=width)
+
             output += '\n'
 
         return output

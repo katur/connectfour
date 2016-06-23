@@ -1,3 +1,25 @@
+def get_int(num, name='Number'):
+    """Convert a string to an int.
+
+    Raises and error if num is not convertible to an int.
+
+    Args:
+        num (str): The value to cast to an int.
+        name (Optional[str]): Description of the number (e.g. 'Days'),
+            to include in error messages.
+    Returns:
+        int: The number cast to an int.
+    Raises:
+        ValueError: If number is not convertible to an int.
+    """
+    try:
+        num = int(num)
+    except ValueError:
+        raise ValueError('{} must be an integer'.format(name))
+
+    return num
+
+
 def get_positive_int(num, name='Number', max_value=None,
                      default_if_blank=None):
     """Convert a string to an int, enforcing that it is positive.
@@ -18,10 +40,7 @@ def get_positive_int(num, name='Number', max_value=None,
     if default_if_blank and len(num) == 0:
         return default_if_blank
 
-    try:
-        num = int(num)
-    except ValueError:
-        raise ValueError('{} must be an integer'.format(name))
+    num = get_int(num, name=name)
 
     if num <= 0:
         raise ValueError('{} must be positive'.format(name))
@@ -32,7 +51,7 @@ def get_positive_int(num, name='Number', max_value=None,
     return num
 
 
-def get_nonempty_string(s, name='String', max_len=None):
+def get_stripped_nonempty_string(s, name='String', max_len=None):
     """Return s if nonempty, raising an error otherwise.
 
     Args:
@@ -41,10 +60,12 @@ def get_nonempty_string(s, name='String', max_len=None):
             error messages.
         max_len (Optional[int]): Maximum length that the string can be.
     Returns:
-        str: The string, if it met all criteria.
+        str: The string, if it meets all criteria.
     Raises:
         ValueError: If string is empty or exceeds max_len.
     """
+    s = s.strip()
+
     if not len(s):
         raise ValueError('{} must be non-empty'.format(name))
 
