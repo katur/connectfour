@@ -1,7 +1,7 @@
 import argparse
 
-from connectfour.model import ConnectFourModel
-from connectfour.views.commandline.view import CommandLineView
+from model import ConnectFourModel
+from view import CommandLineView
 
 
 parser = argparse.ArgumentParser(

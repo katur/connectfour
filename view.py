@@ -1,10 +1,9 @@
 import sys
 
-from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                               Color, TryAgainReason)
-from connectfour.pubsub import Action, subscribe
-from connectfour.views.util import (get_positive_int, get_int,
-                                    get_stripped_nonempty_string)
+from model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN, Color,
+                   TryAgainReason)
+from pubsub import Action, subscribe
+from util import (get_positive_int, get_int, get_stripped_nonempty_string)
 
 MAX_NAME_LENGTH = 50
 MAX_ROWS = 100

@@ -1,7 +1,7 @@
 import operator
 from enum import Enum
 
-from connectfour.pubsub import Action, publish
+from pubsub import Action, publish
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7

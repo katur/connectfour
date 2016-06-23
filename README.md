@@ -1,3 +1,15 @@
+### **Note to RC**
+
+Gists don't allow directories, but I originally wrote this like a Python
+package with some nesting. For this submission, I copied/pasted only the
+relevant files into this gist. If you want to see how I would normally
+organize it, the original is at:
+
+[https://github.com/katur/connectfour](https://github.com/katur/connectfour).
+
+There are also some unit tests and other views (including a GUI) there.
+
+
 # Connect Four
 
 While inspired by
@@ -8,7 +20,7 @@ as well as variable board dimensions and a variable number of players.
 
 ## Code
 
-Code is in Python.
+Code is in Python 2.
 
 Package dependencies are listed in
 [requirements.txt](requirements.txt). To install:
@@ -16,25 +28,10 @@ Package dependencies are listed in
 pip install -r requirements.txt
 ```
 
-GUI view uses Python's built-in Tkinter library.
-
 
 ## App
 
-To launch command line app (from root dir):
+To launch the app (from root dir):
 ```
-python commandline_app.py
-```
-
-To launch GUI app (from root dir):
-```
-python gui_app.py
-```
-
-
-## Tests
-
-To run all unit tests (from root dir):
-```
-python -m unittest discover -v
+python app.py
 ```
