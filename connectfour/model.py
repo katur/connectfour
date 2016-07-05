@@ -272,7 +272,7 @@ class Color(Enum):
     """A color for a player to play in the board."""
 
     # Yellow omitted to serve as background color (as in the classic game).
-    (black, red, blue, purple, brown, green, pink, gray, orange,
+    (black, red, blue, purple, green, brown, pink, gray, orange,
         lime) = range(10)
 
 
