@@ -133,12 +133,13 @@ class GUIView(object):
             name = get_stripped_nonempty_string(
                 self.setup_frame.parse_player_entry(),
                 name='Name', max_len=config.MAX_NAME_LENGTH)
+            is_ai = self.setup_frame.parse_is_ai_bool()
         except ValueError as e:
             tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
             return
 
         color = Color(self.model.get_num_players())
-        self.model.add_player(name, color)
+        self.model.add_player(name, color, is_ai)
 
     def launch_game_frame(self):
         """Tell the model to create the board and start the first game.
@@ -260,9 +261,22 @@ class SetupFrame(object):
         row = config.SETUP_ROWS['add_player']
 
         player_entry = tk.Entry(self.frame)
-        player_entry.grid(row=row, column=0, columnspan=config.SETUP_COLSPAN-1,
+        player_entry.grid(row=row, column=0, columnspan=config.SETUP_COLSPAN-2,
                           pady=config.PAD)
         self.widgets['player_entry'] = player_entry
+
+        is_ai_bool = tk.BooleanVar()
+        self.widgets['is_ai_bool'] = is_ai_bool
+
+        player_radio = tk.Frame(self.frame)
+        player_radio.grid(row=row, column=1)
+
+        human_button = tk.Radiobutton(player_radio, text='Human',
+                                      variable=is_ai_bool, value=False)
+        ai_button = tk.Radiobutton(player_radio, text='AI',
+                                   variable=is_ai_bool, value=True)
+        human_button.grid(row=0, column=0)
+        ai_button.grid(row=1, column=0)
 
         add_player_button = tk.Button(self.frame, command=self.view.add_player,
                                       text=config.SETUP_TEXT['add_player'])
@@ -336,6 +350,14 @@ class SetupFrame(object):
         name = self.widgets['player_entry'].get()
         self.widgets['player_entry'].delete(0, tk.END)
         return name
+
+    def parse_is_ai_bool(self):
+        """Get the contents of the is_ai_bool variable.
+
+        Returns:
+            int:
+        """
+        return self.widgets['is_ai_bool'].get()
 
     def update_feedback(self, player, num_players):
         """Update the feedback to reflect that a new player was added.
