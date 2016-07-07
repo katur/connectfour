@@ -1,4 +1,5 @@
 import operator
+import random
 from enum import Enum
 
 from connectfour.pubsub import Action, publish
@@ -77,7 +78,7 @@ class ConnectFourModel(object):
         self.board = Board(num_rows, num_columns, num_to_win)
         publish(Action.board_created, self.board)
 
-    def add_player(self, name, color):
+    def add_player(self, name, color, is_ai=False):
         """Add a player.
 
         Publishes a player_added Action.
@@ -100,7 +101,7 @@ class ConnectFourModel(object):
             raise ValueError('Color {} is already used'.format(color))
 
         self.used_colors.add(color)
-        player = Player(name, color)
+        player = Player(name, color, is_ai)
         self.players.append(player)
         publish(Action.player_added, player)
 
@@ -131,7 +132,7 @@ class ConnectFourModel(object):
 
         self.current_player_index = self.first_player_index
         self._increment_first_player_index()  # Prep for next game
-        publish(Action.next_player, self.get_current_player())
+        self._process_next_player()
 
     def play(self, column):
         """Play in a column.
@@ -173,6 +174,7 @@ class ConnectFourModel(object):
         elif self.board.is_full():
             self._process_draw()
         else:
+            self._increment_current_player_index()
             self._process_next_player()
 
     def _process_win(self, player, winning_positions):
@@ -185,8 +187,14 @@ class ConnectFourModel(object):
         publish(Action.game_draw)
 
     def _process_next_player(self):
-        self._increment_current_player_index()
-        publish(Action.next_player, self.get_current_player())
+        player = self.get_current_player()
+        publish(Action.next_player, player)
+
+        if player.is_ai:
+            columns = [c for c in range(self.get_num_columns())
+                       if not self.board.is_column_full(c)]
+            column = random.choice(columns)
+            self._process_play(column)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
@@ -285,7 +293,7 @@ class TryAgainReason(Enum):
 class Player(object):
     """A Connect Four player."""
 
-    def __init__(self, name, color):
+    def __init__(self, name, color, is_ai=False):
         """Create a player.
 
         Args:
@@ -294,6 +302,7 @@ class Player(object):
         """
         self.name = name
         self.color = color
+        self.is_ai = is_ai
         self.num_wins = 0
 
     def __repr__(self):
@@ -301,7 +310,8 @@ class Player(object):
             self.__class__.__name__, self.name, self.color)
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.color.name)
+        category = 'AI' if self.is_ai else 'Human'
+        return '{} ({}): {}'.format(self.name, self.color.name, category)
 
 
 class Board(object):

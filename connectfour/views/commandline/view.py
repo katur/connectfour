@@ -66,7 +66,10 @@ class CommandLineView(object):
         self._print_grid()
 
     def on_next_player(self, player):
-        self._play(player)
+        if player.is_ai:
+            self.out.write('AI player {} is playing\n'.format(player))
+        else:
+            self._play(player)
 
     def on_try_again(self, player, reason):
         self.out.write('Try again: {}\n'.format(REASON_TEXT[reason]))
@@ -113,11 +116,10 @@ class CommandLineView(object):
             name = self._prompt_until_valid(
                 prompt='Player name: ', condition=get_stripped_nonempty_string,
                 name='Name', max_len=50)
+            is_ai = self._prompt_yes_no('Is AI?')
             index = self.model.get_num_players()
-            self.model.add_player(name, Color(index))
-            response = raw_input('Add another player? [y/n]: ').strip()
-
-            if response not in YES_RESPONSES:
+            self.model.add_player(name, Color(index), is_ai)
+            if not self._prompt_yes_no('Add another player?'):
                 return
 
     def _play(self, player):
@@ -127,9 +129,7 @@ class CommandLineView(object):
         self.model.play(column)
 
     def _start_new_game(self):
-        response = raw_input('Play again? [y/n]: ').strip()
-
-        if response in YES_RESPONSES:
+        if self._prompt_yes_no('Play again?'):
             self.model.start_game()
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
@@ -138,3 +138,7 @@ class CommandLineView(object):
                 return condition(raw_input(prompt), **kwargs)
             except ValueError as e:
                 self.out.write('Try again: {}\n'.format(e))
+
+    def _prompt_yes_no(self, prompt):
+        response = raw_input('{} [y/n]: '.format(prompt)).strip()
+        return response in YES_RESPONSES
