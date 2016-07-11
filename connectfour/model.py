@@ -191,10 +191,7 @@ class ConnectFourModel(object):
         publish(Action.next_player, player)
 
         if player.is_ai:
-            columns = [c for c in range(self.get_num_columns())
-                       if not self.board.is_column_full(c)]
-            column = random.choice(columns)
-            self._process_play(column)
+            player.do_strategy(self)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
@@ -290,10 +287,26 @@ class TryAgainReason(Enum):
     column_out_of_bounds, column_full = range(2)
 
 
+def random_ai_strategy(model):
+    columns = [c for c in range(model.get_num_columns())
+               if not model.board.is_column_full(c)]
+    column = random.choice(columns)
+    model._process_play(column)
+
+
+AI_EASY = 'easy'
+AI_MEDIUM = 'medium'
+AI_HARD = 'hard'
+
+AI_STRATEGIES = {
+    AI_EASY: random_ai_strategy,
+}
+
+
 class Player(object):
     """A Connect Four player."""
 
-    def __init__(self, name, color, is_ai=False):
+    def __init__(self, name, color, is_ai=False, difficulty=AI_EASY):
         """Create a player.
 
         Args:
@@ -305,6 +318,11 @@ class Player(object):
         self.is_ai = is_ai
         self.num_wins = 0
 
+        if self.is_ai:
+            self.difficulty = AI_EASY
+        else:
+            self.difficulty = difficulty
+
     def __repr__(self):
         return '{} name={} color={}'.format(
             self.__class__.__name__, self.name, self.color)
@@ -312,6 +330,9 @@ class Player(object):
     def __str__(self):
         category = 'AI' if self.is_ai else 'Human'
         return '{} ({}): {}'.format(self.name, self.color.name, category)
+
+    def do_strategy(self, model):
+        AI_STRATEGIES[self.difficulty](model)
 
 
 class Board(object):
