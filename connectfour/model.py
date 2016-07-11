@@ -160,9 +160,9 @@ class ConnectFourModel(object):
                     TryAgainReason.column_full)
 
         else:
-            self._process_play(column)
+            self.process_play(column)
 
-    def _process_play(self, column):
+    def process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
         publish(Action.color_played, player.color, (row, column))
@@ -287,26 +287,15 @@ class TryAgainReason(Enum):
     column_out_of_bounds, column_full = range(2)
 
 
-def random_ai_strategy(model):
-    columns = [c for c in range(model.get_num_columns())
-               if not model.board.is_column_full(c)]
-    column = random.choice(columns)
-    model._process_play(column)
-
-
 AI_EASY = 'easy'
 AI_MEDIUM = 'medium'
 AI_HARD = 'hard'
-
-AI_STRATEGIES = {
-    AI_EASY: random_ai_strategy,
-}
 
 
 class Player(object):
     """A Connect Four player."""
 
-    def __init__(self, name, color, is_ai=False, difficulty=AI_EASY):
+    def __init__(self, name, color, is_ai=False, difficulty=AI_HARD):
         """Create a player.
 
         Args:
@@ -319,8 +308,6 @@ class Player(object):
         self.num_wins = 0
 
         if self.is_ai:
-            self.difficulty = AI_EASY
-        else:
             self.difficulty = difficulty
 
     def __repr__(self):
@@ -332,7 +319,68 @@ class Player(object):
         return '{} ({}): {}'.format(self.name, self.color.name, category)
 
     def do_strategy(self, model):
-        AI_STRATEGIES[self.difficulty](model)
+        AI_STRATEGIES = {
+            AI_EASY: self.easy_ai_strategy,
+            AI_MEDIUM: self.medium_ai_strategy,
+            AI_HARD: self.hard_ai_strategy,
+        }
+
+        column = AI_STRATEGIES[self.difficulty](model)
+        model.process_play(column)
+
+    def easy_ai_strategy(self, model):
+        return self.find_random_legal_column(model)
+
+    def medium_ai_strategy(self, model):
+        column = self.find_win(model)
+        if column is not None:
+            return column
+
+        return self.find_random_legal_column(model)
+
+    def hard_ai_strategy(self, model):
+        column = self.find_win(model)
+        if column is not None:
+            return column
+
+        column = self.prevent_win(model)
+        if column is not None:
+            return column
+
+        return self.find_random_legal_column(model)
+
+    def find_random_legal_column(self, model):
+        columns = [c for c in range(model.get_num_columns())
+                   if not model.board.is_column_full(c)]
+        return random.choice(columns)
+
+    def find_win(self, model):
+        columns = [c for c in range(model.get_num_columns())
+                   if not model.board.is_column_full(c)]
+        color = self.color
+
+        for column in columns:
+            row = model.board.find_next_row(column)
+            if model.board.get_winning_positions(
+                    (row, column), fake_color=color):
+                return column
+
+        return None
+
+    def prevent_win(self, model):
+        columns = [c for c in range(model.get_num_columns())
+                   if not model.board.is_column_full(c)]
+
+        for column in columns:
+            row = model.board.find_next_row(column)
+
+            # TODO: order this in playing order
+            for player in model.players:  # TODO: do this in playing order
+                if model.board.get_winning_positions(
+                        (row, column), fake_color=player.color):
+                    return column
+
+        return None
 
 
 class Board(object):
@@ -376,17 +424,8 @@ class Board(object):
             for column in range(self.num_columns):
                 self.grid[row][column] = None
 
-    def add_color(self, color, column):
-        """Add a color to a column.
-
-        Args:
-            color (Color): The color to add.
-            column (int): The column to add the color to.
-        Returns:
-            int: The row in which the color landed.
-        Raises:
-            ValueError: If column is full or out of bounds.
-        """
+    def find_next_row(self, column):
+        """Find the row where a disc would land if played in this column."""
         if not self.is_column_in_bounds(column):
             raise ValueError('Column {} out of bounds'.format(column))
 
@@ -398,8 +437,22 @@ class Board(object):
         while self.get_color((current_row, column)) is not None:
             current_row -= 1
 
-        self.grid[current_row][column] = color
         return current_row
+
+    def add_color(self, color, column):
+        """Add a color to a column.
+
+        Args:
+            color (Color): The color to add.
+            column (int): The column to add the color to.
+        Returns:
+            int: The row in which the color landed.
+        Raises:
+            ValueError: If column is full or out of bounds.
+        """
+        row = self.find_next_row(column)
+        self.grid[row][column] = color
+        return row
 
     def get_winning_positions(self, origin, fake_color=None):
         """Get winning positions that include some origin position.
