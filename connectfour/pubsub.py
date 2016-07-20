@@ -1,7 +1,8 @@
 from enum import Enum
+from collections import deque
 
 
-class Action(Enum):
+class ModelAction(Enum):
     """An action that occurs in the game.
 
     These are the actions that the model publishes, and which views may
@@ -17,8 +18,24 @@ class Action(Enum):
     game_draw = 7
 
 
+class ViewAction(Enum):
+    add_player = 0
+    create_board = 1
+    start_game = 2
+    play = 3
+    request_ai_play = 4
+
+
 subscriptions = {}
 """dict: To store all subscribed callback functions, keyed on Action."""
+
+queue = deque()
+
+
+def trigger():
+    while len(queue):
+        callback = queue.popleft()
+        callback()
 
 
 def subscribe(action, callback):
@@ -48,4 +65,7 @@ def publish(action, *args, **kwargs):
         return
 
     for callback in subscriptions[action]:
-        callback(*args, **kwargs)
+        def do_callback():
+            return callback(*args, **kwargs)
+
+        queue.append(do_callback)

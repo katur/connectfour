@@ -1,6 +1,6 @@
 import sys
 
-from connectfour.pubsub import Action, subscribe
+from connectfour.pubsub import ModelAction, subscribe
 
 
 class LogView(object):
@@ -17,14 +17,14 @@ class LogView(object):
 
     def _create_subscriptions(self):
         responses = {
-            Action.player_added: self.on_player_added,
-            Action.board_created: self.on_board_created,
-            Action.game_started: self.on_game_started,
-            Action.next_player: self.on_next_player,
-            Action.try_again: self.on_try_again,
-            Action.color_played: self.on_color_played,
-            Action.game_won: self.on_game_won,
-            Action.game_draw: self.on_game_draw,
+            ModelAction.player_added: self.on_player_added,
+            ModelAction.board_created: self.on_board_created,
+            ModelAction.game_started: self.on_game_started,
+            ModelAction.next_player: self.on_next_player,
+            ModelAction.try_again: self.on_try_again,
+            ModelAction.color_played: self.on_color_played,
+            ModelAction.game_won: self.on_game_won,
+            ModelAction.game_draw: self.on_game_draw,
         }
 
         for action, response in responses.iteritems():

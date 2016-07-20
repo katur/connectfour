@@ -2,7 +2,7 @@ import operator
 import random
 from enum import Enum
 
-from connectfour.pubsub import Action, publish
+from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
@@ -48,15 +48,29 @@ class ConnectFourModel(object):
         # Which player goes next in the current game
         self.current_player_index = 0
 
+        self._create_subscriptions()
+
+    def _create_subscriptions(self):
+        responses = {
+            ViewAction.create_board: self._create_board,
+            ViewAction.add_player: self._add_player,
+            ViewAction.start_game: self._start_game,
+            ViewAction.play: self._play,
+            ViewAction.request_ai_play: self._do_ai_play,
+        }
+
+        for action, response in responses.iteritems():
+            subscribe(action, response)
+
     def __repr__(self):
         return 'ConnectFourModel board={}, num_players={}'.format(
             self.board, self.get_num_players())
 
-    def create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
-                     num_to_win=DEFAULT_TO_WIN):
+    def _create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
+                      num_to_win=DEFAULT_TO_WIN):
         """Create a playing board and add it to the model.
 
-        Publishes a board_created Action.
+        Publishes a board_created ModelAction.
 
         Args:
             num_rows (Optional[int]): Number of rows in the board.
@@ -76,12 +90,12 @@ class ConnectFourModel(object):
             raise ValueError('Board dimensions and num_to_win must be >= 1')
 
         self.board = Board(num_rows, num_columns, num_to_win)
-        publish(Action.board_created, self.board)
+        publish(ModelAction.board_created, self.board)
 
-    def add_player(self, name, color, is_ai=False):
+    def _add_player(self, name, color, is_ai=False):
         """Add a player.
 
-        Publishes a player_added Action.
+        Publishes a player_added ModelAction.
 
         Args:
             name (str): The player's name. Must be non-empty. Does not need
@@ -103,12 +117,12 @@ class ConnectFourModel(object):
         self.used_colors.add(color)
         player = Player(name, color, is_ai)
         self.players.append(player)
-        publish(Action.player_added, player)
+        publish(ModelAction.player_added, player)
 
-    def start_game(self):
+    def _start_game(self):
         """Start a new game.
 
-        Publishes a game_started Action, followed by a next_player Action
+        Publishes a game_started ModelAction, followed by a next_player Action
         to indicate which player should go first.
 
         Raises:
@@ -128,19 +142,20 @@ class ConnectFourModel(object):
         self.session_in_progress = True
         self.game_in_progress = True
         self.game_number += 1
-        publish(Action.game_started, self.game_number)
+        publish(ModelAction.game_started, self.game_number)
 
         self.current_player_index = self.first_player_index
         self._increment_first_player_index()  # Prep for next game
+
         self._process_next_player()
 
-    def play(self, column):
+    def _play(self, column):
         """Play in a column.
 
         The play is assumed to be by the current player.
 
-        If the play is illegal, publishes a try_again Action. Otherwise,
-        publishes a color_played Action, followed by one of the following
+        If the play is illegal, publishes a try_again ModelAction. Otherwise,
+        publishes a color_played ModelAction, followed by one of the following
         (depending on the outcome): game_won, game_draw, or next_player.
 
         Args:
@@ -152,20 +167,24 @@ class ConnectFourModel(object):
             raise RuntimeError('Cannot play before game has started')
 
         if not self.board.is_column_in_bounds(column):
-            publish(Action.try_again, self.get_current_player(),
+            publish(ModelAction.try_again, self.get_current_player(),
                     TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
-            publish(Action.try_again, self.get_current_player(),
+            publish(ModelAction.try_again, self.get_current_player(),
                     TryAgainReason.column_full)
 
         else:
             self.process_play(column)
 
+    def _do_ai_play(self):
+        player = self.get_current_player()
+        player.do_strategy(self)
+
     def process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
-        publish(Action.color_played, player.color, (row, column))
+        publish(ModelAction.color_played, player.color, (row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -180,18 +199,15 @@ class ConnectFourModel(object):
     def _process_win(self, player, winning_positions):
         self.game_in_progress = False
         player.num_wins += 1
-        publish(Action.game_won, player, winning_positions)
+        publish(ModelAction.game_won, player, winning_positions)
 
     def _process_draw(self):
         self.game_in_progress = False
-        publish(Action.game_draw)
+        publish(ModelAction.game_draw)
 
     def _process_next_player(self):
         player = self.get_current_player()
-        publish(Action.next_player, player)
-
-        if player.is_ai:
-            player.do_strategy(self)
+        publish(ModelAction.next_player, player)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
