@@ -391,7 +391,7 @@ class Player(object):
             row = model.board.find_next_row(column)
 
             # TODO: order this in playing order
-            for player in model.players:  # TODO: do this in playing order
+            for player in model.players:
                 if model.board.get_winning_positions(
                         (row, column), fake_color=player.color):
                     return column
@@ -500,7 +500,7 @@ class Board(object):
 
         return winning_positions
 
-    def _get_matches_mirrored(self, start, step, **kwargs):
+    def _get_matches_mirrored(self, start, step, fake_color=None):
         """
         From start position, find positions with matching color outward in the
         direction indicated by step as well as in the 180-flipped direction.
@@ -508,8 +508,8 @@ class Board(object):
         """
         flipped_step = tuple(-i for i in step)
 
-        a = self._get_matches(start, step, **kwargs)
-        b = self._get_matches(start, flipped_step, **kwargs)
+        a = self._get_matches(start, step, fake_color=None)
+        b = self._get_matches(start, flipped_step, fake_color=None)
 
         return a | b
 
