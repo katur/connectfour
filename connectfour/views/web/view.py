@@ -1,21 +1,9 @@
-import os
-
-import tornado.httpserver
-import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
 from connectfour import pubsub
 from connectfour.model import ConnectFourModel, Color
 from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
-
-
-BASE_DIR = os.path.join(os.path.dirname(__file__ + '/../'))
-SETTINGS = {
-    'debug': True,
-    'static_path': os.path.join(BASE_DIR, 'static'),
-    'template_path': os.path.join(BASE_DIR, 'templates'),
-}
 
 
 def make_model():
