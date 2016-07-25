@@ -1,0 +1,12 @@
+#game-grid .game-square {
+  border-top: 1px black solid;
+  border-right: 1px black solid;
+  background: yellow;
+  height: 80px;
+  width: 80px;
+  padding: 0;
+}
+
+#column-buttons button {
+  width: 80px;
+}
