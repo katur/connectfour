@@ -3,10 +3,9 @@ import json
 import tornado.web
 import tornado.websocket
 
-from connectfour import pubsub
 from connectfour.model import (ConnectFourModel, Color, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
-from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
+from connectfour.pubsub import ModelAction, ViewAction, PubSub
 
 
 class SetupHandler(tornado.web.RequestHandler):
@@ -46,7 +45,8 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def open(self):
         print('WebSocket open')
-        self.model = ConnectFourModel()
+        self.pubsub = PubSub()
+        self.model = ConnectFourModel(self.pubsub)
         self._create_subscriptions()
 
     def _create_subscriptions(self):
@@ -62,7 +62,7 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
         }
 
         for action, response in responses.iteritems():
-            subscribe(action, response)
+            self.pubsub.subscribe(action, response)
 
     def on_board_created(self, board):
         self.write_message({
@@ -123,24 +123,25 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             num_rows = int(d['num_rows'])
             num_columns = int(d['num_columns'])
             num_to_win = int(d['num_to_win'])
-            publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
-            pubsub.do_queue()
+            self.pubsub.publish(
+                ViewAction.create_board, num_rows, num_columns, num_to_win)
+            self.pubsub.do_queue()
 
         elif kind == 'add_player':
             name = d['name']
             color = Color[d['color']]
             is_ai = False
-            publish(ViewAction.add_player, name, color, is_ai)
-            pubsub.do_queue()
+            self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
+            self.pubsub.do_queue()
 
         elif kind == 'start_game':
-            publish(ViewAction.start_game)
-            pubsub.do_queue()
+            self.pubsub.publish(ViewAction.start_game)
+            self.pubsub.do_queue()
 
         elif kind == 'play':
             column = int(d['column'])
-            publish(ViewAction.play, column)
-            pubsub.do_queue()
+            self.pubsub.publish(ViewAction.play, column)
+            self.pubsub.do_queue()
 
         elif kind == 'print':
             print 'Received message: {}'.format(d['message'])
