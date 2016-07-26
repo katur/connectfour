@@ -83,6 +83,14 @@ class GUIView(object):
         """
         self.game_frame.announce_next_player(player)
 
+        if player.is_ai:
+            self.game_frame.disable_play_buttons()
+            publish(ViewAction.request_ai_play)
+        else:
+            self.game_frame.enable_play_buttons()
+
+        pubsub.do_queue()
+
     def on_try_again(self, player, reason):
         """Respond to the model reporting a try again event.
 
