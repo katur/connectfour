@@ -15,9 +15,10 @@ $(document).ready(function() {
 
 
 function setupGame() {
-  sendCreateBoard(window.num_rows, window.num_columns, window.num_to_win);
-  sendAddPlayer("Alice", "black");
-  sendAddPlayer("Bob", "red");
+  sendCreateBoard(num_rows, num_columns, num_to_win);
+  for (var i = 0; i < players.length; i++) {
+    sendAddPlayer(players[i], colors[i]);
+  }
   sendStartGame();
 }
 

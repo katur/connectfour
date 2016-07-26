@@ -17,8 +17,8 @@ class LogView(object):
 
     def _create_subscriptions(self):
         responses = {
-            ModelAction.player_added: self.on_player_added,
             ModelAction.board_created: self.on_board_created,
+            ModelAction.player_added: self.on_player_added,
             ModelAction.game_started: self.on_game_started,
             ModelAction.next_player: self.on_next_player,
             ModelAction.try_again: self.on_try_again,
@@ -30,11 +30,11 @@ class LogView(object):
         for action, response in responses.iteritems():
             subscribe(action, response)
 
-    def on_player_added(self, player):
-        self.out.write('Player added: {}\n'.format(player))
-
     def on_board_created(self, board):
         self.out.write('Board created: {}\n'.format(board))
+
+    def on_player_added(self, player):
+        self.out.write('Player added: {}\n'.format(player))
 
     def on_game_started(self, game_number):
         self.out.write('Game {} started\n'.format(game_number))

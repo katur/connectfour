@@ -27,6 +27,7 @@ class GameHandler(tornado.web.RequestHandler):
         num_columns = int(self.get_argument('num_columns'))
         num_to_win = int(self.get_argument('num_to_win'))
         players = [x.strip() for x in self.get_argument('players').split(',')]
+        colors = [c.name for c in Color]
 
         self.render('game.html', **{
             'title': 'Connect {}'.format(num_to_win),
@@ -34,6 +35,7 @@ class GameHandler(tornado.web.RequestHandler):
             'num_columns': num_columns,
             'num_to_win': num_to_win,
             'players': players,
+            'colors': colors,
         })
 
 
@@ -46,6 +48,9 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def _create_subscriptions(self):
         responses = {
+            ModelAction.board_created: self.on_board_created,
+            ModelAction.player_added: self.on_player_added,
+            ModelAction.game_started: self.on_game_started,
             ModelAction.next_player: self.on_next_player,
             ModelAction.try_again: self.on_try_again,
             ModelAction.color_played: self.on_color_played,
@@ -56,20 +61,32 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
         for action, response in responses.iteritems():
             subscribe(action, response)
 
+    def on_board_created(self, board):
+        self.write_message('Created board')
+
+    def on_player_added(self, player):
+        self.write_message('Added player {}'.format(player))
+
+    def on_game_started(self, game_number):
+        self.write_message('Started game {}'.format(game_number))
+
     def on_next_player(self, player):
-        pass
+        self.write_message('Player {} next'.format(player))
 
     def on_try_again(self, player, reason):
-        pass
+        self.write_message('Player {} try again ({})'.format(
+            player.name, reason))
 
     def on_color_played(self, color, position):
-        pass
+        self.write_message('{} played in position {}'.format(
+            color, position))
 
     def on_game_won(self, player, winning_positions):
-        pass
+        self.write_message('{} won the game ({})'.format(
+            player, winning_positions))
 
     def on_game_draw(self):
-        pass
+        self.write_message('Game ended in draw.')
 
     def on_message(self, message):
         """Handle incoming messages."""
@@ -82,7 +99,6 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             num_to_win = int(d['num_to_win'])
             publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
             pubsub.trigger()
-            self.write_message('Created board')
 
         elif kind == 'add_player':
             name = d['name']
@@ -90,25 +106,21 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             is_ai = False
             publish(ViewAction.add_player, name, color, is_ai)
             pubsub.trigger()
-            self.write_message('Added player {}'.format(name))
 
         elif kind == 'start_game':
             publish(ViewAction.start_game)
             pubsub.trigger()
-            self.write_message('Started game')
 
         elif kind == 'play':
             column = int(d['column'])
             publish(ViewAction.play, column)
             pubsub.trigger()
-            print self.model.get_printable_grid()
-            self.write_message('Played in column {}'.format(column))
 
         elif kind == 'print':
             print 'Received message: {}'.format(d['message'])
 
         else:
-            raise Exception('Undefined kind: {}'.format(kind))
+            raise Exception('Undefined message type: {}'.format(kind))
 
     def on_close(self):
         print('WebSocket closed')
