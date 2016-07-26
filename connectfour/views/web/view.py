@@ -10,6 +10,7 @@ from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
 
 
 class SetupHandler(tornado.web.RequestHandler):
+    """Page to set up game parameters."""
 
     def get(self):
         self.render('setup.html', **{
@@ -21,6 +22,7 @@ class SetupHandler(tornado.web.RequestHandler):
 
 
 class GameHandler(tornado.web.RequestHandler):
+    """Page for playing game."""
 
     def get(self):
         num_rows = int(self.get_argument('num_rows'))
@@ -40,11 +42,12 @@ class GameHandler(tornado.web.RequestHandler):
 
 
 class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
+    """WebSockets connection for playing game."""
 
-    def __init__(self, *args, **kwargs):
+    def open(self):
+        print('WebSocket open')
         self.model = ConnectFourModel()
         self._create_subscriptions()
-        super(GameWebSocketHandler, self).__init__(*args, **kwargs)
 
     def _create_subscriptions(self):
         responses = {
@@ -62,31 +65,54 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             subscribe(action, response)
 
     def on_board_created(self, board):
-        self.write_message('Created board')
+        self.write_message({
+            'kind': 'board_created',
+            'board': str(board),
+        })
 
     def on_player_added(self, player):
-        self.write_message('Added player {}'.format(player))
+        self.write_message({
+            'kind': 'player_added',
+            'player': player.name,
+        })
 
     def on_game_started(self, game_number):
-        self.write_message('Started game {}'.format(game_number))
+        self.write_message({
+            'kind': 'game_started',
+            'game_number': game_number,
+        })
 
     def on_next_player(self, player):
-        self.write_message('Player {} next'.format(player))
+        self.write_message({
+            'kind': 'next_player',
+            'player': player.name,
+        })
 
     def on_try_again(self, player, reason):
-        self.write_message('Player {} try again ({})'.format(
-            player.name, reason))
+        self.write_message({
+            'kind': 'try_again',
+            'player': player.name,
+            'reason': reason.name,
+        })
 
     def on_color_played(self, color, position):
-        self.write_message('{} played in position {}'.format(
-            color, position))
+        self.write_message({
+            'kind': 'color_played',
+            'color': color.name,
+            'position': position,
+        })
 
     def on_game_won(self, player, winning_positions):
-        self.write_message('{} won the game ({})'.format(
-            player, winning_positions))
+        self.write_message({
+            'kind': 'game_won',
+            'player': player.name,
+            'winning_positions': list(sorted(winning_positions)),
+        })
 
     def on_game_draw(self):
-        self.write_message('Game ended in draw.')
+        self.write_message({
+            'kind': 'game-draw',
+        })
 
     def on_message(self, message):
         """Handle incoming messages."""

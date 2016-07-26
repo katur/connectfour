@@ -3,27 +3,39 @@
 
 {% block content %}
 
-<a href="/">Go Home</a>
+<a id="home-button" href="/">Go Home</a>
 
 <h1>{{ title }}</h1>
 
-<div id="column-buttons">
-{% for column in range(num_columns) %}
-  <button onclick="sendPlay({{ column }});">
-    Play here
-  </button>
-{% end %}
+<h3>Game <span id="game-number"></span></h3>
+
+<div id="game-feedback"></div>
+
+<div id="game-board">
+  <div id="column-buttons">
+    {% for column in range(num_columns) %}
+    <button class="column-play" onclick="sendPlay({{ column }});">
+      Play here
+    </button>
+    {% end %}
+  </div>
+
+  <table id="game-grid">
+    {% for row in range(num_rows) %}
+    <tr class="game-row">
+      {% for column in range(num_columns) %}
+      <td id="square-{{ row }}-{{ column }}" class="game-square"></td>
+      {% end %}
+    </tr>
+    {% end %}
+  </table>
 </div>
 
-<table id="game-grid">
-  {% for row in range(num_rows) %}
-  <tr class="game-row">
-    {% for column in range(num_columns) %}
-    <td class="game-square"></td>
-    {% end %}
-  </tr>
-  {% end %}
-</table>
+<div id="more-controls">
+  <button id="play-again" onclick="sendStartGame();" disabled>
+    Play again?
+  </button>
+</div>
 
 {% end %}
 

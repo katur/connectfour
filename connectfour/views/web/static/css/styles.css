@@ -1,3 +1,7 @@
+#home-button {
+  display: block;
+}
+
 #game-grid .game-square {
   border-top: 1px black solid;
   border-right: 1px black solid;
@@ -9,4 +13,17 @@
 
 #column-buttons button {
   width: 80px;
+}
+
+#game-feedback, #game-board, #more-controls {
+  margin-bottom: 40px;
+}
+
+@keyframes blinker {
+  from { visibility: visible }
+  to { visibility: hidden }
+}
+
+.blink-square {
+  animation: blinker steps(1) 500ms infinite alternate;
 }
