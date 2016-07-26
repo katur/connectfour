@@ -10,8 +10,6 @@ from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
 
 
 class SetupHandler(tornado.web.RequestHandler):
-    def __init__(self, *args, **kwargs):
-        super(SetupHandler, self).__init__(*args, **kwargs)
 
     def get(self):
         self.render('setup.html', **{
@@ -23,8 +21,6 @@ class SetupHandler(tornado.web.RequestHandler):
 
 
 class GameHandler(tornado.web.RequestHandler):
-    def __init__(self, *args, **kwargs):
-        super(GameHandler, self).__init__(*args, **kwargs)
 
     def get(self):
         num_rows = int(self.get_argument('num_rows'))
@@ -42,6 +38,7 @@ class GameHandler(tornado.web.RequestHandler):
 
 
 class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
+
     def __init__(self, *args, **kwargs):
         self.model = ConnectFourModel()
         self._create_subscriptions()

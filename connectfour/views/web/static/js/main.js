@@ -1,6 +1,6 @@
 $(document).ready(function() {
-	window.ws = new WebSocket('ws://' + location.hostname + ':' + location.port +
-                            location.pathname + '/websocket');
+	window.ws = new WebSocket('ws://' + location.hostname + ':' +
+                            location.port + location.pathname + '/ws');
 
 	window.ws.onopen = function() {
     sendPrint("Opened WebSocket");
