@@ -15,7 +15,7 @@ class SetupHandler(tornado.web.RequestHandler):
 
     def get(self):
         self.render('setup.html', **{
-            'title': 'Setup Page',
+            'title': 'Connect X',
             'default_rows': DEFAULT_ROWS,
             'default_columns': DEFAULT_COLUMNS,
             'default_to_win': DEFAULT_TO_WIN,
@@ -33,7 +33,7 @@ class GameHandler(tornado.web.RequestHandler):
         players = [x.strip() for x in self.get_argument('players').split(',')]
 
         self.render('game.html', **{
-            'title': 'Game Page',
+            'title': 'Connect {}'.format(num_to_win),
             'num_rows': num_rows,
             'num_columns': num_columns,
             'num_to_win': num_to_win,
