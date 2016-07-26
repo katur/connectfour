@@ -1,6 +1,6 @@
 import sys
 
-from connectfour.pubsub import ModelAction, subscribe
+from connectfour.pubsub import ModelAction
 
 
 class LogView(object):
@@ -11,7 +11,8 @@ class LogView(object):
             Can be any object with a `write` method.
     """
 
-    def __init__(self, out=sys.stdout):
+    def __init__(self, pubsub, out=sys.stdout):
+        self.pubsub = pubsub
         self.out = out
         self._create_subscriptions()
 
@@ -28,7 +29,7 @@ class LogView(object):
         }
 
         for action, response in responses.iteritems():
-            subscribe(action, response)
+            self.pubsub.subscribe(action, response)
 
     def on_board_created(self, board):
         self.out.write('Board created: {}\n'.format(board))

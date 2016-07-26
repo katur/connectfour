@@ -1,6 +1,7 @@
 import argparse
 
 from connectfour.model import ConnectFourModel
+from connectfour.pubsub import PubSub
 from connectfour.views.gui.view import GUIView
 from connectfour.views.logger.view import LogView
 
@@ -13,9 +14,10 @@ parser.add_argument('--log', dest='log', action='store_true',
 
 args = parser.parse_args()
 
-model = ConnectFourModel()
+pubsub = PubSub()
+model = ConnectFourModel(pubsub)
 
 if args.log:
-    log_view = LogView()
+    log_view = LogView(pubsub)
 
-gui_view = GUIView(model)
+gui_view = GUIView(pubsub, model)

@@ -2,7 +2,7 @@ import operator
 import random
 from enum import Enum
 
-from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
+from connectfour.pubsub import ModelAction, ViewAction
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
@@ -32,8 +32,9 @@ class ConnectFourModel(object):
     -   _play() can only be called while a game is in progress.
     """
 
-    def __init__(self):
+    def __init__(self, pubsub):
         """Create this model."""
+        self.pubsub = pubsub
         self.board = None
         self.players = []
         self.used_colors = set()
@@ -60,7 +61,7 @@ class ConnectFourModel(object):
         }
 
         for action, response in responses.iteritems():
-            subscribe(action, response)
+            self.pubsub.subscribe(action, response)
 
     def __repr__(self):
         return 'ConnectFourModel board={}, num_players={}'.format(
@@ -90,7 +91,7 @@ class ConnectFourModel(object):
             raise ValueError('Board dimensions and num_to_win must be >= 1')
 
         self.board = Board(num_rows, num_columns, num_to_win)
-        publish(ModelAction.board_created, self.board)
+        self.pubsub.publish(ModelAction.board_created, self.board)
 
     def _add_player(self, name, color, is_ai=False):
         """Add a player.
@@ -117,7 +118,7 @@ class ConnectFourModel(object):
         self.used_colors.add(color)
         player = Player(name, color, is_ai)
         self.players.append(player)
-        publish(ModelAction.player_added, player)
+        self.pubsub.publish(ModelAction.player_added, player)
 
     def _start_game(self):
         """Start a new game.
@@ -142,7 +143,7 @@ class ConnectFourModel(object):
         self.session_in_progress = True
         self.game_in_progress = True
         self.game_number += 1
-        publish(ModelAction.game_started, self.game_number)
+        self.pubsub.publish(ModelAction.game_started, self.game_number)
 
         self.current_player_index = self.first_player_index
         self._increment_first_player_index()  # Prep for next game
@@ -167,12 +168,14 @@ class ConnectFourModel(object):
             raise RuntimeError('Cannot play before game has started')
 
         if not self.board.is_column_in_bounds(column):
-            publish(ModelAction.try_again, self.get_current_player(),
-                    TryAgainReason.column_out_of_bounds)
+            self.pubsub.publish(
+                ModelAction.try_again, self.get_current_player(),
+                TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
-            publish(ModelAction.try_again, self.get_current_player(),
-                    TryAgainReason.column_full)
+            self.pubsub.publish(
+                ModelAction.try_again, self.get_current_player(),
+                TryAgainReason.column_full)
 
         else:
             self.process_play(column)
@@ -184,7 +187,8 @@ class ConnectFourModel(object):
     def process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
-        publish(ModelAction.color_played, player.color, (row, column))
+        self.pubsub.publish(
+            ModelAction.color_played, player.color, (row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -199,15 +203,15 @@ class ConnectFourModel(object):
     def _process_win(self, player, winning_positions):
         self.game_in_progress = False
         player.num_wins += 1
-        publish(ModelAction.game_won, player, winning_positions)
+        self.pubsub.publish(ModelAction.game_won, player, winning_positions)
 
     def _process_draw(self):
         self.game_in_progress = False
-        publish(ModelAction.game_draw)
+        self.pubsub.publish(ModelAction.game_draw)
 
     def _process_next_player(self):
         player = self.get_current_player()
-        publish(ModelAction.next_player, player)
+        self.pubsub.publish(ModelAction.next_player, player)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)

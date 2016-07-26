@@ -3,7 +3,7 @@ import time
 
 from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
                                Color, TryAgainReason)
-from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
+from connectfour.pubsub import ModelAction, ViewAction
 from connectfour.views.util import (get_positive_int, get_int,
                                     get_stripped_nonempty_string)
 
@@ -11,7 +11,7 @@ MAX_NAME_LENGTH = 50
 MAX_ROWS = 100
 MAX_COLUMNS = 100
 MAX_TO_WIN = 100
-AI_WAIT_TIME = 0
+AI_WAIT_TIME = 1
 
 YES_RESPONSES = ['y', 'Y']
 
@@ -24,14 +24,15 @@ REASON_TEXT = {
 class CommandLineView(object):
     """View to play Connect Four from the command line."""
 
-    def __init__(self, model):
+    def __init__(self, pubsub, model):
         """Create this view.
 
         Args:
             model (ConnectFourModel): The model this view interacts with.
         """
-        self.out = sys.stdout
+        self.pubsub = pubsub
         self.model = model
+        self.out = sys.stdout
         self._create_subscriptions()
         self._create_board()
 
@@ -48,7 +49,7 @@ class CommandLineView(object):
         }
 
         for action, response in responses.iteritems():
-            subscribe(action, response)
+            self.pubsub.subscribe(action, response)
 
     ###########################
     # Respond to model events #
@@ -64,7 +65,7 @@ class CommandLineView(object):
         if self._prompt_yes_no('Add another player?'):
             self._add_player()
         else:
-            publish(ViewAction.start_game)
+            self.pubsub.publish(ViewAction.start_game)
 
     def on_game_started(self, game_number):
         self.out.write('Game {} started\n'.format(game_number))
@@ -74,7 +75,7 @@ class CommandLineView(object):
         if player.is_ai:
             self.out.write('AI player {} is playing\n'.format(player))
             time.sleep(AI_WAIT_TIME)
-            publish(ViewAction.request_ai_play)
+            self.pubsub.publish(ViewAction.request_ai_play)
         else:
             self._play(player)
 
@@ -116,7 +117,8 @@ class CommandLineView(object):
             condition=get_positive_int, name='To Win', max_value=MAX_TO_WIN,
             default_if_blank=DEFAULT_TO_WIN)
 
-        publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
+        self.pubsub.publish(
+            ViewAction.create_board, num_rows, num_columns, num_to_win)
 
     def _add_player(self):
         name = self._prompt_until_valid(
@@ -124,17 +126,17 @@ class CommandLineView(object):
             name='Name', max_len=50)
         is_ai = self._prompt_yes_no('Is AI?')
         index = self.model.get_num_players()
-        publish(ViewAction.add_player, name, Color(index), is_ai)
+        self.pubsub.publish(ViewAction.add_player, name, Color(index), is_ai)
 
     def _play(self, player):
         column = self._prompt_until_valid(
             prompt='Where would you like to play, {}? '.format(player),
             condition=get_int, name='Column')
-        publish(ViewAction.play, column)
+        self.pubsub.publish(ViewAction.play, column)
 
     def _start_new_game(self):
         if self._prompt_yes_no('Play again?'):
-            publish(ViewAction.start_game)
+            self.pubsub.publish(ViewAction.start_game)
 
     def _prompt_until_valid(self, prompt, condition, **kwargs):
         while True:

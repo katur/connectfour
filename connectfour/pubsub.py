@@ -26,46 +26,45 @@ class ViewAction(Enum):
     request_ai_play = 4
 
 
-subscriptions = {}
-"""dict: To store all subscribed callback functions, keyed on Action."""
+class PubSub(object):
+    def __init__(self):
+        # To store all subscribed callback functions, keyed on Action
+        self.subscriptions = {}
 
-queue = deque()
+        self.queue = deque()
 
+    def do_queue(self):
+        while len(self.queue):
+            callback = self.queue.popleft()
+            callback()
 
-def do_queue():
-    while len(queue):
-        callback = queue.popleft()
-        callback()
+    def subscribe(self, action, callback):
+        """Subscribe to a particular action.
 
+        Args:
+            action (Action): The action to subscribe to.
+            callback (function): Will be called when action occurs.
+        """
+        if action not in self.subscriptions:
+            self.subscriptions[action] = []
 
-def subscribe(action, callback):
-    """Subscribe to a particular action.
+        self.subscriptions[action].append(callback)
 
-    Args:
-        action (Action): The action to subscribe to.
-        callback (function): Will be called when action occurs.
-    """
-    if action not in subscriptions:
-        subscriptions[action] = []
+    def publish(self, action, *args, **kwargs):
+        """Publish that an action occurred.
 
-    subscriptions[action].append(callback)
+        This calls any callbacks that are subscribed to the action.
 
+        Args:
+            action (Action): The action that occurred.
+            *args: Will be passed to any subscribed callbacks.
+            **kwargs: Will be passed to any subscribed callbacks.
+        """
+        if action not in self.subscriptions:
+            return
 
-def publish(action, *args, **kwargs):
-    """Publish that an action occurred.
+        for callback in self.subscriptions[action]:
+            def do_callback():
+                return callback(*args, **kwargs)
 
-    This calls any callbacks that are subscribed to the action.
-
-    Args:
-        action (Action): The action that occurred.
-        *args: Will be passed to any subscribed callbacks.
-        **kwargs: Will be passed to any subscribed callbacks.
-    """
-    if action not in subscriptions:
-        return
-
-    for callback in subscriptions[action]:
-        def do_callback():
-            return callback(*args, **kwargs)
-
-        queue.append(do_callback)
+            self.queue.append(do_callback)

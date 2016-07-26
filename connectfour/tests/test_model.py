@@ -1,6 +1,7 @@
 import unittest
 import string
 
+from connectfour.pubsub import PubSub
 from connectfour.model import Color, ConnectFourModel
 
 TEST_ROWS = 6
@@ -31,7 +32,7 @@ PLAYS = {
 
 
 def create_two_player_model():
-    model = ConnectFourModel()
+    model = ConnectFourModel(PubSub())
     model._add_player(P0_NAME, P0_COLOR)
     model._add_player(P1_NAME, P1_COLOR)
     model._create_board(TEST_ROWS, TEST_COLUMNS, TEST_TO_WIN)
@@ -41,7 +42,7 @@ def create_two_player_model():
 class TestModel_EmptyModel(unittest.TestCase):
 
     def setUp(self):
-        self.model = ConnectFourModel()
+        self.model = ConnectFourModel(PubSub())
 
     def test_get_num_rows_when_no_board(self):
         self.assertIsNone(self.model.get_num_rows())

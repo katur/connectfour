@@ -3,8 +3,7 @@ import tkMessageBox
 
 from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
                                Color)
-from connectfour import pubsub
-from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
+from connectfour.pubsub import ModelAction, ViewAction
 from connectfour.views.gui import config
 from connectfour.views.gui.util import flash
 from connectfour.views.util import (get_stripped_nonempty_string,
@@ -14,12 +13,13 @@ from connectfour.views.util import (get_stripped_nonempty_string,
 class GUIView(object):
     """View to play Connect Four in a Tkinter GUI."""
 
-    def __init__(self, model):
+    def __init__(self, pubsub, model):
         """Create this view, which creates a Tkinter GUI in a new window.
 
         Args:
             model (ConnectFourModel): The model this view interacts with.
         """
+        self.pubsub = pubsub
         self.model = model
         self._create_subscriptions()
 
@@ -45,7 +45,7 @@ class GUIView(object):
         }
 
         for action, response in responses.iteritems():
-            subscribe(action, response)
+            self.pubsub.subscribe(action, response)
 
     def quit(self):
         """Quit the game."""
@@ -85,11 +85,11 @@ class GUIView(object):
 
         if player.is_ai:
             self.game_frame.disable_play_buttons()
-            publish(ViewAction.request_ai_play)
+            self.pubsub.publish(ViewAction.request_ai_play)
         else:
             self.game_frame.enable_play_buttons()
 
-        pubsub.do_queue()
+        self.pubsub.do_queue()
 
     def on_try_again(self, player, reason):
         """Respond to the model reporting a try again event.
@@ -148,8 +148,8 @@ class GUIView(object):
             return
 
         color = Color(self.model.get_num_players())
-        publish(ViewAction.add_player, name, color, is_ai)
-        pubsub.do_queue()
+        self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
+        self.pubsub.do_queue()
 
     def launch_game_frame(self):
         """Tell the model to create the board and start the first game.
@@ -170,8 +170,8 @@ class GUIView(object):
         # Move on to game frame
         self.setup_frame.remove()
         self.game_frame = GameFrame(self)
-        publish(ViewAction.start_game)
-        pubsub.do_queue()
+        self.pubsub.publish(ViewAction.start_game)
+        self.pubsub.do_queue()
 
     def _create_board(self):
         num_rows = get_positive_int(
@@ -184,8 +184,9 @@ class GUIView(object):
             self.setup_frame.parse_to_win_entry(),
             name='To Win', max_value=config.MAX_TO_WIN)
 
-        publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
-        pubsub.do_queue()
+        self.pubsub.publish(
+            ViewAction.create_board, num_rows, num_columns, num_to_win)
+        self.pubsub.do_queue()
 
     def start_new_game(self):
         """Tell the model to start a new game.
@@ -193,8 +194,8 @@ class GUIView(object):
         This method also clears the game squares for the new game.
         """
         self.game_frame.reset_squares()
-        publish(ViewAction.start_game)
-        pubsub.do_queue()
+        self.pubsub.publish(ViewAction.start_game)
+        self.pubsub.do_queue()
 
     def play(self, column):
         """Tell the model to make a play in a column.
@@ -204,8 +205,8 @@ class GUIView(object):
         Args:
             column (int): The column to play in.
         """
-        publish(ViewAction.play, column)
-        pubsub.do_queue()
+        self.pubsub.publish(ViewAction.play, column)
+        self.pubsub.do_queue()
 
 
 class SetupFrame(object):

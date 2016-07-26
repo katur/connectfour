@@ -1,8 +1,8 @@
 import argparse
 
 from connectfour.model import ConnectFourModel
+from connectfour.pubsub import PubSub
 from connectfour.views.commandline.view import CommandLineView
-from connectfour import pubsub
 
 
 parser = argparse.ArgumentParser(
@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(
 
 args = parser.parse_args()
 
-model = ConnectFourModel()
-view = CommandLineView(model)
+pubsub = PubSub()
+model = ConnectFourModel(pubsub)
+view = CommandLineView(pubsub, model)
 pubsub.do_queue()
