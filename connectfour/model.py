@@ -17,19 +17,19 @@ class ConnectFourModel(object):
 
     Dependencies between the core methods:
 
-    -   create_board() and add_player() must be called at least once before
-        calling start_game(), and cannot be called after calling start_game().
+    -   _create_board() and _add_player() must be called at least once before
+        calling _start_game(), and cannot be called after.
 
-    -   add_player() should be called multiple times to add multiple players.
+    -   _add_player() should be called multiple times to add multiple players.
         Since each player must have a distinct color, the number of players is
         capped at len(Color).
 
-    -   If create_board() is called more than once, the old board is replaced
+    -   If _create_board() is called more than once, the old board is replaced
         with the new board.
 
-    -   start_game() can only be called again after a win or draw is announced.
+    -   _start_game() can only be called again after a win or draw.
 
-    -   play() can only be called while a game is in progress.
+    -   _play() can only be called while a game is in progress.
     """
 
     def __init__(self):
@@ -286,7 +286,10 @@ class ConnectFourModel(object):
         Returns:
             str: Formatted string of the board.
         """
-        return self.board.get_printable_grid(**kwargs)
+        if self.board:
+            return self.board.get_printable_grid(**kwargs)
+        else:
+            return ''
 
 
 class Color(Enum):
