@@ -511,8 +511,8 @@ class Board(object):
         """
         flipped_step = tuple(-i for i in step)
 
-        a = self._get_matches(start, step, fake_color=None)
-        b = self._get_matches(start, flipped_step, fake_color=None)
+        a = self._get_matches(start, step, fake_color=fake_color)
+        b = self._get_matches(start, flipped_step, fake_color=fake_color)
 
         return a | b
 

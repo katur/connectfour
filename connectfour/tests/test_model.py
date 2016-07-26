@@ -32,9 +32,9 @@ PLAYS = {
 
 def create_two_player_model():
     model = ConnectFourModel()
-    model.add_player(P0_NAME, P0_COLOR)
-    model.add_player(P1_NAME, P1_COLOR)
-    model.create_board(TEST_ROWS, TEST_COLUMNS, TEST_TO_WIN)
+    model._add_player(P0_NAME, P0_COLOR)
+    model._add_player(P1_NAME, P1_COLOR)
+    model._create_board(TEST_ROWS, TEST_COLUMNS, TEST_TO_WIN)
     return model
 
 
@@ -64,7 +64,7 @@ class TestModel_EmptyModel(unittest.TestCase):
     def test_add_max_players(self):
         num = len(Color)
         for index, name in enumerate(string.ascii_lowercase[:num]):
-            self.model.add_player(name, Color(index))
+            self.model._add_player(name, Color(index))
 
         self.assertEqual(len(self.model.used_colors), num)
         self.assertEqual(self.model.get_num_players(), num)
@@ -107,7 +107,7 @@ class TestModel_FirstGameStarted(unittest.TestCase):
 
     def setUp(self):
         self.model = create_two_player_model()
-        self.model.start_game()
+        self.model._start_game()
 
     def test_session_in_progress(self):
         self.assertTrue(self.model.session_in_progress)
@@ -123,8 +123,8 @@ class TestModel_FirstPlayMade(unittest.TestCase):
 
     def setUp(self):
         self.model = create_two_player_model()
-        self.model.start_game()
-        self.model.play(PLAYS['2P-1W'][0])
+        self.model._start_game()
+        self.model._play(PLAYS['2P-1W'][0])
 
     def test_current_player(self):
         self.assertEqual(self.model.get_current_player().name, P1_NAME)
@@ -134,9 +134,9 @@ class TestModel_OnePlayBeforeWin(unittest.TestCase):
 
     def setUp(self):
         self.model = create_two_player_model()
-        self.model.start_game()
+        self.model._start_game()
         for column in PLAYS['2P-1W'][:-1]:
-            self.model.play(column)
+            self.model._play(column)
 
     def test_current_player(self):
         self.assertEqual(self.model.get_current_player().name, P0_NAME)
@@ -149,9 +149,9 @@ class TestModel_GameWon(unittest.TestCase):
 
     def setUp(self):
         self.model = create_two_player_model()
-        self.model.start_game()
+        self.model._start_game()
         for column in PLAYS['2P-1W']:
-            self.model.play(column)
+            self.model._play(column)
 
     def test_game_not_in_progress_after_win(self):
         self.assertFalse(self.model.game_in_progress)
@@ -171,10 +171,10 @@ class TestModel_SecondGameStarted(unittest.TestCase):
 
     def setUp(self):
         self.model = create_two_player_model()
-        self.model.start_game()
+        self.model._start_game()
         for column in PLAYS['2P-1W']:
-            self.model.play(column)
-        self.model.start_game()
+            self.model._play(column)
+        self.model._start_game()
 
     def test_game_in_progress_second_game(self):
         self.assertTrue(self.model.game_in_progress)
