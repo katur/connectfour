@@ -4,7 +4,8 @@ import tornado.web
 import tornado.websocket
 
 from connectfour import pubsub
-from connectfour.model import ConnectFourModel, Color
+from connectfour.model import (ConnectFourModel, Color, DEFAULT_ROWS,
+                               DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
 
 
@@ -13,7 +14,12 @@ class SetupHandler(tornado.web.RequestHandler):
         super(SetupHandler, self).__init__(*args, **kwargs)
 
     def get(self):
-        self.render('setup.html', title='Setup Page')
+        self.render('setup.html', **{
+            'title': 'Setup Page',
+            'default_rows': DEFAULT_ROWS,
+            'default_columns': DEFAULT_COLUMNS,
+            'default_to_win': DEFAULT_TO_WIN,
+        })
 
 
 class GameHandler(tornado.web.RequestHandler):
@@ -26,11 +32,13 @@ class GameHandler(tornado.web.RequestHandler):
         num_to_win = int(self.get_argument('num_to_win'))
         players = [x.strip() for x in self.get_argument('players').split(',')]
 
-        self.render('game.html', title='Game Page',
-                    num_rows=num_rows,
-                    num_columns=num_columns,
-                    num_to_win=num_to_win,
-                    players=players)
+        self.render('game.html', **{
+            'title': 'Game Page',
+            'num_rows': num_rows,
+            'num_columns': num_columns,
+            'num_to_win': num_to_win,
+            'players': players,
+        })
 
 
 class GameWebSocketHandler(tornado.websocket.WebSocketHandler):

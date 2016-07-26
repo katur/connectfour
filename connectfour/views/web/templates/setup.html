@@ -6,13 +6,20 @@
 <h1>Welcome to Connect X</h1>
 
 <form action="/game">
-  Num rows: <input type="text" name="num_rows">
+  Num rows:
+  <input type="text" name="num_rows" value="{{ default_rows }}">
   <br>
-  Num columns: <input type="text" name="num_columns">
+
+  Num columns:
+  <input type="text" name="num_columns" value="{{ default_columns }}">
   <br>
-  Num to win: <input type="text" name="num_to_win">
+
+  Num to win:
+  <input type="text" name="num_to_win" value="{{ default_to_win }}">
   <br>
-  Players (comma separated): <input type="text" name="players">
+
+  Players (comma separated):
+  <input type="text" name="players" value="Alice,Bob">
   <br>
 
   <br>
