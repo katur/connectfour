@@ -32,7 +32,7 @@ subscriptions = {}
 queue = deque()
 
 
-def trigger():
+def do_queue():
     while len(queue):
         callback = queue.popleft()
         callback()

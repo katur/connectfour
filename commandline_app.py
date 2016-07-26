@@ -12,4 +12,4 @@ args = parser.parse_args()
 
 model = ConnectFourModel()
 view = CommandLineView(model)
-pubsub.trigger()
+pubsub.do_queue()

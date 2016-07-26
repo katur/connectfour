@@ -124,23 +124,23 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             num_columns = int(d['num_columns'])
             num_to_win = int(d['num_to_win'])
             publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
-            pubsub.trigger()
+            pubsub.do_queue()
 
         elif kind == 'add_player':
             name = d['name']
             color = Color[d['color']]
             is_ai = False
             publish(ViewAction.add_player, name, color, is_ai)
-            pubsub.trigger()
+            pubsub.do_queue()
 
         elif kind == 'start_game':
             publish(ViewAction.start_game)
-            pubsub.trigger()
+            pubsub.do_queue()
 
         elif kind == 'play':
             column = int(d['column'])
             publish(ViewAction.play, column)
-            pubsub.trigger()
+            pubsub.do_queue()
 
         elif kind == 'print':
             print 'Received message: {}'.format(d['message'])

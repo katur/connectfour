@@ -141,7 +141,7 @@ class GUIView(object):
 
         color = Color(self.model.get_num_players())
         publish(ViewAction.add_player, name, color, is_ai)
-        pubsub.trigger()
+        pubsub.do_queue()
 
     def launch_game_frame(self):
         """Tell the model to create the board and start the first game.
@@ -163,7 +163,7 @@ class GUIView(object):
         self.setup_frame.remove()
         self.game_frame = GameFrame(self)
         publish(ViewAction.start_game)
-        pubsub.trigger()
+        pubsub.do_queue()
 
     def _create_board(self):
         num_rows = get_positive_int(
@@ -177,7 +177,7 @@ class GUIView(object):
             name='To Win', max_value=config.MAX_TO_WIN)
 
         publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
-        pubsub.trigger()
+        pubsub.do_queue()
 
     def start_new_game(self):
         """Tell the model to start a new game.
@@ -186,7 +186,7 @@ class GUIView(object):
         """
         self.game_frame.reset_squares()
         publish(ViewAction.start_game)
-        pubsub.trigger()
+        pubsub.do_queue()
 
     def play(self, column):
         """Tell the model to make a play in a column.
@@ -197,7 +197,7 @@ class GUIView(object):
             column (int): The column to play in.
         """
         publish(ViewAction.play, column)
-        pubsub.trigger()
+        pubsub.do_queue()
 
 
 class SetupFrame(object):
