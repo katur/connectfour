@@ -1,3 +1,5 @@
+import json
+
 import tornado.web
 import tornado.websocket
 
@@ -6,18 +8,8 @@ from connectfour.model import ConnectFourModel, Color
 from connectfour.pubsub import ModelAction, ViewAction, publish, subscribe
 
 
-def make_model():
-    model = ConnectFourModel()
-    model._create_board(6, 7, 5)
-    model._add_player('Jim', Color.black)
-    model._add_player('Sally', Color.red)
-    model._start_game()
-    return model
-
-
 class SetupHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
-        self.model = kwargs.pop('model')
         super(SetupHandler, self).__init__(*args, **kwargs)
 
     def get(self):
@@ -26,22 +18,26 @@ class SetupHandler(tornado.web.RequestHandler):
 
 class GameHandler(tornado.web.RequestHandler):
     def __init__(self, *args, **kwargs):
-        self.model = kwargs.pop('model')
         super(GameHandler, self).__init__(*args, **kwargs)
 
     def get(self):
+        num_rows = int(self.get_argument('num_rows'))
+        num_columns = int(self.get_argument('num_columns'))
+        num_to_win = int(self.get_argument('num_to_win'))
+        players = [x.strip() for x in self.get_argument('players').split(',')]
+
         self.render('game.html', title='Game Page',
-                    model=self.model,
-                    num_rows=self.model.get_num_rows(),
-                    num_columns=self.model.get_num_columns(),
-                    num_to_win=self.model.get_num_to_win())
+                    num_rows=num_rows,
+                    num_columns=num_columns,
+                    num_to_win=num_to_win,
+                    players=players)
 
 
-class WebSocketHandler(tornado.websocket.WebSocketHandler):
+class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
     def __init__(self, *args, **kwargs):
-        self.model = kwargs.pop('model')
+        self.model = ConnectFourModel()
         self._create_subscriptions()
-        super(WebSocketHandler, self).__init__(*args, **kwargs)
+        super(GameWebSocketHandler, self).__init__(*args, **kwargs)
 
     def _create_subscriptions(self):
         responses = {
@@ -72,13 +68,42 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         """Handle incoming messages."""
-        print 'Received message: {}'.format(message)
-        if message.isdigit():
-            column = int(message)
-            self.write_message('Requesting play in column {}'
-                               .format(column))
+        d = json.loads(message)
+        kind = d['kind']
+
+        if kind == 'create_board':
+            num_rows = int(d['num_rows'])
+            num_columns = int(d['num_columns'])
+            num_to_win = int(d['num_to_win'])
+            publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
+            pubsub.trigger()
+            self.write_message('Created board')
+
+        elif kind == 'add_player':
+            name = d['name']
+            color = Color[d['color']]
+            is_ai = False
+            publish(ViewAction.add_player, name, color, is_ai)
+            pubsub.trigger()
+            self.write_message('Added player {}'.format(name))
+
+        elif kind == 'start_game':
+            publish(ViewAction.start_game)
+            pubsub.trigger()
+            self.write_message('Started game')
+
+        elif kind == 'play':
+            column = int(d['column'])
             publish(ViewAction.play, column)
             pubsub.trigger()
+            print self.model.get_printable_grid()
+            self.write_message('Played in column {}'.format(column))
+
+        elif kind == 'print':
+            print 'Received message: {}'.format(d['message'])
+
+        else:
+            raise Exception('Undefined kind: {}'.format(kind))
 
     def on_close(self):
         print('WebSocket closed')

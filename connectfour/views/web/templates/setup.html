@@ -8,8 +8,21 @@
   <body>
     <h1>Welcome to Connect X</h1>
 
-    Set up a game session here.
-    <br>
-    <a href="/game">Proceed to game</a>
+    <form action="/game">
+      Num rows: <input type="text" name="num_rows">
+      <br>
+      Num columns: <input type="text" name="num_columns">
+      <br>
+      Num to win: <input type="text" name="num_to_win">
+      <br>
+      Players (comma separated): <input type="text" name="players">
+      <br>
+
+
+      <br>
+      <br>
+
+      <input type="submit" value="Submit">
+    </form>
   </body>
 </html>

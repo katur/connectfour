@@ -4,7 +4,7 @@ import tornado.ioloop
 import tornado.web
 
 from connectfour.views.web.view import (
-    make_model, SetupHandler, GameHandler, WebSocketHandler)
+    SetupHandler, GameHandler, GameWebSocketHandler)
 
 BASE_DIR = os.path.join(os.path.dirname(__file__ + '/../'))
 SETTINGS = {
@@ -14,16 +14,15 @@ SETTINGS = {
 }
 
 
-def make_app(model):
+def make_app():
     return tornado.web.Application([
-        (r'/', SetupHandler, {'model': model}),
-        (r'/game', GameHandler, {'model': model}),
-        (r'/game/websocket', WebSocketHandler, {'model': model}),
+        (r'/', SetupHandler),
+        (r'/game', GameHandler),
+        (r'/game/websocket', GameWebSocketHandler),
     ], **SETTINGS)
 
 
 if __name__ == "__main__":
-    model = make_model()
-    app = make_app(model)
+    app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
