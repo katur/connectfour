@@ -9,7 +9,7 @@
 
 <div id="column-buttons">
 {% for column in range(num_columns) %}
-  <button onclick="send_play(ws, {{ column }});">
+  <button onclick="sendPlay({{ column }});">
     Play here
   </button>
 {% end %}
@@ -36,7 +36,7 @@
   window.num_to_win = {{ num_to_win }};
 </script>
 
-<script type="text/javascript" src="{{ static_url('js/main.js') }}" async>
+<script type="text/javascript" src="{{ static_url('js/main.js') }}" defer>
 </script>
 
 {% end %}
