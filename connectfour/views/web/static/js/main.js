@@ -2,10 +2,6 @@ $(document).ready(function() {
 	window.ws = new WebSocket('ws://' + location.hostname + ':' +
                             location.port + location.pathname + '/ws');
 
-	window.ws.onopen = function() {
-    setupGame();
-	};
-
 	window.ws.onmessage = function(e) {
     message = JSON.parse(e.data);
     kind = message.kind;
@@ -90,15 +86,7 @@ function disablePlayAgainButton() {
 }
 
 
-function setupGame() {
-  sendCreateBoard(num_rows, num_columns, num_to_win);
-  for (var i = 0; i < players.length; i++) {
-    sendAddPlayer(players[i], colors[i]);
-  }
-  sendStartGame();
-}
-
-
+// Not used yet
 function sendAddPlayer(name, color) {
   window.ws.send(JSON.stringify({
     "kind": "add_player",
@@ -108,6 +96,7 @@ function sendAddPlayer(name, color) {
 }
 
 
+// Not used yet
 function sendCreateBoard(num_rows, num_columns, num_to_win) {
   window.ws.send(JSON.stringify({
     "kind": "create_board",

@@ -1,4 +1,6 @@
 import json
+import random
+import string
 
 import tornado.web
 import tornado.websocket
@@ -8,46 +10,17 @@ from connectfour.model import (ConnectFourModel, Color, DEFAULT_ROWS,
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 
 
-class SetupHandler(tornado.web.RequestHandler):
-    """Page to set up game parameters."""
-
-    def get(self):
-        self.render('setup.html', **{
-            'title': 'Connect X',
-            'default_rows': DEFAULT_ROWS,
-            'default_columns': DEFAULT_COLUMNS,
-            'default_to_win': DEFAULT_TO_WIN,
-        })
+sessions = {}
 
 
-class GameHandler(tornado.web.RequestHandler):
-    """Page for playing game."""
-
-    def get(self):
-        num_rows = int(self.get_argument('num_rows'))
-        num_columns = int(self.get_argument('num_columns'))
-        num_to_win = int(self.get_argument('num_to_win'))
-        players = [x.strip() for x in self.get_argument('players').split(',')]
-        colors = [c.name for c in Color]
-
-        self.render('game.html', **{
-            'title': 'Connect {}'.format(num_to_win),
-            'num_rows': num_rows,
-            'num_columns': num_columns,
-            'num_to_win': num_to_win,
-            'players': players,
-            'colors': colors,
-        })
-
-
-class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
-    """WebSockets connection for playing game."""
-
-    def open(self):
-        print('WebSocket open')
+class Session():
+    def __init__(self):
+        self.id = generate_random_string(10)
         self.pubsub = PubSub()
         self.model = ConnectFourModel(self.pubsub)
+        self.connections = set()
         self._create_subscriptions()
+        sessions[self.id] = self
 
     def _create_subscriptions(self):
         responses = {
@@ -65,83 +38,164 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
             self.pubsub.subscribe(action, response)
 
     def on_board_created(self, board):
-        self.write_message({
-            'kind': 'board_created',
-            'board': str(board),
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'board_created',
+                'board': str(board),
+            })
 
     def on_player_added(self, player):
-        self.write_message({
-            'kind': 'player_added',
-            'player': player.name,
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'player_added',
+                'player': player.name,
+            })
 
     def on_game_started(self, game_number):
-        self.write_message({
-            'kind': 'game_started',
-            'game_number': game_number,
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'game_started',
+                'game_number': game_number,
+            })
 
     def on_next_player(self, player):
-        self.write_message({
-            'kind': 'next_player',
-            'player': player.name,
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'next_player',
+                'player': player.name,
+            })
 
     def on_try_again(self, player, reason):
-        self.write_message({
-            'kind': 'try_again',
-            'player': player.name,
-            'reason': reason.name,
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'try_again',
+                'player': player.name,
+                'reason': reason.name,
+            })
 
     def on_color_played(self, color, position):
-        self.write_message({
-            'kind': 'color_played',
-            'color': color.name,
-            'position': position,
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'color_played',
+                'color': color.name,
+                'position': position,
+            })
 
     def on_game_won(self, player, winning_positions):
-        self.write_message({
-            'kind': 'game_won',
-            'player': player.name,
-            'winning_positions': list(sorted(winning_positions)),
-        })
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'game_won',
+                'player': player.name,
+                'winning_positions': list(sorted(winning_positions)),
+            })
 
     def on_game_draw(self):
-        self.write_message({
-            'kind': 'game-draw',
+        for connection in self.connections:
+            connection.write_message({
+                'kind': 'game-draw',
+            })
+
+
+class SetupHandler(tornado.web.RequestHandler):
+    """Page to set up session parameters."""
+
+    def get(self):
+        self.render('setup.html', **{
+            'title': 'Connect X',
+            'default_rows': DEFAULT_ROWS,
+            'default_columns': DEFAULT_COLUMNS,
+            'default_to_win': DEFAULT_TO_WIN,
         })
+
+    def post(self):
+        session = Session()
+
+        # Eventually move this board setup to the session itself
+        num_rows = int(self.get_argument('num_rows'))
+        num_columns = int(self.get_argument('num_columns'))
+        num_to_win = int(self.get_argument('num_to_win'))
+        session.pubsub.publish(
+            ViewAction.create_board, num_rows, num_columns, num_to_win)
+
+        players = [x.strip() for x in self.get_argument('players').split(',')]
+        colors = [c for c in Color]
+
+        # Eventually move player creation to the session itself
+        for i, player in enumerate(players):
+            color = colors[i]
+            session.pubsub.publish(ViewAction.add_player, player, color)
+
+        session.pubsub.do_queue()
+
+        self.redirect('/session/{}'.format(session.id))
+
+
+class SessionHandler(tornado.web.RequestHandler):
+    """Page for playing games in a session."""
+
+    def get(self, session_id):
+        model = sessions[session_id].model
+
+        self.render('game.html', **{
+            'title': 'Connect {}'.format(model.get_num_to_win()),
+            'num_rows': model.get_num_rows(),
+            'num_columns': model.get_num_columns(),
+            'num_to_win': model.get_num_to_win(),
+        })
+
+
+class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
+    """WebSockets connection to go with SessionHandler."""
+
+    def open(self, session_id):
+        self.session = sessions[session_id]
+        self.session.connections.add(self)
+        print('WebSocket open (now {} connections)'
+              .format(len(self.session.connections)))
+        print('All sessions: {}'.format(sessions))
+
+    def on_close(self):
+        self.session.connections.remove(self)
+
+        print('WebSocket closing (leaving {} connections)'
+              .format(len(self.session.connections)))
+
+        print('All sessions before del: {}'.format(sessions))
+        if not self.session.connections:
+            print('Deleting session {}'.format(self.session.id))
+            del sessions[self.session.id]
+
+        print('All sessions after del: {}'.format(sessions))
 
     def on_message(self, message):
         """Handle incoming messages."""
         d = json.loads(message)
         kind = d['kind']
 
+        # Not used yet
         if kind == 'create_board':
             num_rows = int(d['num_rows'])
             num_columns = int(d['num_columns'])
             num_to_win = int(d['num_to_win'])
-            self.pubsub.publish(
+            self.session.pubsub.publish(
                 ViewAction.create_board, num_rows, num_columns, num_to_win)
-            self.pubsub.do_queue()
+            self.session.pubsub.do_queue()
 
+        # Not used yet
         elif kind == 'add_player':
             name = d['name']
-            color = Color[d['color']]
-            is_ai = False
-            self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
-            self.pubsub.do_queue()
+            color = Color(d['color'])
+            self.session.pubsub.publish(ViewAction.add_player, name, color)
+            self.session.pubsub.do_queue()
 
         elif kind == 'start_game':
-            self.pubsub.publish(ViewAction.start_game)
-            self.pubsub.do_queue()
+            self.session.pubsub.publish(ViewAction.start_game)
+            self.session.pubsub.do_queue()
 
         elif kind == 'play':
             column = int(d['column'])
-            self.pubsub.publish(ViewAction.play, column)
-            self.pubsub.do_queue()
+            self.session.pubsub.publish(ViewAction.play, column)
+            self.session.pubsub.do_queue()
 
         elif kind == 'print':
             print 'Received message: {}'.format(d['message'])
@@ -149,5 +203,7 @@ class GameWebSocketHandler(tornado.websocket.WebSocketHandler):
         else:
             raise Exception('Undefined message type: {}'.format(kind))
 
-    def on_close(self):
-        print('WebSocket closed')
+
+def generate_random_string(length):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+                   for _ in range(length))
