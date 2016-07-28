@@ -2,13 +2,17 @@
   display: block;
 }
 
+#game-grid {
+  border-collapse: collapse;
+}
+
 #game-grid .game-square {
-  border-top: 1px black solid;
-  border-right: 1px black solid;
+  border: 3px #555 solid;
   background: yellow;
   height: 80px;
   width: 80px;
   padding: 0;
+  margin: 0;
 }
 
 #column-buttons button {
