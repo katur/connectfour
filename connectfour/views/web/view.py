@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 import string
 
@@ -11,6 +12,11 @@ from connectfour.pubsub import ModelAction, ViewAction, PubSub
 
 
 sessions = {}
+my_log = logging.getLogger('my_log')
+
+
+def log_number_of_sessions():
+    my_log.info('Number of sessions: {}'.format(len(sessions)))
 
 
 class Session():
@@ -152,8 +158,9 @@ class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, session_pk):
         self.session = sessions[session_pk]
         self.session.connections.add(self)
-        print('Connection to {} open (now {} connections)'
-              .format(session_pk, len(self.session.connections)))
+        my_log.info('Open connection to {} (now {} connections)'
+                    .format(session_pk, len(self.session.connections)))
+        log_number_of_sessions()
 
     def on_close(self):
         self.session.connections.remove(self)
@@ -161,9 +168,9 @@ class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
         if not self.session.connections:
             del sessions[self.session.pk]
 
-        print('Connection to {} closing (leaving {} connections, {} sessions)'
-              .format(self.session.pk, len(self.session.connections),
-                      len(sessions)))
+        my_log.info('Close connection to {} (now {} connections)'
+                    .format(self.session.pk, len(self.session.connections)))
+        log_number_of_sessions()
 
     def on_message(self, message):
         """Handle incoming messages."""
@@ -196,10 +203,10 @@ class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
             self.session.pubsub.do_queue()
 
         elif kind == 'print':
-            print d['message']
+            my_log.info(d['message'])
 
         else:
-            print 'Received undefined message type: {}'.format(kind)
+            my_log.info('Received undefined message type: {}'.format(kind))
 
 
 def generate_random_string(length):
