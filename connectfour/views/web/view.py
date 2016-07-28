@@ -15,12 +15,13 @@ sessions = {}
 
 class Session():
     def __init__(self):
-        self.id = generate_random_string(10)
+        self.pk = generate_random_string(10)
+        self.connections = set()
+        sessions[self.pk] = self
+
         self.pubsub = PubSub()
         self.model = ConnectFourModel(self.pubsub)
-        self.connections = set()
         self._create_subscriptions()
-        sessions[self.id] = self
 
     def _create_subscriptions(self):
         responses = {
@@ -117,24 +118,25 @@ class SetupHandler(tornado.web.RequestHandler):
         session.pubsub.publish(
             ViewAction.create_board, num_rows, num_columns, num_to_win)
 
-        players = [x.strip() for x in self.get_argument('players').split(',')]
+        player_names = [x.strip() for x in
+                        self.get_argument('players').split(',')]
         colors = [c for c in Color]
 
         # Eventually move player creation to the session itself
-        for i, player in enumerate(players):
+        for i, name in enumerate(player_names):
             color = colors[i]
-            session.pubsub.publish(ViewAction.add_player, player, color)
+            session.pubsub.publish(ViewAction.add_player, name, color)
 
         session.pubsub.do_queue()
 
-        self.redirect('/session/{}'.format(session.id))
+        self.redirect('/session/{}'.format(session.pk))
 
 
 class SessionHandler(tornado.web.RequestHandler):
     """Page for playing games in a session."""
 
-    def get(self, session_id):
-        model = sessions[session_id].model
+    def get(self, session_pk):
+        model = sessions[session_pk].model
 
         self.render('game.html', **{
             'title': 'Connect {}'.format(model.get_num_to_win()),
@@ -147,20 +149,20 @@ class SessionHandler(tornado.web.RequestHandler):
 class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
     """WebSockets connection to go with SessionHandler."""
 
-    def open(self, session_id):
-        self.session = sessions[session_id]
+    def open(self, session_pk):
+        self.session = sessions[session_pk]
         self.session.connections.add(self)
         print('Connection to {} open (now {} connections)'
-              .format(session_id, len(self.session.connections)))
+              .format(session_pk, len(self.session.connections)))
 
     def on_close(self):
         self.session.connections.remove(self)
 
         if not self.session.connections:
-            del sessions[self.session.id]
+            del sessions[self.session.pk]
 
         print('Connection to {} closing (leaving {} connections, {} sessions)'
-              .format(self.session.id, len(self.session.connections),
+              .format(self.session.pk, len(self.session.connections),
                       len(sessions)))
 
     def on_message(self, message):
@@ -194,10 +196,10 @@ class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
             self.session.pubsub.do_queue()
 
         elif kind == 'print':
-            print 'Received message: {}'.format(d['message'])
+            print d['message']
 
         else:
-            raise Exception('Undefined message type: {}'.format(kind))
+            print 'Received undefined message type: {}'.format(kind)
 
 
 def generate_random_string(length):
