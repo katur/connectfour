@@ -150,22 +150,18 @@ class SessionWebSocketHandler(tornado.websocket.WebSocketHandler):
     def open(self, session_id):
         self.session = sessions[session_id]
         self.session.connections.add(self)
-        print('WebSocket open (now {} connections)'
-              .format(len(self.session.connections)))
-        print('All sessions: {}'.format(sessions))
+        print('Connection to {} open (now {} connections)'
+              .format(session_id, len(self.session.connections)))
 
     def on_close(self):
         self.session.connections.remove(self)
 
-        print('WebSocket closing (leaving {} connections)'
-              .format(len(self.session.connections)))
-
-        print('All sessions before del: {}'.format(sessions))
         if not self.session.connections:
-            print('Deleting session {}'.format(self.session.id))
             del sessions[self.session.id]
 
-        print('All sessions after del: {}'.format(sessions))
+        print('Connection to {} closing (leaving {} connections, {} sessions)'
+              .format(self.session.id, len(self.session.connections),
+                      len(sessions)))
 
     def on_message(self, message):
         """Handle incoming messages."""
