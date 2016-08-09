@@ -16,7 +16,7 @@ SETTINGS = {
     'template_path': os.path.join(BASE_DIR, 'connectfour/views/web/templates'),
 }
 
-define("port", default=8888, help="run on the given port", type=int)
+define('port', default=8888, help='run on the given port', type=int)
 
 
 def make_app():
