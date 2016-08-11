@@ -1,12 +1,14 @@
 $(document).ready(function() {
-	window.ws = new WebSocket('ws://' + location.hostname + ':' +
-                            location.port + location.pathname + '/ws');
+  window.ws = io.connect("http://" + document.domain + ":" + location.port);
 
-	window.ws.onmessage = function(e) {
+  window.ws.on("connect", function() {
+    console.log("connected yo");
+  });
+
+  window.ws.on("message", function(e) {
     message = JSON.parse(e.data);
-    kind = message.kind;
 
-    switch(kind) {
+    switch(message.kind) {
       case "game_started":
         resetBoard();
         disablePlayAgainButton();
@@ -20,6 +22,7 @@ $(document).ready(function() {
 
       case "color_played":
         updateGameSquare(message.color, message.position);
+        break;
 
       case "try_again":
         updateFeedbackBar(message.player + " try again (" +
@@ -40,50 +43,9 @@ $(document).ready(function() {
 
       default:
         console.log(message);
-    }
-	};
+    };
+	});
 });
-
-
-function resetBoard() {
-  $(".game-square").css("background", "yellow");
-}
-
-
-function updateGameSquare(color, position) {
-  id = "#square-" + position[0] + "-" + position[1];
-  $(id).css("background", color);
-}
-
-
-function updateFeedbackBar(message) {
-  $("#game-feedback").text(message);
-}
-
-
-function updateGameNumber(number) {
-  $("#game-number").text(number);
-}
-
-
-function enablePlayButtons() {
-  $(".column-play").removeAttr("disabled");
-}
-
-
-function disablePlayButtons() {
-  $(".column-play").attr("disabled", true);
-}
-
-
-function enablePlayAgainButton() {
-  $("#play-again").removeAttr("disabled");
-}
-
-
-function disablePlayAgainButton() {
-  $("#play-again").attr("disabled", true);
-}
 
 
 // Not used yet
@@ -127,4 +89,45 @@ function sendPrint(message) {
     "kind": "print",
     "message": message,
   }));
+}
+
+
+function resetBoard() {
+  $(".game-square").css("background", "yellow");
+}
+
+
+function updateGameSquare(color, position) {
+  id = "#square-" + position[0] + "-" + position[1];
+  $(id).css("background", color);
+}
+
+
+function updateFeedbackBar(message) {
+  $("#game-feedback").text(message);
+}
+
+
+function updateGameNumber(number) {
+  $("#game-number").text(number);
+}
+
+
+function enablePlayButtons() {
+  $(".column-play").removeAttr("disabled");
+}
+
+
+function disablePlayButtons() {
+  $(".column-play").attr("disabled", true);
+}
+
+
+function enablePlayAgainButton() {
+  $("#play-again").removeAttr("disabled");
+}
+
+
+function disablePlayAgainButton() {
+  $("#play-again").attr("disabled", true);
 }

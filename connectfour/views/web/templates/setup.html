@@ -1,31 +1,31 @@
 {% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
 
 
 {% block content %}
 
 <h1>Welcome to Connect X</h1>
 
+<h2>Set up a new game?</h2>
+
 <form action="" method="post">
-  Num rows:
-  <input type="text" name="num_rows" value="{{ default_rows }}">
-  <br>
-
-  Num columns:
-  <input type="text" name="num_columns" value="{{ default_columns }}">
-  <br>
-
-  Num to win:
-  <input type="text" name="num_to_win" value="{{ default_to_win }}">
-  <br>
-
-  Players (comma separated):
-  <input type="text" name="players" value="Alice, Bob, Carol">
-  <br>
-
-  <br>
-  <br>
-
-  <input type="submit" value="Submit">
+  <dl>
+    {{ render_field(new_game_form.num_rows) }}
+    {{ render_field(new_game_form.num_columns) }}
+    {{ render_field(new_game_form.num_to_win) }}
+    {{ render_field(new_game_form.username) }}
+  </dl>
+  <p><input type="submit" name="new-game" value="Submit">
 </form>
 
-{% end %}
+<h2>Join an existing game?</h2>
+
+<form action="" method="post">
+  <dl>
+    {{ render_field(existing_game_form.pk) }}
+    {{ render_field(existing_game_form.username) }}
+  </dl>
+  <p><input type="submit" name="new-game" value="Submit">
+</form>
+
+{% endblock %}

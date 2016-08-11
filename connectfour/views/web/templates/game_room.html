@@ -17,7 +17,7 @@
     <button class="column-play" onclick="sendPlay({{ column }});" disabled>
       Play here
     </button>
-    {% end %}
+    {% endfor %}
   </div>
 
   <table id="game-grid">
@@ -25,9 +25,9 @@
     <tr class="game-row">
       {% for column in range(num_columns) %}
       <td id="square-{{ row }}-{{ column }}" class="game-square"></td>
-      {% end %}
+      {% endfor %}
     </tr>
-    {% end %}
+    {% endfor %}
   </table>
 </div>
 
@@ -37,7 +37,7 @@
   </button>
 </div>
 
-{% end %}
+{% endblock %}
 
 
 {% block js %}
@@ -46,9 +46,19 @@
   window.num_rows = {{ num_rows }};
   window.num_columns = {{ num_columns }};
   window.num_to_win = {{ num_to_win }};
+  window.username = {{ username }};
 </script>
 
-<script type="text/javascript" src="{{ static_url('js/main.js') }}" defer>
+<script
+  type="text/javascript"
+  src="http://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"
+  defer>
 </script>
 
-{% end %}
+<script
+  type="text/javascript"
+  src="{{ url_for('static', filename='js/main.js') }}"
+  defer>
+</script>
+
+{% endblock %}
