@@ -1,31 +1,40 @@
-{% extends "base.html" %}
-{% from "_formhelpers.html" import render_field %}
-
-
-{% block content %}
-
-<h1>Welcome to Connect X</h1>
-
 <h2>Set up a new game?</h2>
 
-<form action="" method="post">
+<form id="new-game-form" action="" method="post">
   <dl>
-    {{ render_field(new_game_form.num_rows) }}
-    {{ render_field(new_game_form.num_columns) }}
-    {{ render_field(new_game_form.num_to_win) }}
-    {{ render_field(new_game_form.username) }}
+    <dt>Num rows</dt>
+    <dd>
+      <input type="text" name="num-rows" value="{{ DEFAULT_ROWS }}">
+    </dd>
+
+    <dt>Num columns</dt>
+    <dd>
+      <input type="text" name="num-columns" value="{{ DEFAULT_COLUMNS }}">
+    </dd>
+
+    <dt>Num to win</dt>
+    <dd>
+      <input type="text" name="num-to-win" value="{{ DEFAULT_TO_WIN }}">
+    </dd>
+
+    <dt>Your username</dt>
+    <dd><input type="text" name="first-username"></dd>
   </dl>
-  <p><input type="submit" name="new-game" value="Submit">
+
+  <input type="submit" value="Submit">
 </form>
 
-<h2>Join an existing game?</h2>
 
-<form action="" method="post">
+<h2>Join an existing game room?</h2>
+
+<form id="existing-game-form" action="" method="post">
   <dl>
-    {{ render_field(existing_game_form.pk) }}
-    {{ render_field(existing_game_form.username) }}
-  </dl>
-  <p><input type="submit" name="new-game" value="Submit">
-</form>
+    <dt>Room ID</dt>
+    <dd><input type="text" name="room"></dd>
 
-{% endblock %}
+    <dt>Your username</dt>
+    <dd><input type="text" name="new-username"></dd>
+  </dl>
+
+  <input type="submit" name="new-game" value="Submit">
+</form>

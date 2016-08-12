@@ -1,4 +1,3 @@
-import json
 import logging
 import random
 import string
@@ -6,12 +5,10 @@ import string
 from flask import Flask, redirect, render_template, request, url_for
 from flask_socketio import (SocketIO, send, emit, rooms,
                             join_room, leave_room, close_room)
-from wtforms import Form, IntegerField, StringField, validators
 
 from connectfour.model import (ConnectFourModel, Color, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
-from connectfour.views.web.forms import NewGameForm, ExistingGameForm
 
 
 async_mode = None
@@ -19,167 +16,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
 
-game_rooms = {}
 log = logging.getLogger('log')
 
-
-def get_color():
-    yield [c for c in Color]
-
-
-def generate_random_string(length):
-    return ''.join(random.choice(string.ascii_uppercase + string.digits)
-                   for _ in range(length))
+sid_to_room = {}
+room_data = {}
 
 
-def log_number_of_rooms():
-    log.info('Number of rooms: {}'.format(len(rooms)))
+class RoomData():
 
-
-def add_user_and_redirect(form, room):
-    username = form.username.data
-    color = get_color()
-    room.pubsub.publish(ViewAction.add_player, username, color)
-    room.pubsub.do_queue()
-    return redirect(url_for('game_room', pk=room.pk))
-
-
-@app.route('/', methods=['POST', 'GET'])
-def setup():
-    """Page to set up session parameters."""
-    new_game_form = NewGameForm(request.form, prefix='new')
-    existing_game_form = ExistingGameForm(request.form, prefix='existing')
-
-    if request.method == 'POST' and new_game_form.validate():
-        room = GameRoom()
-        # TODO: add optional arg to publish to do queue immediately
-        room.pubsub.publish(
-            ViewAction.create_board,
-            new_game_form.num_rows.data,
-            new_game_form.num_columns.data,
-            new_game_form.num_to_win.data,
-        )
-        room.pubsub.do_queue()
-        return add_user_and_redirect(new_game_form, room)
-
-    elif request.method == 'POST' and existing_game_form.validate():
-        pk = existing_game_form.pk.data
-        room = game_rooms[pk]
-        return add_user_and_redirect(existing_game_form, room)
-
-    # If either no request.POST or errors
-    context = {
-        'async_mode': async_mode,
-        'title': 'Connect X',
-        'new_game_form': new_game_form,
-        'existing_game_form': existing_game_form,
-    }
-    return render_template('setup.html', **context)
-
-
-@app.route('/game/<pk>')
-def game_room(pk):
-    """Page for playing in a particular room."""
-
-    model = game_rooms[pk].model
-
-    context = {
-        'title': 'Connect {}'.format(model.get_num_to_win()),
-        'num_rows': model.get_num_rows(),
-        'num_columns': model.get_num_columns(),
-        'num_to_win': model.get_num_to_win(),
-    }
-    return render_template('game_room.html', **context)
-
-
-@socketio.on('connect')
-def connect():
-    pk = request.sid
-    game_room = game_rooms[pk]
-    game_room.connections.add(pk)
-    log.info('Open connection to {} (now {} connections)'
-             .format(pk, len(game_room.connections)))
-    log_number_of_rooms()
-
-
-@socketio.on('join')
-def on_join(data):
-    username = data['username']
-    room = data['room']
-    join_room(room)
-    send(username + ' has entered the room.', room=room)
-
-
-@socketio.on('disconnect')
-def disconnect():
-    print 'disconnected'
-    '''
-    self.session.connections.remove(self)
-
-    if not self.session.connections:
-        del game_rooms[self.session.pk]
-
-    log.info('Close connection to {} (now {} connections)'
-                .format(self.session.pk, len(self.session.connections)))
-    log_number_of_rooms()
-    '''
-
-
-'''
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    send(username + ' has left the room.', room=room)
-
-
-@socketio.on('message')
-def on_message(message):
-
-    """Handle incoming messages."""
-    d = json.loads(message)
-    kind = d['kind']
-
-    # Not used yet
-    if kind == 'create_board':
-        num_rows = int(d['num_rows'])
-        num_columns = int(d['num_columns'])
-        num_to_win = int(d['num_to_win'])
-        self.session.pubsub.publish(
-            ViewAction.create_board, num_rows, num_columns, num_to_win)
-        self.session.pubsub.do_queue()
-
-    # Not used yet
-    elif kind == 'add_player':
-        name = d['name']
-        color = Color(d['color'])
-        self.session.pubsub.publish(ViewAction.add_player, name, color)
-        self.session.pubsub.do_queue()
-
-    elif kind == 'start_game':
-        self.session.pubsub.publish(ViewAction.start_game)
-        self.session.pubsub.do_queue()
-
-    elif kind == 'play':
-        column = int(d['column'])
-        self.session.pubsub.publish(ViewAction.play, column)
-        self.session.pubsub.do_queue()
-
-    elif kind == 'print':
-        log.info(d['message'])
-
-    else:
-        log.info('Received undefined message type: {}'.format(kind))
-'''
-
-
-class GameRoom():
-    def __init__(self):
-        self.pk = generate_random_string(10)
-        self.connections = set()
-        game_rooms[self.pk] = self
-
+    def __init__(self, room):
+        self.room = room
         self.pubsub = PubSub()
         self.model = ConnectFourModel(self.pubsub)
         self._create_subscriptions()
@@ -200,59 +46,167 @@ class GameRoom():
             self.pubsub.subscribe(action, response)
 
     def on_board_created(self, board):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'board_created',
-                'board': str(board),
-            })
+        socketio.emit('board_created', {
+            'num_rows': board.num_rows,
+            'num_columns': board.num_columns,
+            'num_to_win': board.num_to_win,
+        }, room=self.room)
 
     def on_player_added(self, player):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'player_added',
-                'player': player.name,
-            })
+        socketio.emit('player_added', {
+            'player': str(player),
+            'room': self.room,
+        }, room=self.room)
 
     def on_game_started(self, game_number):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'game_started',
-                'game_number': game_number,
-            })
+        socketio.emit('game_started', {
+            'game_number': game_number,
+        }, room=self.room)
 
     def on_next_player(self, player):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'next_player',
-                'player': player.name,
-            })
+        socketio.emit('next_player', {
+            'player': str(player),
+        }, room=self.room)
 
     def on_try_again(self, player, reason):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'try_again',
-                'player': player.name,
-                'reason': reason.name,
-            })
+        socketio.emit('try_again', {
+            'player': str(player),
+            'reason': reason.name,
+        }, room=self.room)
 
     def on_color_played(self, color, position):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'color_played',
-                'color': color.name,
-                'position': position,
-            })
+        socketio.emit('color_played', {
+            'color': color.name,
+            'position': position,
+        }, room=self.room)
 
     def on_game_won(self, player, winning_positions):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'game_won',
-                'player': player.name,
-                'winning_positions': list(sorted(winning_positions)),
-            })
+        socketio.emit('game_won', {
+            'player': str(player),
+            'winning_positions': list(sorted(winning_positions)),
+        }, room=self.room)
 
     def on_game_draw(self):
-        for connection in self.connections:
-            connection.write_message({
-                'kind': 'game-draw',
-            })
+        socketio.emit('game_draw', {}, room=self.room)
+
+
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    """Page to set up session parameters."""
+    context = {
+        'async_mode': async_mode,
+        'DEFAULT_ROWS': DEFAULT_ROWS,
+        'DEFAULT_COLUMNS': DEFAULT_COLUMNS,
+        'DEFAULT_TO_WIN': DEFAULT_TO_WIN,
+    }
+    return render_template('index.html', **context)
+
+
+@socketio.on('message')
+def on_message(message):
+    print 'received message: {}'.format(message)
+
+
+@socketio.on('json')
+def on_json(json):
+    print 'received json: {}'.format(json)
+
+
+@socketio.on('connect')
+def on_connect():
+    print '{} has connected to the server'.format(request.sid)
+
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print '{} has disconnected from the server'.format(request.sid)
+
+
+'''
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    sid_to_room[request.sid] = room
+    send('{} has entered the room'.format(username), room=room)
+
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send('{} has left the room'.format(username), room=room)
+'''
+
+
+@socketio.on('add_first_player')
+def on_add_first_player(data):
+    name = data['username']
+    color = next(_colors)
+    print color
+    room = _get_random_string(5)
+
+    join_room(room)
+    sid_to_room[request.sid] = room
+    room_data[room] = RoomData(room)
+
+    pubsub = room_data[room].pubsub
+    pubsub.publish(ViewAction.add_player, name, color)
+    pubsub.do_queue()
+
+
+@socketio.on('add_player')
+def on_add_player(data):
+    name = data['username']
+    color = next(_colors)
+    room = data['room']
+
+    join_room(room)
+    sid_to_room[request.sid] = room
+
+    pubsub = room_data[room].pubsub
+    pubsub.publish(ViewAction.add_player, name, color)
+    pubsub.do_queue()
+
+
+@socketio.on('create_board')
+def on_create_board(data):
+    num_rows = int(data['num_rows'])
+    num_columns = int(data['num_columns'])
+    num_to_win = int(data['num_to_win'])
+
+    pubsub = _get_pubsub(request)
+    pubsub.publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
+    pubsub.do_queue()
+
+
+@socketio.on('start_game')
+def on_start_game(data):
+    pubsub = _get_pubsub(request)
+    pubsub.publish(ViewAction.start_game)
+    pubsub.do_queue()
+
+
+@socketio.on('play')
+def on_play(data):
+    column = int(data['column'])
+    pubsub = _get_pubsub(request)
+    pubsub.publish(ViewAction.play, column)
+    pubsub.do_queue()
+
+
+def _get_pubsub(request):
+    return room_data[sid_to_room[request.sid]].pubsub
+
+
+def _get_color():
+    for color in Color:
+        yield color
+
+_colors = _get_color()
+
+
+def _get_random_string(length):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+                   for _ in range(length))

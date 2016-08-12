@@ -1,99 +1,188 @@
 $(document).ready(function() {
+
+  /////////////////////////
+  // Process setup forms //
+  /////////////////////////
+
+  $("#new-game-form").submit(function(e) {
+    console.log("submitted new game form");
+    e.preventDefault();
+    processNewGameForm();
+  });
+
+  $("#existing-game-form").submit(function(e) {
+    console.log("submitted existing game form");
+    e.preventDefault();
+    processExistingGameForm();
+  });
+
   window.ws = io.connect("http://" + document.domain + ":" + location.port);
+  //////////////////////////////
+  // Respond to server events //
+  //////////////////////////////
 
   window.ws.on("connect", function() {
     console.log("connected yo");
   });
 
-  window.ws.on("message", function(e) {
-    message = JSON.parse(e.data);
+  window.ws.on("message", function(message) {
+    console.log(message);
+  });
 
-    switch(message.kind) {
-      case "game_started":
-        resetBoard();
-        disablePlayAgainButton();
-        enablePlayButtons();
-        updateGameNumber(message.game_number);
-        break;
+  window.ws.on("board_created", function(data) {
+    updateFeedbackBar("Board created");
+    drawBoard(data.num_rows, data.num_columns, data.num_to_win);
+  });
 
-      case "next_player":
-        updateFeedbackBar(message.player + "'s turn");
-        break;
+  window.ws.on("player_added", function(data) {
+    updateFeedbackBar("Welcome, " + data.player);
+    updateGameTitle(data.room);
+  });
 
-      case "color_played":
-        updateGameSquare(message.color, message.position);
-        break;
+  window.ws.on("game_started", function(data) {
+    resetBoard();
+    disablePlayAgainButton();
+    enablePlayButtons();
+    updateGameNumber(data.game_number);
+  });
 
-      case "try_again":
-        updateFeedbackBar(message.player + " try again (" +
-                          message.reason + ")");
-        break;
+  window.ws.on("next_player", function(data) {
+    updateFeedbackBar(data.player + "'s turn");
+  });
 
-      case "game_won":
-        disablePlayButtons();
-        updateFeedbackBar("Game won by " + message.player);
-        enablePlayAgainButton()
-        break;
+  window.ws.on("color_played", function(data) {
+    updateGameSquare(data.color, data.position);
+  });
 
-      case "game_draw":
-        disablePlayButtons();
-        updateFeedbackBar("Game ended in a draw");
-        enablePlayAgainButton()
-        break;
+  window.ws.on("try_again", function(data) {
+    updateFeedbackBar(data.player + " try again (" + data.reason + ")");
+  });
 
-      default:
-        console.log(message);
-    };
-	});
+  window.ws.on("game_won", function(data) {
+    disablePlayButtons();
+    updateFeedbackBar("Game won by " + data.player);
+    enablePlayAgainButton()
+  });
+
+  window.ws.on("game_draw", function(data) {
+    disablePlayButtons();
+    updateFeedbackBar("Game ended in a draw");
+    enablePlayAgainButton()
+  });
 });
 
 
-// Not used yet
-function sendAddPlayer(name, color) {
-  window.ws.send(JSON.stringify({
-    "kind": "add_player",
-    "name": name,
-    "color": color,
-  }));
+function sendCreateBoard(numRows, numColumns, numToWin) {
+  window.ws.emit("create_board", {
+    "num_rows": numRows,
+    "num_columns": numColumns,
+    "num_to_win": numToWin,
+  });
 }
 
 
-// Not used yet
-function sendCreateBoard(num_rows, num_columns, num_to_win) {
-  window.ws.send(JSON.stringify({
-    "kind": "create_board",
-    "num_rows": num_rows,
-    "num_columns": num_columns,
-    "num_to_win": num_to_win,
-  }));
+function sendAddFirstPlayer(username) {
+  window.ws.emit("add_first_player", {
+    "username": username,
+  });
+}
+
+
+function sendAddPlayer(username, room) {
+  window.ws.emit("add_player", {
+    "username": username,
+    "room": room,
+  });
 }
 
 
 function sendStartGame() {
-  window.ws.send(JSON.stringify({
-    "kind": "start_game",
-  }));
+  window.ws.emit("start_game", {});
 }
 
 
 function sendPlay(column) {
-  window.ws.send(JSON.stringify({
-    "kind": "play",
+  window.ws.emit("play", {
     "column": column,
-  }));
+  });
 }
 
 
 function sendPrint(message) {
-  window.ws.send(JSON.stringify({
-    "kind": "print",
+  window.ws.emit("print", {
     "message": message,
-  }));
+  });
+}
+
+
+function processNewGameForm() {
+  console.log("processing new game form");
+  var username = $("input[name=first-username]").val();
+  sendAddFirstPlayer(username);
+
+  var numRows = $("input[name=num-rows]").val();
+  var numColumns = $("input[name=num-columns]").val();
+  var numToWin = $("input[name=num-to-win]").val();
+  sendCreateBoard(numRows, numColumns, numToWin);
+
+  $("#setup-content").hide();
+  $("#game-content").show();
+}
+
+
+function processExistingGameForm() {
+  console.log("processing existing game form");
+  var username = $("input[name=new-username]").val();
+  var room = $("input[name=room]").val();
+  sendAddPlayer(username, room);
+
+  $("#setup-content").hide();
+  $("#game-content").show();
+}
+
+
+function drawBoard(numRows, numColumns, numToWin) {
+  var percentage = 80.0 / Math.max(numRows, numColumns);
+
+  var columnButtons = $("#column-buttons");
+  var buttonStyle = "width:" + percentage + "vmin;";
+  for (var i = 0; i < numColumns; i++) {
+    columnButtons.append(
+      "<button class='column-play' style='" + buttonStyle +
+      "' onclick='sendPlay(" + i + ")' disabled>Play here</button>");
+  }
+
+  var gameGrid = $("#game-grid");
+  for (var i = 0; i < numRows; i++) {
+    for (var j = 0; j < numColumns; j++) {
+      var squareStyle = "width:" + percentage + "vmin; " +
+                        "height:" + percentage + "vmin; ";
+      if (j === 0) {
+        squareStyle += "clear: left; ";
+      }
+      gameGrid.append("<div id='square-" + i + "-" + j +
+                      "' class='game-square' style='" + squareStyle +
+                      "'></div>");
+    }
+  }
+
+  resetBoard();
+}
+
+
+function drawPlayAgain() {
+  $("#more-controls").append(
+    "<button id='play-again' onclick='sendStartGame();'>Play again?</button>");
 }
 
 
 function resetBoard() {
-  $(".game-square").css("background", "yellow");
+  $(".game-square").css("background", "#fcef03");
+}
+
+
+function updateGameTitle(room) {
+  $("#game-title").text("Game Room " + room);
 }
 
 
