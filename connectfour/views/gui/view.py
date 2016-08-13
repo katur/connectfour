@@ -2,7 +2,7 @@ import Tkinter as tk
 import tkMessageBox
 
 from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                               Color)
+                               get_colors)
 from connectfour.pubsub import ModelAction, ViewAction
 from connectfour.views.gui import config
 from connectfour.views.gui.util import flash
@@ -21,6 +21,7 @@ class GUIView(object):
         """
         self.pubsub = pubsub
         self.model = model
+        self.colors = get_colors()
         self._create_subscriptions()
 
         # Initialize GUI window
@@ -147,7 +148,7 @@ class GUIView(object):
             tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
             return
 
-        color = Color(self.model.get_num_players())
+        color = next(self.colors)
         self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
         self.pubsub.do_queue()
 

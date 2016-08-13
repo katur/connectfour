@@ -2,7 +2,7 @@ import sys
 import time
 
 from connectfour.model import (DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN,
-                               Color, TryAgainReason)
+                               get_colors, TryAgainReason)
 from connectfour.pubsub import ModelAction, ViewAction
 from connectfour.views.util import (get_positive_int, get_int,
                                     get_stripped_nonempty_string)
@@ -32,6 +32,7 @@ class CommandLineView(object):
         """
         self.pubsub = pubsub
         self.model = model
+        self.colors = get_colors()
         self.out = sys.stdout
         self._create_subscriptions()
         self._create_board()
@@ -125,8 +126,8 @@ class CommandLineView(object):
             prompt='Player name: ', condition=get_stripped_nonempty_string,
             name='Name', max_len=50)
         is_ai = self._prompt_yes_no('Is AI?')
-        index = self.model.get_num_players()
-        self.pubsub.publish(ViewAction.add_player, name, Color(index), is_ai)
+        color = next(self.colors)
+        self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
 
     def _play(self, player):
         column = self._prompt_until_valid(
