@@ -1,4 +1,6 @@
 const $ = require("jquery");
+const WS_URL = "http://" + document.domain + ":" + location.port;
+window.ws = require("socket.io-client")(WS_URL);
 
 
 $(document).ready(function() {
@@ -19,14 +21,9 @@ $(document).ready(function() {
     processExistingGameForm();
   });
 
-  window.ws = io.connect("http://" + document.domain + ":" + location.port);
   //////////////////////////////
   // Respond to server events //
   //////////////////////////////
-
-  window.ws.on("connect", function() {
-    console.log("connected yo");
-  });
 
   window.ws.on("message", function(message) {
     console.log(message);
