@@ -304,6 +304,11 @@ class Color(Enum):
         lime) = range(10)
 
 
+def get_colors():
+    for color in Color:
+        yield color
+
+
 class TryAgainReason(Enum):
     """Reason that a player needs to try again."""
 
