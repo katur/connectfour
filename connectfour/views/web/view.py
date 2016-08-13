@@ -144,7 +144,6 @@ def on_leave(data):
 def on_add_first_player(data):
     name = data['username']
     color = next(_colors)
-    print color
     room = _get_random_string(5)
 
     join_room(room)
