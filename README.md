@@ -20,11 +20,13 @@ pip install -r requirements.txt
 
 The GUI view uses Python's built-in Tkinter library.
 
-The web view uses Flask, with React with Redux on the front end.
-It also uses the WebSocket protocol, with
-[socket.io](http://socket.io/) on the client side and
+The web view uses the [Flask](http://flask.pocoo.org/) framework, and the
+WebSocket protocol to communicate between client and server
+([socket.io](http://socket.io/) on the client side and
 [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) on the
-server side.
+server side).
+The front end uses [React](https://facebook.github.io/react/)
+with [Redux](http://redux.js.org/).
 
 
 ## Dev
