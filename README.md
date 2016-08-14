@@ -10,7 +10,7 @@ as well as variable board dimensions and a variable number of players.
 
 Code is in Python.
 
-Python version listed in [runtime.txt](runtime.txt).
+Python version is listed in [runtime.txt](runtime.txt).
 
 Package dependencies are listed in [requirements.txt](requirements.txt).
 To install (preferably in a new [virtualenv](https://virtualenv.pypa.io)):
