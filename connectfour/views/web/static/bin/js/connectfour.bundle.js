@@ -46,31 +46,49 @@
 
 	"use strict";
 
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(35);
-	var App = __webpack_require__(175);
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactDom = __webpack_require__(35);
+
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+
+	var _App = __webpack_require__(175);
+
+	var _App2 = _interopRequireDefault(_App);
+
 	__webpack_require__(178);
 
-	var $ = __webpack_require__(179);
+	var _jquery = __webpack_require__(179);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _socket = __webpack_require__(180);
+
+	var _socket2 = _interopRequireDefault(_socket);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var WS_URL = "http://" + document.domain + ":" + location.port;
-	window.ws = __webpack_require__(180)(WS_URL);
 
-	$(document).ready(function () {
+	window.ws = (0, _socket2.default)(WS_URL);
 
-	  ReactDOM.render(React.createElement(App, null), document.getElementById("react-root"));
+	(0, _jquery2.default)(document).ready(function () {
+
+	  _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById("react-root"));
 
 	  /////////////////////////
 	  // Process setup forms //
 	  /////////////////////////
 
-	  $("#new-game-form").submit(function (e) {
+	  (0, _jquery2.default)("#new-game-form").submit(function (e) {
 	    console.log("submitted new game form");
 	    e.preventDefault();
 	    processNewGameForm();
 	  });
 
-	  $("#join-game-form").submit(function (e) {
+	  (0, _jquery2.default)("#join-game-form").submit(function (e) {
 	    console.log("submitted join game form");
 	    e.preventDefault();
 	    processJoinGameForm();
@@ -165,38 +183,38 @@
 
 	function processNewGameForm() {
 	  console.log("processing new game form");
-	  var username = $("input[name=first-username]").val();
+	  var username = (0, _jquery2.default)("input[name=first-username]").val();
 	  sendAddFirstPlayer(username);
 
-	  var numRows = $("input[name=num-rows]").val();
-	  var numColumns = $("input[name=num-columns]").val();
-	  var numToWin = $("input[name=num-to-win]").val();
+	  var numRows = (0, _jquery2.default)("input[name=num-rows]").val();
+	  var numColumns = (0, _jquery2.default)("input[name=num-columns]").val();
+	  var numToWin = (0, _jquery2.default)("input[name=num-to-win]").val();
 	  sendCreateBoard(numRows, numColumns, numToWin);
 
-	  $("#setup-content").hide();
-	  $("#game-content").show();
+	  (0, _jquery2.default)("#setup-content").hide();
+	  (0, _jquery2.default)("#game-content").show();
 	}
 
 	function processJoinGameForm() {
 	  console.log("processing join game form");
-	  var username = $("input[name=join-username]").val();
-	  var room = $("input[name=room]").val();
+	  var username = (0, _jquery2.default)("input[name=join-username]").val();
+	  var room = (0, _jquery2.default)("input[name=room]").val();
 	  sendAddPlayer(username, room);
 
-	  $("#setup-content").hide();
-	  $("#game-content").show();
+	  (0, _jquery2.default)("#setup-content").hide();
+	  (0, _jquery2.default)("#game-content").show();
 	}
 
 	function drawBoard(numRows, numColumns, numToWin) {
 	  var percentage = 80.0 / Math.max(numRows, numColumns);
 
-	  var columnButtons = $("#column-buttons");
+	  var columnButtons = (0, _jquery2.default)("#column-buttons");
 	  var buttonStyle = "width:" + percentage + "vmin;";
 	  for (var i = 0; i < numColumns; i++) {
 	    columnButtons.append("<button class='column-play' style='" + buttonStyle + "' onclick='sendPlay(" + i + ")' disabled>Play here</button>");
 	  }
 
-	  var gameGrid = $("#game-grid");
+	  var gameGrid = (0, _jquery2.default)("#game-grid");
 	  for (var i = 0; i < numRows; i++) {
 	    for (var j = 0; j < numColumns; j++) {
 	      var squareStyle = "width:" + percentage + "vmin; " + "height:" + percentage + "vmin; ";
@@ -211,44 +229,44 @@
 	}
 
 	function drawPlayAgain() {
-	  $("#more-controls").append("<button id='play-again' onclick='sendStartGame();'>Play again?</button>");
+	  (0, _jquery2.default)("#more-controls").append("<button id='play-again' onclick='sendStartGame();'>Play again?</button>");
 	}
 
 	function resetBoard() {
-	  $(".game-square").css("background", "#fcef03");
+	  (0, _jquery2.default)(".game-square").css("background", "#fcef03");
 	}
 
 	function updateGameTitle(room) {
-	  $("#game-title").text("Game Room " + room);
+	  (0, _jquery2.default)("#game-title").text("Game Room " + room);
 	}
 
 	function updateGameSquare(color, position) {
 	  id = "#square-" + position[0] + "-" + position[1];
-	  $(id).css("background", color);
+	  (0, _jquery2.default)(id).css("background", color);
 	}
 
 	function updateFeedbackBar(message) {
-	  $("#game-feedback").text(message);
+	  (0, _jquery2.default)("#game-feedback").text(message);
 	}
 
 	function updateGameNumber(number) {
-	  $("#game-number").text(number);
+	  (0, _jquery2.default)("#game-number").text(number);
 	}
 
 	function enablePlayButtons() {
-	  $(".column-play").removeAttr("disabled");
+	  (0, _jquery2.default)(".column-play").removeAttr("disabled");
 	}
 
 	function disablePlayButtons() {
-	  $(".column-play").attr("disabled", true);
+	  (0, _jquery2.default)(".column-play").attr("disabled", true);
 	}
 
 	function enablePlayAgainButton() {
-	  $("#play-again").removeAttr("disabled");
+	  (0, _jquery2.default)("#play-again").removeAttr("disabled");
 	}
 
 	function disablePlayAgainButton() {
-	  $("#play-again").attr("disabled", true);
+	  (0, _jquery2.default)("#play-again").attr("disabled", true);
 	}
 
 /***/ },
@@ -21663,23 +21681,33 @@
 
 	"use strict";
 
-	var React = __webpack_require__(1);
-	var NewGameForm = __webpack_require__(176);
-	var JoinGameForm = __webpack_require__(177);
+	var _react = __webpack_require__(1);
 
-	var App = React.createClass({
+	var _react2 = _interopRequireDefault(_react);
+
+	var _NewGameForm = __webpack_require__(176);
+
+	var _NewGameForm2 = _interopRequireDefault(_NewGameForm);
+
+	var _JoinGameForm = __webpack_require__(177);
+
+	var _JoinGameForm2 = _interopRequireDefault(_JoinGameForm);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var App = _react2.default.createClass({
 	  displayName: "App",
 
 	  render: function render() {
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      "div",
 	      { id: "setup-content" },
-	      React.createElement(NewGameForm, {
+	      _react2.default.createElement(_NewGameForm2.default, {
 	        DEFAULT_ROWS: window.DEFAULT_ROWS,
 	        DEFAULT_COLUMNS: window.DEFAULT_COLUMNS,
 	        DEFAULT_TO_WIN: window.DEFAULT_TO_WIN
 	      }),
-	      React.createElement(JoinGameForm, null)
+	      _react2.default.createElement(_JoinGameForm2.default, null)
 	    );
 	  }
 	});
@@ -21692,11 +21720,15 @@
 
 	"use strict";
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var React = __webpack_require__(1);
-
-	var NewGameForm = React.createClass({
+	var NewGameForm = _react2.default.createClass({
 	  displayName: "NewGameForm",
 
 	  getInitialState: function getInitialState() {
@@ -21713,74 +21745,74 @@
 	  },
 
 	  render: function render() {
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      "div",
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        "h2",
 	        null,
 	        "Set up a new game?"
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        "form",
 	        { id: "new-game-form", action: "", method: "post" },
-	        React.createElement(
+	        _react2.default.createElement(
 	          "dl",
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Num rows"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "numRows",
 	              value: this.state.numRows,
 	              onChange: this._handleInput
 	            })
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Num columns"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "numColumns",
 	              value: this.state.numColumns,
 	              onChange: this._handleInput
 	            })
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Num to win"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "numToWin",
 	              value: this.state.numToWin,
 	              onChange: this._handleInput
 	            })
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Your username"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "username",
 	              value: this.state.username,
@@ -21788,7 +21820,7 @@
 	            })
 	          )
 	        ),
-	        React.createElement("input", { type: "submit", value: "Submit" })
+	        _react2.default.createElement("input", { type: "submit", value: "Submit" })
 	      )
 	    );
 	  }
@@ -21802,11 +21834,15 @@
 
 	"use strict";
 
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var React = __webpack_require__(1);
-
-	var JoinGameForm = React.createClass({
+	var JoinGameForm = _react2.default.createClass({
 	  displayName: "JoinGameForm",
 
 	  getInitialState: function getInitialState() {
@@ -21821,44 +21857,44 @@
 	  },
 
 	  render: function render() {
-	    return React.createElement(
+	    return _react2.default.createElement(
 	      "div",
 	      null,
-	      React.createElement(
+	      _react2.default.createElement(
 	        "h2",
 	        null,
 	        "Join a game room?"
 	      ),
-	      React.createElement(
+	      _react2.default.createElement(
 	        "form",
 	        { id: "join-game-form", action: "", method: "post" },
-	        React.createElement(
+	        _react2.default.createElement(
 	          "dl",
 	          null,
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Room ID"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "room",
 	              value: this.state.room,
 	              onChange: this._handleInput
 	            })
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dt",
 	            null,
 	            "Your username"
 	          ),
-	          React.createElement(
+	          _react2.default.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", {
+	            _react2.default.createElement("input", {
 	              type: "text",
 	              name: "username",
 	              value: this.state.username,
@@ -21866,7 +21902,7 @@
 	            })
 	          )
 	        ),
-	        React.createElement("input", { type: "submit", value: "Submit" })
+	        _react2.default.createElement("input", { type: "submit", value: "Submit" })
 	      )
 	    );
 	  }

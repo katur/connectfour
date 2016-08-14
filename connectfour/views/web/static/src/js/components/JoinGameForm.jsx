@@ -1,4 +1,5 @@
-const React = require("react");
+import React from "react";
+
 
 const JoinGameForm = React.createClass({
   getInitialState: function() {
@@ -48,5 +49,6 @@ const JoinGameForm = React.createClass({
     );
   },
 });
+
 
 module.exports = JoinGameForm;

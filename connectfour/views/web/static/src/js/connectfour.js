@@ -1,12 +1,14 @@
-const React = require("react");
-const ReactDOM = require("react-dom");
-const App = require("./components/App.jsx");
-require("../stylesheets/connectfour.sass");
-
-const $ = require("jquery");
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./components/App.jsx";
+import "../stylesheets/connectfour.sass";
+import $ from "jquery";
+import wsClient from "socket.io-client";
 
 const WS_URL = "http://" + document.domain + ":" + location.port;
-window.ws = require("socket.io-client")(WS_URL);
+
+
+window.ws = wsClient(WS_URL);
 
 
 $(document).ready(function() {

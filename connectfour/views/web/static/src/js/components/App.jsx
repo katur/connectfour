@@ -1,6 +1,7 @@
-const React = require("react");
-const NewGameForm = require("./NewGameForm.jsx");
-const JoinGameForm = require("./JoinGameForm.jsx");
+import React from "react";
+import NewGameForm from "./NewGameForm.jsx";
+import JoinGameForm from "./JoinGameForm.jsx";
+
 
 const App = React.createClass({
   render: function() {
@@ -17,5 +18,6 @@ const App = React.createClass({
     );
   },
 });
+
 
 module.exports = App;
