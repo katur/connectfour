@@ -29,19 +29,6 @@ The front end uses [React](https://facebook.github.io/react/)
 with [Redux](http://redux.js.org/).
 
 
-## Dev
-
-To do development work on the web app, first install Node packages:
-```
-npm install
-```
-
-And then start webpack to compile JS and CSS:
-```
-webpack --watch
-```
-
-
 ## App
 
 To start the command line app (from root dir):
@@ -57,6 +44,19 @@ python gui_app.py
 To start the web app (from root dir):
 ```
 python web_app.py
+```
+
+
+## Web app dev dependencies
+
+To do development work on the web app, first install Node packages:
+```
+npm install
+```
+
+And then start webpack to compile JS and CSS:
+```
+webpack --watch
 ```
 
 
