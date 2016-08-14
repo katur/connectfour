@@ -1,12 +1,17 @@
+const React = require("react");
+const ReactDOM = require("react-dom");
+const Muxy = require("./components/muxy.jsx");
+require("../stylesheets/styles.sass");
+
 const $ = require("jquery");
+
 const WS_URL = "http://" + document.domain + ":" + location.port;
 window.ws = require("socket.io-client")(WS_URL);
 
 
-require("../stylesheets/styles.sass");
-
-
 $(document).ready(function() {
+
+  ReactDOM.render(<Muxy />, document.getElementById("muxypoo"));
 
   /////////////////////////
   // Process setup forms //
