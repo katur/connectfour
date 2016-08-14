@@ -49,6 +49,9 @@
 	window.ws = __webpack_require__(2)(WS_URL);
 
 
+	__webpack_require__(52);
+
+
 	$(document).ready(function() {
 
 	  /////////////////////////
@@ -17960,6 +17963,12 @@
 	};
 
 
+
+/***/ },
+/* 52 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

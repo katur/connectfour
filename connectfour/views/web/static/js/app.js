@@ -3,6 +3,9 @@ const WS_URL = "http://" + document.domain + ":" + location.port;
 window.ws = require("socket.io-client")(WS_URL);
 
 
+require("../stylesheets/styles.sass");
+
+
 $(document).ready(function() {
 
   /////////////////////////
