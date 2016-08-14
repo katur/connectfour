@@ -1,4 +1,5 @@
 import React from "react";
+import Emitters from "../emitters";
 
 
 const NewGameForm = React.createClass({
@@ -17,12 +18,29 @@ const NewGameForm = React.createClass({
     });
   },
 
+  _handleSubmit: function(e) {
+    e.preventDefault();
+    Emitters.addFirstPlayer({
+      username: this.state.username,
+    });
+    Emitters.createBoard({
+      numRows: this.state.numRows,
+      numColumns: this.state.numColumns,
+      numToWin: this.state.numToWin,
+    });
+  },
+
   render: function() {
     return (
       <div>
         <h2>Set up a new game?</h2>
 
-        <form id="new-game-form" action="" method="post">
+        <form
+          id="new-game-form"
+          action=""
+          method="post"
+          onSubmit={this._handleSubmit}
+        >
           <dl>
             <dt>Num rows</dt>
             <dd>

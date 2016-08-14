@@ -123,7 +123,6 @@ def on_disconnect():
     print '{} has disconnected from the server'.format(request.sid)
 
 
-"""
 @socketio.on('join')
 def on_join(data):
     username = data['username']
@@ -132,13 +131,13 @@ def on_join(data):
     sid_to_room[request.sid] = room
     send('{} has entered the room'.format(username), room=room)
 
+
 @socketio.on('leave')
 def on_leave(data):
     username = data['username']
     room = data['room']
     leave_room(room)
     send('{} has left the room'.format(username), room=room)
-"""
 
 
 @socketio.on('add_first_player')

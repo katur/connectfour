@@ -1,4 +1,10 @@
-import {SET_USERNAME, SET_ROOM, ADD_PLAYER} from "./actions"
+import {
+  SET_USERNAME,
+  SET_ROOM,
+  ADD_PLAYER,
+  REMOVE_PLAYER,
+  SET_CURRENT_PLAYER_INDEX,
+} from "./actions";
 
 
 const initialState = {
@@ -24,10 +30,12 @@ function connectfourApp(state = initialState, action) {
       return Object.assign({}, state, {
         username: action.username,
       });
+
     case SET_ROOM:
       return Object.assign({}, state, {
         room: action.room,
       });
+
     case ADD_PLAYER:
       return Object.assign({}, state, {
         players: [
@@ -35,6 +43,7 @@ function connectfourApp(state = initialState, action) {
           action.player,
         ],
       });
+
     default:
       return state;
   }

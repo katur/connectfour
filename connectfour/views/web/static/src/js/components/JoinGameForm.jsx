@@ -1,4 +1,5 @@
 import React from "react";
+import Emitters from "../emitters";
 
 
 const JoinGameForm = React.createClass({
@@ -15,12 +16,25 @@ const JoinGameForm = React.createClass({
     });
   },
 
+  _handleSubmit: function(e) {
+    e.preventDefault();
+    Emitters.addPlayer({
+      username: this.state.username,
+      room: this.state.room,
+    });
+  },
+
   render: function() {
     return (
       <div>
         <h2>Join a game room?</h2>
 
-        <form id="join-game-form" action="" method="post">
+        <form
+          id="join-game-form"
+          action=""
+          method="post"
+          onSubmit={this._handleSubmit}
+        >
           <dl>
             <dt>Room ID</dt>
             <dd>

@@ -1,53 +1,35 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
-
 import { createStore } from "redux";
-import setUsername from "./actions";
 import connectfourApp from "./reducers";
-
+import { setUsername } from "./actions";
 import "../stylesheets/connectfour";
+import wsClient from "socket.io-client";
+
 import $ from "jquery";
 
-import wsClient from "socket.io-client";
+// Connect to websocket
 const WS_URL = "http://" + document.domain + ":" + location.port;
 window.ws = wsClient(WS_URL);
 
-
-// let store = createStore(connectfourApp, window.STATE_FROM_SERVER);
+// Create Redux store
 let store = createStore(connectfourApp);
+// let store = createStore(connectfourApp, window.STATE_FROM_SERVER);
 console.log(store.getState());
 
 // Every time the state changes, log it
 // Note that subscribe() returns a function for unregistering the listener
-/*
-let unsubscribe = store.subscribe(() =>
+let unsubscribe = store.subscribe(function() {
   console.log(store.getState());
-)
+});
 
 store.dispatch(setUsername("Jimbo"));
 unsubscribe();
-*/
 
 $(document).ready(function() {
 
   ReactDOM.render(<App />, document.getElementById("react-root"));
-
-  /////////////////////////
-  // Process setup forms //
-  /////////////////////////
-
-  $("#new-game-form").submit(function(e) {
-    console.log("submitted new game form");
-    e.preventDefault();
-    processNewGameForm();
-  });
-
-  $("#join-game-form").submit(function(e) {
-    console.log("submitted join game form");
-    e.preventDefault();
-    processJoinGameForm();
-  });
 
   //////////////////////////////
   // Respond to server events //
@@ -98,75 +80,6 @@ $(document).ready(function() {
     enablePlayAgainButton()
   });
 });
-
-
-function sendCreateBoard(numRows, numColumns, numToWin) {
-  window.ws.emit("create_board", {
-    "num_rows": numRows,
-    "num_columns": numColumns,
-    "num_to_win": numToWin,
-  });
-}
-
-
-function sendAddFirstPlayer(username) {
-  window.ws.emit("add_first_player", {
-    "username": username,
-  });
-}
-
-
-function sendAddPlayer(username, room) {
-  window.ws.emit("add_player", {
-    "username": username,
-    "room": room,
-  });
-}
-
-
-function sendStartGame() {
-  window.ws.emit("start_game", {});
-}
-
-
-function sendPlay(column) {
-  window.ws.emit("play", {
-    "column": column,
-  });
-}
-
-
-function sendPrint(message) {
-  window.ws.emit("print", {
-    "message": message,
-  });
-}
-
-
-function processNewGameForm() {
-  console.log("processing new game form");
-  var username = $("input[name=first-username]").val();
-  sendAddFirstPlayer(username);
-
-  var numRows = $("input[name=num-rows]").val();
-  var numColumns = $("input[name=num-columns]").val();
-  var numToWin = $("input[name=num-to-win]").val();
-  sendCreateBoard(numRows, numColumns, numToWin);
-
-  $("#setup-content").hide();
-  $("#game-content").show();
-}
-
-
-function processJoinGameForm() {
-  console.log("processing join game form");
-  var username = $("input[name=join-username]").val();
-  var room = $("input[name=room]").val();
-  sendAddPlayer(username, room);
-
-  $("#setup-content").hide();
-  $("#game-content").show();
-}
 
 
 function drawBoard(numRows, numColumns, numToWin) {

@@ -11,7 +11,6 @@ export const SET_CURRENT_PLAYER_INDEX = "SET_CURRENT_PLAYER_INDEX";
 /*
  * action creators
  */
-
 export function setUsername(username) {
   return {
     type: SET_USERNAME,
