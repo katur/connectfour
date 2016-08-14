@@ -1,7 +1,7 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
-const Muxy = require("./components/muxy.jsx");
-require("../stylesheets/styles.sass");
+const App = require("./components/App.jsx");
+require("../stylesheets/connectfour.sass");
 
 const $ = require("jquery");
 
@@ -11,7 +11,7 @@ window.ws = require("socket.io-client")(WS_URL);
 
 $(document).ready(function() {
 
-  ReactDOM.render(<Muxy />, document.getElementById("muxypoo"));
+  ReactDOM.render(<App />, document.getElementById("react-root"));
 
   /////////////////////////
   // Process setup forms //
@@ -23,10 +23,10 @@ $(document).ready(function() {
     processNewGameForm();
   });
 
-  $("#existing-game-form").submit(function(e) {
-    console.log("submitted existing game form");
+  $("#join-game-form").submit(function(e) {
+    console.log("submitted join game form");
     e.preventDefault();
-    processExistingGameForm();
+    processJoinGameForm();
   });
 
   //////////////////////////////
@@ -138,9 +138,9 @@ function processNewGameForm() {
 }
 
 
-function processExistingGameForm() {
-  console.log("processing existing game form");
-  var username = $("input[name=new-username]").val();
+function processJoinGameForm() {
+  console.log("processing join game form");
+  var username = $("input[name=join-username]").val();
   var room = $("input[name=room]").val();
   sendAddPlayer(username, room);
 

@@ -2,10 +2,10 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = {
-  entry: "./connectfour/views/web/static/src/js/app.js",
+  entry: "./connectfour/views/web/static/src/js/connectfour.js",
   output: {
     path: "./connectfour/views/web/static/bin/js",
-    filename: "app.bundle.js"
+    filename: "connectfour.bundle.js"
   },
   module: {
     loaders: [{
@@ -19,7 +19,7 @@ module.exports = {
     }]
   },
   plugins: [
-    new ExtractTextPlugin("../stylesheets/styles.css", {
+    new ExtractTextPlugin("../stylesheets/connectfour.css", {
       allChunks: true
     })
   ]
