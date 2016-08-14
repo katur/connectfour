@@ -2,11 +2,11 @@ import logging
 import random
 import string
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, render_template, request
 from flask_socketio import (SocketIO, send, emit, rooms,
                             join_room, leave_room, close_room)
 
-from connectfour.model import (ConnectFourModel, Color, DEFAULT_ROWS,
+from connectfour.model import (ConnectFourModel, get_colors, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 
@@ -28,6 +28,7 @@ class RoomData():
         self.room = room
         self.pubsub = PubSub()
         self.model = ConnectFourModel(self.pubsub)
+        self.colors = get_colors()
         self._create_subscriptions()
 
     def _create_subscriptions(self):
@@ -122,7 +123,7 @@ def on_disconnect():
     print '{} has disconnected from the server'.format(request.sid)
 
 
-'''
+"""
 @socketio.on('join')
 def on_join(data):
     username = data['username']
@@ -137,19 +138,19 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send('{} has left the room'.format(username), room=room)
-'''
+"""
 
 
 @socketio.on('add_first_player')
 def on_add_first_player(data):
     name = data['username']
-    color = next(_colors)
     room = _get_random_string(5)
 
     join_room(room)
     sid_to_room[request.sid] = room
     room_data[room] = RoomData(room)
 
+    color = next(room_data[room].colors)
     pubsub = room_data[room].pubsub
     pubsub.publish(ViewAction.add_player, name, color)
     pubsub.do_queue()
@@ -158,12 +159,12 @@ def on_add_first_player(data):
 @socketio.on('add_player')
 def on_add_player(data):
     name = data['username']
-    color = next(_colors)
     room = data['room']
 
     join_room(room)
     sid_to_room[request.sid] = room
 
+    color = next(room_data[room].colors)
     pubsub = room_data[room].pubsub
     pubsub.publish(ViewAction.add_player, name, color)
     pubsub.do_queue()
@@ -197,13 +198,6 @@ def on_play(data):
 
 def _get_pubsub(request):
     return room_data[sid_to_room[request.sid]].pubsub
-
-
-def _get_color():
-    for color in Color:
-        yield color
-
-_colors = _get_color()
 
 
 def _get_random_string(length):
