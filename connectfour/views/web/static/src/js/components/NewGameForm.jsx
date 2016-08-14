@@ -1,6 +1,21 @@
 const React = require("react");
 
 const NewGameForm = React.createClass({
+  getInitialState: function() {
+    return {
+      numRows: `${this.props.DEFAULT_ROWS}`,
+      numColumns: `${this.props.DEFAULT_COLUMNS}`,
+      numToWin: `${this.props.DEFAULT_TO_WIN}`,
+      username: ``,
+    };
+  },
+
+  _handleInput: function(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  },
+
   render: function() {
     return (
       <div>
@@ -12,8 +27,9 @@ const NewGameForm = React.createClass({
             <dd>
               <input
                 type="text"
-                name="num-rows"
-                defaultValue={this.props.DEFAULT_ROWS}
+                name="numRows"
+                value={this.state.numRows}
+                onChange={this._handleInput}
               />
             </dd>
 
@@ -21,8 +37,9 @@ const NewGameForm = React.createClass({
             <dd>
               <input
                 type="text"
-                name="num-columns"
-                defaultValue={this.props.DEFAULT_COLUMNS}
+                name="numColumns"
+                value={this.state.numColumns}
+                onChange={this._handleInput}
               />
             </dd>
 
@@ -30,14 +47,20 @@ const NewGameForm = React.createClass({
             <dd>
               <input
                 type="text"
-                name="num-to-win"
-                defaultValue={this.props.DEFAULT_TO_WIN}
+                name="numToWin"
+                value={this.state.numToWin}
+                onChange={this._handleInput}
               />
             </dd>
 
             <dt>Your username</dt>
             <dd>
-              <input type="text" name="first-username" />
+              <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this._handleInput}
+              />
             </dd>
           </dl>
 

@@ -21692,10 +21692,25 @@
 
 	"use strict";
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var React = __webpack_require__(1);
 
 	var NewGameForm = React.createClass({
 	  displayName: "NewGameForm",
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      numRows: "" + this.props.DEFAULT_ROWS,
+	      numColumns: "" + this.props.DEFAULT_COLUMNS,
+	      numToWin: "" + this.props.DEFAULT_TO_WIN,
+	      username: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
+	  },
 
 	  render: function render() {
 	    return React.createElement(
@@ -21722,8 +21737,9 @@
 	            null,
 	            React.createElement("input", {
 	              type: "text",
-	              name: "num-rows",
-	              defaultValue: this.props.DEFAULT_ROWS
+	              name: "numRows",
+	              value: this.state.numRows,
+	              onChange: this._handleInput
 	            })
 	          ),
 	          React.createElement(
@@ -21736,8 +21752,9 @@
 	            null,
 	            React.createElement("input", {
 	              type: "text",
-	              name: "num-columns",
-	              defaultValue: this.props.DEFAULT_COLUMNS
+	              name: "numColumns",
+	              value: this.state.numColumns,
+	              onChange: this._handleInput
 	            })
 	          ),
 	          React.createElement(
@@ -21750,8 +21767,9 @@
 	            null,
 	            React.createElement("input", {
 	              type: "text",
-	              name: "num-to-win",
-	              defaultValue: this.props.DEFAULT_TO_WIN
+	              name: "numToWin",
+	              value: this.state.numToWin,
+	              onChange: this._handleInput
 	            })
 	          ),
 	          React.createElement(
@@ -21762,7 +21780,12 @@
 	          React.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", { type: "text", name: "first-username" })
+	            React.createElement("input", {
+	              type: "text",
+	              name: "username",
+	              value: this.state.username,
+	              onChange: this._handleInput
+	            })
 	          )
 	        ),
 	        React.createElement("input", { type: "submit", value: "Submit" })
@@ -21779,10 +21802,23 @@
 
 	"use strict";
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	var React = __webpack_require__(1);
 
 	var JoinGameForm = React.createClass({
 	  displayName: "JoinGameForm",
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      room: "",
+	      username: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
+	  },
 
 	  render: function render() {
 	    return React.createElement(
@@ -21807,7 +21843,12 @@
 	          React.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", { type: "text", name: "room" })
+	            React.createElement("input", {
+	              type: "text",
+	              name: "room",
+	              value: this.state.room,
+	              onChange: this._handleInput
+	            })
 	          ),
 	          React.createElement(
 	            "dt",
@@ -21817,7 +21858,12 @@
 	          React.createElement(
 	            "dd",
 	            null,
-	            React.createElement("input", { type: "text", name: "join-username" })
+	            React.createElement("input", {
+	              type: "text",
+	              name: "username",
+	              value: this.state.username,
+	              onChange: this._handleInput
+	            })
 	          )
 	        ),
 	        React.createElement("input", { type: "submit", value: "Submit" })
