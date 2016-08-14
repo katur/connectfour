@@ -1,6 +1,6 @@
 import React from "react";
-import NewGameForm from "./NewGameForm.jsx";
-import JoinGameForm from "./JoinGameForm.jsx";
+import NewGameForm from "./NewGameForm";
+import JoinGameForm from "./JoinGameForm";
 
 
 const App = React.createClass({

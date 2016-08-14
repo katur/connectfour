@@ -1,15 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App.jsx";
-import "../stylesheets/connectfour.sass";
+import App from "./components/App";
+
+import { createStore } from "redux";
+import setUsername from "./actions";
+import connectfourApp from "./reducers";
+
+import "../stylesheets/connectfour";
 import $ from "jquery";
+
 import wsClient from "socket.io-client";
-
 const WS_URL = "http://" + document.domain + ":" + location.port;
-
-
 window.ws = wsClient(WS_URL);
 
+
+// let store = createStore(connectfourApp, window.STATE_FROM_SERVER);
+let store = createStore(connectfourApp);
+console.log(store.getState());
+
+// Every time the state changes, log it
+// Note that subscribe() returns a function for unregistering the listener
+/*
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState());
+)
+
+store.dispatch(setUsername("Jimbo"));
+unsubscribe();
+*/
 
 $(document).ready(function() {
 

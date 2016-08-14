@@ -24,5 +24,8 @@ module.exports = {
       allChunks: true
     }),
     new WebpackNotifierPlugin()
-  ]
+  ],
+  resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".js", ".jsx", ".sass"]
+  }
 };
