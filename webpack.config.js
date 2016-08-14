@@ -1,4 +1,5 @@
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var WebpackNotifierPlugin = require("webpack-notifier");
 
 
 module.exports = {
@@ -21,6 +22,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin("../stylesheets/connectfour.css", {
       allChunks: true
-    })
+    }),
+    new WebpackNotifierPlugin()
   ]
 };
