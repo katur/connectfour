@@ -21643,6 +21643,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _GameScreenWrapper = __webpack_require__(257);
+
+	var _GameScreenWrapper2 = _interopRequireDefault(_GameScreenWrapper);
+
 	var _SetupScreenWrapper = __webpack_require__(176);
 
 	var _SetupScreenWrapper2 = _interopRequireDefault(_SetupScreenWrapper);
@@ -21656,7 +21660,8 @@
 	    return _react2.default.createElement(
 	      "div",
 	      null,
-	      _react2.default.createElement(_SetupScreenWrapper2.default, null)
+	      _react2.default.createElement(_SetupScreenWrapper2.default, null),
+	      _react2.default.createElement(_GameScreenWrapper2.default, null)
 	    );
 	  }
 	});
@@ -21683,7 +21688,7 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    showSetupScreen: state.username ? false : true,
+	    show: state.username ? false : true,
 	    defaultRows: window.DEFAULT_ROWS,
 	    defaultColumns: window.DEFAULT_COLUMNS,
 	    defaultToWin: window.DEFAULT_TO_WIN
@@ -23274,20 +23279,20 @@
 	  displayName: "SetupScreen",
 
 	  render: function render() {
-	    if (this.props.showSetupScreen) {
-	      return _react2.default.createElement(
-	        "div",
-	        { id: "setup-content" },
-	        _react2.default.createElement(_NewGameForm2.default, {
-	          defaultRows: this.props.defaultRows,
-	          defaultColumns: this.props.defaultColumns,
-	          defaultToWin: this.props.defaultToWin
-	        }),
-	        _react2.default.createElement(_JoinGameForm2.default, null)
-	      );
-	    } else {
+	    if (!this.props.show) {
 	      return null;
 	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "setup-content" },
+	      _react2.default.createElement(_NewGameForm2.default, {
+	        defaultRows: this.props.defaultRows,
+	        defaultColumns: this.props.defaultColumns,
+	        defaultToWin: this.props.defaultToWin
+	      }),
+	      _react2.default.createElement(_JoinGameForm2.default, null)
+	    );
 	  }
 	});
 
@@ -41411,6 +41416,68 @@
 	};
 
 
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactRedux = __webpack_require__(177);
+
+	var _GameScreen = __webpack_require__(258);
+
+	var _GameScreen2 = _interopRequireDefault(_GameScreen);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    show: state.username ? true : false
+	  };
+	}
+
+	var GameScreenWrapper = (0, _reactRedux.connect)(mapStateToProps)(_GameScreen2.default);
+
+	exports.default = GameScreenWrapper;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameScreen = _react2.default.createClass({
+	  displayName: "GameScreen",
+
+	  render: function render() {
+	    if (!this.props.show) {
+	      return null;
+	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      "Hi we are playing the game"
+	    );
+	  }
+	});
+
+	exports.default = GameScreen;
 
 /***/ }
 /******/ ]);
