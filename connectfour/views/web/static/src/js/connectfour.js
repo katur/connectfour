@@ -2,8 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
 import { createStore } from "redux";
-import connectfourApp from "./reducers";
-import { setUsername } from "./actions";
+import { Provider } from 'react-redux';
+import appReducer from "./reducers";
+import { setUsername, setRoom, addPlayer } from "./actions";
 import "../stylesheets/connectfour";
 import $ from "jquery";
 import wsClient from "socket.io-client";
@@ -13,12 +14,15 @@ import wsClient from "socket.io-client";
 // Create Redux store and render React app //
 /////////////////////////////////////////////
 
-let store = createStore(connectfourApp);
-// let store = createStore(connectfourApp, window.STATE_FROM_SERVER);
+let store = createStore(appReducer);
+// let store = createStore(appReducer, window.STATE_FROM_SERVER);
 
-$(document).ready(function() {
-  ReactDOM.render(<App />, document.getElementById("react-root"));
-});
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("react-root")
+);
 
 
 //////////////////////////
@@ -33,18 +37,20 @@ window.ws = wsClient(WS_URL);
 // Respond to WebSocket events (these will mostly update the store) //
 //////////////////////////////////////////////////////////////////////
 
-window.ws.on("message", function(message) {
-  console.log(message);
+window.ws.on("room_joined", function(data) {
+  store.dispatch(setUsername(data.username));
+  store.dispatch(setRoom(data.room));
+});
+
+window.ws.on("player_added", function(data) {
+  store.dispatch(addPlayer(data.player));
+  // updateFeedbackBar("Welcome, " + data.player);
+  // updateGameTitle(data.room);
 });
 
 window.ws.on("board_created", function(data) {
   updateFeedbackBar("Board created");
   drawBoard(data.num_rows, data.num_columns, data.num_to_win);
-});
-
-window.ws.on("player_added", function(data) {
-  updateFeedbackBar("Welcome, " + data.player);
-  updateGameTitle(data.room);
 });
 
 window.ws.on("game_started", function(data) {
@@ -76,6 +82,10 @@ window.ws.on("game_draw", function(data) {
   disablePlayButtons();
   updateFeedbackBar("Game ended in a draw");
   enablePlayAgainButton()
+});
+
+window.ws.on("message", function(message) {
+  console.log(message);
 });
 
 

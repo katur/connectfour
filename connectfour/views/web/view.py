@@ -3,8 +3,7 @@ import random
 import string
 
 from flask import Flask, render_template, request
-from flask_socketio import (SocketIO, send, emit, rooms,
-                            join_room, leave_room, close_room)
+from flask_socketio import (SocketIO, join_room)
 
 from connectfour.model import (ConnectFourModel, get_colors, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
@@ -55,7 +54,7 @@ class RoomData():
 
     def on_player_added(self, player):
         socketio.emit('player_added', {
-            'player': str(player),
+            'player': player.get_json(),
             'room': self.room,
         }, room=self.room)
 
@@ -123,50 +122,43 @@ def on_disconnect():
     print '{} has disconnected from the server'.format(request.sid)
 
 
-@socketio.on('join')
-def on_join(data):
-    username = data['username']
-    room = data['room']
-    join_room(room)
-    sid_to_room[request.sid] = room
-    send('{} has entered the room'.format(username), room=room)
-
-
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    room = data['room']
-    leave_room(room)
-    send('{} has left the room'.format(username), room=room)
-
-
 @socketio.on('add_first_player')
 def on_add_first_player(data):
     name = data['username']
     room = _get_random_string(5)
-
     join_room(room)
-    sid_to_room[request.sid] = room
-    room_data[room] = RoomData(room)
 
-    color = next(room_data[room].colors)
-    pubsub = room_data[room].pubsub
-    pubsub.publish(ViewAction.add_player, name, color)
-    pubsub.do_queue()
+    # Store mapping of this user being in room
+    sid_to_room[request.sid] = room
+
+    socketio.emit('room_joined', {
+        'username': name,
+        'room': room,
+    })
+
+    data = RoomData(room)
+    room_data[room] = data
+    data.pubsub.publish(ViewAction.add_player, name, next(data.colors))
+    data.pubsub.do_queue()
 
 
 @socketio.on('add_player')
 def on_add_player(data):
     name = data['username']
     room = data['room']
-
     join_room(room)
+
+    # Store mapping of this user being in room
     sid_to_room[request.sid] = room
 
-    color = next(room_data[room].colors)
-    pubsub = room_data[room].pubsub
-    pubsub.publish(ViewAction.add_player, name, color)
-    pubsub.do_queue()
+    socketio.emit('room_joined', {
+        'username': name,
+        'room': room,
+    })
+
+    data = room_data[room]
+    data.pubsub.publish(ViewAction.add_player, name, next(data.colors))
+    data.pubsub.do_queue()
 
 
 @socketio.on('create_board')

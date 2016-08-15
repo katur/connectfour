@@ -19,11 +19,12 @@ const initialState = {
 }
 
 
-// Next try splitting reducers:
+// Later, try splitting reducers:
 // http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
 
-function connectfourApp(state = initialState, action) {
+function appReducer(state = initialState, action) {
   switch(action.type) {
+
     case SET_USERNAME:
       // Object.assign creates a copy. Consider this instead:
       // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
@@ -50,4 +51,4 @@ function connectfourApp(state = initialState, action) {
 }
 
 
-export default connectfourApp;
+export default appReducer;

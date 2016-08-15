@@ -346,6 +346,14 @@ class Player(object):
         category = 'AI' if self.is_ai else 'Human'
         return '{} ({}): {}'.format(self.name, self.color.name, category)
 
+    def get_json(self):
+        return {
+            'name': self.name,
+            'color': self.color.name,
+            'is_ai': self.is_ai,
+            'num_wins': self.num_wins,
+        }
+
     def do_strategy(self, model):
         AI_STRATEGIES = {
             AI_EASY: self.easy_ai_strategy,

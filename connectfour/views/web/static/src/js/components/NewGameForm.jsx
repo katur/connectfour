@@ -5,9 +5,9 @@ import Emitters from "../emitters";
 const NewGameForm = React.createClass({
   getInitialState: function() {
     return {
-      numRows: `${this.props.DEFAULT_ROWS}`,
-      numColumns: `${this.props.DEFAULT_COLUMNS}`,
-      numToWin: `${this.props.DEFAULT_TO_WIN}`,
+      numRows: `${this.props.defaultRows}`,
+      numColumns: `${this.props.defaultColumns}`,
+      numToWin: `${this.props.defaultToWin}`,
       username: ``,
     };
   },
@@ -91,4 +91,4 @@ const NewGameForm = React.createClass({
 });
 
 
-module.exports = NewGameForm;
+export default NewGameForm;
