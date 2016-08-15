@@ -10,7 +10,7 @@ const SetupScreen = React.createClass({
     }
 
     return (
-      <div id="setup-content">
+      <div id="setup-screen">
         <NewGameForm
           defaultRows={this.props.defaultRows}
           defaultColumns={this.props.defaultColumns}

@@ -44,8 +44,6 @@ window.ws.on("room_joined", function(data) {
 
 window.ws.on("player_added", function(data) {
   store.dispatch(addPlayer(data.player));
-  // updateFeedbackBar("Welcome, " + data.player);
-  // updateGameTitle(data.room);
 });
 
 window.ws.on("board_created", function(data) {

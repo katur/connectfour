@@ -2,18 +2,12 @@ import React from "react";
 
 
 const FeedbackBar = React.createClass({
-  getInitialState: function() {
-    return {
-      text: ``,
-    };
-  },
-
   render: function() {
     return (
-      <div id="game-feedback">{this.state.text}</div>
+      <div id="feedback-bar">{this.props.text}</div>
     );
   },
 });
 
 
-module.exports = FeedbackBar;
+export default FeedbackBar;

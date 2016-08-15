@@ -1,4 +1,6 @@
 import React from "react";
+import FeedbackBarWrapper from "../containers/FeedbackBarWrapper";
+import PlayerListWrapper from "../containers/PlayerListWrapper";
 
 
 const GameScreen = React.createClass({
@@ -8,7 +10,10 @@ const GameScreen = React.createClass({
     }
 
     return (
-      <div>Hi we are playing the game</div>
+      <div id="game-screen">
+        <FeedbackBarWrapper />
+        <PlayerListWrapper />
+      </div>
     );
   },
 });
