@@ -8,11 +8,13 @@ from flask_socketio import (SocketIO, join_room)
 from connectfour.model import (ConnectFourModel, get_colors, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
+from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
 
 
 async_mode = None
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+app.config['DEBUG'] = DEBUG
+app.config['SECRET_KEY'] = SECRET_KEY
 socketio = SocketIO(app, async_mode=async_mode)
 
 log = logging.getLogger('log')

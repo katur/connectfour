@@ -2,4 +2,9 @@
 *.pyc
 *.swp
 *.DS_Store
+
+# js packages
 node_modules
+
+# Flask local config
+*localsettings.py
