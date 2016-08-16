@@ -102,50 +102,17 @@ def index():
     return render_template('index.html', **context)
 
 
-@socketio.on('message')
-def on_message(message):
-    print 'received message: {}'.format(message)
-
-
-@socketio.on('json')
-def on_json(json):
-    print 'received json: {}'.format(json)
-
-
-@socketio.on('connect')
-def on_connect():
-    print '{} has connected to the server'.format(request.sid)
-
-
-@socketio.on('disconnect')
-def on_disconnect():
-    print '{} has disconnected from the server'.format(request.sid)
-
-
-@socketio.on('add_first_player')
-def on_add_first_player(data):
+@socketio.on('add_user')
+def on_add_user(data):
     name = data['username']
-    room = _get_random_string(5)
-    join_room(room)
 
-    # Store mapping of this user being in room
-    sid_to_room[request.sid] = room
+    if 'room' in data and data['room']:
+        room = data['room']
+    else:
+        # Start a new room with a new model
+        room = _get_random_string(5)
+        room_data[room] = RoomData(room)
 
-    socketio.emit('room_joined', {
-        'username': name,
-        'room': room,
-    })
-
-    data = RoomData(room)
-    room_data[room] = data
-    data.pubsub.publish(ViewAction.add_player, name, next(data.colors))
-    data.pubsub.do_queue()
-
-
-@socketio.on('add_player')
-def on_add_player(data):
-    name = data['username']
-    room = data['room']
     join_room(room)
 
     # Store mapping of this user being in room
@@ -186,6 +153,30 @@ def on_play(data):
     pubsub.publish(ViewAction.play, column)
     pubsub.do_queue()
 
+
+@socketio.on('message')
+def on_message(message):
+    print 'received message: {}'.format(message)
+
+
+@socketio.on('json')
+def on_json(json):
+    print 'received json: {}'.format(json)
+
+
+@socketio.on('connect')
+def on_connect():
+    print '{} has connected to the server'.format(request.sid)
+
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print '{} has disconnected from the server'.format(request.sid)
+
+
+###########
+# Helpers #
+###########
 
 def _get_pubsub(request):
     return room_data[sid_to_room[request.sid]].pubsub

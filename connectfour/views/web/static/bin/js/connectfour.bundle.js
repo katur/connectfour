@@ -23318,9 +23318,12 @@
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
-	    _emitters2.default.addFirstPlayer({
+
+	    _emitters2.default.addUser({
 	      username: this.state.username
 	    });
+
+	    // could this signal be received before the previous on the server?
 	    _emitters2.default.createBoard({
 	      numRows: this.state.numRows,
 	      numColumns: this.state.numColumns,
@@ -23427,19 +23430,19 @@
 	  value: true
 	});
 	var Emitters = {
-	  addFirstPlayer: function addFirstPlayer(_ref) {
+	  addFirstUser: function addFirstUser(_ref) {
 	    var username = _ref.username;
 
-	    window.ws.emit("add_first_player", {
+	    window.ws.emit("add_first_user", {
 	      "username": username
 	    });
 	  },
 
-	  addPlayer: function addPlayer(_ref2) {
+	  addUser: function addUser(_ref2) {
 	    var username = _ref2.username;
 	    var room = _ref2.room;
 
-	    window.ws.emit("add_player", {
+	    window.ws.emit("add_user", {
 	      "username": username,
 	      "room": room
 	    });
@@ -23518,7 +23521,7 @@
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
-	    _emitters2.default.addPlayer({
+	    _emitters2.default.addUser({
 	      username: this.state.username,
 	      room: this.state.room
 	    });
@@ -23743,7 +23746,7 @@
 	  username: "",
 	  room: "",
 	  players: [],
-	  currentPlayerIndex: null,
+	  currentPlayer: null,
 	  board: [[]],
 	  feedback: "",
 	  gameInProgress: false,
@@ -23796,16 +23799,14 @@
 	exports.setUsername = setUsername;
 	exports.setRoom = setRoom;
 	exports.addPlayer = addPlayer;
-	exports.removePlayer = removePlayer;
-	exports.setCurrentPlayerIndex = setCurrentPlayerIndex;
+	exports.setCurrentPlayer = setCurrentPlayer;
 	/*
 	 * action types
 	 */
 	var SET_USERNAME = exports.SET_USERNAME = "SET_USERNAME";
 	var SET_ROOM = exports.SET_ROOM = "SET_ROOM";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
-	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
-	var SET_CURRENT_PLAYER_INDEX = exports.SET_CURRENT_PLAYER_INDEX = "SET_CURRENT_PLAYER_INDEX";
+	var SET_CURRENT_PLAYER = exports.SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
 
 	/*
 	 * action creators
@@ -23831,17 +23832,10 @@
 	  };
 	}
 
-	function removePlayer(player) {
+	function setCurrentPlayer(player) {
 	  return {
-	    type: REMOVE_PLAYER,
+	    type: SET_CURRENT_PLAYER,
 	    player: player
-	  };
-	}
-
-	function setCurrentPlayerIndex(index) {
-	  return {
-	    type: SET_CURRENT_PLAYER_INDEX,
-	    index: index
 	  };
 	}
 

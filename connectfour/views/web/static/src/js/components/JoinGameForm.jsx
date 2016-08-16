@@ -18,7 +18,7 @@ const JoinGameForm = React.createClass({
 
   _handleSubmit: function(e) {
     e.preventDefault();
-    Emitters.addPlayer({
+    Emitters.addUser({
       username: this.state.username,
       room: this.state.room,
     });

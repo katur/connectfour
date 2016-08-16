@@ -20,9 +20,12 @@ const NewGameForm = React.createClass({
 
   _handleSubmit: function(e) {
     e.preventDefault();
-    Emitters.addFirstPlayer({
+
+    Emitters.addUser({
       username: this.state.username,
     });
+
+    // could this signal be received before the previous on the server?
     Emitters.createBoard({
       numRows: this.state.numRows,
       numColumns: this.state.numColumns,

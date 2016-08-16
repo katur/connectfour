@@ -2,20 +2,19 @@ import {
   SET_USERNAME,
   SET_ROOM,
   ADD_PLAYER,
-  REMOVE_PLAYER,
-  SET_CURRENT_PLAYER_INDEX,
+  SET_CURRENT_PLAYER,
 } from "./actions";
 
 
 const initialState = {
-	username: ``,
-	room: ``,
-	players: [],
-	currentPlayerIndex: null,
-	board: [[]],
-	feedback: ``,
-	gameInProgress: false,
-	gameNumber: null,
+  username: ``,
+  room: ``,
+  players: [],
+  currentPlayer: null,
+  board: [[]],
+  feedback: ``,
+  gameInProgress: false,
+  gameNumber: null,
 }
 
 

@@ -4,8 +4,7 @@
 export const SET_USERNAME = "SET_USERNAME";
 export const SET_ROOM = "SET_ROOM";
 export const ADD_PLAYER = "ADD_PLAYER";
-export const REMOVE_PLAYER = "REMOVE_PLAYER";
-export const SET_CURRENT_PLAYER_INDEX = "SET_CURRENT_PLAYER_INDEX";
+export const SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
 
 
 /*
@@ -32,16 +31,9 @@ export function addPlayer(player) {
   }
 }
 
-export function removePlayer(player) {
+export function setCurrentPlayer(player) {
   return {
-    type: REMOVE_PLAYER,
+    type: SET_CURRENT_PLAYER,
     player
-  }
-}
-
-export function setCurrentPlayerIndex(index) {
-  return {
-    type: SET_CURRENT_PLAYER_INDEX,
-    index
   }
 }
