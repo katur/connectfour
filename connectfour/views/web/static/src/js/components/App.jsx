@@ -1,14 +1,14 @@
 import React from "react";
-import GameScreenWrapper from "../containers/GameScreenWrapper";
-import SetupScreenWrapper from "../containers/SetupScreenWrapper";
+import SetupScreen from "./SetupScreen";
+import GameScreen from "./GameScreen";
 
 
 const App = React.createClass({
   render: function() {
     return (
       <div>
-      <SetupScreenWrapper />
-      <GameScreenWrapper />
+      <SetupScreen />
+      <GameScreen />
       </div>
     );
   },

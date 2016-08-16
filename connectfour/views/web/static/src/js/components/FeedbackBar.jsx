@@ -1,13 +1,27 @@
 import React from "react";
+import { connect } from 'react-redux'
 
 
-const FeedbackBar = React.createClass({
+function mapStateToProps(state) {
+  return {
+    text: state.feedback,
+    room: state.room,
+  }
+}
+
+
+var FeedbackBar = React.createClass({
   render: function() {
     return (
-      <div id="feedback-bar">{this.props.text}</div>
+      <div id="feedback-bar">{this.props.text} | {this.props.room}</div>
     );
   },
 });
+
+
+FeedbackBar = connect(
+  mapStateToProps
+)(FeedbackBar);
 
 
 export default FeedbackBar;

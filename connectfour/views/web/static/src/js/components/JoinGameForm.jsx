@@ -65,4 +65,4 @@ const JoinGameForm = React.createClass({
 });
 
 
-module.exports = JoinGameForm;
+export default JoinGameForm;

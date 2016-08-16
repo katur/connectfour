@@ -1,9 +1,17 @@
 import React from "react";
-import FeedbackBarWrapper from "../containers/FeedbackBarWrapper";
-import PlayerListWrapper from "../containers/PlayerListWrapper";
+import { connect } from "react-redux";
+import FeedbackBar from "./FeedbackBar";
+import PlayerList from "./PlayerList";
 
 
-const GameScreen = React.createClass({
+function mapStateToProps(state) {
+  return {
+    show: state.username ? true : false,
+  }
+}
+
+
+var GameScreen = React.createClass({
   render: function() {
     if (!this.props.show) {
       return null;
@@ -11,12 +19,17 @@ const GameScreen = React.createClass({
 
     return (
       <div id="game-screen">
-        <FeedbackBarWrapper />
-        <PlayerListWrapper />
+        <FeedbackBar />
+        <PlayerList />
       </div>
     );
   },
 });
+
+
+GameScreen = connect(
+  mapStateToProps
+)(GameScreen);
 
 
 export default GameScreen;
