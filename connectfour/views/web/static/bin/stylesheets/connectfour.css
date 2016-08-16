@@ -2,10 +2,10 @@ body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
   background: red; }
 
-#game-title, #feedback-bar, #game-board, #game-controls {
+#game-title, #game-feedback, #game-board, #game-controls {
   margin-bottom: 40px; }
 
-#feedback-bar {
+#game-feedback {
   background: white;
   padding: 5px; }
 
@@ -15,6 +15,24 @@ body {
 
 .game-square {
   border-radius: 5px; }
+  .game-square-black {
+    background: black; }
+  .game-square-red {
+    background: red; }
+  .game-square-blue {
+    background: blue; }
+  .game-square-purple {
+    background: purple; }
+  .game-square-green {
+    background: green; }
+  .game-square-brown {
+    background: brown; }
+  .game-square-pink {
+    background: pink; }
+  .game-square-gray {
+    background: gray; }
+  .game-square-orange {
+    background: orange; }
 
 @keyframes blinker {
   from {

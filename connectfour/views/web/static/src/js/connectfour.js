@@ -1,13 +1,18 @@
+import wsClient from "socket.io-client";
+import $ from "jquery";
+import "../stylesheets/connectfour";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";
 import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import appReducer from "./reducers";
-import { setUsername, setRoom, addPlayer } from "./actions";
-import "../stylesheets/connectfour";
-import $ from "jquery";
-import wsClient from "socket.io-client";
+import {
+  setUsername,
+  setRoom,
+  addPlayer,
+  createBoard,
+} from "./actions";
 
 
 /////////////////////////////////////////////
@@ -47,8 +52,7 @@ window.ws.on("player_added", function(data) {
 });
 
 window.ws.on("board_created", function(data) {
-  updateFeedbackBar("Board created");
-  drawBoard(data.num_rows, data.num_columns, data.num_to_win);
+  store.dispatch(createBoard(data.board));
 });
 
 window.ws.on("game_started", function(data) {

@@ -2,6 +2,7 @@ import {
   SET_USERNAME,
   SET_ROOM,
   ADD_PLAYER,
+  CREATE_BOARD,
   SET_CURRENT_PLAYER,
 } from "./actions";
 
@@ -9,12 +10,18 @@ import {
 const initialState = {
   username: ``,
   room: ``,
+
+  gameNumber: null,
+  gameInProgress: false,
+  feedback: ``,
+
+  grid: [[]],
+  numRows: null,
+  numColumns: null,
+  numToWin: null,
+
   players: [],
   currentPlayer: null,
-  board: [[]],
-  feedback: ``,
-  gameInProgress: false,
-  gameNumber: null,
 }
 
 
@@ -37,12 +44,24 @@ function appReducer(state = initialState, action) {
       });
 
     case ADD_PLAYER:
+      let player = action.player;
+
       return Object.assign({}, state, {
         players: [
           ...state.players,
-          action.player,
+          player,
         ],
-        feedback: "Welcome, " + action.player.name,
+        feedback: `Welcome, ${player.name}`,
+      });
+
+    case CREATE_BOARD:
+      let board = action.board;
+      return Object.assign({}, state, {
+        numToWin: board.num_to_win,
+        numRows: board.num_rows,
+        numColumns: board.num_columns,
+        grid: board.grid,
+        feedback: `${board.num_rows} x ${board.num_columns} board created`,
       });
 
     default:

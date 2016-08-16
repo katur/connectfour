@@ -9,7 +9,7 @@ function mapStateToProps(state) {
 }
 
 
-let PlayerList = React.createClass({
+let GamePlayers = React.createClass({
   render: function() {
     return (
       <ul id="player-list">
@@ -24,9 +24,9 @@ let PlayerList = React.createClass({
 });
 
 
-PlayerList = connect(
+GamePlayers = connect(
   mapStateToProps
-)(PlayerList);
+)(GamePlayers);
 
 
-export default PlayerList;
+export default GamePlayers;

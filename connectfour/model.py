@@ -451,6 +451,14 @@ class Board(object):
         return '{} rows x {} columns ({} to win)'.format(
             self.num_rows, self.num_columns, self.num_to_win)
 
+    def get_json(self):
+        return {
+            'num_rows': self.num_rows,
+            'num_columns': self.num_columns,
+            'num_to_win': self.num_to_win,
+            'grid': self.grid,
+        }
+
     def reset(self):
         """Reset this board for a new game.
 

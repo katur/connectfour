@@ -5,23 +5,22 @@ import { connect } from 'react-redux'
 function mapStateToProps(state) {
   return {
     text: state.feedback,
-    room: state.room,
   }
 }
 
 
-let FeedbackBar = React.createClass({
+let GameFeedback = React.createClass({
   render: function() {
     return (
-      <div id="feedback-bar">{this.props.text} | {this.props.room}</div>
+      <div id="game-feedback">{this.props.text}</div>
     );
   },
 });
 
 
-FeedbackBar = connect(
+GameFeedback = connect(
   mapStateToProps
-)(FeedbackBar);
+)(GameFeedback);
 
 
-export default FeedbackBar;
+export default GameFeedback;

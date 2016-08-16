@@ -1,13 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import Emitters from "../emitters";
 
 
-const NewGameForm = React.createClass({
+let NewGameForm = React.createClass({
   getInitialState: function() {
     return {
-      numRows: `${this.props.defaultRows}`,
-      numColumns: `${this.props.defaultColumns}`,
-      numToWin: `${this.props.defaultToWin}`,
+      numRows: `${window.DEFAULT_ROWS}`,
+      numColumns: `${window.DEFAULT_COLUMNS}`,
+      numToWin: `${window.DEFAULT_TO_WIN}`,
       username: ``,
     };
   },

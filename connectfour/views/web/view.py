@@ -47,17 +47,14 @@ class RoomData():
         for action, response in responses.iteritems():
             self.pubsub.subscribe(action, response)
 
-    def on_board_created(self, board):
-        socketio.emit('board_created', {
-            'num_rows': board.num_rows,
-            'num_columns': board.num_columns,
-            'num_to_win': board.num_to_win,
-        }, room=self.room)
-
     def on_player_added(self, player):
         socketio.emit('player_added', {
             'player': player.get_json(),
-            'room': self.room,
+        }, room=self.room)
+
+    def on_board_created(self, board):
+        socketio.emit('board_created', {
+            'board': board.get_json(),
         }, room=self.room)
 
     def on_game_started(self, game_number):

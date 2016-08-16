@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import FeedbackBar from "./FeedbackBar";
-import PlayerList from "./PlayerList";
+import GameTitle from "./GameTitle";
+import GamePlayers from "./GamePlayers";
+import GameFeedback from "./GameFeedback";
+import GameBoard from "./GameBoard";
 
 
 function mapStateToProps(state) {
@@ -19,8 +21,10 @@ let GameScreen = React.createClass({
 
     return (
       <div id="game-screen">
-        <FeedbackBar />
-        <PlayerList />
+        <GameTitle />
+        <GamePlayers />
+        <GameFeedback />
+        <GameBoard />
       </div>
     );
   },
