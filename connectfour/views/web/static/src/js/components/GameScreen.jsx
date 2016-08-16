@@ -11,7 +11,7 @@ function mapStateToProps(state) {
 }
 
 
-var GameScreen = React.createClass({
+let GameScreen = React.createClass({
   render: function() {
     if (!this.props.show) {
       return null;

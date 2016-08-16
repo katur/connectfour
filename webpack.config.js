@@ -1,5 +1,5 @@
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var WebpackNotifierPlugin = require("webpack-notifier");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const WebpackNotifierPlugin = require("webpack-notifier");
 
 
 module.exports = {

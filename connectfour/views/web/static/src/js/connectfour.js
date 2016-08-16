@@ -92,20 +92,20 @@ window.ws.on("message", function(message) {
 ///////////////////////////////////////////////////////////////
 
 function drawBoard(numRows, numColumns, numToWin) {
-  var percentage = 80.0 / Math.max(numRows, numColumns);
+  let percentage = 80.0 / Math.max(numRows, numColumns);
 
-  var columnButtons = $("#column-buttons");
-  var buttonStyle = "width:" + percentage + "vmin;";
-  for (var i = 0; i < numColumns; i++) {
+  let columnButtons = $("#column-buttons");
+  let buttonStyle = "width:" + percentage + "vmin;";
+  for (let i = 0; i < numColumns; i++) {
     columnButtons.append(
       "<button class='column-play' style='" + buttonStyle +
       "' onclick='sendPlay(" + i + ")' disabled>Play here</button>");
   }
 
-  var gameGrid = $("#game-grid");
-  for (var i = 0; i < numRows; i++) {
-    for (var j = 0; j < numColumns; j++) {
-      var squareStyle = "width:" + percentage + "vmin; " +
+  let gameGrid = $("#game-grid");
+  for (let i = 0; i < numRows; i++) {
+    for (let j = 0; j < numColumns; j++) {
+      let squareStyle = "width:" + percentage + "vmin; " +
                         "height:" + percentage + "vmin; ";
       if (j === 0) {
         squareStyle += "clear: left; ";

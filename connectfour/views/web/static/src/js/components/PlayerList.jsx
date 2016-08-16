@@ -9,7 +9,7 @@ function mapStateToProps(state) {
 }
 
 
-var PlayerList = React.createClass({
+let PlayerList = React.createClass({
   render: function() {
     return (
       <ul id="player-list">

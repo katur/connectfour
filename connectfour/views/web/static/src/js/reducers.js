@@ -38,14 +38,13 @@ function appReducer(state = initialState, action) {
       });
 
     case ADD_PLAYER:
-      var newState = Object.assign({}, state, {
+      return Object.assign({}, state, {
         players: [
           ...state.players,
           action.player,
         ],
         feedback: "Welcome, " + action.player.name,
       });
-      return newState;
 
     default:
       return state;

@@ -14,7 +14,7 @@ function mapStateToProps(state) {
 }
 
 
-var SetupScreen = React.createClass({
+let SetupScreen = React.createClass({
   render: function() {
     if (!this.props.show) {
       return null;

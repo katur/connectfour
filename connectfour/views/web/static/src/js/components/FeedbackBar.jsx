@@ -10,7 +10,7 @@ function mapStateToProps(state) {
 }
 
 
-var FeedbackBar = React.createClass({
+let FeedbackBar = React.createClass({
   render: function() {
     return (
       <div id="feedback-bar">{this.props.text} | {this.props.room}</div>
