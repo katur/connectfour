@@ -72,11 +72,11 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _reducers = __webpack_require__(262);
+	var _reducers = __webpack_require__(264);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(265);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -133,7 +133,7 @@
 	});
 
 	window.ws.on("next_player", function (data) {
-	  updateFeedbackBar(data.player + "'s turn");
+	  updateFeedbackBar(data.player.name + "'s turn");
 	});
 
 	window.ws.on("color_played", function (data) {
@@ -141,12 +141,12 @@
 	});
 
 	window.ws.on("try_again", function (data) {
-	  updateFeedbackBar(data.player + " try again (" + data.reason + ")");
+	  updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
 	});
 
 	window.ws.on("game_won", function (data) {
 	  disablePlayButtons();
-	  updateFeedbackBar("Game won by " + data.player);
+	  updateFeedbackBar("Game won by " + data.player.name);
 	  enablePlayAgainButton();
 	});
 
@@ -41311,11 +41311,15 @@
 
 	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
 
-	var _GameFeedback = __webpack_require__(257);
+	var _GameStartButton = __webpack_require__(257);
+
+	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
+
+	var _GameFeedback = __webpack_require__(258);
 
 	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
 
-	var _GameBoard = __webpack_require__(258);
+	var _GameBoard = __webpack_require__(259);
 
 	var _GameBoard2 = _interopRequireDefault(_GameBoard);
 
@@ -41340,6 +41344,7 @@
 	      { id: "game-screen" },
 	      _react2.default.createElement(_GameTitle2.default, null),
 	      _react2.default.createElement(_GamePlayers2.default, null),
+	      _react2.default.createElement(_GameStartButton2.default, null),
 	      _react2.default.createElement(_GameFeedback2.default, null),
 	      _react2.default.createElement(_GameBoard2.default, null)
 	    );
@@ -41463,6 +41468,54 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _emitters = __webpack_require__(252);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameStartButton = _react2.default.createClass({
+	  displayName: "GameStartButton",
+
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+	    _emitters2.default.startGame();
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "form",
+	      {
+	        id: "game-start",
+	        action: "",
+	        method: "post",
+	        onSubmit: this._handleSubmit
+	      },
+	      _react2.default.createElement(
+	        "button",
+	        { type: "submit" },
+	        "Start Game"
+	      )
+	    );
+	  }
+	});
+
+	exports.default = GameStartButton;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
 	var _reactRedux = __webpack_require__(229);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -41490,7 +41543,7 @@
 	exports.default = GameFeedback;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41505,11 +41558,11 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameColumnButtons = __webpack_require__(259);
+	var _GameColumnButtons = __webpack_require__(260);
 
 	var _GameColumnButtons2 = _interopRequireDefault(_GameColumnButtons);
 
-	var _GameGrid = __webpack_require__(260);
+	var _GameGrid = __webpack_require__(262);
 
 	var _GameGrid2 = _interopRequireDefault(_GameGrid);
 
@@ -41531,7 +41584,7 @@
 	exports.default = GameBoard;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41546,7 +41599,7 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameColumnButton = __webpack_require__(264);
+	var _GameColumnButton = __webpack_require__(261);
 
 	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
 
@@ -41590,7 +41643,7 @@
 	exports.default = GameColumnButtons;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41605,7 +41658,42 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameSquare = __webpack_require__(261);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameColumnButton = _react2.default.createClass({
+	  displayName: "GameColumnButton",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "button",
+	      {
+	        className: "game-column-button",
+	        style: this.props.style
+	      },
+	      "Play here"
+	    );
+	  }
+	});
+
+	exports.default = GameColumnButton;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	var _GameSquare = __webpack_require__(263);
 
 	var _GameSquare2 = _interopRequireDefault(_GameSquare);
 
@@ -41660,7 +41748,7 @@
 	exports.default = GameGrid;
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41691,7 +41779,7 @@
 	exports.default = GameSquare;
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41700,7 +41788,7 @@
 	  value: true
 	});
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(265);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -41772,7 +41860,7 @@
 	exports.default = appReducer;
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41840,41 +41928,6 @@
 	    player: player
 	  };
 	}
-
-/***/ },
-/* 264 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(53);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(229);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var GameColumnButton = _react2.default.createClass({
-	  displayName: "GameColumnButton",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "button",
-	      {
-	        className: "game-column-button",
-	        style: this.props.style
-	      },
-	      "Play here"
-	    );
-	  }
-	});
-
-	exports.default = GameColumnButton;
 
 /***/ }
 /******/ ]);

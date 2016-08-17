@@ -18,7 +18,7 @@ button {
   button:hover {
     background: #aaa; }
 
-#game-title, #game-players, #game-feedback, #game-board, #game-controls {
+#game-title, #game-players, #game-start, #game-feedback, #game-board, #game-controls {
   margin-bottom: 40px; }
 
 #game-feedback {

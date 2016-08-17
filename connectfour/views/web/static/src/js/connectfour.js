@@ -72,7 +72,7 @@ window.ws.on("game_started", function(data) {
 });
 
 window.ws.on("next_player", function(data) {
-  updateFeedbackBar(data.player + "'s turn");
+  updateFeedbackBar(data.player.name + "'s turn");
 });
 
 window.ws.on("color_played", function(data) {
@@ -80,12 +80,12 @@ window.ws.on("color_played", function(data) {
 });
 
 window.ws.on("try_again", function(data) {
-  updateFeedbackBar(data.player + " try again (" + data.reason + ")");
+  updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
 });
 
 window.ws.on("game_won", function(data) {
   disablePlayButtons();
-  updateFeedbackBar("Game won by " + data.player);
+  updateFeedbackBar("Game won by " + data.player.name);
   enablePlayAgainButton()
 });
 
