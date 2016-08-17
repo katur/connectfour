@@ -1,12 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
+import GameColumnButtons from "./GameColumnButtons";
 import GameGrid from "./GameGrid";
 
 
 let GameBoard = React.createClass({
   render: function() {
     return (
-      <GameGrid />
+      <div id="game-board">
+        <GameColumnButtons />
+        <GameGrid />
+      </div>
     );
   },
 });

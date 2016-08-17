@@ -57,7 +57,7 @@ const JoinGameForm = React.createClass({
             </dd>
           </dl>
 
-          <input type="submit" value="Submit" />
+          <button type="submit">Submit</button>
         </form>
       </div>
     );

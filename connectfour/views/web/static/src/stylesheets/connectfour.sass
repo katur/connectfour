@@ -3,16 +3,36 @@ body
   background: cornflowerblue
 
 
-#game-title, #game-feedback, #game-board, #game-controls
+input, button
+  background: #eee
+
+
+input
+  padding: 3px
+  border: none
+  border-radius: 1px
+
+
+button
+  cursor: pointer
+  padding: 5px
+  border: none
+  border-radius: 3px
+
+  &:hover
+    background: #aaa
+
+
+#game-title, #game-players, #game-feedback, #game-board, #game-controls
   margin-bottom: 40px
 
 
 #game-feedback
-  background: white
-  padding: 5px
+  background: lighten(cornflowerblue, 10%)
+  padding: 10px
 
 
-.game-square, .column-play
+.game-column-button, .game-square
   margin: 1vmin
   float: left
 

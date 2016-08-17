@@ -72,11 +72,11 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _reducers = __webpack_require__(261);
+	var _reducers = __webpack_require__(262);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(262);
+	var _actions = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41113,7 +41113,11 @@
 	            })
 	          )
 	        ),
-	        _react2.default.createElement("input", { type: "submit", value: "Submit" })
+	        _react2.default.createElement(
+	          "button",
+	          { type: "submit" },
+	          "Submit"
+	        )
 	      )
 	    );
 	  }
@@ -41271,7 +41275,11 @@
 	            })
 	          )
 	        ),
-	        _react2.default.createElement("input", { type: "submit", value: "Submit" })
+	        _react2.default.createElement(
+	          "button",
+	          { type: "submit" },
+	          "Submit"
+	        )
 	      )
 	    );
 	  }
@@ -41415,15 +41423,24 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "ul",
-	      { id: "player-list" },
-	      this.props.players.map(function (player, i) {
-	        return _react2.default.createElement(
-	          "li",
-	          { key: i },
-	          player.name
-	        );
-	      })
+	      "div",
+	      { id: "game-players" },
+	      _react2.default.createElement(
+	        "h3",
+	        null,
+	        "Players"
+	      ),
+	      _react2.default.createElement(
+	        "ul",
+	        null,
+	        this.props.players.map(function (player, i) {
+	          return _react2.default.createElement(
+	            "li",
+	            { key: i },
+	            player.name
+	          );
+	        })
+	      )
 	    );
 	  }
 	});
@@ -41488,7 +41505,11 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameGrid = __webpack_require__(259);
+	var _GameColumnButtons = __webpack_require__(259);
+
+	var _GameColumnButtons2 = _interopRequireDefault(_GameColumnButtons);
+
+	var _GameGrid = __webpack_require__(260);
 
 	var _GameGrid2 = _interopRequireDefault(_GameGrid);
 
@@ -41498,7 +41519,12 @@
 	  displayName: "GameBoard",
 
 	  render: function render() {
-	    return _react2.default.createElement(_GameGrid2.default, null);
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-board" },
+	      _react2.default.createElement(_GameColumnButtons2.default, null),
+	      _react2.default.createElement(_GameGrid2.default, null)
+	    );
 	  }
 	});
 
@@ -41520,7 +41546,66 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameSquare = __webpack_require__(260);
+	var _GameColumnButton = __webpack_require__(264);
+
+	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    numRows: state.numRows,
+	    numColumns: state.numColumns
+	  };
+	}
+
+	var GameColumnButtons = _react2.default.createClass({
+	  displayName: "GameColumnButtons",
+
+	  render: function render() {
+	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var size = percentage + "vmin";
+
+	    var row = [];
+
+	    for (var i = 0; i < this.props.numColumns; i++) {
+	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
+	        key: i,
+	        style: {
+	          width: size
+	        }
+	      }));
+	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-column-buttons" },
+	      row
+	    );
+	  }
+	});
+
+	GameColumnButtons = (0, _reactRedux.connect)(mapStateToProps)(GameColumnButtons);
+
+	exports.default = GameColumnButtons;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	var _GameSquare = __webpack_require__(261);
 
 	var _GameSquare2 = _interopRequireDefault(_GameSquare);
 
@@ -41539,29 +41624,28 @@
 
 	  render: function render() {
 	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var styleRoot = "width:" + percentage + "vmin; " + "height:" + percentage + "vmin; ";
-
-	    var grid = this.props.grid;
+	    var size = percentage + "vmin";
 
 	    var rows = [];
 
-	    grid.forEach(function (row, i) {
-	      var currentRow = [];
-	      row.forEach(function (column, j) {
+	    for (var i = 0; i < this.props.numRows; i++) {
+	      var row = [];
+	      for (var j = 0; j < this.props.numColumns; j++) {
 	        var clear = j === 0 ? "left" : "none";
 
-	        currentRow.push(_react2.default.createElement(_GameSquare2.default, {
+	        row.push(_react2.default.createElement(_GameSquare2.default, {
 	          key: i + "-" + j,
-	          color: grid[i][j],
+	          color: this.props.grid[i][j],
 	          style: {
-	            width: percentage + "vmin",
-	            height: percentage + "vmin",
+	            width: size,
+	            height: size,
 	            clear: clear
 	          }
 	        }));
-	      });
-	      rows.push(currentRow);
-	    });
+	      }
+
+	      rows.push(row);
+	    }
 
 	    return _react2.default.createElement(
 	      "div",
@@ -41576,7 +41660,7 @@
 	exports.default = GameGrid;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41607,7 +41691,7 @@
 	exports.default = GameSquare;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41616,7 +41700,7 @@
 	  value: true
 	});
 
-	var _actions = __webpack_require__(262);
+	var _actions = __webpack_require__(263);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -41688,7 +41772,7 @@
 	exports.default = appReducer;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -41756,6 +41840,41 @@
 	    player: player
 	  };
 	}
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameColumnButton = _react2.default.createClass({
+	  displayName: "GameColumnButton",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "button",
+	      {
+	        className: "game-column-button",
+	        style: this.props.style
+	      },
+	      "Play here"
+	    );
+	  }
+	});
+
+	exports.default = GameColumnButton;
 
 /***/ }
 /******/ ]);

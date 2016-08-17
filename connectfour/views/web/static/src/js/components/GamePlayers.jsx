@@ -12,13 +12,16 @@ function mapStateToProps(state) {
 let GamePlayers = React.createClass({
   render: function() {
     return (
-      <ul id="player-list">
-        {this.props.players.map(function(player, i) {
-          return (
-            <li key={i}>{player.name}</li>
-          );
-        })}
-      </ul>
+      <div id="game-players">
+        <h3>Players</h3>
+        <ul>
+          {this.props.players.map(function(player, i) {
+            return (
+              <li key={i}>{player.name}</li>
+            );
+          })}
+        </ul>
+      </div>
     );
   },
 });

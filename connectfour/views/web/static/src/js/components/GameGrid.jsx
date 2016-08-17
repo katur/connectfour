@@ -16,32 +16,30 @@ let GameGrid = React.createClass({
   render: function() {
     const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
-    const styleRoot = "width:" + percentage + "vmin; " +
-                      "height:" + percentage + "vmin; ";
-
-    const grid = this.props.grid;
+    const size = percentage + "vmin";
 
     let rows = [];
 
-    grid.forEach(function(row, i) {
-      let currentRow = [];
-      row.forEach(function(column, j) {
+    for (let i = 0; i < this.props.numRows; i++) {
+      let row = [];
+      for (let j = 0; j < this.props.numColumns; j++) {
         let clear = (j === 0) ? "left" : "none";
 
-        currentRow.push(
+        row.push(
           <GameSquare
             key={`${i}-${j}`}
-            color={grid[i][j]}
+            color={this.props.grid[i][j]}
             style={{
-              width: percentage + "vmin",
-              height: percentage + "vmin",
+              width: size,
+              height: size,
               clear: clear,
             }}
           />
         );
-      });
-      rows.push(currentRow);
-    });
+      }
+
+      rows.push(row);
+    }
 
     return (
       <div id="game-grid">{rows}</div>
