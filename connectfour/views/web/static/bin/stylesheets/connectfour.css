@@ -1,6 +1,6 @@
 body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  background: red; }
+  background: cornflowerblue; }
 
 #game-title, #game-feedback, #game-board, #game-controls {
   margin-bottom: 40px; }
@@ -16,7 +16,7 @@ body {
 .game-square {
   border-radius: 5px; }
   .game-square-null {
-    background: yellow; }
+    background: gold; }
   .game-square-black {
     background: black; }
   .game-square-red {
@@ -24,17 +24,17 @@ body {
   .game-square-blue {
     background: blue; }
   .game-square-purple {
-    background: purple; }
+    background: blueviolet; }
   .game-square-green {
-    background: green; }
+    background: forestgreen; }
   .game-square-brown {
-    background: brown; }
+    background: saddlebrown; }
   .game-square-pink {
-    background: pink; }
+    background: hotpink; }
   .game-square-gray {
-    background: gray; }
+    background: darkgray; }
   .game-square-orange {
-    background: orange; }
+    background: darkorange; }
 
 @keyframes blinker {
   from {
