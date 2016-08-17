@@ -72,11 +72,11 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _reducers = __webpack_require__(260);
+	var _reducers = __webpack_require__(261);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(261);
+	var _actions = __webpack_require__(262);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -107,14 +107,22 @@
 	window.ws.on("room_joined", function (data) {
 	  store.dispatch((0, _actions.setUsername)(data.username));
 	  store.dispatch((0, _actions.setRoom)(data.room));
+
+	  if (data.board) {
+	    store.dispatch((0, _actions.initializeBoard)(data.board));
+	  }
+
+	  if (data.players) {
+	    store.dispatch((0, _actions.initializePlayers)(data.players));
+	  }
+	});
+
+	window.ws.on("board_created", function (data) {
+	  store.dispatch((0, _actions.initializeBoard)(data.board));
 	});
 
 	window.ws.on("player_added", function (data) {
 	  store.dispatch((0, _actions.addPlayer)(data.player));
-	});
-
-	window.ws.on("board_created", function (data) {
-	  store.dispatch((0, _actions.createBoard)(data.board));
 	});
 
 	window.ws.on("game_started", function (data) {
@@ -41123,17 +41131,9 @@
 	  value: true
 	});
 	var Emitters = {
-	  addFirstUser: function addFirstUser(_ref) {
+	  addUser: function addUser(_ref) {
 	    var username = _ref.username;
-
-	    window.ws.emit("add_first_user", {
-	      "username": username
-	    });
-	  },
-
-	  addUser: function addUser(_ref2) {
-	    var username = _ref2.username;
-	    var room = _ref2.room;
+	    var room = _ref.room;
 
 	    window.ws.emit("add_user", {
 	      "username": username,
@@ -41141,10 +41141,10 @@
 	    });
 	  },
 
-	  createBoard: function createBoard(_ref3) {
-	    var numRows = _ref3.numRows;
-	    var numColumns = _ref3.numColumns;
-	    var numToWin = _ref3.numToWin;
+	  createBoard: function createBoard(_ref2) {
+	    var numRows = _ref2.numRows;
+	    var numColumns = _ref2.numColumns;
+	    var numToWin = _ref2.numToWin;
 
 	    window.ws.emit("create_board", {
 	      "num_rows": numRows,
@@ -41157,16 +41157,16 @@
 	    window.ws.emit("start_game", {});
 	  },
 
-	  play: function play(_ref4) {
-	    var column = _ref4.column;
+	  play: function play(_ref3) {
+	    var column = _ref3.column;
 
 	    window.ws.emit("play", {
 	      "column": column
 	    });
 	  },
 
-	  print: function print(_ref5) {
-	    var message = _ref5.message;
+	  print: function print(_ref4) {
+	    var message = _ref4.message;
 
 	    window.ws.emit("print", {
 	      "message": message
@@ -41295,19 +41295,19 @@
 
 	var _reactRedux = __webpack_require__(229);
 
-	var _GameTitle = __webpack_require__(263);
+	var _GameTitle = __webpack_require__(255);
 
 	var _GameTitle2 = _interopRequireDefault(_GameTitle);
 
-	var _GamePlayers = __webpack_require__(264);
+	var _GamePlayers = __webpack_require__(256);
 
 	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
 
-	var _GameFeedback = __webpack_require__(262);
+	var _GameFeedback = __webpack_require__(257);
 
 	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
 
-	var _GameBoard = __webpack_require__(257);
+	var _GameBoard = __webpack_require__(258);
 
 	var _GameBoard2 = _interopRequireDefault(_GameBoard);
 
@@ -41343,313 +41343,7 @@
 	exports.default = GameScreen;
 
 /***/ },
-/* 255 */,
-/* 256 */,
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(53);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(229);
-
-	var _GameGrid = __webpack_require__(258);
-
-	var _GameGrid2 = _interopRequireDefault(_GameGrid);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var GameBoard = _react2.default.createClass({
-	  displayName: "GameBoard",
-
-	  render: function render() {
-	    return _react2.default.createElement(_GameGrid2.default, null);
-	  }
-	});
-
-	exports.default = GameBoard;
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(53);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(229);
-
-	var _GameSquare = __webpack_require__(259);
-
-	var _GameSquare2 = _interopRequireDefault(_GameSquare);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    grid: state.grid,
-	    numRows: state.numRows,
-	    numColumns: state.numColumns
-	  };
-	}
-
-	var GameGrid = _react2.default.createClass({
-	  displayName: "GameGrid",
-
-	  render: function render() {
-	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var styleRoot = "width:" + percentage + "vmin; " + "height:" + percentage + "vmin; ";
-
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-grid" },
-	      this.props.grid.map(function (row, i) {
-	        return;
-	        {
-	          row.map(function (column, j) {
-	            var styleExtra = j === 0 ? "clear: left; " : "";
-
-	            return _react2.default.createElement(_GameSquare2.default, {
-	              key: i + "-" + j,
-	              color: this.props.board[row][column],
-	              style: styleRoot + " " + styleExtra
-	            });
-	          });
-	        }
-	        ;
-	      })
-	    );
-	  }
-	});
-
-	GameGrid = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
-
-	exports.default = GameGrid;
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(53);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(229);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var GameSquare = _react2.default.createClass({
-	  displayName: "GameSquare",
-
-	  render: function render() {
-	    return _react2.default.createElement("div", {
-	      "class": "game-square game-square-{this.props.color}",
-	      style: this.props.style
-	    });
-	  }
-	});
-
-	exports.default = GameSquare;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _actions = __webpack_require__(261);
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var initialState = {
-	  username: "",
-	  room: "",
-
-	  gameNumber: null,
-	  gameInProgress: false,
-	  feedback: "",
-
-	  grid: [[]],
-	  numRows: null,
-	  numColumns: null,
-	  numToWin: null,
-
-	  players: [],
-	  currentPlayer: null
-	};
-
-	// Later, try splitting reducers:
-	// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
-
-	function appReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	  var action = arguments[1];
-
-	  switch (action.type) {
-
-	    case _actions.SET_USERNAME:
-	      // Object.assign creates a copy. Consider this instead:
-	      // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
-	      return Object.assign({}, state, {
-	        username: action.username
-	      });
-
-	    case _actions.SET_ROOM:
-	      return Object.assign({}, state, {
-	        room: action.room
-	      });
-
-	    case _actions.ADD_PLAYER:
-	      var player = action.player;
-
-	      return Object.assign({}, state, {
-	        players: [].concat(_toConsumableArray(state.players), [player]),
-	        feedback: "Welcome, " + player.name
-	      });
-
-	    case _actions.CREATE_BOARD:
-	      var board = action.board;
-	      return Object.assign({}, state, {
-	        numToWin: board.num_to_win,
-	        numRows: board.num_rows,
-	        numColumns: board.num_columns,
-	        grid: board.grid,
-	        feedback: board.num_rows + " x " + board.num_columns + " board created"
-	      });
-
-	    default:
-	      return state;
-	  }
-	}
-
-	exports.default = appReducer;
-
-/***/ },
-/* 261 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.setUsername = setUsername;
-	exports.setRoom = setRoom;
-	exports.addPlayer = addPlayer;
-	exports.createBoard = createBoard;
-	exports.setCurrentPlayer = setCurrentPlayer;
-	/*
-	 * action types
-	 */
-	var SET_USERNAME = exports.SET_USERNAME = "SET_USERNAME";
-	var SET_ROOM = exports.SET_ROOM = "SET_ROOM";
-	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
-	var CREATE_BOARD = exports.CREATE_BOARD = "CREATE_BOARD";
-	var SET_CURRENT_PLAYER = exports.SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
-
-	/*
-	 * action creators
-	 */
-	function setUsername(username) {
-	  return {
-	    type: SET_USERNAME,
-	    username: username
-	  };
-	}
-
-	function setRoom(room) {
-	  return {
-	    type: SET_ROOM,
-	    room: room
-	  };
-	}
-
-	function addPlayer(player) {
-	  return {
-	    type: ADD_PLAYER,
-	    player: player
-	  };
-	}
-
-	function createBoard(board) {
-	  return {
-	    type: CREATE_BOARD,
-	    board: board
-	  };
-	}
-
-	function setCurrentPlayer(player) {
-	  return {
-	    type: SET_CURRENT_PLAYER,
-	    player: player
-	  };
-	}
-
-/***/ },
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(53);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(229);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    text: state.feedback
-	  };
-	}
-
-	var GameFeedback = _react2.default.createClass({
-	  displayName: "GameFeedback",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-feedback" },
-	      this.props.text
-	    );
-	  }
-	});
-
-	GameFeedback = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
-
-	exports.default = GameFeedback;
-
-/***/ },
-/* 263 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41693,7 +41387,7 @@
 	exports.default = GameTitle;
 
 /***/ },
-/* 264 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41737,6 +41431,331 @@
 	GamePlayers = (0, _reactRedux.connect)(mapStateToProps)(GamePlayers);
 
 	exports.default = GamePlayers;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    text: state.feedback
+	  };
+	}
+
+	var GameFeedback = _react2.default.createClass({
+	  displayName: "GameFeedback",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-feedback" },
+	      this.props.text
+	    );
+	  }
+	});
+
+	GameFeedback = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
+
+	exports.default = GameFeedback;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	var _GameGrid = __webpack_require__(259);
+
+	var _GameGrid2 = _interopRequireDefault(_GameGrid);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameBoard = _react2.default.createClass({
+	  displayName: "GameBoard",
+
+	  render: function render() {
+	    return _react2.default.createElement(_GameGrid2.default, null);
+	  }
+	});
+
+	exports.default = GameBoard;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	var _GameSquare = __webpack_require__(260);
+
+	var _GameSquare2 = _interopRequireDefault(_GameSquare);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    grid: state.grid,
+	    numRows: state.numRows,
+	    numColumns: state.numColumns
+	  };
+	}
+
+	var GameGrid = _react2.default.createClass({
+	  displayName: "GameGrid",
+
+	  render: function render() {
+	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var styleRoot = "width:" + percentage + "vmin; " + "height:" + percentage + "vmin; ";
+
+	    var grid = this.props.grid;
+
+	    var rows = [];
+
+	    grid.forEach(function (row, i) {
+	      var currentRow = [];
+	      row.forEach(function (column, j) {
+	        var clear = j === 0 ? "left" : "none";
+
+	        currentRow.push(_react2.default.createElement(_GameSquare2.default, {
+	          key: i + "-" + j,
+	          color: grid[i][j],
+	          style: {
+	            width: percentage + "vmin",
+	            height: percentage + "vmin",
+	            clear: clear
+	          }
+	        }));
+	      });
+	      rows.push(currentRow);
+	    });
+
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-grid" },
+	      rows
+	    );
+	  }
+	});
+
+	GameGrid = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
+
+	exports.default = GameGrid;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(53);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(229);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameSquare = _react2.default.createClass({
+	  displayName: "GameSquare",
+
+	  render: function render() {
+	    return _react2.default.createElement("div", {
+	      className: "game-square game-square-" + this.props.color,
+	      style: this.props.style
+	    });
+	  }
+	});
+
+	exports.default = GameSquare;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _actions = __webpack_require__(262);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var initialState = {
+	  username: "",
+	  room: "",
+
+	  gameNumber: null,
+	  gameInProgress: false,
+	  feedback: "",
+
+	  grid: [[]],
+	  numRows: null,
+	  numColumns: null,
+	  numToWin: null,
+
+	  players: [],
+	  currentPlayer: null
+	};
+
+	// Later, try splitting reducers:
+	// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
+
+	function appReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+
+	    case _actions.SET_USERNAME:
+	      // Object.assign creates a copy. Consider this instead:
+	      // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
+	      return Object.assign({}, state, {
+	        username: action.username
+	      });
+
+	    case _actions.SET_ROOM:
+	      return Object.assign({}, state, {
+	        room: action.room
+	      });
+
+	    case _actions.INITIALIZE_PLAYERS:
+	      return Object.assign({}, state, {
+	        players: action.players
+	      });
+
+	    case _actions.INITIALIZE_BOARD:
+	      var newState = Object.assign({}, state, {
+	        numRows: action.board.num_rows,
+	        numColumns: action.board.num_columns,
+	        numToWin: action.board.num_to_win,
+	        grid: action.board.grid
+	      });
+	      return newState;
+
+	    case _actions.ADD_PLAYER:
+	      var player = action.player;
+
+	      return Object.assign({}, state, {
+	        players: [].concat(_toConsumableArray(state.players), [player]),
+	        feedback: "Welcome, " + player.name
+	      });
+
+	    default:
+	      return state;
+	  }
+	}
+
+	exports.default = appReducer;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setUsername = setUsername;
+	exports.setRoom = setRoom;
+	exports.initializeBoard = initializeBoard;
+	exports.initializePlayers = initializePlayers;
+	exports.addPlayer = addPlayer;
+	exports.setCurrentPlayer = setCurrentPlayer;
+	/*
+	 * action types
+	 */
+	var SET_USERNAME = exports.SET_USERNAME = "SET_USERNAME";
+	var SET_ROOM = exports.SET_ROOM = "SET_ROOM";
+	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
+	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
+	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
+	var SET_CURRENT_PLAYER = exports.SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
+
+	/*
+	 * action creators
+	 */
+	function setUsername(username) {
+	  return {
+	    type: SET_USERNAME,
+	    username: username
+	  };
+	}
+
+	function setRoom(room) {
+	  return {
+	    type: SET_ROOM,
+	    room: room
+	  };
+	}
+
+	function initializeBoard(board) {
+	  return {
+	    type: INITIALIZE_BOARD,
+	    board: board
+	  };
+	}
+
+	function initializePlayers(players) {
+	  return {
+	    type: INITIALIZE_PLAYERS,
+	    players: players
+	  };
+	}
+
+	function addPlayer(player) {
+	  return {
+	    type: ADD_PLAYER,
+	    player: player
+	  };
+	}
+
+	function setCurrentPlayer(player) {
+	  return {
+	    type: SET_CURRENT_PLAYER,
+	    player: player
+	  };
+	}
 
 /***/ }
 /******/ ]);

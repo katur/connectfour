@@ -3,7 +3,7 @@ import random
 import string
 
 from flask import Flask, render_template, request
-from flask_socketio import (SocketIO, join_room)
+from flask_socketio import (SocketIO, join_room, emit)
 
 from connectfour.model import (ConnectFourModel, get_colors, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
@@ -64,12 +64,12 @@ class RoomData():
 
     def on_next_player(self, player):
         socketio.emit('next_player', {
-            'player': str(player),
+            'player': player.get_json(),
         }, room=self.room)
 
     def on_try_again(self, player, reason):
         socketio.emit('try_again', {
-            'player': str(player),
+            'player': player.get_json(),
             'reason': reason.name,
         }, room=self.room)
 
@@ -81,7 +81,7 @@ class RoomData():
 
     def on_game_won(self, player, winning_positions):
         socketio.emit('game_won', {
-            'player': str(player),
+            'player': player.get_json(),
             'winning_positions': list(sorted(winning_positions)),
         }, room=self.room)
 
@@ -117,12 +117,19 @@ def on_add_user(data):
     # Store mapping of this user being in room
     sid_to_room[request.sid] = room
 
-    socketio.emit('room_joined', {
+    data = room_data[room]
+
+    board_json = None
+    if data.model.board:
+        board_json = data.model.board.get_json()
+
+    emit('room_joined', {
         'username': name,
         'room': room,
+        'players': [player.get_json() for player in data.model.players],
+        'board': board_json,
     })
 
-    data = room_data[room]
     data.pubsub.publish(ViewAction.add_player, name, next(data.colors))
     data.pubsub.do_queue()
 

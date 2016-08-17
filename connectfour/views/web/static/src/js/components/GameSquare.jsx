@@ -6,7 +6,7 @@ let GameSquare = React.createClass({
   render: function() {
     return (
       <div
-        class={`game-square game-square-{this.props.color}`}
+        className={`game-square game-square-${this.props.color}`}
         style={this.props.style}
       >
       </div>

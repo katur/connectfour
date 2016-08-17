@@ -10,8 +10,9 @@ import appReducer from "./reducers";
 import {
   setUsername,
   setRoom,
+  initializeBoard,
+  initializePlayers,
   addPlayer,
-  createBoard,
 } from "./actions";
 
 
@@ -45,14 +46,22 @@ window.ws = wsClient(WS_URL);
 window.ws.on("room_joined", function(data) {
   store.dispatch(setUsername(data.username));
   store.dispatch(setRoom(data.room));
+
+  if (data.board) {
+    store.dispatch(initializeBoard(data.board));
+  }
+
+  if (data.players) {
+    store.dispatch(initializePlayers(data.players));
+  }
+});
+
+window.ws.on("board_created", function(data) {
+  store.dispatch(initializeBoard(data.board));
 });
 
 window.ws.on("player_added", function(data) {
   store.dispatch(addPlayer(data.player));
-});
-
-window.ws.on("board_created", function(data) {
-  store.dispatch(createBoard(data.board));
 });
 
 window.ws.on("game_started", function(data) {

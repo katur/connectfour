@@ -1,10 +1,4 @@
 const Emitters = {
-  addFirstUser: function({ username }) {
-    window.ws.emit("add_first_user", {
-      "username": username,
-    });
-  },
-
   addUser: function ({ username, room }) {
     window.ws.emit("add_user", {
       "username": username,

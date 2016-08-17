@@ -19,24 +19,32 @@ let GameGrid = React.createClass({
     const styleRoot = "width:" + percentage + "vmin; " +
                       "height:" + percentage + "vmin; ";
 
-    return (
-      <div id="game-grid">
-        {this.props.grid.map(function(row, i) {
-          return
-            {row.map(function(column, j) {
-              let styleExtra = (j === 0) ? "clear: left; " : "";
+    const grid = this.props.grid;
 
-              return (
-                <GameSquare
-                  key={`${i}-${j}`}
-                  color={this.props.board[row][column]}
-                  style={`${styleRoot} ${styleExtra}`}
-                />
-              );
-            })}
-          ;
-        })}
-      </div>
+    let rows = [];
+
+    grid.forEach(function(row, i) {
+      let currentRow = [];
+      row.forEach(function(column, j) {
+        let clear = (j === 0) ? "left" : "none";
+
+        currentRow.push(
+          <GameSquare
+            key={`${i}-${j}`}
+            color={grid[i][j]}
+            style={{
+              width: percentage + "vmin",
+              height: percentage + "vmin",
+              clear: clear,
+            }}
+          />
+        );
+      });
+      rows.push(currentRow);
+    });
+
+    return (
+      <div id="game-grid">{rows}</div>
     );
   },
 });

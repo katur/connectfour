@@ -1,8 +1,9 @@
 import {
   SET_USERNAME,
   SET_ROOM,
+  INITIALIZE_BOARD,
+  INITIALIZE_PLAYERS,
   ADD_PLAYER,
-  CREATE_BOARD,
   SET_CURRENT_PLAYER,
 } from "./actions";
 
@@ -43,6 +44,20 @@ function appReducer(state = initialState, action) {
         room: action.room,
       });
 
+    case INITIALIZE_PLAYERS:
+      return Object.assign({}, state, {
+        players: action.players,
+      });
+
+    case INITIALIZE_BOARD:
+      let newState = Object.assign({}, state, {
+        numRows: action.board.num_rows,
+        numColumns: action.board.num_columns,
+        numToWin: action.board.num_to_win,
+        grid: action.board.grid,
+      });
+      return newState;
+
     case ADD_PLAYER:
       let player = action.player;
 
@@ -52,16 +67,6 @@ function appReducer(state = initialState, action) {
           player,
         ],
         feedback: `Welcome, ${player.name}`,
-      });
-
-    case CREATE_BOARD:
-      let board = action.board;
-      return Object.assign({}, state, {
-        numToWin: board.num_to_win,
-        numRows: board.num_rows,
-        numColumns: board.num_columns,
-        grid: board.grid,
-        feedback: `${board.num_rows} x ${board.num_columns} board created`,
       });
 
     default:
