@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 let GamePlayers = React.createClass({
   render: function() {
     return (
-      <div id="game-players">
+      <div id="game-players" className="section">
         <h3>Players</h3>
         <ul>
           {this.props.players.map(function(player, i) {

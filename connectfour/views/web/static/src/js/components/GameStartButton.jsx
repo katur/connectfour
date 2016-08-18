@@ -20,6 +20,7 @@ let GameStartButton = React.createClass({
     return (
       <form
         id="game-start"
+        className="section"
         action=""
         method="post"
         onSubmit={this._handleSubmit}

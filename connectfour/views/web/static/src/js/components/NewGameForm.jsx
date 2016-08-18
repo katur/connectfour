@@ -36,7 +36,7 @@ let NewGameForm = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className="section">
         <h2>Set up a new game?</h2>
 
         <form

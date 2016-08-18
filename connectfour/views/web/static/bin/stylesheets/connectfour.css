@@ -1,6 +1,6 @@
 body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  background: cornflowerblue; }
+  background: #7ba5f0; }
 
 input, button {
   background: #eee; }
@@ -18,11 +18,12 @@ button {
     background: #aaa;
     cursor: pointer; }
 
-#game-title, #game-players, #game-start, #game-feedback, #game-board, #game-controls {
+.section {
   margin-bottom: 40px; }
 
 #game-feedback {
-  background: #92b4f2;
+  border-radius: 5px;
+  background: #a9c4f5;
   padding: 10px; }
 
 .game-column-button, .game-square {
@@ -38,7 +39,7 @@ button {
   .game-square-red {
     background: crimson; }
   .game-square-blue {
-    background: blue; }
+    background: royalblue; }
   .game-square-purple {
     background: blueviolet; }
   .game-square-green {
@@ -51,6 +52,8 @@ button {
     background: darkgray; }
   .game-square-orange {
     background: darkorange; }
+  .game-square-lime {
+    background: chartreuse; }
 
 @keyframes blinker {
   from {

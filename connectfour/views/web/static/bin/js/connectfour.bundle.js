@@ -30878,7 +30878,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      null,
+	      { className: "section" },
 	      _react2.default.createElement(
 	        "h2",
 	        null,
@@ -31071,7 +31071,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      null,
+	      { className: "section" },
 	      _react2.default.createElement(
 	        "h2",
 	        null,
@@ -31276,7 +31276,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-players" },
+	      { id: "game-players", className: "section" },
 	      _react2.default.createElement(
 	        "h3",
 	        null,
@@ -31342,6 +31342,7 @@
 	      "form",
 	      {
 	        id: "game-start",
+	        className: "section",
 	        action: "",
 	        method: "post",
 	        onSubmit: this._handleSubmit
@@ -31392,7 +31393,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-feedback" },
+	      { id: "game-feedback", className: "section" },
 	      this.props.text
 	    );
 	  }
@@ -31434,7 +31435,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-board" },
+	      { id: "game-board", className: "section" },
 	      _react2.default.createElement(_GameColumnButtons2.default, null),
 	      _react2.default.createElement(_GameGrid2.default, null)
 	    );

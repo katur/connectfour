@@ -7,7 +7,7 @@ import GameGrid from "./GameGrid";
 let GameBoard = React.createClass({
   render: function() {
     return (
-      <div id="game-board">
+      <div id="game-board" className="section">
         <GameColumnButtons />
         <GameGrid />
       </div>

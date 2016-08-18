@@ -1,6 +1,9 @@
+$background-color: lighten(cornflowerblue, 5%)
+
+
 body
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif
-  background: cornflowerblue
+  background: $background-color
 
 
 input, button
@@ -23,12 +26,13 @@ button
     cursor: pointer
 
 
-#game-title, #game-players, #game-start, #game-feedback, #game-board, #game-controls
+.section
   margin-bottom: 40px
 
 
 #game-feedback
-  background: lighten(cornflowerblue, 10%)
+  border-radius: 5px
+  background: lighten($background-color, 10%)
   padding: 10px
 
 
@@ -50,7 +54,7 @@ button
     background: crimson
 
   &-blue
-    background: blue
+    background: royalblue
 
   &-purple
     background: blueviolet
@@ -69,6 +73,9 @@ button
 
   &-orange
     background: darkorange
+
+  &-lime
+    background: chartreuse
 
 
 @keyframes blinker

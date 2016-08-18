@@ -26,7 +26,7 @@ const JoinGameForm = React.createClass({
 
   render: function() {
     return (
-      <div>
+      <div className="section">
         <h2>Join a game room?</h2>
 
         <form
