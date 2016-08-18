@@ -1,29 +1,37 @@
-import logging
 import random
 import string
 
 from flask import Flask, render_template, request
-from flask_socketio import (SocketIO, join_room, emit)
+from flask_socketio import SocketIO, join_room, emit
 
 from connectfour.model import (ConnectFourModel, get_colors, DEFAULT_ROWS,
                                DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
 
+ROOM_ID_LENGTH = 5
 
+
+# Set up application
 async_mode = None
 app = Flask(__name__)
-app.config['DEBUG'] = DEBUG
-app.config['SECRET_KEY'] = SECRET_KEY
+app.config.update(
+    DEBUG=DEBUG,
+    SECRET_KEY=SECRET_KEY
+)
 socketio = SocketIO(app, async_mode=async_mode)
 
-log = logging.getLogger('log')
 
+# To map user session ids to rooms
 sid_to_room = {}
-room_data = {}
+
+
+# To map rooms to room-specific data
+room_to_data = {}
 
 
 class RoomData():
+    """Room-specific data, including model and model event handlers."""
 
     def __init__(self, room):
         self.room = room
@@ -110,16 +118,11 @@ def on_add_user(data):
     if 'room' in data and data['room']:
         room = data['room']
     else:
-        # Start a new room with a new model
-        room = _get_random_string(5)
-        room_data[room] = RoomData(room)
+        room = _create_new_room()
 
     join_room(room)
-
-    # Store mapping of this user being in room
     sid_to_room[request.sid] = room
-
-    data = room_data[room]
+    data = room_to_data[room]
 
     board_json = None
     if data.model.board:
@@ -187,9 +190,15 @@ def on_disconnect():
 ###########
 
 def _get_pubsub(request):
-    return room_data[sid_to_room[request.sid]].pubsub
+    return room_to_data[sid_to_room[request.sid]].pubsub
 
 
 def _get_random_string(length):
     return ''.join(random.choice(string.ascii_uppercase + string.digits)
                    for _ in range(length))
+
+
+def _create_new_room():
+    room = _get_random_string(ROOM_ID_LENGTH)
+    room_to_data[room] = RoomData(room)
+    return room
