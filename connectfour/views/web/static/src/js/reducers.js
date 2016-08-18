@@ -61,9 +61,9 @@ function appReducer(state = initialState, action) {
 
     case INITIALIZE_BOARD:
       return update(state, {
-        numRows: action.board.num_rows,
-        numColumns: action.board.num_columns,
-        numToWin: action.board.num_to_win,
+        numRows: action.board.numRows,
+        numColumns: action.board.numColumns,
+        numToWin: action.board.numToWin,
         grid: action.board.grid,
       });
 

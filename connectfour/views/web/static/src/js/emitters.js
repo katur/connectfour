@@ -1,21 +1,21 @@
 const Emitters = {
   addUser: function ({ username, room }) {
-    window.ws.emit("add_user", {
+    window.ws.emit("addUser", {
       "username": username,
       "room": room,
     });
   },
 
   createBoard: function({ numRows, numColumns, numToWin }) {
-    window.ws.emit("create_board", {
-      "num_rows": numRows,
-      "num_columns": numColumns,
-      "num_to_win": numToWin,
+    window.ws.emit("createBoard", {
+      "numRows": numRows,
+      "numColumns": numColumns,
+      "numToWin": numToWin,
     });
   },
 
   startGame: function() {
-    window.ws.emit("start_game", {});
+    window.ws.emit("startGame", {});
   },
 
   play: function({ column }) {

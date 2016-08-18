@@ -17,7 +17,6 @@ import {
 /////////////////////////////////////////////
 
 let store = createStore(appReducer);
-// let store = createStore(appReducer, window.STATE_FROM_SERVER);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -39,7 +38,7 @@ window.ws = wsClient(WS_URL);
 // Respond to WebSocket events (these will mostly update the store) //
 //////////////////////////////////////////////////////////////////////
 
-window.ws.on("room_joined", function(data) {
+window.ws.on("roomJoined", function(data) {
   store.dispatch(setUsername(data.username));
   store.dispatch(setRoom(data.room));
 
@@ -52,36 +51,36 @@ window.ws.on("room_joined", function(data) {
   }
 });
 
-window.ws.on("board_created", function(data) {
+window.ws.on("boardCreated", function(data) {
   store.dispatch(initializeBoard(data.board));
 });
 
-window.ws.on("player_added", function(data) {
+window.ws.on("playerAdded", function(data) {
   store.dispatch(addPlayer(data.player));
 });
 
-window.ws.on("game_started", function(data) {
+window.ws.on("gameStarted", function(data) {
   store.dispatch(initializeBoard(data.board));
-  store.dispatch(startGame(data.game_number));
+  store.dispatch(startGame(data.gameNumber));
 });
 
-window.ws.on("next_player", function(data) {
+window.ws.on("nextPlayer", function(data) {
   store.dispatch(setNextPlayer(data.player));
 });
 
-window.ws.on("color_played", function(data) {
+window.ws.on("colorPlayed", function(data) {
   store.dispatch(colorSquare(data.color, data.position));
 });
 
-window.ws.on("try_again", function(data) {
+window.ws.on("tryAgain", function(data) {
   store.dispatch(tryAgain(data.player, data.reason));
 });
 
-window.ws.on("game_won", function(data) {
+window.ws.on("gameWon", function(data) {
   store.dispatch(gameWon(data.player));
 });
 
-window.ws.on("game_draw", function(data) {
+window.ws.on("gameDraw", function(data) {
   store.dispatch(gameDraw());
 });
 

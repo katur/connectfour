@@ -81,7 +81,6 @@
 	/////////////////////////////////////////////
 
 	var store = (0, _redux.createStore)(_reducers2.default);
-	// let store = createStore(appReducer, window.STATE_FROM_SERVER);
 
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRedux.Provider,
@@ -100,7 +99,7 @@
 	// Respond to WebSocket events (these will mostly update the store) //
 	//////////////////////////////////////////////////////////////////////
 
-	window.ws.on("room_joined", function (data) {
+	window.ws.on("roomJoined", function (data) {
 	  store.dispatch((0, _actions.setUsername)(data.username));
 	  store.dispatch((0, _actions.setRoom)(data.room));
 
@@ -113,36 +112,36 @@
 	  }
 	});
 
-	window.ws.on("board_created", function (data) {
+	window.ws.on("boardCreated", function (data) {
 	  store.dispatch((0, _actions.initializeBoard)(data.board));
 	});
 
-	window.ws.on("player_added", function (data) {
+	window.ws.on("playerAdded", function (data) {
 	  store.dispatch((0, _actions.addPlayer)(data.player));
 	});
 
-	window.ws.on("game_started", function (data) {
+	window.ws.on("gameStarted", function (data) {
 	  store.dispatch((0, _actions.initializeBoard)(data.board));
-	  store.dispatch((0, _actions.startGame)(data.game_number));
+	  store.dispatch((0, _actions.startGame)(data.gameNumber));
 	});
 
-	window.ws.on("next_player", function (data) {
+	window.ws.on("nextPlayer", function (data) {
 	  store.dispatch((0, _actions.setNextPlayer)(data.player));
 	});
 
-	window.ws.on("color_played", function (data) {
+	window.ws.on("colorPlayed", function (data) {
 	  store.dispatch((0, _actions.colorSquare)(data.color, data.position));
 	});
 
-	window.ws.on("try_again", function (data) {
+	window.ws.on("tryAgain", function (data) {
 	  store.dispatch((0, _actions.tryAgain)(data.player, data.reason));
 	});
 
-	window.ws.on("game_won", function (data) {
+	window.ws.on("gameWon", function (data) {
 	  store.dispatch((0, _actions.gameWon)(data.player));
 	});
 
-	window.ws.on("game_draw", function (data) {
+	window.ws.on("gameDraw", function (data) {
 	  store.dispatch((0, _actions.gameDraw)());
 	});
 
@@ -30981,7 +30980,7 @@
 	    var username = _ref.username;
 	    var room = _ref.room;
 
-	    window.ws.emit("add_user", {
+	    window.ws.emit("addUser", {
 	      "username": username,
 	      "room": room
 	    });
@@ -30992,15 +30991,15 @@
 	    var numColumns = _ref2.numColumns;
 	    var numToWin = _ref2.numToWin;
 
-	    window.ws.emit("create_board", {
-	      "num_rows": numRows,
-	      "num_columns": numColumns,
-	      "num_to_win": numToWin
+	    window.ws.emit("createBoard", {
+	      "numRows": numRows,
+	      "numColumns": numColumns,
+	      "numToWin": numToWin
 	    });
 	  },
 
 	  startGame: function startGame() {
-	    window.ws.emit("start_game", {});
+	    window.ws.emit("startGame", {});
 	  },
 
 	  play: function play(_ref3) {
@@ -31722,9 +31721,9 @@
 
 	    case _actions.INITIALIZE_BOARD:
 	      return update(state, {
-	        numRows: action.board.num_rows,
-	        numColumns: action.board.num_columns,
-	        numToWin: action.board.num_to_win,
+	        numRows: action.board.numRows,
+	        numColumns: action.board.numColumns,
+	        numToWin: action.board.numToWin,
 	        grid: action.board.grid
 	      });
 

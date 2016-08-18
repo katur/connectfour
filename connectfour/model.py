@@ -350,8 +350,8 @@ class Player(object):
         return {
             'name': self.name,
             'color': self.color.name,
-            'is_ai': self.is_ai,
-            'num_wins': self.num_wins,
+            'isAI': self.is_ai,
+            'numWins': self.num_wins,
         }
 
     def do_strategy(self, model):
@@ -453,9 +453,9 @@ class Board(object):
 
     def get_json(self):
         return {
-            'num_rows': self.num_rows,
-            'num_columns': self.num_columns,
-            'num_to_win': self.num_to_win,
+            'numRows': self.num_rows,
+            'numColumns': self.num_columns,
+            'numToWin': self.num_to_win,
             'grid': self.grid,
         }
 
