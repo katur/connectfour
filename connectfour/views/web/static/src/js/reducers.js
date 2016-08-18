@@ -4,7 +4,9 @@ import {
   INITIALIZE_BOARD,
   INITIALIZE_PLAYERS,
   ADD_PLAYER,
-  SET_CURRENT_PLAYER,
+  START_GAME,
+  SET_NEXT_PLAYER,
+  COLOR_SQUARE,
 } from "./actions";
 
 
@@ -22,7 +24,12 @@ const initialState = {
   numToWin: null,
 
   players: [],
-  currentPlayer: null,
+  nextPlayer: null,
+}
+
+
+function update(state, mutations) {
+  return Object.assign({}, state, mutations);
 }
 
 
@@ -35,39 +42,61 @@ function appReducer(state = initialState, action) {
     case SET_USERNAME:
       // Object.assign creates a copy. Consider this instead:
       // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
-      return Object.assign({}, state, {
+      return update(state, {
         username: action.username,
       });
 
     case SET_ROOM:
-      return Object.assign({}, state, {
+      return update(state, {
         room: action.room,
       });
 
     case INITIALIZE_PLAYERS:
-      return Object.assign({}, state, {
+      return update(state, {
         players: action.players,
       });
 
     case INITIALIZE_BOARD:
-      let newState = Object.assign({}, state, {
+      return update(state, {
         numRows: action.board.num_rows,
         numColumns: action.board.num_columns,
         numToWin: action.board.num_to_win,
         grid: action.board.grid,
       });
-      return newState;
 
     case ADD_PLAYER:
-      let player = action.player;
-
-      return Object.assign({}, state, {
+      return update(state, {
         players: [
           ...state.players,
-          player,
+          action.player,
         ],
-        feedback: `Welcome, ${player.name}`,
+        feedback: `Welcome, ${action.player.name}`,
       });
+
+    case START_GAME:
+      // TODO: Gotta reset the board here, too
+      return update(state, {
+        gameNumber: action.gameNumber,
+        gameInProgress: true,
+        // feedback: `Game ${action.gameNumber} started`,
+      });
+
+    case SET_NEXT_PLAYER:
+      return update(state, {
+        nextPlayer: action.player,
+        feedback: `${action.player.name} turn`,
+      });
+
+    case COLOR_SQUARE:
+      let newGrid = state.grid.map(function(row) {
+        return row.slice();
+      });
+
+      newGrid[action.position[0]][action.position[1]] = action.color;
+
+      return update(state, {
+        grid: newGrid,
+      })
 
     default:
       return state;

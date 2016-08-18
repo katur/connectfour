@@ -7,6 +7,7 @@ function mapStateToProps(state) {
   return {
     numRows: state.numRows,
     numColumns: state.numColumns,
+    gameInProgress: state.gameInProgress,
   }
 }
 
@@ -23,9 +24,11 @@ let GameColumnButtons = React.createClass({
       row.push(
         <GameColumnButton
           key={i}
+          column={i}
           style={{
             width: size,
           }}
+          disabled={!this.props.gameInProgress}
         />
       );
     }

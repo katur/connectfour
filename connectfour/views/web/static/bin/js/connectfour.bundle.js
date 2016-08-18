@@ -126,34 +126,31 @@
 	});
 
 	window.ws.on("game_started", function (data) {
-	  resetBoard();
-	  disablePlayAgainButton();
-	  enablePlayButtons();
-	  updateGameNumber(data.game_number);
+	  store.dispatch((0, _actions.startGame)(data.game_number));
 	});
 
 	window.ws.on("next_player", function (data) {
-	  updateFeedbackBar(data.player.name + "'s turn");
+	  store.dispatch((0, _actions.setNextPlayer)(data.player));
 	});
 
 	window.ws.on("color_played", function (data) {
-	  updateGameSquare(data.color, data.position);
+	  store.dispatch((0, _actions.colorSquare)(data.color, data.position));
 	});
 
 	window.ws.on("try_again", function (data) {
-	  updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
+	  // updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
 	});
 
 	window.ws.on("game_won", function (data) {
-	  disablePlayButtons();
-	  updateFeedbackBar("Game won by " + data.player.name);
-	  enablePlayAgainButton();
+	  // disablePlayButtons();
+	  // updateFeedbackBar("Game won by " + data.player.name);
+	  // enablePlayAgainButton()
 	});
 
 	window.ws.on("game_draw", function (data) {
-	  disablePlayButtons();
-	  updateFeedbackBar("Game ended in a draw");
-	  enablePlayAgainButton();
+	  // disablePlayButtons();
+	  // updateFeedbackBar("Game ended in a draw");
+	  // enablePlayAgainButton()
 	});
 
 	window.ws.on("message", function (message) {
@@ -164,41 +161,6 @@
 	// Helpers that i'll mostly be migrating to React components //
 	///////////////////////////////////////////////////////////////
 
-	function drawBoard(numRows, numColumns, numToWin) {
-	  var percentage = 80.0 / Math.max(numRows, numColumns);
-
-	  var columnButtons = (0, _jquery2.default)("#column-buttons");
-	  var buttonStyle = "width:" + percentage + "vmin;";
-	  for (var i = 0; i < numColumns; i++) {
-	    columnButtons.append("<button class='column-play' style='" + buttonStyle + "' onclick='sendPlay(" + i + ")' disabled>Play here</button>");
-	  }
-
-	  var gameGrid = (0, _jquery2.default)("#game-grid");
-	  for (var _i = 0; _i < numRows; _i++) {
-	    for (var j = 0; j < numColumns; j++) {
-	      var squareStyle = "width:" + percentage + "vmin; " + "height:" + percentage + "vmin; ";
-	      if (j === 0) {
-	        squareStyle += "clear: left; ";
-	      }
-	      gameGrid.append("<div id='square-" + _i + "-" + j + "' class='game-square' style='" + squareStyle + "'></div>");
-	    }
-	  }
-
-	  resetBoard();
-	}
-
-	function drawPlayAgain() {
-	  (0, _jquery2.default)("#more-controls").append("<button id='play-again' onclick='sendStartGame();'>Play again?</button>");
-	}
-
-	function resetBoard() {
-	  (0, _jquery2.default)(".game-square").css("background", "#fcef03");
-	}
-
-	function updateGameTitle(room) {
-	  (0, _jquery2.default)("#game-title").text("Game Room " + room);
-	}
-
 	function updateGameSquare(color, position) {
 	  id = "#square-" + position[0] + "-" + position[1];
 	  (0, _jquery2.default)(id).css("background", color);
@@ -208,24 +170,12 @@
 	  (0, _jquery2.default)("#game-feedback").text(message);
 	}
 
-	function updateGameNumber(number) {
-	  (0, _jquery2.default)("#game-number").text(number);
-	}
-
-	function enablePlayButtons() {
-	  (0, _jquery2.default)(".column-play").removeAttr("disabled");
-	}
-
 	function disablePlayButtons() {
 	  (0, _jquery2.default)(".column-play").attr("disabled", true);
 	}
 
 	function enablePlayAgainButton() {
 	  (0, _jquery2.default)("#play-again").removeAttr("disabled");
-	}
-
-	function disablePlayAgainButton() {
-	  (0, _jquery2.default)("#play-again").attr("disabled", true);
 	}
 
 /***/ },
@@ -41164,6 +41114,7 @@
 	  play: function play(_ref3) {
 	    var column = _ref3.column;
 
+	    console.log(column);
 	    window.ws.emit("play", {
 	      "column": column
 	    });
@@ -41376,7 +41327,8 @@
 	function mapStateToProps(state) {
 	  return {
 	    numToWin: state.numToWin,
-	    room: state.room
+	    room: state.room,
+	    gameNumber: state.gameNumber
 	  };
 	}
 
@@ -41389,8 +41341,10 @@
 	      { id: "game-title" },
 	      "Connect ",
 	      this.props.numToWin,
-	      " | Room ",
-	      this.props.room
+	      "| Room ",
+	      this.props.room,
+	      "| Game ",
+	      this.props.gameNumber
 	    );
 	  }
 	});
@@ -41468,11 +41422,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(229);
+
 	var _emitters = __webpack_require__(252);
 
 	var _emitters2 = _interopRequireDefault(_emitters);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    gameInProgress: state.gameInProgress
+	  };
+	}
 
 	var GameStartButton = _react2.default.createClass({
 	  displayName: "GameStartButton",
@@ -41493,12 +41455,17 @@
 	      },
 	      _react2.default.createElement(
 	        "button",
-	        { type: "submit" },
+	        {
+	          type: "submit",
+	          disabled: this.props.gameInProgress
+	        },
 	        "Start Game"
 	      )
 	    );
 	  }
 	});
+
+	GameStartButton = (0, _reactRedux.connect)(mapStateToProps)(GameStartButton);
 
 	exports.default = GameStartButton;
 
@@ -41608,7 +41575,8 @@
 	function mapStateToProps(state) {
 	  return {
 	    numRows: state.numRows,
-	    numColumns: state.numColumns
+	    numColumns: state.numColumns,
+	    gameInProgress: state.gameInProgress
 	  };
 	}
 
@@ -41624,9 +41592,11 @@
 	    for (var i = 0; i < this.props.numColumns; i++) {
 	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
 	        key: i,
+	        column: i,
 	        style: {
 	          width: size
-	        }
+	        },
+	        disabled: !this.props.gameInProgress
 	      }));
 	    }
 
@@ -41656,21 +41626,39 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRedux = __webpack_require__(229);
+	var _emitters = __webpack_require__(252);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var GameColumnButton = _react2.default.createClass({
 	  displayName: "GameColumnButton",
 
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+	    _emitters2.default.play({
+	      column: this.props.column
+	    });
+	  },
+
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "button",
+	      "form",
 	      {
-	        className: "game-column-button",
-	        style: this.props.style
+	        action: "",
+	        method: "post",
+	        onSubmit: this._handleSubmit
 	      },
-	      "Play here"
+	      _react2.default.createElement(
+	        "button",
+	        {
+	          className: "game-column-button",
+	          style: this.props.style,
+	          disabled: this.props.disabled
+	        },
+	        "Play here"
+	      )
 	    );
 	  }
 	});
@@ -41806,8 +41794,12 @@
 	  numToWin: null,
 
 	  players: [],
-	  currentPlayer: null
+	  nextPlayer: null
 	};
+
+	function update(state, mutations) {
+	  return Object.assign({}, state, mutations);
+	}
 
 	// Later, try splitting reducers:
 	// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
@@ -41821,35 +41813,56 @@
 	    case _actions.SET_USERNAME:
 	      // Object.assign creates a copy. Consider this instead:
 	      // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
-	      return Object.assign({}, state, {
+	      return update(state, {
 	        username: action.username
 	      });
 
 	    case _actions.SET_ROOM:
-	      return Object.assign({}, state, {
+	      return update(state, {
 	        room: action.room
 	      });
 
 	    case _actions.INITIALIZE_PLAYERS:
-	      return Object.assign({}, state, {
+	      return update(state, {
 	        players: action.players
 	      });
 
 	    case _actions.INITIALIZE_BOARD:
-	      var newState = Object.assign({}, state, {
+	      return update(state, {
 	        numRows: action.board.num_rows,
 	        numColumns: action.board.num_columns,
 	        numToWin: action.board.num_to_win,
 	        grid: action.board.grid
 	      });
-	      return newState;
 
 	    case _actions.ADD_PLAYER:
-	      var player = action.player;
+	      return update(state, {
+	        players: [].concat(_toConsumableArray(state.players), [action.player]),
+	        feedback: "Welcome, " + action.player.name
+	      });
 
-	      return Object.assign({}, state, {
-	        players: [].concat(_toConsumableArray(state.players), [player]),
-	        feedback: "Welcome, " + player.name
+	    case _actions.START_GAME:
+	      // TODO: Gotta reset the board here, too
+	      return update(state, {
+	        gameNumber: action.gameNumber,
+	        gameInProgress: true
+	      });
+
+	    case _actions.SET_NEXT_PLAYER:
+	      return update(state, {
+	        nextPlayer: action.player,
+	        feedback: action.player.name + " turn"
+	      });
+
+	    case _actions.COLOR_SQUARE:
+	      var newGrid = state.grid.map(function (row) {
+	        return row.slice();
+	      });
+
+	      newGrid[action.position[0]][action.position[1]] = action.color;
+
+	      return update(state, {
+	        grid: newGrid
 	      });
 
 	    default:
@@ -41873,7 +41886,9 @@
 	exports.initializeBoard = initializeBoard;
 	exports.initializePlayers = initializePlayers;
 	exports.addPlayer = addPlayer;
-	exports.setCurrentPlayer = setCurrentPlayer;
+	exports.startGame = startGame;
+	exports.setNextPlayer = setNextPlayer;
+	exports.colorSquare = colorSquare;
 	/*
 	 * action types
 	 */
@@ -41882,7 +41897,9 @@
 	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
 	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
-	var SET_CURRENT_PLAYER = exports.SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
+	var START_GAME = exports.START_GAME = "START_GAME";
+	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
+	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
 
 	/*
 	 * action creators
@@ -41922,10 +41939,25 @@
 	  };
 	}
 
-	function setCurrentPlayer(player) {
+	function startGame(gameNumber) {
 	  return {
-	    type: SET_CURRENT_PLAYER,
+	    type: START_GAME,
+	    gameNumber: gameNumber
+	  };
+	}
+
+	function setNextPlayer(player) {
+	  return {
+	    type: SET_NEXT_PLAYER,
 	    player: player
+	  };
+	}
+
+	function colorSquare(color, position) {
+	  return {
+	    type: COLOR_SQUARE,
+	    color: color,
+	    position: position
 	  };
 	}
 

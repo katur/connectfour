@@ -11,12 +11,12 @@ input {
   border-radius: 1px; }
 
 button {
-  cursor: pointer;
-  padding: 5px;
+  padding: 5px 8px;
   border: none;
   border-radius: 3px; }
-  button:hover {
-    background: #aaa; }
+  button:hover:enabled {
+    background: #aaa;
+    cursor: pointer; }
 
 #game-title, #game-players, #game-start, #game-feedback, #game-board, #game-controls {
   margin-bottom: 40px; }
@@ -36,7 +36,7 @@ button {
   .game-square-black {
     background: black; }
   .game-square-red {
-    background: red; }
+    background: crimson; }
   .game-square-blue {
     background: blue; }
   .game-square-purple {

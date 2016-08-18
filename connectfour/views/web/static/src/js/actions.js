@@ -6,7 +6,9 @@ export const SET_ROOM = "SET_ROOM";
 export const INITIALIZE_BOARD = "INITIALIZE_BOARD";
 export const INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
 export const ADD_PLAYER = "ADD_PLAYER";
-export const SET_CURRENT_PLAYER = "SET_CURRENT_PLAYER";
+export const START_GAME = "START_GAME";
+export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
+export const COLOR_SQUARE = "COLOR_SQUARE";
 
 
 /*
@@ -36,20 +38,35 @@ export function initializeBoard(board) {
 export function initializePlayers(players) {
   return {
     type: INITIALIZE_PLAYERS,
-    players
+    players,
   }
 }
 
 export function addPlayer(player) {
   return {
     type: ADD_PLAYER,
-    player
+    player,
   }
 }
 
-export function setCurrentPlayer(player) {
+export function startGame(gameNumber) {
   return {
-    type: SET_CURRENT_PLAYER,
-    player
+    type: START_GAME,
+    gameNumber,
+  }
+}
+
+export function setNextPlayer(player) {
+  return {
+    type: SET_NEXT_PLAYER,
+    player,
+  }
+}
+
+export function colorSquare(color, position) {
+  return {
+    type: COLOR_SQUARE,
+    color,
+    position,
   }
 }

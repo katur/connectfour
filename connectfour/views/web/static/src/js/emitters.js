@@ -19,6 +19,7 @@ const Emitters = {
   },
 
   play: function({ column }) {
+    console.log(column);
     window.ws.emit("play", {
       "column": column,
     });

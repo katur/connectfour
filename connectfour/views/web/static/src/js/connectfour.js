@@ -13,6 +13,9 @@ import {
   initializeBoard,
   initializePlayers,
   addPlayer,
+  startGame,
+  setNextPlayer,
+  colorSquare,
 } from "./actions";
 
 
@@ -65,34 +68,31 @@ window.ws.on("player_added", function(data) {
 });
 
 window.ws.on("game_started", function(data) {
-  resetBoard();
-  disablePlayAgainButton();
-  enablePlayButtons();
-  updateGameNumber(data.game_number);
+  store.dispatch(startGame(data.game_number));
 });
 
 window.ws.on("next_player", function(data) {
-  updateFeedbackBar(data.player.name + "'s turn");
+  store.dispatch(setNextPlayer(data.player));
 });
 
 window.ws.on("color_played", function(data) {
-  updateGameSquare(data.color, data.position);
+  store.dispatch(colorSquare(data.color, data.position));
 });
 
 window.ws.on("try_again", function(data) {
-  updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
+  // updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
 });
 
 window.ws.on("game_won", function(data) {
-  disablePlayButtons();
-  updateFeedbackBar("Game won by " + data.player.name);
-  enablePlayAgainButton()
+  // disablePlayButtons();
+  // updateFeedbackBar("Game won by " + data.player.name);
+  // enablePlayAgainButton()
 });
 
 window.ws.on("game_draw", function(data) {
-  disablePlayButtons();
-  updateFeedbackBar("Game ended in a draw");
-  enablePlayAgainButton()
+  // disablePlayButtons();
+  // updateFeedbackBar("Game ended in a draw");
+  // enablePlayAgainButton()
 });
 
 window.ws.on("message", function(message) {
@@ -104,47 +104,6 @@ window.ws.on("message", function(message) {
 // Helpers that i'll mostly be migrating to React components //
 ///////////////////////////////////////////////////////////////
 
-function drawBoard(numRows, numColumns, numToWin) {
-  let percentage = 80.0 / Math.max(numRows, numColumns);
-
-  let columnButtons = $("#column-buttons");
-  let buttonStyle = "width:" + percentage + "vmin;";
-  for (let i = 0; i < numColumns; i++) {
-    columnButtons.append(
-      "<button class='column-play' style='" + buttonStyle +
-      "' onclick='sendPlay(" + i + ")' disabled>Play here</button>");
-  }
-
-  let gameGrid = $("#game-grid");
-  for (let i = 0; i < numRows; i++) {
-    for (let j = 0; j < numColumns; j++) {
-      let squareStyle = "width:" + percentage + "vmin; " +
-                        "height:" + percentage + "vmin; ";
-      if (j === 0) {
-        squareStyle += "clear: left; ";
-      }
-      gameGrid.append("<div id='square-" + i + "-" + j +
-                      "' class='game-square' style='" + squareStyle +
-                      "'></div>");
-    }
-  }
-
-  resetBoard();
-}
-
-function drawPlayAgain() {
-  $("#more-controls").append(
-    "<button id='play-again' onclick='sendStartGame();'>Play again?</button>");
-}
-
-function resetBoard() {
-  $(".game-square").css("background", "#fcef03");
-}
-
-function updateGameTitle(room) {
-  $("#game-title").text("Game Room " + room);
-}
-
 function updateGameSquare(color, position) {
   id = "#square-" + position[0] + "-" + position[1];
   $(id).css("background", color);
@@ -154,22 +113,10 @@ function updateFeedbackBar(message) {
   $("#game-feedback").text(message);
 }
 
-function updateGameNumber(number) {
-  $("#game-number").text(number);
-}
-
-function enablePlayButtons() {
-  $(".column-play").removeAttr("disabled");
-}
-
 function disablePlayButtons() {
   $(".column-play").attr("disabled", true);
 }
 
 function enablePlayAgainButton() {
   $("#play-again").removeAttr("disabled");
-}
-
-function disablePlayAgainButton() {
-  $("#play-again").attr("disabled", true);
 }

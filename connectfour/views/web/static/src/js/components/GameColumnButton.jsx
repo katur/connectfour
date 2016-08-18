@@ -1,16 +1,30 @@
 import React from "react";
-import { connect } from "react-redux";
+import Emitters from "../emitters";
 
 
-let GameColumnButton = React.createClass({
+const GameColumnButton = React.createClass({
+  _handleSubmit: function(e) {
+    e.preventDefault();
+    Emitters.play({
+      column: this.props.column,
+    });
+  },
+
   render: function() {
     return (
-      <button
-        className="game-column-button"
-        style={this.props.style}
+      <form
+        action=""
+        method="post"
+        onSubmit={this._handleSubmit}
       >
-        Play here
-      </button>
+        <button
+          className="game-column-button"
+          style={this.props.style}
+          disabled={this.props.disabled}
+        >
+          Play here
+        </button>
+      </form>
     );
   },
 });
