@@ -8,7 +8,7 @@ as well as variable board dimensions and a variable number of players.
 
 ## Code
 
-Code is in Python.
+The game logic code is in Python.
 
 Python version is listed in [runtime.txt](runtime.txt).
 
@@ -26,7 +26,8 @@ WebSocket protocol to communicate between client and server
 [Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) on the
 server side).
 The front end uses [React](https://facebook.github.io/react/)
-with [Redux](http://redux.js.org/).
+with [Redux](http://redux.js.org/), and is packed with
+[webpack](http://webpack.github.io/).
 
 
 ## App
