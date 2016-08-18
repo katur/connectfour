@@ -73,7 +73,7 @@ function appReducer(state = initialState, action) {
           ...state.players,
           action.player,
         ],
-        feedback: `Welcome, ${action.player.name}`,
+        feedback: `${action.player.name} has joined the room`,
       });
 
     case START_GAME:

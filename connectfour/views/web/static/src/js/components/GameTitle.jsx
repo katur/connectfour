@@ -4,8 +4,9 @@ import { connect } from 'react-redux'
 
 function mapStateToProps(state) {
   return {
-    numToWin: state.numToWin,
+    username: state.username,
     room: state.room,
+    numToWin: state.numToWin,
     gameNumber: state.gameNumber,
   }
 }
@@ -13,12 +14,24 @@ function mapStateToProps(state) {
 
 let GameTitle = React.createClass({
   render: function() {
+    let gameNumberFeedback = ``;
+
+    if (this.props.gameNumber) {
+      gameNumberFeedback = `| Game ${this.props.gameNumber}`
+    }
+
     return (
-      <h1 id="game-title">
-        Connect {this.props.numToWin}
-        | Room {this.props.room}
-        | Game {this.props.gameNumber}
-      </h1>
+      <div>
+        <h1>
+          Connect {this.props.numToWin}
+        </h1>
+
+        <h3>
+          Welcome, {this.props.username}
+          | Room {this.props.room}
+          {gameNumberFeedback}
+        </h3>
+      </div>
     );
   },
 });

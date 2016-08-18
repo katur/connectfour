@@ -31217,8 +31217,9 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    numToWin: state.numToWin,
+	    username: state.username,
 	    room: state.room,
+	    numToWin: state.numToWin,
 	    gameNumber: state.gameNumber
 	  };
 	}
@@ -31227,15 +31228,30 @@
 	  displayName: "GameTitle",
 
 	  render: function render() {
+	    var gameNumberFeedback = "";
+
+	    if (this.props.gameNumber) {
+	      gameNumberFeedback = "| Game " + this.props.gameNumber;
+	    }
+
 	    return _react2.default.createElement(
-	      "h1",
-	      { id: "game-title" },
-	      "Connect ",
-	      this.props.numToWin,
-	      "| Room ",
-	      this.props.room,
-	      "| Game ",
-	      this.props.gameNumber
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "h1",
+	        null,
+	        "Connect ",
+	        this.props.numToWin
+	      ),
+	      _react2.default.createElement(
+	        "h3",
+	        null,
+	        "Welcome, ",
+	        this.props.username,
+	        "| Room ",
+	        this.props.room,
+	        gameNumberFeedback
+	      )
 	    );
 	  }
 	});
@@ -31730,7 +31746,7 @@
 	    case _actions.ADD_PLAYER:
 	      return update(state, {
 	        players: [].concat(_toConsumableArray(state.players), [action.player]),
-	        feedback: "Welcome, " + action.player.name
+	        feedback: action.player.name + " has joined the room"
 	      });
 
 	    case _actions.START_GAME:
