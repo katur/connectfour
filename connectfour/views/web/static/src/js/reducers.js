@@ -7,6 +7,9 @@ import {
   START_GAME,
   SET_NEXT_PLAYER,
   COLOR_SQUARE,
+  TRY_AGAIN,
+  GAME_WON,
+  GAME_DRAW,
 } from "./actions";
 
 
@@ -74,11 +77,9 @@ function appReducer(state = initialState, action) {
       });
 
     case START_GAME:
-      // TODO: Gotta reset the board here, too
       return update(state, {
         gameNumber: action.gameNumber,
         gameInProgress: true,
-        // feedback: `Game ${action.gameNumber} started`,
       });
 
     case SET_NEXT_PLAYER:
@@ -88,7 +89,7 @@ function appReducer(state = initialState, action) {
       });
 
     case COLOR_SQUARE:
-      let newGrid = state.grid.map(function(row) {
+      var newGrid = state.grid.map(function(row) {
         return row.slice();
       });
 
@@ -96,6 +97,23 @@ function appReducer(state = initialState, action) {
 
       return update(state, {
         grid: newGrid,
+      });
+
+    case TRY_AGAIN:
+      return update(state, {
+        feedback: `${action.player.name} try again (${action.reason})`,
+      });
+
+    case GAME_WON:
+      return update(state, {
+        gameInProgress: false,
+        feedback: `Game won by ${action.player.name}`,
+      })
+
+    case GAME_DRAW:
+      return update(state, {
+        gameInProgress: false,
+        feedback: `Game ended in a draw`,
       })
 
     default:

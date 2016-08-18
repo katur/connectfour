@@ -1,5 +1,4 @@
 import wsClient from "socket.io-client";
-import $ from "jquery";
 import "../stylesheets/connectfour";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -8,14 +7,8 @@ import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
-  setUsername,
-  setRoom,
-  initializeBoard,
-  initializePlayers,
-  addPlayer,
-  startGame,
-  setNextPlayer,
-  colorSquare,
+  setUsername, setRoom, initializeBoard, initializePlayers, addPlayer,
+  startGame, setNextPlayer, colorSquare, tryAgain, gameWon, gameDraw,
 } from "./actions";
 
 
@@ -68,6 +61,7 @@ window.ws.on("player_added", function(data) {
 });
 
 window.ws.on("game_started", function(data) {
+  store.dispatch(initializeBoard(data.board));
   store.dispatch(startGame(data.game_number));
 });
 
@@ -80,43 +74,17 @@ window.ws.on("color_played", function(data) {
 });
 
 window.ws.on("try_again", function(data) {
-  // updateFeedbackBar(data.player.name + " try again (" + data.reason + ")");
+  store.dispatch(tryAgain(data.player, data.reason));
 });
 
 window.ws.on("game_won", function(data) {
-  // disablePlayButtons();
-  // updateFeedbackBar("Game won by " + data.player.name);
-  // enablePlayAgainButton()
+  store.dispatch(gameWon(data.player));
 });
 
 window.ws.on("game_draw", function(data) {
-  // disablePlayButtons();
-  // updateFeedbackBar("Game ended in a draw");
-  // enablePlayAgainButton()
+  store.dispatch(gameDraw());
 });
 
 window.ws.on("message", function(message) {
   console.log(message);
 });
-
-
-///////////////////////////////////////////////////////////////
-// Helpers that i'll mostly be migrating to React components //
-///////////////////////////////////////////////////////////////
-
-function updateGameSquare(color, position) {
-  id = "#square-" + position[0] + "-" + position[1];
-  $(id).css("background", color);
-}
-
-function updateFeedbackBar(message) {
-  $("#game-feedback").text(message);
-}
-
-function disablePlayButtons() {
-  $(".column-play").attr("disabled", true);
-}
-
-function enablePlayAgainButton() {
-  $("#play-again").removeAttr("disabled");
-}

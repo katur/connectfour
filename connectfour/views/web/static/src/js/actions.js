@@ -9,6 +9,9 @@ export const ADD_PLAYER = "ADD_PLAYER";
 export const START_GAME = "START_GAME";
 export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
 export const COLOR_SQUARE = "COLOR_SQUARE";
+export const TRY_AGAIN = "TRY_AGAIN";
+export const GAME_WON = "GAME_WON";
+export const GAME_DRAW = "GAME_DRAW";
 
 
 /*
@@ -17,21 +20,21 @@ export const COLOR_SQUARE = "COLOR_SQUARE";
 export function setUsername(username) {
   return {
     type: SET_USERNAME,
-    username
+    username,
   }
 }
 
 export function setRoom(room) {
   return {
     type: SET_ROOM,
-    room
+    room,
   }
 }
 
 export function initializeBoard(board) {
   return {
     type: INITIALIZE_BOARD,
-    board
+    board,
   }
 }
 
@@ -68,5 +71,26 @@ export function colorSquare(color, position) {
     type: COLOR_SQUARE,
     color,
     position,
+  }
+}
+
+export function tryAgain(player, reason) {
+  return {
+    type: TRY_AGAIN,
+    player,
+    reason,
+  }
+}
+
+export function gameWon(player) {
+  return {
+    type: GAME_WON,
+    player,
+  }
+}
+
+export function gameDraw() {
+  return {
+    type: GAME_DRAW,
   }
 }

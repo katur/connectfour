@@ -59,6 +59,8 @@ class RoomData():
 
     def on_game_started(self, game_number):
         socketio.emit('game_started', {
+            # Send along board to ease resetting
+            'board': self.model.board.get_json(),
             'game_number': game_number,
         }, room=self.room)
 
