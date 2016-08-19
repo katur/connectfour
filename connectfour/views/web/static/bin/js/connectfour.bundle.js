@@ -31489,7 +31489,9 @@
 	  return {
 	    numRows: state.numRows,
 	    numColumns: state.numColumns,
-	    gameInProgress: state.gameInProgress
+	    gameInProgress: state.gameInProgress,
+	    username: state.username,
+	    nextPlayer: state.nextPlayer
 	  };
 	}
 
@@ -31501,6 +31503,7 @@
 	    var size = percentage + "vmin";
 
 	    var row = [];
+	    var enabled = this.props.gameInProgress && this.props.username === this.props.nextPlayer.name;
 
 	    for (var i = 0; i < this.props.numColumns; i++) {
 	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
@@ -31509,7 +31512,7 @@
 	        style: {
 	          width: size
 	        },
-	        disabled: !this.props.gameInProgress
+	        disabled: !enabled
 	      }));
 	    }
 
