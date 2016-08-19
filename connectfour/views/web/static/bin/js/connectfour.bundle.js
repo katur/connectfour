@@ -29256,6 +29256,11 @@
 	    return _react2.default.createElement(
 	      "div",
 	      { id: "setup-screen" },
+	      _react2.default.createElement(
+	        "h1",
+	        null,
+	        "Connect X"
+	      ),
 	      _react2.default.createElement(_NewGameForm2.default, null),
 	      _react2.default.createElement(_JoinGameForm2.default, null)
 	    );

@@ -19,6 +19,7 @@ let SetupScreen = React.createClass({
 
     return (
       <div id="setup-screen">
+        <h1>Connect X</h1>
         <NewGameForm />
         <JoinGameForm />
       </div>
