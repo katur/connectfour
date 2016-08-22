@@ -51,7 +51,7 @@ python web_app.py
 ## Web app dev dependencies
 
 To do development work on the web app, first install js dependencies (listed
-in [package.json](package.json):
+in [package.json](package.json)):
 ```
 npm install
 ```
