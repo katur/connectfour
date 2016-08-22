@@ -31311,7 +31311,7 @@
 	        this.props.players.map(function (player, i) {
 	          return _react2.default.createElement(
 	            "li",
-	            { key: i },
+	            { key: player.pk },
 	            player.name
 	          );
 	        })
@@ -31762,9 +31762,9 @@
 	      });
 
 	    case _actions.REMOVE_PLAYER:
-	      var newPlayers = state.players.slice();
-	      var indexToRemove = newPlayers.indexOf(action.player);
-	      newPlayers.splice(indexToRemove, 1);
+	      var newPlayers = state.players.filter(function (player) {
+	        return player.pk !== action.player.pk;
+	      });
 
 	      return update(state, {
 	        players: newPlayers,

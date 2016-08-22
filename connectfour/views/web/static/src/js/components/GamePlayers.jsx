@@ -17,7 +17,7 @@ let GamePlayers = React.createClass({
         <ul>
           {this.props.players.map(function(player, i) {
             return (
-              <li key={i}>{player.name}</li>
+              <li key={player.pk}>{player.name}</li>
             );
           })}
         </ul>

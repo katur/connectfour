@@ -78,9 +78,9 @@ function appReducer(state = initialState, action) {
       });
 
     case REMOVE_PLAYER:
-      var newPlayers = state.players.slice();
-      var indexToRemove = newPlayers.indexOf(action.player);
-      newPlayers.splice(indexToRemove, 1);
+			var newPlayers = state.players.filter(function(player) {
+				return player.pk !== action.player.pk;
+			});
 
       return update(state, {
         players: newPlayers,

@@ -6,8 +6,7 @@ from flask_socketio import SocketIO, join_room, emit
 
 from connectfour.model import (
     ConnectFourModel, get_colors, DEFAULT_ROWS, DEFAULT_COLUMNS,
-    DEFAULT_TO_WIN,
-)
+    DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
 
@@ -23,10 +22,8 @@ app.config.update(
 )
 socketio = SocketIO(app, async_mode=async_mode)
 
-
-# To map user session ids to rooms and colors
+# To map user session ids to room
 sid_to_room = {}
-
 
 # To map rooms to room-specific data
 room_to_data = {}
@@ -41,12 +38,6 @@ class RoomData():
         self.model = ConnectFourModel(self.pubsub)
         self.colors = get_colors()
         self._create_subscriptions()
-
-        # This gets set before Player object is actually created
-        self.color_to_sid = {}
-
-        # This gets set after Player objects is created
-        self.sid_to_player = {}
 
     def _create_subscriptions(self):
         responses = {
@@ -65,17 +56,11 @@ class RoomData():
             self.pubsub.subscribe(action, response)
 
     def on_player_added(self, player):
-        sid = self.color_to_sid[player.color]
-        self.sid_to_player[sid] = player
-
         socketio.emit('playerAdded', {
             'player': player.get_json(),
         }, room=self.room)
 
     def on_player_removed(self, player):
-        sid = self.color_to_sid[player.color]
-        del self.sid_to_player[sid]
-
         socketio.emit('playerRemoved', {
             'player': player.get_json(),
         }, room=self.room)
@@ -87,7 +72,7 @@ class RoomData():
 
     def on_game_started(self, game_number):
         socketio.emit('gameStarted', {
-            # Send along board to ease resetting
+            # Send along board to ease reset
             'board': self.model.board.get_json(),
             'gameNumber': game_number,
         }, room=self.room)
@@ -156,19 +141,22 @@ def on_add_user(data):
     })
 
     color = next(data.colors)
-    data.color_to_sid[color] = request.sid
-    data.pubsub.publish(ViewAction.add_player, name, color)
+    data.pubsub.publish(
+        ViewAction.add_player, name=name, color=color, pk=request.sid)
     data.pubsub.do_queue()
 
 
 @socketio.on('disconnect')
 def on_disconnect():
-    room = sid_to_room[request.sid]
-    data = room_to_data[room]
+    try:
+        model = _get_data(request).model
+    except KeyError:
+        return
 
-    player = data.sid_to_player[request.sid]
-    data.pubsub.publish(ViewAction.remove_player, player)
-    data.pubsub.do_queue()
+    player = [p for p in model.players if p.pk == request.sid][0]
+    pubsub = _get_data(request).pubsub
+    pubsub.publish(ViewAction.remove_player, player=player)
+    pubsub.do_queue()
 
 
 @socketio.on('createBoard')
@@ -177,14 +165,16 @@ def on_create_board(data):
     num_columns = int(data['numColumns'])
     num_to_win = int(data['numToWin'])
 
-    pubsub = _get_pubsub(request)
-    pubsub.publish(ViewAction.create_board, num_rows, num_columns, num_to_win)
+    pubsub = _get_data(request).pubsub
+    pubsub.publish(
+        ViewAction.create_board, num_rows=num_rows, num_columns=num_columns,
+        num_to_win=num_to_win)
     pubsub.do_queue()
 
 
 @socketio.on('startGame')
 def on_start_game(data):
-    pubsub = _get_pubsub(request)
+    pubsub = _get_data(request).pubsub
     pubsub.publish(ViewAction.start_game)
     pubsub.do_queue()
 
@@ -192,32 +182,17 @@ def on_start_game(data):
 @socketio.on('play')
 def on_play(data):
     column = int(data['column'])
-    pubsub = _get_pubsub(request)
-    pubsub.publish(ViewAction.play, column)
+    pubsub = _get_data(request).pubsub
+    pubsub.publish(ViewAction.play, column=column)
     pubsub.do_queue()
-
-
-@socketio.on('message')
-def on_message(message):
-    print 'received message: {}'.format(message)
-
-
-@socketio.on('json')
-def on_json(json):
-    print 'received json: {}'.format(json)
-
-
-@socketio.on('connect')
-def on_connect():
-    print '{} has connected to the server'.format(request.sid)
 
 
 ###########
 # Helpers #
 ###########
 
-def _get_pubsub(request):
-    return room_to_data[sid_to_room[request.sid]].pubsub
+def _get_data(request):
+    return room_to_data[sid_to_room[request.sid]]
 
 
 def _get_random_string(length):
