@@ -100,8 +100,7 @@
 	//////////////////////////////////////////////////////////////////////
 
 	window.ws.on("roomJoined", function (data) {
-	  store.dispatch((0, _actions.setUsername)(data.username));
-	  store.dispatch((0, _actions.setRoom)(data.room));
+	  store.dispatch((0, _actions.setLoggedInUser)(data.pk, data.username, data.room));
 
 	  if (data.board) {
 	    store.dispatch((0, _actions.initializeBoard)(data.board));
@@ -31227,6 +31226,7 @@
 	function mapStateToProps(state) {
 	  return {
 	    username: state.username,
+	    pk: state.pk,
 	    room: state.room,
 	    numToWin: state.numToWin,
 	    gameNumber: state.gameNumber
@@ -31255,7 +31255,7 @@
 	      _react2.default.createElement(
 	        "h3",
 	        null,
-	        "Welcome, ",
+	        "Welcome ",
 	        this.props.username,
 	        "| Room ",
 	        this.props.room,
@@ -31306,15 +31306,34 @@
 	        "Players"
 	      ),
 	      _react2.default.createElement(
-	        "ul",
+	        "table",
 	        null,
-	        this.props.players.map(function (player, i) {
-	          return _react2.default.createElement(
-	            "li",
-	            { key: player.pk },
-	            player.name
-	          );
-	        })
+	        _react2.default.createElement(
+	          "tbody",
+	          null,
+	          this.props.players.map(function (player, i) {
+	            return _react2.default.createElement(
+	              "tr",
+	              { key: player.pk },
+	              _react2.default.createElement(
+	                "td",
+	                { className: "player-key player-key-" + player.color },
+	                player.color
+	              ),
+	              _react2.default.createElement(
+	                "td",
+	                null,
+	                player.name
+	              ),
+	              _react2.default.createElement(
+	                "td",
+	                null,
+	                player.numWins,
+	                " wins"
+	              )
+	            );
+	          })
+	        )
 	      )
 	    );
 	  }
@@ -31494,7 +31513,7 @@
 	    numRows: state.numRows,
 	    numColumns: state.numColumns,
 	    gameInProgress: state.gameInProgress,
-	    username: state.username,
+	    pk: state.pk,
 	    nextPlayer: state.nextPlayer
 	  };
 	}
@@ -31507,7 +31526,7 @@
 	    var size = percentage + "vmin";
 
 	    var row = [];
-	    var enabled = this.props.gameInProgress && this.props.username === this.props.nextPlayer.name;
+	    var enabled = this.props.gameInProgress && this.props.nextPlayer && this.props.pk === this.props.nextPlayer.pk;
 
 	    for (var i = 0; i < this.props.numColumns; i++) {
 	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
@@ -31702,6 +31721,7 @@
 
 	var initialState = {
 	  username: "",
+	  pk: "",
 	  room: "",
 
 	  gameNumber: null,
@@ -31724,21 +31744,19 @@
 	// Later, try splitting reducers:
 	// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
 
+	// Also later, try using object spread operator
+	// http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
+
 	function appReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	  var action = arguments[1];
 
 	  switch (action.type) {
 
-	    case _actions.SET_USERNAME:
-	      // Object.assign creates a copy. Consider this instead:
-	      // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
+	    case _actions.SET_LOGGED_IN_USER:
 	      return update(state, {
-	        username: action.username
-	      });
-
-	    case _actions.SET_ROOM:
-	      return update(state, {
+	        username: action.username,
+	        pk: action.pk,
 	        room: action.room
 	      });
 
@@ -31800,7 +31818,12 @@
 	      });
 
 	    case _actions.GAME_WON:
+	      var newPlayers = state.players.map(function (player) {
+	        return player.pk === action.player.pk ? action.player : player;
+	      });
+
 	      return update(state, {
+	        players: newPlayers,
 	        gameInProgress: false,
 	        feedback: "Game won by " + action.player.name
 	      });
@@ -31827,8 +31850,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.setUsername = setUsername;
-	exports.setRoom = setRoom;
+	exports.setLoggedInUser = setLoggedInUser;
 	exports.initializeBoard = initializeBoard;
 	exports.initializePlayers = initializePlayers;
 	exports.addPlayer = addPlayer;
@@ -31842,8 +31864,7 @@
 	/*
 	 * action types
 	 */
-	var SET_USERNAME = exports.SET_USERNAME = "SET_USERNAME";
-	var SET_ROOM = exports.SET_ROOM = "SET_ROOM";
+	var SET_LOGGED_IN_USER = exports.SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
 	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
 	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
@@ -31858,16 +31879,12 @@
 	/*
 	 * action creators
 	 */
-	function setUsername(username) {
-	  return {
-	    type: SET_USERNAME,
-	    username: username
-	  };
-	}
 
-	function setRoom(room) {
+	function setLoggedInUser(pk, username, room) {
 	  return {
-	    type: SET_ROOM,
+	    type: SET_LOGGED_IN_USER,
+	    pk: pk,
+	    username: username,
 	    room: room
 	  };
 	}

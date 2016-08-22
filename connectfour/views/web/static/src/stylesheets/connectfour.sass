@@ -35,11 +35,33 @@ h1
 .section
   margin-bottom: 40px
 
+  &:last-child
+    margin-bottom: none
+
 
 #game-feedback
   border-radius: 5px
   background: lighten($background-color, 10%)
   padding: 10px
+
+
+#game-players
+  position: absolute
+  top: 0
+  right: 0
+
+  table
+    border-collapse: collapse
+
+    td
+      padding: 10px
+      border: 1px solid gold
+
+
+.player-key
+  border-radius: 2px
+  padding: 5px 10px
+  color: white
 
 
 .game-column-button, .game-square
@@ -50,6 +72,8 @@ h1
 .game-square
   border-radius: 5px
 
+
+.game-square, .player-key
   &-null
     background: gold
 

@@ -1,6 +1,5 @@
 import {
-  SET_USERNAME,
-  SET_ROOM,
+  SET_LOGGED_IN_USER,
   INITIALIZE_BOARD,
   INITIALIZE_PLAYERS,
   ADD_PLAYER,
@@ -16,6 +15,7 @@ import {
 
 const initialState = {
   username: ``,
+  pk: ``,
   room: ``,
 
   gameNumber: null,
@@ -40,18 +40,16 @@ function update(state, mutations) {
 // Later, try splitting reducers:
 // http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
 
+// Also later, try using object spread operator
+// http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
+
 function appReducer(state = initialState, action) {
   switch(action.type) {
 
-    case SET_USERNAME:
-      // Object.assign creates a copy. Consider this instead:
-      // http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
+    case SET_LOGGED_IN_USER:
       return update(state, {
         username: action.username,
-      });
-
-    case SET_ROOM:
-      return update(state, {
+        pk: action.pk,
         room: action.room,
       });
 
@@ -78,9 +76,9 @@ function appReducer(state = initialState, action) {
       });
 
     case REMOVE_PLAYER:
-			var newPlayers = state.players.filter(function(player) {
-				return player.pk !== action.player.pk;
-			});
+      var newPlayers = state.players.filter(function(player) {
+        return player.pk !== action.player.pk;
+      });
 
       return update(state, {
         players: newPlayers,
@@ -116,7 +114,12 @@ function appReducer(state = initialState, action) {
       });
 
     case GAME_WON:
+      var newPlayers = state.players.map(function(player) {
+        return (player.pk === action.player.pk) ? action.player : player;
+      });
+
       return update(state, {
+        players: newPlayers,
         gameInProgress: false,
         feedback: `Game won by ${action.player.name}`,
       })

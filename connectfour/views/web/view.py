@@ -127,34 +127,33 @@ def on_add_user(data):
 
     join_room(room)
     sid_to_room[request.sid] = room
-    data = room_to_data[room]
-
-    board_json = None
-    if data.model.board:
-        board_json = data.model.board.get_json()
+    room_data = _get_room_data(request)
+    model = room_data.model
 
     emit('roomJoined', {
-        'room': room,
+        'pk': request.sid,
         'username': name,
-        'players': [player.get_json() for player in data.model.players],
-        'board': board_json,
+        'room': room,
+        'players': [player.get_json() for player in model.players],
+        'board': model.board.get_json() if model.board else None,
     })
 
-    color = next(data.colors)
-    data.pubsub.publish(
+    color = next(room_data.colors)
+    pubsub = room_data.pubsub
+    pubsub.publish(
         ViewAction.add_player, name=name, color=color, pk=request.sid)
-    data.pubsub.do_queue()
+    pubsub.do_queue()
 
 
 @socketio.on('disconnect')
 def on_disconnect():
     try:
-        model = _get_data(request).model
+        model = _get_room_data(request).model
     except KeyError:
         return
 
     player = [p for p in model.players if p.pk == request.sid][0]
-    pubsub = _get_data(request).pubsub
+    pubsub = _get_room_data(request).pubsub
     pubsub.publish(ViewAction.remove_player, player=player)
     pubsub.do_queue()
 
@@ -165,7 +164,7 @@ def on_create_board(data):
     num_columns = int(data['numColumns'])
     num_to_win = int(data['numToWin'])
 
-    pubsub = _get_data(request).pubsub
+    pubsub = _get_room_data(request).pubsub
     pubsub.publish(
         ViewAction.create_board, num_rows=num_rows, num_columns=num_columns,
         num_to_win=num_to_win)
@@ -174,7 +173,7 @@ def on_create_board(data):
 
 @socketio.on('startGame')
 def on_start_game(data):
-    pubsub = _get_data(request).pubsub
+    pubsub = _get_room_data(request).pubsub
     pubsub.publish(ViewAction.start_game)
     pubsub.do_queue()
 
@@ -182,7 +181,7 @@ def on_start_game(data):
 @socketio.on('play')
 def on_play(data):
     column = int(data['column'])
-    pubsub = _get_data(request).pubsub
+    pubsub = _get_room_data(request).pubsub
     pubsub.publish(ViewAction.play, column=column)
     pubsub.do_queue()
 
@@ -191,7 +190,7 @@ def on_play(data):
 # Helpers #
 ###########
 
-def _get_data(request):
+def _get_room_data(request):
     return room_to_data[sid_to_room[request.sid]]
 
 

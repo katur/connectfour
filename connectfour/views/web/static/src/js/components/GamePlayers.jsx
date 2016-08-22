@@ -14,13 +14,23 @@ let GamePlayers = React.createClass({
     return (
       <div id="game-players" className="section">
         <h3>Players</h3>
-        <ul>
-          {this.props.players.map(function(player, i) {
-            return (
-              <li key={player.pk}>{player.name}</li>
-            );
-          })}
-        </ul>
+        <table>
+          <tbody>
+            {this.props.players.map(function(player, i) {
+              return (
+                <tr key={player.pk}>
+                  <td className={`player-key player-key-${player.color}`}>
+                    {player.color}
+                  </td>
+
+                  <td>{player.name}</td>
+
+                  <td>{player.numWins} wins</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     );
   },

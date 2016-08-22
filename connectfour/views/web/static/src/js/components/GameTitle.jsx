@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 function mapStateToProps(state) {
   return {
     username: state.username,
+    pk: state.pk,
     room: state.room,
     numToWin: state.numToWin,
     gameNumber: state.gameNumber,
@@ -27,7 +28,7 @@ let GameTitle = React.createClass({
         </h1>
 
         <h3>
-          Welcome, {this.props.username}
+          Welcome {this.props.username}
           | Room {this.props.room}
           {gameNumberFeedback}
         </h3>

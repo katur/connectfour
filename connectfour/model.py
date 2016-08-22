@@ -483,11 +483,22 @@ class Board(object):
             self.num_rows, self.num_columns, self.num_to_win)
 
     def get_json(self):
+        new_grid = []
+
+        for row in self.grid:
+            new_row = []
+            for item in row:
+                if item:
+                    new_row.append(item.name)
+                else:
+                    new_row.append(None)
+            new_grid.append(new_row)
+
         return {
             'numRows': self.num_rows,
             'numColumns': self.num_columns,
             'numToWin': self.num_to_win,
-            'grid': self.grid,
+            'grid': new_grid,
         }
 
     def reset(self):

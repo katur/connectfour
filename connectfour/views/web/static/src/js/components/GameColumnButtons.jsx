@@ -8,7 +8,7 @@ function mapStateToProps(state) {
     numRows: state.numRows,
     numColumns: state.numColumns,
     gameInProgress: state.gameInProgress,
-    username: state.username,
+    pk: state.pk,
     nextPlayer: state.nextPlayer,
   }
 }
@@ -21,8 +21,8 @@ let GameColumnButtons = React.createClass({
     const size = percentage + "vmin";
 
     let row = [];
-    let enabled = this.props.gameInProgress &&
-        this.props.username === this.props.nextPlayer.name;
+    let enabled = this.props.gameInProgress && this.props.nextPlayer &&
+        this.props.pk === this.props.nextPlayer.pk;
 
     for (let i = 0; i < this.props.numColumns; i++) {
       row.push(

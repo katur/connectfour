@@ -7,9 +7,8 @@ import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
-  setUsername, setRoom, initializeBoard, initializePlayers, addPlayer,
-  removePlayer, startGame, setNextPlayer, colorSquare, tryAgain, gameWon,
-  gameDraw,
+  setLoggedInUser, initializeBoard, initializePlayers, addPlayer, removePlayer,
+  startGame, setNextPlayer, colorSquare, tryAgain, gameWon, gameDraw,
 } from "./actions";
 
 
@@ -40,8 +39,7 @@ window.ws = wsClient(WS_URL);
 //////////////////////////////////////////////////////////////////////
 
 window.ws.on("roomJoined", function(data) {
-  store.dispatch(setUsername(data.username));
-  store.dispatch(setRoom(data.room));
+  store.dispatch(setLoggedInUser(data.pk, data.username, data.room));
 
   if (data.board) {
     store.dispatch(initializeBoard(data.board));
