@@ -24,7 +24,7 @@ app.config.update(
 socketio = SocketIO(app, async_mode=async_mode)
 
 
-# To map user session ids to rooms
+# To map user session ids to rooms and colors
 sid_to_room = {}
 
 
@@ -42,10 +42,17 @@ class RoomData():
         self.colors = get_colors()
         self._create_subscriptions()
 
+        # This gets set before Player object is actually created
+        self.color_to_sid = {}
+
+        # This gets set after Player objects is created
+        self.sid_to_player = {}
+
     def _create_subscriptions(self):
         responses = {
             ModelAction.board_created: self.on_board_created,
             ModelAction.player_added: self.on_player_added,
+            ModelAction.player_removed: self.on_player_removed,
             ModelAction.game_started: self.on_game_started,
             ModelAction.next_player: self.on_next_player,
             ModelAction.try_again: self.on_try_again,
@@ -58,7 +65,18 @@ class RoomData():
             self.pubsub.subscribe(action, response)
 
     def on_player_added(self, player):
+        sid = self.color_to_sid[player.color]
+        self.sid_to_player[sid] = player
+
         socketio.emit('playerAdded', {
+            'player': player.get_json(),
+        }, room=self.room)
+
+    def on_player_removed(self, player):
+        sid = self.color_to_sid[player.color]
+        del self.sid_to_player[sid]
+
+        socketio.emit('playerRemoved', {
             'player': player.get_json(),
         }, room=self.room)
 
@@ -131,13 +149,25 @@ def on_add_user(data):
         board_json = data.model.board.get_json()
 
     emit('roomJoined', {
-        'username': name,
         'room': room,
+        'username': name,
         'players': [player.get_json() for player in data.model.players],
         'board': board_json,
     })
 
-    data.pubsub.publish(ViewAction.add_player, name, next(data.colors))
+    color = next(data.colors)
+    data.color_to_sid[color] = request.sid
+    data.pubsub.publish(ViewAction.add_player, name, color)
+    data.pubsub.do_queue()
+
+
+@socketio.on('disconnect')
+def on_disconnect():
+    room = sid_to_room[request.sid]
+    data = room_to_data[room]
+
+    player = data.sid_to_player[request.sid]
+    data.pubsub.publish(ViewAction.remove_player, player)
     data.pubsub.do_queue()
 
 
@@ -180,11 +210,6 @@ def on_json(json):
 @socketio.on('connect')
 def on_connect():
     print '{} has connected to the server'.format(request.sid)
-
-
-@socketio.on('disconnect')
-def on_disconnect():
-    print '{} has disconnected from the server'.format(request.sid)
 
 
 ###########

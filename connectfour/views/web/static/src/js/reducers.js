@@ -4,6 +4,7 @@ import {
   INITIALIZE_BOARD,
   INITIALIZE_PLAYERS,
   ADD_PLAYER,
+  REMOVE_PLAYER,
   START_GAME,
   SET_NEXT_PLAYER,
   COLOR_SQUARE,
@@ -74,6 +75,16 @@ function appReducer(state = initialState, action) {
           action.player,
         ],
         feedback: `${action.player.name} has joined the room`,
+      });
+
+    case REMOVE_PLAYER:
+      var newPlayers = state.players.slice();
+      var indexToRemove = newPlayers.indexOf(action.player);
+      newPlayers.splice(indexToRemove, 1);
+
+      return update(state, {
+        players: newPlayers,
+        feedback: `${action.player.name} has left the room`,
       });
 
     case START_GAME:

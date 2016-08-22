@@ -120,6 +120,10 @@
 	  store.dispatch((0, _actions.addPlayer)(data.player));
 	});
 
+	window.ws.on("playerRemoved", function (data) {
+	  store.dispatch((0, _actions.removePlayer)(data.player));
+	});
+
 	window.ws.on("gameStarted", function (data) {
 	  store.dispatch((0, _actions.initializeBoard)(data.board));
 	  store.dispatch((0, _actions.startGame)(data.gameNumber));
@@ -31757,6 +31761,16 @@
 	        feedback: action.player.name + " has joined the room"
 	      });
 
+	    case _actions.REMOVE_PLAYER:
+	      var newPlayers = state.players.slice();
+	      var indexToRemove = newPlayers.indexOf(action.player);
+	      newPlayers.splice(indexToRemove, 1);
+
+	      return update(state, {
+	        players: newPlayers,
+	        feedback: action.player.name + " has left the room"
+	      });
+
 	    case _actions.START_GAME:
 	      return update(state, {
 	        gameNumber: action.gameNumber,
@@ -31818,6 +31832,7 @@
 	exports.initializeBoard = initializeBoard;
 	exports.initializePlayers = initializePlayers;
 	exports.addPlayer = addPlayer;
+	exports.removePlayer = removePlayer;
 	exports.startGame = startGame;
 	exports.setNextPlayer = setNextPlayer;
 	exports.colorSquare = colorSquare;
@@ -31832,6 +31847,7 @@
 	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
 	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
+	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
 	var START_GAME = exports.START_GAME = "START_GAME";
 	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
 	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
@@ -31873,6 +31889,13 @@
 	function addPlayer(player) {
 	  return {
 	    type: ADD_PLAYER,
+	    player: player
+	  };
+	}
+
+	function removePlayer(player) {
+	  return {
+	    type: REMOVE_PLAYER,
 	    player: player
 	  };
 	}

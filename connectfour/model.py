@@ -124,28 +124,27 @@ class ConnectFourModel(object):
         self.players.append(player)
         self.pubsub.publish(ModelAction.player_added, player)
 
-    def _remove_player(self, color):
+    def _remove_player(self, player):
         """Remove a player.
 
         Publishes a player_removed ModelAction.
 
         Args:
-            color (Color): The color of the player to be removed.
+            player (Player): The player to be removed.
         Raises:
             RuntimeError: If a game is currently in progress.
-            ValueError: If color is not yet assigned to a player.
+            ValueError: If player not currently in the model.
         """
         if self.game_in_progress:
             raise RuntimeError('Cannot remove player while a game is in '
                                'progress')
 
-        if color not in self.used_colors:
-            raise ValueError('Color {} not yet assigned to a player'
-                             .format(color))
+        if player not in self.players:
+            raise ValueError('Player {} not in this model'.format(player))
 
-        self.players.remove(p for p in self.players if p.color == color)
-        self.used_colors.remove(color)
-        self.pubsub.publish(ModelAction.player_removed, color)
+        self.players.remove(player)
+        self.used_colors.remove(player.color)
+        self.pubsub.publish(ModelAction.player_removed, player)
 
     def _start_game(self):
         """Start a new game.

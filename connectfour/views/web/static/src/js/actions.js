@@ -6,6 +6,7 @@ export const SET_ROOM = "SET_ROOM";
 export const INITIALIZE_BOARD = "INITIALIZE_BOARD";
 export const INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
 export const ADD_PLAYER = "ADD_PLAYER";
+export const REMOVE_PLAYER = "REMOVE_PLAYER";
 export const START_GAME = "START_GAME";
 export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
 export const COLOR_SQUARE = "COLOR_SQUARE";
@@ -48,6 +49,13 @@ export function initializePlayers(players) {
 export function addPlayer(player) {
   return {
     type: ADD_PLAYER,
+    player,
+  }
+}
+
+export function removePlayer(player) {
+  return {
+    type: REMOVE_PLAYER,
     player,
   }
 }

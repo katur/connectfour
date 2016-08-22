@@ -8,7 +8,8 @@ import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
   setUsername, setRoom, initializeBoard, initializePlayers, addPlayer,
-  startGame, setNextPlayer, colorSquare, tryAgain, gameWon, gameDraw,
+  removePlayer, startGame, setNextPlayer, colorSquare, tryAgain, gameWon,
+  gameDraw,
 } from "./actions";
 
 
@@ -57,6 +58,10 @@ window.ws.on("boardCreated", function(data) {
 
 window.ws.on("playerAdded", function(data) {
   store.dispatch(addPlayer(data.player));
+});
+
+window.ws.on("playerRemoved", function(data) {
+  store.dispatch(removePlayer(data.player));
 });
 
 window.ws.on("gameStarted", function(data) {
