@@ -56,8 +56,8 @@ in [package.json](package.json)):
 npm install
 ```
 
-If you install any new npm dependencies, use the `--save-dev` option to list
-the new requirement in [package.json](package.json):
+If you install any new js dependencies, use the `--save-dev` option to list
+as a devDependency in [package.json](package.json):
 ```
 npm install <package-name> --save-dev
 ```
