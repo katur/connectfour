@@ -149,7 +149,8 @@ class GUIView(object):
             return
 
         color = next(self.colors)
-        self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
+        self.pubsub.publish(
+            ViewAction.add_player, name=name, color=color, is_ai=is_ai)
         self.pubsub.do_queue()
 
     def launch_game_frame(self):
@@ -186,7 +187,8 @@ class GUIView(object):
             name='To Win', max_value=config.MAX_TO_WIN)
 
         self.pubsub.publish(
-            ViewAction.create_board, num_rows, num_columns, num_to_win)
+            ViewAction.create_board, num_rows=num_rows,
+            num_columns=num_columns, num_to_win=num_to_win)
         self.pubsub.do_queue()
 
     def start_new_game(self):
@@ -206,7 +208,7 @@ class GUIView(object):
         Args:
             column (int): The column to play in.
         """
-        self.pubsub.publish(ViewAction.play, column)
+        self.pubsub.publish(ViewAction.play, column=column)
         self.pubsub.do_queue()
 
 
@@ -287,10 +289,10 @@ class SetupFrame(object):
         player_radio = tk.Frame(self.frame)
         player_radio.grid(row=row, column=1)
 
-        human_button = tk.Radiobutton(player_radio, text='Human',
-                                      variable=is_ai_bool, value=False)
-        ai_button = tk.Radiobutton(player_radio, text='AI',
-                                   variable=is_ai_bool, value=True)
+        human_button = tk.Radiobutton(
+            player_radio, text='Human', variable=is_ai_bool, value=False)
+        ai_button = tk.Radiobutton(
+            player_radio, text='AI', variable=is_ai_bool, value=True)
         human_button.grid(row=0, column=0)
         ai_button.grid(row=1, column=0)
 

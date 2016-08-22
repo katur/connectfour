@@ -119,7 +119,8 @@ class CommandLineView(object):
             default_if_blank=DEFAULT_TO_WIN)
 
         self.pubsub.publish(
-            ViewAction.create_board, num_rows, num_columns, num_to_win)
+            ViewAction.create_board, num_rows=num_rows,
+            num_columns=num_columns, num_to_win=num_to_win)
 
     def _add_player(self):
         name = self._prompt_until_valid(
@@ -127,13 +128,14 @@ class CommandLineView(object):
             name='Name', max_len=50)
         is_ai = self._prompt_yes_no('Is AI?')
         color = next(self.colors)
-        self.pubsub.publish(ViewAction.add_player, name, color, is_ai)
+        self.pubsub.publish(
+            ViewAction.add_player, name=name, color=color, is_ai=is_ai)
 
     def _play(self, player):
         column = self._prompt_until_valid(
             prompt='Where would you like to play, {}? '.format(player),
             condition=get_int, name='Column')
-        self.pubsub.publish(ViewAction.play, column)
+        self.pubsub.publish(ViewAction.play, column=column)
 
     def _start_new_game(self):
         if self._prompt_yes_no('Play again?'):
