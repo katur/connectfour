@@ -17,17 +17,19 @@ class ConnectFourModel(object):
 
     Dependencies between the core methods:
 
-    -   _create_board() and _add_player() must be called at least once before
-        calling _start_game(), and cannot be called after.
+    -   _create_board() and _add_player() cannot be called when a game is in
+        progress. There must be a board created and a player added before
+        calling _start_game().
 
-    -   _add_player() should be called multiple times to add multiple players.
+    -   _add_player() can be called multiple times to add multiple players.
         Since each player must have a distinct color, the number of players is
         capped at len(Color).
 
     -   If _create_board() is called more than once, the old board is replaced
         with the new board.
 
-    -   _start_game() can only be called again after a win or draw.
+    -   If _start_game() is called while a game is in progress, it resets the
+        previous game.
 
     -   _play() can only be called while a game is in progress.
     """
@@ -39,7 +41,6 @@ class ConnectFourModel(object):
         self.players = []
         self.used_colors = set()
 
-        self.session_in_progress = False
         self.game_in_progress = False
         self.game_number = 0
 
@@ -69,9 +70,11 @@ class ConnectFourModel(object):
 
     def _create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                       num_to_win=DEFAULT_TO_WIN):
-        """Create a playing board and add it to the model.
+        """Add a playing board.
 
         Publishes a board_created ModelAction.
+
+        If a board was previously created, it is replaced with this board.
 
         Args:
             num_rows (Optional[int]): Number of rows in the board.
@@ -81,11 +84,11 @@ class ConnectFourModel(object):
             num_to_win (Optional[int]): Number in a row to win.
                 Must be positive.
         Raises:
-            RuntimeError: If gaming session has already started.
+            RuntimeError: If a game is currently in progress.
             ValueError: If either dimension or the num_to_win is less than 1.
         """
-        if self.session_in_progress:
-            raise RuntimeError('Cannot add board once session is started')
+        if self.game_in_progress:
+            raise RuntimeError('Cannot add board while a game is in progress')
 
         if num_rows < 1 or num_columns < 1 or num_to_win < 1:
             raise ValueError('Board dimensions and num_to_win must be >= 1')
@@ -103,11 +106,11 @@ class ConnectFourModel(object):
                 to be unique (two Emilys are distinguishable by color).
             color (Color): This player's playing color. Must be unique.
         Raises:
-            RuntimeError: If gaming session has already started.
+            RuntimeError: If a game is currently in progress.
             ValueError: If name is empty or if color is already in use.
         """
-        if self.session_in_progress:
-            raise RuntimeError('Cannot add player once session is started')
+        if self.game_in_progress:
+            raise RuntimeError('Cannot add player while a game is in progress')
 
         if not name:
             raise ValueError('Name is required and must be non-empty')
@@ -140,7 +143,6 @@ class ConnectFourModel(object):
             raise RuntimeError('Cannot start a game with no players')
 
         self.board.reset()
-        self.session_in_progress = True
         self.game_in_progress = True
         self.game_number += 1
         self.pubsub.publish(ModelAction.game_started, self.game_number)

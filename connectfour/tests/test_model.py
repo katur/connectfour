@@ -76,9 +76,6 @@ class TestModel_BeforeFirstGameStarted(unittest.TestCase):
     def setUp(self):
         self.model = create_two_player_model()
 
-    def test_session_in_progress_before_first_game(self):
-        self.assertFalse(self.model.session_in_progress)
-
     def test_game_in_progress_before_first_game(self):
         self.assertFalse(self.model.game_in_progress)
 
@@ -109,9 +106,6 @@ class TestModel_FirstGameStarted(unittest.TestCase):
     def setUp(self):
         self.model = create_two_player_model()
         self.model._start_game()
-
-    def test_session_in_progress(self):
-        self.assertTrue(self.model.session_in_progress)
 
     def test_game_in_progress(self):
         self.assertTrue(self.model.game_in_progress)
@@ -156,9 +150,6 @@ class TestModel_GameWon(unittest.TestCase):
 
     def test_game_not_in_progress_after_win(self):
         self.assertFalse(self.model.game_in_progress)
-
-    def test_session_still_in_progress_after_win(self):
-        self.assertTrue(self.model.session_in_progress)
 
     def test_win_recorded_in_player(self):
         p0 = self.model.get_player(0)
