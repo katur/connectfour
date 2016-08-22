@@ -50,12 +50,19 @@ python web_app.py
 
 ## Web app dev dependencies
 
-To do development work on the web app, first install Node packages:
+To do development work on the web app, first install js dependencies (listed
+in [package.json](package.json):
 ```
 npm install
 ```
 
-And then start webpack to compile JS and CSS:
+If you install any new npm dependencies, use the `--save-dev` option to list
+the new requirement in [package.json](package.json):
+```
+npm install <package-name> --save-dev
+```
+
+To have webpack auto-compile JS and CSS during dev:
 ```
 webpack --watch
 ```
