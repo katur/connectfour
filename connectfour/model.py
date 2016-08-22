@@ -95,9 +95,9 @@ class ConnectFourModel(object):
             raise ValueError('Board dimensions and num_to_win must be >= 1')
 
         self.board = Board(num_rows, num_columns, num_to_win)
-        self.pubsub.publish(ModelAction.board_created, self.board)
+        self.pubsub.publish(ModelAction.board_created, board=self.board)
 
-    def _add_player(self, name, color, is_ai=False):
+    def _add_player(self, name, color, pk=None, is_ai=False):
         """Add a player.
 
         Publishes a player_added ModelAction.
@@ -120,9 +120,9 @@ class ConnectFourModel(object):
             raise ValueError('Color {} is already used'.format(color))
 
         self.used_colors.add(color)
-        player = Player(name, color, is_ai)
+        player = Player(name=name, color=color, pk=pk, is_ai=is_ai)
         self.players.append(player)
-        self.pubsub.publish(ModelAction.player_added, player)
+        self.pubsub.publish(ModelAction.player_added, player=player)
 
     def _remove_player(self, player):
         """Remove a player.
@@ -144,7 +144,7 @@ class ConnectFourModel(object):
 
         self.players.remove(player)
         self.used_colors.remove(player.color)
-        self.pubsub.publish(ModelAction.player_removed, player)
+        self.pubsub.publish(ModelAction.player_removed, player=player)
 
     def _start_game(self):
         """Start a new game.
@@ -171,7 +171,8 @@ class ConnectFourModel(object):
         self.board.reset()
         self.game_in_progress = True
         self.game_number += 1
-        self.pubsub.publish(ModelAction.game_started, self.game_number)
+        self.pubsub.publish(
+            ModelAction.game_started, game_number=self.game_number)
 
         self._process_next_player()
 
@@ -194,13 +195,13 @@ class ConnectFourModel(object):
 
         if not self.board.is_column_in_bounds(column):
             self.pubsub.publish(
-                ModelAction.try_again, self.get_current_player(),
-                TryAgainReason.column_out_of_bounds)
+                ModelAction.try_again, player=self.get_current_player(),
+                reason=TryAgainReason.column_out_of_bounds)
 
         elif self.board.is_column_full(column):
             self.pubsub.publish(
-                ModelAction.try_again, self.get_current_player(),
-                TryAgainReason.column_full)
+                ModelAction.try_again, player=self.get_current_player(),
+                reason=TryAgainReason.column_full)
 
         else:
             self.process_play(column)
@@ -213,7 +214,8 @@ class ConnectFourModel(object):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
         self.pubsub.publish(
-            ModelAction.color_played, player.color, (row, column))
+            ModelAction.color_played, color=player.color,
+            position=(row, column))
 
         winning_positions = self.board.get_winning_positions((row, column))
 
@@ -228,7 +230,9 @@ class ConnectFourModel(object):
     def _process_win(self, player, winning_positions):
         self.game_in_progress = False
         player.num_wins += 1
-        self.pubsub.publish(ModelAction.game_won, player, winning_positions)
+        self.pubsub.publish(
+            ModelAction.game_won, player=player,
+            winning_positions=winning_positions)
 
     def _process_draw(self):
         self.game_in_progress = False
@@ -236,7 +240,7 @@ class ConnectFourModel(object):
 
     def _process_next_player(self):
         player = self.get_current_player()
-        self.pubsub.publish(ModelAction.next_player, player)
+        self.pubsub.publish(ModelAction.next_player, player=player)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
@@ -348,7 +352,7 @@ AI_HARD = 'hard'
 class Player(object):
     """A Connect Four player."""
 
-    def __init__(self, name, color, is_ai=False, difficulty=AI_HARD):
+    def __init__(self, name, color, pk=None, is_ai=False):
         """Create a player.
 
         Args:
@@ -357,15 +361,16 @@ class Player(object):
         """
         self.name = name
         self.color = color
+        self.pk = pk
         self.is_ai = is_ai
         self.num_wins = 0
 
         if self.is_ai:
-            self.difficulty = difficulty
+            self.difficulty = AI_HARD
 
     def __repr__(self):
-        return '{} name={} color={}'.format(
-            self.__class__.__name__, self.name, self.color)
+        return '{} name={} color={} pk={}'.format(
+            self.__class__.__name__, self.name, self.color, self.pk)
 
     def __str__(self):
         category = 'AI' if self.is_ai else 'Human'
@@ -375,6 +380,7 @@ class Player(object):
         return {
             'name': self.name,
             'color': self.color.name,
+            'pk': self.pk,
             'isAI': self.is_ai,
             'numWins': self.num_wins,
         }
