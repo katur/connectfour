@@ -8,22 +8,17 @@ class ModelAction(Enum):
     These are the actions that the model publishes, and which views may
     subscribe to.
     """
-    player_added = 0
-    board_created = 1
-    game_started = 2
-    next_player = 3
-    try_again = 4
-    color_played = 5
-    game_won = 6
-    game_draw = 7
+    (
+        player_added, player_removed, board_created, game_started,
+        next_player, try_again, color_played, game_won, game_draw,
+    ) = range(9)
 
 
 class ViewAction(Enum):
-    add_player = 0
-    create_board = 1
-    start_game = 2
-    play = 3
-    request_ai_play = 4
+    (
+        add_player, remove_player, create_board, start_game, play,
+        request_ai_play
+    ) = range(6)
 
 
 class PubSub(object):

@@ -17,9 +17,9 @@ class ConnectFourModel(object):
 
     Dependencies between the core methods:
 
-    -   _create_board() and _add_player() cannot be called when a game is in
-        progress. There must be a board created and a player added before
-        calling _start_game().
+    -   _create_board(), _add_player(), and _remove_player() cannot be called
+        when a game is in progress. There must be a board created and a player
+        added before calling _start_game().
 
     -   _add_player() can be called multiple times to add multiple players.
         Since each player must have a distinct color, the number of players is
@@ -44,8 +44,8 @@ class ConnectFourModel(object):
         self.game_in_progress = False
         self.game_number = 0
 
-        # Which player goes first in the next game
-        self.first_player_index = 0
+        # After being incremented, which player goes first in the next game
+        self.first_player_index = -1
 
         # Which player goes next in the current game
         self.current_player_index = 0
@@ -56,6 +56,7 @@ class ConnectFourModel(object):
         responses = {
             ViewAction.create_board: self._create_board,
             ViewAction.add_player: self._add_player,
+            ViewAction.remove_player: self._remove_player,
             ViewAction.start_game: self._start_game,
             ViewAction.play: self._play,
             ViewAction.request_ai_play: self._do_ai_play,
@@ -123,6 +124,29 @@ class ConnectFourModel(object):
         self.players.append(player)
         self.pubsub.publish(ModelAction.player_added, player)
 
+    def _remove_player(self, color):
+        """Remove a player.
+
+        Publishes a player_removed ModelAction.
+
+        Args:
+            color (Color): The color of the player to be removed.
+        Raises:
+            RuntimeError: If a game is currently in progress.
+            ValueError: If color is not yet assigned to a player.
+        """
+        if self.game_in_progress:
+            raise RuntimeError('Cannot remove player while a game is in '
+                               'progress')
+
+        if color not in self.used_colors:
+            raise ValueError('Color {} not yet assigned to a player'
+                             .format(color))
+
+        self.players.remove(p for p in self.players if p.color == color)
+        self.used_colors.remove(color)
+        self.pubsub.publish(ModelAction.player_removed, color)
+
     def _start_game(self):
         """Start a new game.
 
@@ -142,13 +166,13 @@ class ConnectFourModel(object):
         if not self.players:
             raise RuntimeError('Cannot start a game with no players')
 
+        self._increment_first_player_index()
+        self.current_player_index = self.first_player_index
+
         self.board.reset()
         self.game_in_progress = True
         self.game_number += 1
         self.pubsub.publish(ModelAction.game_started, self.game_number)
-
-        self.current_player_index = self.first_player_index
-        self._increment_first_player_index()  # Prep for next game
 
         self._process_next_player()
 
