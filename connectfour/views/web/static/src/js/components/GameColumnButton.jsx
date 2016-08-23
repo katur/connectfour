@@ -17,13 +17,17 @@ const GameColumnButton = React.createClass({
         method="post"
         onSubmit={this._handleSubmit}
       >
-        <button
-          className="game-column-button"
+        <div
+          className="game-column-button-wrapper"
           style={this.props.style}
-          disabled={this.props.disabled}
         >
-          Play here
-        </button>
+          <button
+            className="game-column-button"
+            disabled={this.props.disabled}
+          >
+            Play here
+          </button>
+        </div>
       </form>
     );
   },

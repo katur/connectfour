@@ -14,8 +14,8 @@ function mapStateToProps(state) {
 
 let GameGrid = React.createClass({
   render: function() {
-    const percentage = 80.0 / Math.max(this.props.numRows,
-                                       this.props.numColumns);
+    const percentage = 90.0 / Math.max(this.props.numRows,
+                                        this.props.numColumns);
     const size = percentage + "vmin";
 
     let rows = [];
@@ -42,7 +42,9 @@ let GameGrid = React.createClass({
     }
 
     return (
-      <div id="game-grid">{rows}</div>
+      <div id="game-grid">
+        {rows}
+      </div>
     );
   },
 });

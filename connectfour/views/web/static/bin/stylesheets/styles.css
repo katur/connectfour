@@ -44,6 +44,7 @@ table {
   border-spacing: 0; }
 
 body {
+  box-sizing: border-box;
   background: #7ba5f0;
   padding: 20px 5vmin; }
 
@@ -118,11 +119,16 @@ dd {
 
 #game-screen #game-board {
   float: right; }
-  #game-screen #game-board .game-column-button, #game-screen #game-board .game-square {
-    margin: 1vmin;
+  #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
     float: left; }
+  #game-screen #game-board .game-column-button {
+    display: block; }
+  #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
+    width: 80%;
+    margin: 10%; }
   #game-screen #game-board .game-square {
-    border-radius: 5px; }
+    border-radius: 5px;
+    height: 80%; }
 
 @keyframes blinker {
   from {
@@ -132,35 +138,35 @@ dd {
   #game-screen #game-board .blink-square {
     animation: blinker steps(1) 500ms infinite alternate; }
 
-#game-screen .game-square-null, #game-screen .player-key-null {
+.color-null {
   background: gold; }
 
-#game-screen .game-square-black, #game-screen .player-key-black {
+.color-black {
   background: black; }
 
-#game-screen .game-square-red, #game-screen .player-key-red {
+.color-red {
   background: crimson; }
 
-#game-screen .game-square-blue, #game-screen .player-key-blue {
+.color-blue {
   background: royalblue; }
 
-#game-screen .game-square-purple, #game-screen .player-key-purple {
+.color-purple {
   background: blueviolet; }
 
-#game-screen .game-square-green, #game-screen .player-key-green {
+.color-green {
   background: forestgreen; }
 
-#game-screen .game-square-brown, #game-screen .player-key-brown {
+.color-brown {
   background: saddlebrown; }
 
-#game-screen .game-square-pink, #game-screen .player-key-pink {
+.color-pink {
   background: hotpink; }
 
-#game-screen .game-square-gray, #game-screen .player-key-gray {
+.color-gray {
   background: darkgray; }
 
-#game-screen .game-square-orange, #game-screen .player-key-orange {
+.color-orange {
   background: darkorange; }
 
-#game-screen .game-square-lime, #game-screen .player-key-lime {
+.color-lime {
   background: chartreuse; }

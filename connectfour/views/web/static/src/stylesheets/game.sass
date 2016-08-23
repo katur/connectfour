@@ -28,12 +28,19 @@
   #game-board
     float: right
 
-    .game-column-button, .game-square
-      margin: 1vmin
+    .game-square-wrapper, .game-column-button-wrapper
       float: left
+
+    .game-column-button
+      display: block
+
+    .game-square, .game-column-button
+      width: 80%
+      margin: 10%
 
     .game-square
       border-radius: 5px
+      height: 80%
 
     @keyframes blinker
       from
@@ -44,36 +51,36 @@
     .blink-square
       animation: blinker steps(1) 500ms infinite alternate
 
-  .game-square, .player-key
-    &-null
-      background: gold
+.color
+  &-null
+    background: gold
 
-    &-black
-      background: black
+  &-black
+    background: black
 
-    &-red
-      background: crimson
+  &-red
+    background: crimson
 
-    &-blue
-      background: royalblue
+  &-blue
+    background: royalblue
 
-    &-purple
-      background: blueviolet
+  &-purple
+    background: blueviolet
 
-    &-green
-      background: forestgreen
+  &-green
+    background: forestgreen
 
-    &-brown
-      background: saddlebrown
+  &-brown
+    background: saddlebrown
 
-    &-pink
-      background: hotpink
+  &-pink
+    background: hotpink
 
-    &-gray
-      background: darkgray
+  &-gray
+    background: darkgray
 
-    &-orange
-      background: darkorange
+  &-orange
+    background: darkorange
 
-    &-lime
-      background: chartreuse
+  &-lime
+    background: chartreuse

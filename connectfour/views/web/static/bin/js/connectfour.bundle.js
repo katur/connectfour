@@ -31332,7 +31332,7 @@
 	              { key: player.pk },
 	              _react2.default.createElement(
 	                "td",
-	                { className: "player-key player-key-" + player.color },
+	                { className: "player-key color-" + player.color },
 	                player.name
 	              ),
 	              _react2.default.createElement(
@@ -31534,7 +31534,7 @@
 	  displayName: "GameColumnButtons",
 
 	  render: function render() {
-	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var percentage = 90.0 / Math.max(this.props.numRows, this.props.numColumns);
 	    var size = percentage + "vmin";
 
 	    var row = [];
@@ -31602,13 +31602,19 @@
 	        onSubmit: this._handleSubmit
 	      },
 	      _react2.default.createElement(
-	        "button",
+	        "div",
 	        {
-	          className: "game-column-button",
-	          style: this.props.style,
-	          disabled: this.props.disabled
+	          className: "game-column-button-wrapper",
+	          style: this.props.style
 	        },
-	        "Play here"
+	        _react2.default.createElement(
+	          "button",
+	          {
+	            className: "game-column-button",
+	            disabled: this.props.disabled
+	          },
+	          "Play here"
+	        )
 	      )
 	    );
 	  }
@@ -31650,7 +31656,7 @@
 	  displayName: "GameGrid",
 
 	  render: function render() {
-	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var percentage = 90.0 / Math.max(this.props.numRows, this.props.numColumns);
 	    var size = percentage + "vmin";
 
 	    var rows = [];
@@ -31708,10 +31714,16 @@
 	  displayName: "GameSquare",
 
 	  render: function render() {
-	    return _react2.default.createElement("div", {
-	      className: "game-square game-square-" + this.props.color,
-	      style: this.props.style
-	    });
+	    return _react2.default.createElement(
+	      "div",
+	      {
+	        className: "game-square-wrapper",
+	        style: this.props.style
+	      },
+	      _react2.default.createElement("div", {
+	        className: "game-square color-" + this.props.color
+	      })
+	    );
 	  }
 	});
 
