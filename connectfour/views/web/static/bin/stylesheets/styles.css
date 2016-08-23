@@ -54,7 +54,8 @@ h1 {
   margin-bottom: 20px; }
 
 body {
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; }
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-size: 16px; }
 
 h1 {
   font-size: 48px;
@@ -94,15 +95,8 @@ dl dt {
 dl dd {
   margin-bottom: 10px; }
 
-dl.inline dt {
-  display: inline-block; }
-
-dl.inline dd {
-  display: inline;
-  margin-left: 40px; }
-  dl.inline dd:after {
-    content: '';
-    display: block; }
+dl:last-of-type {
+  margin-bottom: none; }
 
 #setup-screen div {
   margin-bottom: 40px; }
@@ -118,7 +112,8 @@ dl.inline dd {
 #game-screen #game-feedback, #game-screen #game-info {
   padding: 10px;
   position: absolute;
-  top: 0; }
+  top: 0;
+  opacity: 0.75; }
 
 #game-screen #game-feedback {
   left: 0; }
@@ -131,8 +126,7 @@ dl.inline dd {
     padding-right: 5px; }
 
 #game-screen #game-board {
-  float: left;
-  margin-right: 80px; }
+  float: left; }
   #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
     float: left; }
   #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
@@ -154,7 +148,8 @@ dl.inline dd {
     animation: blinker steps(1) 500ms infinite alternate; }
 
 #game-screen #game-control {
-  float: left; }
+  float: left;
+  margin-left: 80px; }
   #game-screen #game-control #game-players, #game-screen #game-control #game-start {
     margin-bottom: 80px; }
   #game-screen #game-control #game-players {

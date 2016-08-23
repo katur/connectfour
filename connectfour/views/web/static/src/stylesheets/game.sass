@@ -1,8 +1,9 @@
 #game-screen
   #game-feedback, #game-info
-    padding: 10px
+    padding: $whitespace / 4
     position: absolute
     top: 0
+    opacity: 0.75
 
   #game-feedback
     left: 0
@@ -17,7 +18,6 @@
 
   #game-board
     float: left
-    margin-right: $whitespace * 2
 
     .game-square-wrapper, .game-column-button-wrapper
       float: left
@@ -45,6 +45,7 @@
 
   #game-control
     float: left
+    margin-left: $whitespace * 2
 
     #game-players, #game-start
       margin-bottom: $whitespace * 2
@@ -66,34 +67,34 @@
 
 .color
   &-null
-    background: gold
+    background: $yellow
 
   &-black
-    background: black
+    background: $black
 
   &-red
-    background: crimson
+    background: $red
 
   &-blue
-    background: royalblue
+    background: $blue
 
   &-purple
-    background: blueviolet
+    background: $purple
 
   &-green
-    background: forestgreen
+    background: $green
 
   &-brown
-    background: saddlebrown
+    background: $brown
 
   &-pink
-    background: hotpink
+    background: $pink
 
   &-gray
-    background: darkgray
+    background: $gray
 
   &-orange
-    background: darkorange
+    background: $orange
 
   &-lime
-    background: chartreuse
+    background: $lime

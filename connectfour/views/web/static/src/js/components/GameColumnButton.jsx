@@ -25,7 +25,7 @@ const GameColumnButton = React.createClass({
             className="game-column-button"
             disabled={this.props.disabled}
           >
-            Play here
+            Drop
           </button>
         </div>
       </form>
