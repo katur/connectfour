@@ -157,6 +157,15 @@ def on_disconnect():
     pubsub.publish(ViewAction.remove_player, player=player)
     pubsub.do_queue()
 
+    room = sid_to_room[request.sid]
+    del sid_to_room[request.sid]
+
+    if not model.players:
+        del room_to_data[room]
+
+    print sid_to_room
+    print room_to_data
+
 
 @socketio.on('createBoard')
 def on_create_board(data):
