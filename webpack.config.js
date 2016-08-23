@@ -3,9 +3,9 @@ const WebpackNotifierPlugin = require("webpack-notifier");
 
 
 module.exports = {
-  entry: "./connectfour/views/web/static/src/js/connectfour.js",
+  entry: "./connectfour/views/web/static/js/src/connectfour.js",
   output: {
-    path: "./connectfour/views/web/static/bin/js",
+    path: "./connectfour/views/web/static/js/bin",
     filename: "connectfour.bundle.js"
   },
   module: {
@@ -20,7 +20,7 @@ module.exports = {
     }]
   },
   plugins: [
-    new ExtractTextPlugin("../stylesheets/styles.css", {
+    new ExtractTextPlugin("../../stylesheets/bin/styles.css", {
       allChunks: true
     }),
     new WebpackNotifierPlugin()

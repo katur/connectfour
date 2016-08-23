@@ -4,9 +4,14 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
   <link
+    type="image/ico"
+    rel="icon"
+    href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+  <link
     type="text/css"
     rel="stylesheet"
-    href="{{ url_for('static', filename='bin/stylesheets/styles.css') }}">
+    href="{{ url_for('static', filename='stylesheets/bin/styles.css') }}">
 
   <script type="text/javascript">
     window.DEFAULT_ROWS = {{ DEFAULT_ROWS }};
@@ -16,7 +21,7 @@
 
   <script
     type="text/javascript"
-    src="{{ url_for('static', filename='bin/js/connectfour.bundle.js') }}"
+    src="{{ url_for('static', filename='js/bin/connectfour.bundle.js') }}"
     defer>
   </script>
 </head>
