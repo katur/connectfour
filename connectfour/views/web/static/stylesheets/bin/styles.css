@@ -119,11 +119,9 @@ dl:last-of-type {
   left: 0; }
 
 #game-screen #game-info {
-  right: 0;
-  background: #a9c4f5;
-  border-radius: 5px; }
+  right: 0; }
   #game-screen #game-info td {
-    padding-right: 5px; }
+    padding-left: 5px; }
 
 #game-screen #game-board {
   float: left; }

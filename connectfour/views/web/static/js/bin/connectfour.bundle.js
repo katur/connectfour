@@ -31244,7 +31244,7 @@
 	            _react2.default.createElement(
 	              "td",
 	              null,
-	              "User"
+	              "User:"
 	            ),
 	            _react2.default.createElement(
 	              "td",
@@ -31258,7 +31258,7 @@
 	            _react2.default.createElement(
 	              "td",
 	              null,
-	              "Room"
+	              "Room:"
 	            ),
 	            _react2.default.createElement(
 	              "td",

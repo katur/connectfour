@@ -17,12 +17,12 @@ let GameInfo = React.createClass({
         <table>
           <tbody>
             <tr>
-              <td>User</td>
+              <td>User:</td>
               <td>{this.props.username}</td>
             </tr>
 
             <tr>
-              <td>Room</td>
+              <td>Room:</td>
               <td>{this.props.room}</td>
             </tr>
           </tbody>
