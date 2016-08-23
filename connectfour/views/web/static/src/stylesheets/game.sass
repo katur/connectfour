@@ -1,0 +1,79 @@
+#game-screen
+  #game-control
+    float: left
+
+    div
+      margin-bottom: $whitespace / 2
+
+    #game-info
+      span
+        display: block
+        width: 100%
+
+    #game-players
+      td
+        padding: 10px
+        border: 1px solid gold
+
+    #game-feedback
+      border-radius: 5px
+      background: lighten($background-color, 10%)
+      padding: 10px
+
+    .player-key
+      border-radius: 2px
+      padding: 5px 10px
+      color: white
+
+  #game-board
+    float: right
+
+    .game-column-button, .game-square
+      margin: 1vmin
+      float: left
+
+    .game-square
+      border-radius: 5px
+
+    @keyframes blinker
+      from
+        visibility: visible
+      to
+        visibility: hidden
+
+    .blink-square
+      animation: blinker steps(1) 500ms infinite alternate
+
+  .game-square, .player-key
+    &-null
+      background: gold
+
+    &-black
+      background: black
+
+    &-red
+      background: crimson
+
+    &-blue
+      background: royalblue
+
+    &-purple
+      background: blueviolet
+
+    &-green
+      background: forestgreen
+
+    &-brown
+      background: saddlebrown
+
+    &-pink
+      background: hotpink
+
+    &-gray
+      background: darkgray
+
+    &-orange
+      background: darkorange
+
+    &-lime
+      background: chartreuse

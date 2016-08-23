@@ -160,6 +160,7 @@ def on_disconnect():
 
 @socketio.on('createBoard')
 def on_create_board(data):
+    # TODO: add error checking
     num_rows = int(data['numRows'])
     num_columns = int(data['numColumns'])
     num_to_win = int(data['numToWin'])
@@ -173,6 +174,7 @@ def on_create_board(data):
 
 @socketio.on('startGame')
 def on_start_game(data):
+    # TODO: add error checking
     pubsub = _get_room_data(request).pubsub
     pubsub.publish(ViewAction.start_game)
     pubsub.do_queue()
@@ -180,6 +182,7 @@ def on_start_game(data):
 
 @socketio.on('play')
 def on_play(data):
+    # TODO: add error checking (that current player really played)
     column = int(data['column'])
     pubsub = _get_room_data(request).pubsub
     pubsub.publish(ViewAction.play, column=column)
@@ -194,12 +197,12 @@ def _get_room_data(request):
     return room_to_data[sid_to_room[request.sid]]
 
 
-def _get_random_string(length):
-    return ''.join(random.choice(string.ascii_uppercase + string.digits)
-                   for _ in range(length))
-
-
 def _create_new_room():
     room = _get_random_string(ROOM_ID_LENGTH)
     room_to_data[room] = RoomData(room)
     return room
+
+
+def _get_random_string(length):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+                   for _ in range(length))

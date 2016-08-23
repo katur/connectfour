@@ -18,20 +18,20 @@ let GameStartButton = React.createClass({
 
   render: function() {
     return (
-      <form
-        id="game-start"
-        className="section"
-        action=""
-        method="post"
-        onSubmit={this._handleSubmit}
-      >
-        <button
-          type="submit"
-          disabled={this.props.gameInProgress}
+      <div id="game-start">
+        <form
+          action=""
+          method="post"
+          onSubmit={this._handleSubmit}
         >
-          Start Game
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={this.props.gameInProgress}
+          >
+            Start Game
+          </button>
+        </form>
+      </div>
     );
   },
 });

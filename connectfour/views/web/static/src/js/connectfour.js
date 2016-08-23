@@ -1,5 +1,5 @@
 import wsClient from "socket.io-client";
-import "../stylesheets/connectfour";
+import "../stylesheets/styles";
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./components/App";

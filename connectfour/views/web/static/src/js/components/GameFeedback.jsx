@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 let GameFeedback = React.createClass({
   render: function() {
     return (
-      <div id="game-feedback" className="section">
+      <div id="game-feedback">
         {this.props.text}
       </div>
     );

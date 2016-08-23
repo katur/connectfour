@@ -18,7 +18,7 @@ const initialState = {
   pk: ``,
   room: ``,
 
-  gameNumber: null,
+  gameNumber: 0,
   gameInProgress: false,
   feedback: ``,
 

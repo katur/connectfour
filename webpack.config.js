@@ -20,7 +20,7 @@ module.exports = {
     }]
   },
   plugins: [
-    new ExtractTextPlugin("../stylesheets/connectfour.css", {
+    new ExtractTextPlugin("../stylesheets/styles.css", {
       allChunks: true
     }),
     new WebpackNotifierPlugin()

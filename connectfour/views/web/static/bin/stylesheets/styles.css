@@ -1,0 +1,166 @@
+/********** Get rid of native browser styles **********/
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+body {
+  background: #7ba5f0;
+  padding: 20px 5vmin; }
+
+h1 {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 20px; }
+
+.section {
+  margin-bottom: 40px; }
+  .section:last-child {
+    margin-bottom: none; }
+
+body {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; }
+
+h1 {
+  font-size: 48px;
+  color: white;
+  font-weight: bold; }
+
+h2 {
+  font-size: 28px;
+  font-weight: bold; }
+
+input, button {
+  background: #eee; }
+
+input {
+  padding: 3px;
+  border: none;
+  border-radius: 1px; }
+
+button {
+  padding: 5px 8px;
+  border: none;
+  border-radius: 3px; }
+  button:hover:enabled {
+    background: #aaa;
+    cursor: pointer; }
+
+dd, dt {
+  margin-bottom: 5px; }
+
+dd {
+  margin-left: 40px; }
+
+#setup-screen h2 {
+  margin-bottom: 13.33333px; }
+
+#setup-screen button {
+  margin-top: 13.33333px; }
+
+#game-screen #game-control {
+  float: left; }
+  #game-screen #game-control div {
+    margin-bottom: 20px; }
+  #game-screen #game-control #game-info span {
+    display: block;
+    width: 100%; }
+  #game-screen #game-control #game-players td {
+    padding: 10px;
+    border: 1px solid gold; }
+  #game-screen #game-control #game-feedback {
+    border-radius: 5px;
+    background: #a9c4f5;
+    padding: 10px; }
+  #game-screen #game-control .player-key {
+    border-radius: 2px;
+    padding: 5px 10px;
+    color: white; }
+
+#game-screen #game-board {
+  float: right; }
+  #game-screen #game-board .game-column-button, #game-screen #game-board .game-square {
+    margin: 1vmin;
+    float: left; }
+  #game-screen #game-board .game-square {
+    border-radius: 5px; }
+
+@keyframes blinker {
+  from {
+    visibility: visible; }
+  to {
+    visibility: hidden; } }
+  #game-screen #game-board .blink-square {
+    animation: blinker steps(1) 500ms infinite alternate; }
+
+#game-screen .game-square-null, #game-screen .player-key-null {
+  background: gold; }
+
+#game-screen .game-square-black, #game-screen .player-key-black {
+  background: black; }
+
+#game-screen .game-square-red, #game-screen .player-key-red {
+  background: crimson; }
+
+#game-screen .game-square-blue, #game-screen .player-key-blue {
+  background: royalblue; }
+
+#game-screen .game-square-purple, #game-screen .player-key-purple {
+  background: blueviolet; }
+
+#game-screen .game-square-green, #game-screen .player-key-green {
+  background: forestgreen; }
+
+#game-screen .game-square-brown, #game-screen .player-key-brown {
+  background: saddlebrown; }
+
+#game-screen .game-square-pink, #game-screen .player-key-pink {
+  background: hotpink; }
+
+#game-screen .game-square-gray, #game-screen .player-key-gray {
+  background: darkgray; }
+
+#game-screen .game-square-orange, #game-screen .player-key-orange {
+  background: darkorange; }
+
+#game-screen .game-square-lime, #game-screen .player-key-lime {
+  background: chartreuse; }

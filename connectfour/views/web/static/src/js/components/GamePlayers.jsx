@@ -12,18 +12,15 @@ function mapStateToProps(state) {
 let GamePlayers = React.createClass({
   render: function() {
     return (
-      <div id="game-players" className="section">
-        <h3>Players</h3>
+      <div id="game-players">
         <table>
           <tbody>
             {this.props.players.map(function(player, i) {
               return (
                 <tr key={player.pk}>
                   <td className={`player-key player-key-${player.color}`}>
-                    {player.color}
+                    {player.name}
                   </td>
-
-                  <td>{player.name}</td>
 
                   <td>{player.numWins} wins</td>
                 </tr>

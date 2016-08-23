@@ -68,11 +68,11 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _reducers = __webpack_require__(263);
+	var _reducers = __webpack_require__(264);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(264);
+	var _actions = __webpack_require__(265);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31157,19 +31157,11 @@
 
 	var _GameTitle2 = _interopRequireDefault(_GameTitle);
 
-	var _GamePlayers = __webpack_require__(255);
+	var _GameControl = __webpack_require__(255);
 
-	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
+	var _GameControl2 = _interopRequireDefault(_GameControl);
 
-	var _GameStartButton = __webpack_require__(256);
-
-	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
-
-	var _GameFeedback = __webpack_require__(257);
-
-	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
-
-	var _GameBoard = __webpack_require__(258);
+	var _GameBoard = __webpack_require__(259);
 
 	var _GameBoard2 = _interopRequireDefault(_GameBoard);
 
@@ -31193,9 +31185,7 @@
 	      "div",
 	      { id: "game-screen" },
 	      _react2.default.createElement(_GameTitle2.default, null),
-	      _react2.default.createElement(_GamePlayers2.default, null),
-	      _react2.default.createElement(_GameStartButton2.default, null),
-	      _react2.default.createElement(_GameFeedback2.default, null),
+	      _react2.default.createElement(_GameControl2.default, null),
 	      _react2.default.createElement(_GameBoard2.default, null)
 	    );
 	  }
@@ -31225,11 +31215,7 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    username: state.username,
-	    pk: state.pk,
-	    room: state.room,
-	    numToWin: state.numToWin,
-	    gameNumber: state.gameNumber
+	    numToWin: state.numToWin
 	  };
 	}
 
@@ -31237,12 +31223,6 @@
 	  displayName: "GameTitle",
 
 	  render: function render() {
-	    var gameNumberFeedback = "";
-
-	    if (this.props.gameNumber) {
-	      gameNumberFeedback = "| Game " + this.props.gameNumber;
-	    }
-
 	    return _react2.default.createElement(
 	      "div",
 	      null,
@@ -31251,15 +31231,6 @@
 	        null,
 	        "Connect ",
 	        this.props.numToWin
-	      ),
-	      _react2.default.createElement(
-	        "h3",
-	        null,
-	        "Welcome ",
-	        this.props.username,
-	        "| Room ",
-	        this.props.room,
-	        gameNumberFeedback
 	      )
 	    );
 	  }
@@ -31271,6 +31242,55 @@
 
 /***/ },
 /* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _GameInfo = __webpack_require__(266);
+
+	var _GameInfo2 = _interopRequireDefault(_GameInfo);
+
+	var _GamePlayers = __webpack_require__(256);
+
+	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
+
+	var _GameStartButton = __webpack_require__(257);
+
+	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
+
+	var _GameFeedback = __webpack_require__(258);
+
+	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameControl = _react2.default.createClass({
+	  displayName: "GameControl",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-control" },
+	      _react2.default.createElement(_GameInfo2.default, null),
+	      _react2.default.createElement(_GamePlayers2.default, null),
+	      _react2.default.createElement(_GameFeedback2.default, null),
+	      _react2.default.createElement(_GameStartButton2.default, null)
+	    );
+	  }
+	});
+
+	exports.default = GameControl;
+
+/***/ },
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31299,12 +31319,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-players", className: "section" },
-	      _react2.default.createElement(
-	        "h3",
-	        null,
-	        "Players"
-	      ),
+	      { id: "game-players" },
 	      _react2.default.createElement(
 	        "table",
 	        null,
@@ -31318,11 +31333,6 @@
 	              _react2.default.createElement(
 	                "td",
 	                { className: "player-key player-key-" + player.color },
-	                player.color
-	              ),
-	              _react2.default.createElement(
-	                "td",
-	                null,
 	                player.name
 	              ),
 	              _react2.default.createElement(
@@ -31344,7 +31354,7 @@
 	exports.default = GamePlayers;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31381,21 +31391,23 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "form",
-	      {
-	        id: "game-start",
-	        className: "section",
-	        action: "",
-	        method: "post",
-	        onSubmit: this._handleSubmit
-	      },
+	      "div",
+	      { id: "game-start" },
 	      _react2.default.createElement(
-	        "button",
+	        "form",
 	        {
-	          type: "submit",
-	          disabled: this.props.gameInProgress
+	          action: "",
+	          method: "post",
+	          onSubmit: this._handleSubmit
 	        },
-	        "Start Game"
+	        _react2.default.createElement(
+	          "button",
+	          {
+	            type: "submit",
+	            disabled: this.props.gameInProgress
+	          },
+	          "Start Game"
+	        )
 	      )
 	    );
 	  }
@@ -31406,7 +31418,7 @@
 	exports.default = GameStartButton;
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31435,7 +31447,7 @@
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-feedback", className: "section" },
+	      { id: "game-feedback" },
 	      this.props.text
 	    );
 	  }
@@ -31446,7 +31458,7 @@
 	exports.default = GameFeedback;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31461,11 +31473,11 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameColumnButtons = __webpack_require__(259);
+	var _GameColumnButtons = __webpack_require__(260);
 
 	var _GameColumnButtons2 = _interopRequireDefault(_GameColumnButtons);
 
-	var _GameGrid = __webpack_require__(261);
+	var _GameGrid = __webpack_require__(262);
 
 	var _GameGrid2 = _interopRequireDefault(_GameGrid);
 
@@ -31487,7 +31499,7 @@
 	exports.default = GameBoard;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31502,7 +31514,7 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameColumnButton = __webpack_require__(260);
+	var _GameColumnButton = __webpack_require__(261);
 
 	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
 
@@ -31552,7 +31564,7 @@
 	exports.default = GameColumnButtons;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31605,7 +31617,7 @@
 	exports.default = GameColumnButton;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31620,7 +31632,7 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameSquare = __webpack_require__(262);
+	var _GameSquare = __webpack_require__(263);
 
 	var _GameSquare2 = _interopRequireDefault(_GameSquare);
 
@@ -31675,7 +31687,7 @@
 	exports.default = GameGrid;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31706,7 +31718,7 @@
 	exports.default = GameSquare;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31715,7 +31727,7 @@
 	  value: true
 	});
 
-	var _actions = __webpack_require__(264);
+	var _actions = __webpack_require__(265);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -31724,7 +31736,7 @@
 	  pk: "",
 	  room: "",
 
-	  gameNumber: null,
+	  gameNumber: 0,
 	  gameInProgress: false,
 	  feedback: "",
 
@@ -31842,7 +31854,7 @@
 	exports.default = appReducer;
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31959,6 +31971,65 @@
 	    type: GAME_DRAW
 	  };
 	}
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(228);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    username: state.username,
+	    room: state.room,
+	    gameNumber: state.gameNumber
+	  };
+	}
+
+	var GameInfo = _react2.default.createClass({
+	  displayName: "GameInfo",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-info" },
+	      _react2.default.createElement(
+	        "span",
+	        null,
+	        "Welcome ",
+	        this.props.username
+	      ),
+	      _react2.default.createElement(
+	        "span",
+	        null,
+	        "Room ",
+	        this.props.room
+	      ),
+	      _react2.default.createElement(
+	        "span",
+	        null,
+	        "Game ",
+	        this.props.gameNumber
+	      )
+	    );
+	  }
+	});
+
+	GameInfo = (0, _reactRedux.connect)(mapStateToProps)(GameInfo);
+
+	exports.default = GameInfo;
 
 /***/ }
 /******/ ]);
