@@ -32020,19 +32020,19 @@
 	      _react2.default.createElement(
 	        "span",
 	        null,
-	        "Welcome ",
+	        "Your user: ",
 	        this.props.username
 	      ),
 	      _react2.default.createElement(
 	        "span",
 	        null,
-	        "Room ",
+	        "Room: ",
 	        this.props.room
 	      ),
 	      _react2.default.createElement(
 	        "span",
 	        null,
-	        "Game ",
+	        "Game: ",
 	        this.props.gameNumber
 	      )
 	    );

@@ -15,9 +15,9 @@ let GameInfo = React.createClass({
   render: function() {
     return (
       <div id="game-info">
-        <span>Welcome {this.props.username}</span>
-        <span>Room {this.props.room}</span>
-        <span>Game {this.props.gameNumber}</span>
+        <span>Your user: {this.props.username}</span>
+        <span>Room: {this.props.room}</span>
+        <span>Game: {this.props.gameNumber}</span>
       </div>
     );
   },
