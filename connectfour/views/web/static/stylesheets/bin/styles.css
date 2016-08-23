@@ -109,19 +109,19 @@ dl:last-of-type {
 #setup-screen dl {
   margin-bottom: 13.33333px; }
 
-#game-screen #game-feedback, #game-screen #game-info {
+#game-screen #game-info, #game-screen #game-feedback {
   padding: 10px;
   position: absolute;
   top: 0;
   opacity: 0.75; }
 
-#game-screen #game-feedback {
-  left: 0; }
-
 #game-screen #game-info {
-  right: 0; }
+  left: 0; }
   #game-screen #game-info td {
-    padding-left: 5px; }
+    padding-right: 5px; }
+
+#game-screen #game-feedback {
+  right: 0; }
 
 #game-screen #game-board {
   float: left; }
