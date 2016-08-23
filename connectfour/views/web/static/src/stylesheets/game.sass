@@ -1,46 +1,38 @@
 #game-screen
-  #game-control
-    float: left
+  #game-feedback, #game-info
+    padding: 10px
+    position: absolute
+    top: 0
 
-    div
-      margin-bottom: $whitespace / 2
+  #game-feedback
+    left: 0
 
-    #game-info
-      span
-        display: block
-        width: 100%
+  #game-info
+    right: 0
+    background: lighten($background-color, 10%)
+    border-radius: 5px
 
-    #game-players
-      td
-        padding: 10px
-        border: 1px solid gold
-
-    #game-feedback
-      border-radius: 5px
-      background: lighten($background-color, 10%)
-      padding: 10px
-
-    .player-key
-      border-radius: 2px
-      padding: 5px 10px
-      color: white
+    td
+      padding-right: 5px
 
   #game-board
-    float: right
+    float: left
+    margin-right: $whitespace * 2
 
     .game-square-wrapper, .game-column-button-wrapper
       float: left
 
-    .game-column-button
-      display: block
-
     .game-square, .game-column-button
       width: 80%
-      margin: 10%
 
     .game-square
-      border-radius: 5px
       height: 80%
+      margin: 10%
+      border-radius: 5px
+
+    .game-column-button
+      display: block
+      margin: 0 10% 10% 10%
 
     @keyframes blinker
       from
@@ -50,6 +42,27 @@
 
     .blink-square
       animation: blinker steps(1) 500ms infinite alternate
+
+  #game-control
+    float: left
+
+    #game-players, #game-start
+      margin-bottom: $whitespace * 2
+
+    #game-players
+      margin-top: $whitespace / 4
+
+      td
+        padding: 5px
+
+        &.color-key
+          height: 15px
+          width: 15px
+
+    #change-board
+      input
+        width: 30px
+
 
 .color
   &-null

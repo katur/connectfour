@@ -6,6 +6,12 @@ $whitespace: 40px
 $background-color: lighten(cornflowerblue, 5%)
 $body-padding: 5vmin
 
+@mixin sectionify($margin)
+  margin-bottom: $margin
+
+  &:last-child
+    margin-bottom: none
+
 @import page
 @import font
 @import elements

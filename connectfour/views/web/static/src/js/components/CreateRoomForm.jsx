@@ -2,10 +2,9 @@ import React from "react";
 import Emitters from "../emitters";
 
 
-const JoinGameForm = React.createClass({
+let CreateRoomForm = React.createClass({
   getInitialState: function() {
     return {
-      room: ``,
       username: ``,
     };
   },
@@ -18,34 +17,30 @@ const JoinGameForm = React.createClass({
 
   _handleSubmit: function(e) {
     e.preventDefault();
+
     Emitters.addUser({
       username: this.state.username,
-      room: this.state.room,
+    });
+
+    Emitters.createBoard({
+      numRows: window.DEFAULT_ROWS,
+      numColumns: window.DEFAULT_COLUMNS,
+      numToWin: window.DEFAULT_TO_WIN,
     });
   },
 
   render: function() {
     return (
-      <div className="section">
-        <h2>Join a game room?</h2>
+      <div>
+        <h3>Create a game room?</h3>
 
         <form
-          id="join-game-form"
+          id="create-room-form"
           action=""
           method="post"
           onSubmit={this._handleSubmit}
         >
           <dl>
-            <dt>Room ID</dt>
-            <dd>
-              <input
-                type="text"
-                name="room"
-                value={this.state.room}
-                onChange={this._handleInput}
-              />
-            </dd>
-
             <dt>Your username</dt>
             <dd>
               <input
@@ -65,4 +60,4 @@ const JoinGameForm = React.createClass({
 });
 
 
-export default JoinGameForm;
+export default CreateRoomForm;

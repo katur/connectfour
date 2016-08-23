@@ -3,7 +3,17 @@ import { connect } from "react-redux";
 import Emitters from "../emitters";
 
 
-let NewGameForm = React.createClass({
+function mapStateToProps(state) {
+  return {
+    gameInProgress: state.gameInProgress,
+    numRows: state.numRows,
+    numColumns: state.numColumns,
+    numToWin: state.numToWin,
+  }
+}
+
+
+let ChangeBoardForm = React.createClass({
   getInitialState: function() {
     return {
       numRows: `${window.DEFAULT_ROWS}`,
@@ -22,10 +32,6 @@ let NewGameForm = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
 
-    Emitters.addUser({
-      username: this.state.username,
-    });
-
     // could this signal be received before the previous on the server?
     Emitters.createBoard({
       numRows: this.state.numRows,
@@ -36,11 +42,8 @@ let NewGameForm = React.createClass({
 
   render: function() {
     return (
-      <div className="section">
-        <h2>Set up a new game?</h2>
-
+      <div id="change-board">
         <form
-          id="new-game-form"
           action=""
           method="post"
           onSubmit={this._handleSubmit}
@@ -76,18 +79,14 @@ let NewGameForm = React.createClass({
               />
             </dd>
 
-            <dt>Your username</dt>
-            <dd>
-              <input
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this._handleInput}
-              />
-            </dd>
           </dl>
 
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            disabled={this.props.gameInProgress}
+          >
+            Change board
+          </button>
         </form>
       </div>
     );
@@ -95,4 +94,9 @@ let NewGameForm = React.createClass({
 });
 
 
-export default NewGameForm;
+ChangeBoardForm = connect(
+  mapStateToProps
+)(ChangeBoardForm);
+
+
+export default ChangeBoardForm;

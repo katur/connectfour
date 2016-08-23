@@ -53,21 +53,23 @@ h1 {
   text-align: center;
   margin-bottom: 20px; }
 
-.section {
-  margin-bottom: 40px; }
-  .section:last-child {
-    margin-bottom: none; }
-
 body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; }
 
 h1 {
   font-size: 48px;
-  color: white;
-  font-weight: bold; }
+  color: white; }
 
 h2 {
-  font-size: 28px;
+  font-size: 38px; }
+
+h3 {
+  font-size: 28px; }
+
+h4 {
+  font-size: 18px; }
+
+h1, h2, h3, h4 {
   font-weight: bold; }
 
 input, button {
@@ -86,49 +88,62 @@ button {
     background: #aaa;
     cursor: pointer; }
 
-dd, dt {
-  margin-bottom: 5px; }
+dl dt {
+  margin-bottom: 3px; }
 
-dd {
+dl dd {
+  margin-bottom: 10px; }
+
+dl.inline dt {
+  display: inline-block; }
+
+dl.inline dd {
+  display: inline;
   margin-left: 40px; }
+  dl.inline dd:after {
+    content: '';
+    display: block; }
 
-#setup-screen h2 {
+#setup-screen div {
+  margin-bottom: 40px; }
+  #setup-screen div:last-child {
+    margin-bottom: none; }
+
+#setup-screen h3 {
   margin-bottom: 13.33333px; }
 
-#setup-screen button {
-  margin-top: 13.33333px; }
+#setup-screen dl {
+  margin-bottom: 13.33333px; }
 
-#game-screen #game-control {
-  float: left; }
-  #game-screen #game-control div {
-    margin-bottom: 20px; }
-  #game-screen #game-control #game-info span {
-    display: block;
-    width: 100%; }
-  #game-screen #game-control #game-players td {
-    padding: 10px;
-    border: 1px solid gold; }
-  #game-screen #game-control #game-feedback {
-    border-radius: 5px;
-    background: #a9c4f5;
-    padding: 10px; }
-  #game-screen #game-control .player-key {
-    border-radius: 2px;
-    padding: 5px 10px;
-    color: white; }
+#game-screen #game-feedback, #game-screen #game-info {
+  padding: 10px;
+  position: absolute;
+  top: 0; }
+
+#game-screen #game-feedback {
+  left: 0; }
+
+#game-screen #game-info {
+  right: 0;
+  background: #a9c4f5;
+  border-radius: 5px; }
+  #game-screen #game-info td {
+    padding-right: 5px; }
 
 #game-screen #game-board {
-  float: right; }
+  float: left;
+  margin-right: 80px; }
   #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
     float: left; }
-  #game-screen #game-board .game-column-button {
-    display: block; }
   #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
-    width: 80%;
-    margin: 10%; }
+    width: 80%; }
   #game-screen #game-board .game-square {
-    border-radius: 5px;
-    height: 80%; }
+    height: 80%;
+    margin: 10%;
+    border-radius: 5px; }
+  #game-screen #game-board .game-column-button {
+    display: block;
+    margin: 0 10% 10% 10%; }
 
 @keyframes blinker {
   from {
@@ -137,6 +152,20 @@ dd {
     visibility: hidden; } }
   #game-screen #game-board .blink-square {
     animation: blinker steps(1) 500ms infinite alternate; }
+
+#game-screen #game-control {
+  float: left; }
+  #game-screen #game-control #game-players, #game-screen #game-control #game-start {
+    margin-bottom: 80px; }
+  #game-screen #game-control #game-players {
+    margin-top: 10px; }
+    #game-screen #game-control #game-players td {
+      padding: 5px; }
+      #game-screen #game-control #game-players td.color-key {
+        height: 15px;
+        width: 15px; }
+  #game-screen #game-control #change-board input {
+    width: 30px; }
 
 .color-null {
   background: gold; }

@@ -68,11 +68,11 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _reducers = __webpack_require__(264);
+	var _reducers = __webpack_require__(266);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(265);
+	var _actions = __webpack_require__(267);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29232,13 +29232,13 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _NewGameForm = __webpack_require__(250);
+	var _CreateRoomForm = __webpack_require__(268);
 
-	var _NewGameForm2 = _interopRequireDefault(_NewGameForm);
+	var _CreateRoomForm2 = _interopRequireDefault(_CreateRoomForm);
 
-	var _JoinGameForm = __webpack_require__(252);
+	var _JoinRoomForm = __webpack_require__(269);
 
-	var _JoinGameForm2 = _interopRequireDefault(_JoinGameForm);
+	var _JoinRoomForm2 = _interopRequireDefault(_JoinRoomForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29264,8 +29264,8 @@
 	        null,
 	        "Connect X"
 	      ),
-	      _react2.default.createElement(_NewGameForm2.default, null),
-	      _react2.default.createElement(_JoinGameForm2.default, null)
+	      _react2.default.createElement(_CreateRoomForm2.default, null),
+	      _react2.default.createElement(_JoinRoomForm2.default, null)
 	    );
 	  }
 	});
@@ -30827,154 +30827,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(54)))
 
 /***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(228);
-
-	var _emitters = __webpack_require__(251);
-
-	var _emitters2 = _interopRequireDefault(_emitters);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var NewGameForm = _react2.default.createClass({
-	  displayName: "NewGameForm",
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      numRows: "" + window.DEFAULT_ROWS,
-	      numColumns: "" + window.DEFAULT_COLUMNS,
-	      numToWin: "" + window.DEFAULT_TO_WIN,
-	      username: ""
-	    };
-	  },
-
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
-
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-
-	    _emitters2.default.addUser({
-	      username: this.state.username
-	    });
-
-	    // could this signal be received before the previous on the server?
-	    _emitters2.default.createBoard({
-	      numRows: this.state.numRows,
-	      numColumns: this.state.numColumns,
-	      numToWin: this.state.numToWin
-	    });
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { className: "section" },
-	      _react2.default.createElement(
-	        "h2",
-	        null,
-	        "Set up a new game?"
-	      ),
-	      _react2.default.createElement(
-	        "form",
-	        {
-	          id: "new-game-form",
-	          action: "",
-	          method: "post",
-	          onSubmit: this._handleSubmit
-	        },
-	        _react2.default.createElement(
-	          "dl",
-	          null,
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num rows"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numRows",
-	              value: this.state.numRows,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num columns"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numColumns",
-	              value: this.state.numColumns,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num to win"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numToWin",
-	              value: this.state.numToWin,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Your username"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "username",
-	              value: this.state.username,
-	              onChange: this._handleInput
-	            })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "button",
-	          { type: "submit" },
-	          "Submit"
-	        )
-	      )
-	    );
-	  }
-	});
-
-	exports.default = NewGameForm;
-
-/***/ },
+/* 250 */,
 /* 251 */
 /***/ function(module, exports) {
 
@@ -31031,113 +30884,7 @@
 	exports.default = Emitters;
 
 /***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _emitters = __webpack_require__(251);
-
-	var _emitters2 = _interopRequireDefault(_emitters);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var JoinGameForm = _react2.default.createClass({
-	  displayName: "JoinGameForm",
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      room: "",
-	      username: ""
-	    };
-	  },
-
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
-
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-	    _emitters2.default.addUser({
-	      username: this.state.username,
-	      room: this.state.room
-	    });
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { className: "section" },
-	      _react2.default.createElement(
-	        "h2",
-	        null,
-	        "Join a game room?"
-	      ),
-	      _react2.default.createElement(
-	        "form",
-	        {
-	          id: "join-game-form",
-	          action: "",
-	          method: "post",
-	          onSubmit: this._handleSubmit
-	        },
-	        _react2.default.createElement(
-	          "dl",
-	          null,
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Room ID"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "room",
-	              value: this.state.room,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Your username"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "username",
-	              value: this.state.username,
-	              onChange: this._handleInput
-	            })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "button",
-	          { type: "submit" },
-	          "Submit"
-	        )
-	      )
-	    );
-	  }
-	});
-
-	exports.default = JoinGameForm;
-
-/***/ },
+/* 252 */,
 /* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31157,11 +30904,19 @@
 
 	var _GameTitle2 = _interopRequireDefault(_GameTitle);
 
+	var _GameInfo = __webpack_require__(256);
+
+	var _GameInfo2 = _interopRequireDefault(_GameInfo);
+
+	var _GameFeedback = __webpack_require__(259);
+
+	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
+
 	var _GameControl = __webpack_require__(255);
 
 	var _GameControl2 = _interopRequireDefault(_GameControl);
 
-	var _GameBoard = __webpack_require__(259);
+	var _GameBoard = __webpack_require__(261);
 
 	var _GameBoard2 = _interopRequireDefault(_GameBoard);
 
@@ -31185,8 +30940,10 @@
 	      "div",
 	      { id: "game-screen" },
 	      _react2.default.createElement(_GameTitle2.default, null),
-	      _react2.default.createElement(_GameControl2.default, null),
-	      _react2.default.createElement(_GameBoard2.default, null)
+	      _react2.default.createElement(_GameInfo2.default, null),
+	      _react2.default.createElement(_GameFeedback2.default, null),
+	      _react2.default.createElement(_GameBoard2.default, null),
+	      _react2.default.createElement(_GameControl2.default, null)
 	    );
 	  }
 	});
@@ -31254,21 +31011,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _GameInfo = __webpack_require__(266);
+	var _GameNumber = __webpack_require__(271);
 
-	var _GameInfo2 = _interopRequireDefault(_GameInfo);
+	var _GameNumber2 = _interopRequireDefault(_GameNumber);
 
-	var _GamePlayers = __webpack_require__(256);
+	var _GamePlayers = __webpack_require__(257);
 
 	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
 
-	var _GameStartButton = __webpack_require__(257);
+	var _GameStartButton = __webpack_require__(258);
 
 	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
 
-	var _GameFeedback = __webpack_require__(258);
+	var _ChangeBoardForm = __webpack_require__(270);
 
-	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
+	var _ChangeBoardForm2 = _interopRequireDefault(_ChangeBoardForm);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31279,10 +31036,10 @@
 	    return _react2.default.createElement(
 	      "div",
 	      { id: "game-control" },
-	      _react2.default.createElement(_GameInfo2.default, null),
+	      _react2.default.createElement(_GameNumber2.default, null),
 	      _react2.default.createElement(_GamePlayers2.default, null),
-	      _react2.default.createElement(_GameFeedback2.default, null),
-	      _react2.default.createElement(_GameStartButton2.default, null)
+	      _react2.default.createElement(_GameStartButton2.default, null),
+	      _react2.default.createElement(_ChangeBoardForm2.default, null)
 	    );
 	  }
 	});
@@ -31291,6 +31048,82 @@
 
 /***/ },
 /* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(228);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    username: state.username,
+	    room: state.room
+	  };
+	}
+
+	var GameInfo = _react2.default.createClass({
+	  displayName: "GameInfo",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-info" },
+	      _react2.default.createElement(
+	        "table",
+	        null,
+	        _react2.default.createElement(
+	          "tbody",
+	          null,
+	          _react2.default.createElement(
+	            "tr",
+	            null,
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              "User"
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              this.props.username
+	            )
+	          ),
+	          _react2.default.createElement(
+	            "tr",
+	            null,
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              "Room"
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              this.props.room
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	GameInfo = (0, _reactRedux.connect)(mapStateToProps)(GameInfo);
+
+	exports.default = GameInfo;
+
+/***/ },
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31330,9 +31163,10 @@
 	            return _react2.default.createElement(
 	              "tr",
 	              { key: player.pk },
+	              _react2.default.createElement("td", { className: "color-key color-" + player.color }),
 	              _react2.default.createElement(
 	                "td",
-	                { className: "player-key color-" + player.color },
+	                null,
 	                player.name
 	              ),
 	              _react2.default.createElement(
@@ -31354,7 +31188,7 @@
 	exports.default = GamePlayers;
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31418,7 +31252,7 @@
 	exports.default = GameStartButton;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31458,7 +31292,8 @@
 	exports.default = GameFeedback;
 
 /***/ },
-/* 259 */
+/* 260 */,
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31473,11 +31308,11 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameColumnButtons = __webpack_require__(260);
+	var _GameColumnButtons = __webpack_require__(262);
 
 	var _GameColumnButtons2 = _interopRequireDefault(_GameColumnButtons);
 
-	var _GameGrid = __webpack_require__(262);
+	var _GameGrid = __webpack_require__(264);
 
 	var _GameGrid2 = _interopRequireDefault(_GameGrid);
 
@@ -31499,7 +31334,7 @@
 	exports.default = GameBoard;
 
 /***/ },
-/* 260 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31514,7 +31349,7 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameColumnButton = __webpack_require__(261);
+	var _GameColumnButton = __webpack_require__(263);
 
 	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
 
@@ -31564,7 +31399,7 @@
 	exports.default = GameColumnButtons;
 
 /***/ },
-/* 261 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31623,7 +31458,7 @@
 	exports.default = GameColumnButton;
 
 /***/ },
-/* 262 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31638,7 +31473,7 @@
 
 	var _reactRedux = __webpack_require__(228);
 
-	var _GameSquare = __webpack_require__(263);
+	var _GameSquare = __webpack_require__(265);
 
 	var _GameSquare2 = _interopRequireDefault(_GameSquare);
 
@@ -31693,7 +31528,7 @@
 	exports.default = GameGrid;
 
 /***/ },
-/* 263 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31730,7 +31565,7 @@
 	exports.default = GameSquare;
 
 /***/ },
-/* 264 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31739,7 +31574,7 @@
 	  value: true
 	});
 
-	var _actions = __webpack_require__(265);
+	var _actions = __webpack_require__(267);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -31866,7 +31701,7 @@
 	exports.default = appReducer;
 
 /***/ },
-/* 265 */
+/* 267 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -31985,7 +31820,349 @@
 	}
 
 /***/ },
-/* 266 */
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _emitters = __webpack_require__(251);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var CreateRoomForm = _react2.default.createClass({
+	  displayName: "CreateRoomForm",
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      username: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
+	  },
+
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+
+	    _emitters2.default.addUser({
+	      username: this.state.username
+	    });
+
+	    _emitters2.default.createBoard({
+	      numRows: window.DEFAULT_ROWS,
+	      numColumns: window.DEFAULT_COLUMNS,
+	      numToWin: window.DEFAULT_TO_WIN
+	    });
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "h3",
+	        null,
+	        "Create a game room?"
+	      ),
+	      _react2.default.createElement(
+	        "form",
+	        {
+	          id: "create-room-form",
+	          action: "",
+	          method: "post",
+	          onSubmit: this._handleSubmit
+	        },
+	        _react2.default.createElement(
+	          "dl",
+	          null,
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Your username"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "username",
+	              value: this.state.username,
+	              onChange: this._handleInput
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "button",
+	          { type: "submit" },
+	          "Submit"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = CreateRoomForm;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _emitters = __webpack_require__(251);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var JoinRoomForm = _react2.default.createClass({
+	  displayName: "JoinRoomForm",
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      username: "",
+	      room: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
+	  },
+
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+
+	    _emitters2.default.addUser({
+	      username: this.state.username,
+	      room: this.state.room
+	    });
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      null,
+	      _react2.default.createElement(
+	        "h3",
+	        null,
+	        "Join a game room?"
+	      ),
+	      _react2.default.createElement(
+	        "form",
+	        {
+	          id: "join-room-form",
+	          action: "",
+	          method: "post",
+	          onSubmit: this._handleSubmit
+	        },
+	        _react2.default.createElement(
+	          "dl",
+	          null,
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Room ID"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "room",
+	              value: this.state.room,
+	              onChange: this._handleInput
+	            })
+	          ),
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Your username"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "username",
+	              value: this.state.username,
+	              onChange: this._handleInput
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "button",
+	          { type: "submit" },
+	          "Submit"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = JoinRoomForm;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(228);
+
+	var _emitters = __webpack_require__(251);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function mapStateToProps(state) {
+	  return {
+	    gameInProgress: state.gameInProgress,
+	    numRows: state.numRows,
+	    numColumns: state.numColumns,
+	    numToWin: state.numToWin
+	  };
+	}
+
+	var ChangeBoardForm = _react2.default.createClass({
+	  displayName: "ChangeBoardForm",
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      numRows: "" + window.DEFAULT_ROWS,
+	      numColumns: "" + window.DEFAULT_COLUMNS,
+	      numToWin: "" + window.DEFAULT_TO_WIN,
+	      username: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
+	  },
+
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+
+	    // could this signal be received before the previous on the server?
+	    _emitters2.default.createBoard({
+	      numRows: this.state.numRows,
+	      numColumns: this.state.numColumns,
+	      numToWin: this.state.numToWin
+	    });
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "change-board" },
+	      _react2.default.createElement(
+	        "form",
+	        {
+	          action: "",
+	          method: "post",
+	          onSubmit: this._handleSubmit
+	        },
+	        _react2.default.createElement(
+	          "dl",
+	          null,
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num rows"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numRows",
+	              value: this.state.numRows,
+	              onChange: this._handleInput
+	            })
+	          ),
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num columns"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numColumns",
+	              value: this.state.numColumns,
+	              onChange: this._handleInput
+	            })
+	          ),
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num to win"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numToWin",
+	              value: this.state.numToWin,
+	              onChange: this._handleInput
+	            })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "button",
+	          {
+	            type: "submit",
+	            disabled: this.props.gameInProgress
+	          },
+	          "Change board"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	ChangeBoardForm = (0, _reactRedux.connect)(mapStateToProps)(ChangeBoardForm);
+
+	exports.default = ChangeBoardForm;
+
+/***/ },
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -32004,44 +32181,26 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    username: state.username,
-	    room: state.room,
 	    gameNumber: state.gameNumber
 	  };
 	}
 
-	var GameInfo = _react2.default.createClass({
-	  displayName: "GameInfo",
+	var GameNumber = _react2.default.createClass({
+	  displayName: "GameNumber",
 
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
-	      { id: "game-info" },
-	      _react2.default.createElement(
-	        "span",
-	        null,
-	        "Your user: ",
-	        this.props.username
-	      ),
-	      _react2.default.createElement(
-	        "span",
-	        null,
-	        "Room: ",
-	        this.props.room
-	      ),
-	      _react2.default.createElement(
-	        "span",
-	        null,
-	        "Game: ",
-	        this.props.gameNumber
-	      )
+	      { id: "game-number" },
+	      "Game ",
+	      this.props.gameNumber
 	    );
 	  }
 	});
 
-	GameInfo = (0, _reactRedux.connect)(mapStateToProps)(GameInfo);
+	GameNumber = (0, _reactRedux.connect)(mapStateToProps)(GameNumber);
 
-	exports.default = GameInfo;
+	exports.default = GameNumber;
 
 /***/ }
 /******/ ]);

@@ -18,9 +18,22 @@ button
     cursor: pointer
 
 
-dd, dt
-  margin-bottom: 5px
+dl
+  dt
+    margin-bottom: 3px
+
+  dd
+    margin-bottom: 10px
 
 
-dd
-  margin-left: $whitespace
+dl.inline
+  dt
+    display: inline-block
+
+  dd
+    display: inline
+    margin-left: $whitespace
+
+    &:after
+      content: ''
+      display: block

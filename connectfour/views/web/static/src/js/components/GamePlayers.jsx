@@ -18,7 +18,10 @@ let GamePlayers = React.createClass({
             {this.props.players.map(function(player, i) {
               return (
                 <tr key={player.pk}>
-                  <td className={`player-key color-${player.color}`}>
+                  <td className={`color-key color-${player.color}`}>
+                  </td>
+
+                  <td>
                     {player.name}
                   </td>
 

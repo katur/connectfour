@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import NewGameForm from "./NewGameForm";
-import JoinGameForm from "./JoinGameForm";
+import CreateRoomForm from "./CreateRoomForm";
+import JoinRoomForm from "./JoinRoomForm";
 
 
 function mapStateToProps(state) {
@@ -20,8 +20,8 @@ let SetupScreen = React.createClass({
     return (
       <div id="setup-screen">
         <h1>Connect X</h1>
-        <NewGameForm />
-        <JoinGameForm />
+        <CreateRoomForm />
+        <JoinRoomForm />
       </div>
     );
   },

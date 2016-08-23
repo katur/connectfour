@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import GameTitle from "./GameTitle";
+import GameInfo from "./GameInfo";
+import GameFeedback from "./GameFeedback";
 import GameControl from "./GameControl";
 import GameBoard from "./GameBoard";
 
@@ -21,8 +23,10 @@ let GameScreen = React.createClass({
     return (
       <div id="game-screen">
         <GameTitle />
-        <GameControl />
+        <GameInfo />
+        <GameFeedback />
         <GameBoard />
+        <GameControl />
       </div>
     );
   },

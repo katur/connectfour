@@ -6,7 +6,6 @@ function mapStateToProps(state) {
   return {
     username: state.username,
     room: state.room,
-    gameNumber: state.gameNumber,
   }
 }
 
@@ -15,9 +14,19 @@ let GameInfo = React.createClass({
   render: function() {
     return (
       <div id="game-info">
-        <span>Your user: {this.props.username}</span>
-        <span>Room: {this.props.room}</span>
-        <span>Game: {this.props.gameNumber}</span>
+        <table>
+          <tbody>
+            <tr>
+              <td>User</td>
+              <td>{this.props.username}</td>
+            </tr>
+
+            <tr>
+              <td>Room</td>
+              <td>{this.props.room}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     );
   },

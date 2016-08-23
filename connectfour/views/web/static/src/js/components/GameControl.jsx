@@ -1,18 +1,18 @@
 import React from "react";
-import GameInfo from "./GameInfo";
+import GameNumber from "./GameNumber";
 import GamePlayers from "./GamePlayers";
 import GameStartButton from "./GameStartButton";
-import GameFeedback from "./GameFeedback";
+import ChangeBoardForm from "./ChangeBoardForm";
 
 
 let GameControl = React.createClass({
   render: function() {
     return (
       <div id="game-control">
-        <GameInfo />
+        <GameNumber />
         <GamePlayers />
-        <GameFeedback />
         <GameStartButton />
+        <ChangeBoardForm />
       </div>
     );
   },
