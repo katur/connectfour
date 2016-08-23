@@ -31426,7 +31426,8 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    players: state.players
+	    players: state.players,
+	    nextPlayer: state.nextPlayer
 	  };
 	}
 
@@ -31434,6 +31435,9 @@
 	  displayName: "GamePlayers",
 
 	  render: function render() {
+	    var nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
+	    var arrow = String.fromCharCode("8592");
+
 	    return _react2.default.createElement(
 	      "div",
 	      { id: "game-players" },
@@ -31458,6 +31462,11 @@
 	                null,
 	                player.numWins,
 	                " wins"
+	              ),
+	              _react2.default.createElement(
+	                "td",
+	                null,
+	                player.pk === nextPk ? arrow : ''
 	              )
 	            );
 	          })

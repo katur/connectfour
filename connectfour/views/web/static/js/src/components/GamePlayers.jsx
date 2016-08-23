@@ -5,12 +5,16 @@ import { connect } from "react-redux";
 function mapStateToProps(state) {
   return {
     players: state.players,
+    nextPlayer: state.nextPlayer,
   }
 }
 
 
 let GamePlayers = React.createClass({
   render: function() {
+    const nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
+    const arrow = String.fromCharCode("8592");
+
     return (
       <div id="game-players">
         <table>
@@ -26,6 +30,10 @@ let GamePlayers = React.createClass({
                   </td>
 
                   <td>{player.numWins} wins</td>
+
+                  <td>
+                    {player.pk === nextPk ? arrow : ''}
+                  </td>
                 </tr>
               );
             })}
