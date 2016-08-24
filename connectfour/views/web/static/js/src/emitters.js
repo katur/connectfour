@@ -23,12 +23,6 @@ const Emitters = {
       "column": column,
     });
   },
-
-  print: function({ message }) {
-    window.ws.emit("print", {
-      "message": message,
-    });
-  },
 };
 
 

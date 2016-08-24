@@ -32,7 +32,6 @@ let ChangeBoardForm = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
 
-    // could this signal be received before the previous on the server?
     Emitters.createBoard({
       numRows: this.state.numRows,
       numColumns: this.state.numColumns,

@@ -31014,14 +31014,6 @@
 	    window.ws.emit("play", {
 	      "column": column
 	    });
-	  },
-
-	  print: function print(_ref4) {
-	    var message = _ref4.message;
-
-	    window.ws.emit("print", {
-	      "message": message
-	    });
 	  }
 	};
 
@@ -31599,7 +31591,6 @@
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
 
-	    // could this signal be received before the previous on the server?
 	    _emitters2.default.createBoard({
 	      numRows: this.state.numRows,
 	      numColumns: this.state.numColumns,
