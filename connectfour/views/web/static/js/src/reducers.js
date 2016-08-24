@@ -64,6 +64,7 @@ function appReducer(state = initialState, action) {
         numColumns: action.board.numColumns,
         numToWin: action.board.numToWin,
         grid: action.board.grid,
+        blinkingSquares: [],
       });
 
     case ADD_PLAYER:
@@ -87,7 +88,6 @@ function appReducer(state = initialState, action) {
       return update(state, {
         gameNumber: action.gameNumber,
         gameInProgress: true,
-        blinkingSquares: [],
       });
 
     case SET_NEXT_PLAYER:

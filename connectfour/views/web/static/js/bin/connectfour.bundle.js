@@ -32159,7 +32159,8 @@
 	        numRows: action.board.numRows,
 	        numColumns: action.board.numColumns,
 	        numToWin: action.board.numToWin,
-	        grid: action.board.grid
+	        grid: action.board.grid,
+	        blinkingSquares: []
 	      });
 
 	    case _actions.ADD_PLAYER:
@@ -32179,8 +32180,7 @@
 	    case _actions.START_GAME:
 	      return update(state, {
 	        gameNumber: action.gameNumber,
-	        gameInProgress: true,
-	        blinkingSquares: []
+	        gameInProgress: true
 	      });
 
 	    case _actions.SET_NEXT_PLAYER:
