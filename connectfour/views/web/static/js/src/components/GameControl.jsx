@@ -9,9 +9,9 @@ let GameControl = React.createClass({
   render: function() {
     return (
       <div id="game-control">
+        <GameStartButton />
         <GameNumber />
         <GamePlayers />
-        <GameStartButton />
         <ChangeBoardForm />
       </div>
     );

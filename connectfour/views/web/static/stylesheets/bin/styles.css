@@ -154,11 +154,12 @@ dl:last-of-type {
 
 #game-screen #game-control {
   float: left;
-  margin-left: 80px; }
-  #game-screen #game-control #game-players, #game-screen #game-control #game-start {
-    margin-bottom: 80px; }
+  margin-left: 120px; }
+  #game-screen #game-control #game-start {
+    margin-bottom: 40px; }
   #game-screen #game-control #game-players {
-    margin-top: 10px; }
+    margin-top: 10px;
+    margin-bottom: 40px; }
     #game-screen #game-control #game-players table {
       white-space: nowrap;
       border-collapse: separate; }

@@ -31448,9 +31448,9 @@
 	    return _react2.default.createElement(
 	      "div",
 	      { id: "game-control" },
+	      _react2.default.createElement(_GameStartButton2.default, null),
 	      _react2.default.createElement(_GameNumber2.default, null),
 	      _react2.default.createElement(_GamePlayers2.default, null),
-	      _react2.default.createElement(_GameStartButton2.default, null),
 	      _react2.default.createElement(_ChangeBoardForm2.default, null)
 	    );
 	  }
@@ -31487,7 +31487,7 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
+	      "span",
 	      { id: "game-number" },
 	      "Game ",
 	      this.props.gameNumber

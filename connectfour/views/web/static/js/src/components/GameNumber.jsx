@@ -12,7 +12,7 @@ function mapStateToProps(state) {
 let GameNumber = React.createClass({
   render: function() {
     return (
-      <div id="game-number">Game {this.props.gameNumber}</div>
+      <span id="game-number">Game {this.props.gameNumber}</span>
     );
   },
 });
