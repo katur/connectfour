@@ -69,6 +69,15 @@ class ConnectFourModel(object):
         return 'ConnectFourModel board={}, num_players={}'.format(
             self.board, self.get_num_players())
 
+    def get_json_board(self):
+        if self.board:
+            return self.board.get_json()
+        else:
+            return None
+
+    def get_json_players(self):
+        return [p.get_json() for p in self.players]
+
     def _create_board(self, num_rows=DEFAULT_ROWS, num_columns=DEFAULT_COLUMNS,
                       num_to_win=DEFAULT_TO_WIN):
         """Add a playing board.
@@ -249,6 +258,7 @@ class ConnectFourModel(object):
 
     def _process_win(self, player, winning_positions):
         self.game_in_progress = False
+        self._increment_num_games_all_players()
         player.num_wins += 1
         self.pubsub.publish(
             ModelAction.game_won, player=player,
@@ -256,6 +266,7 @@ class ConnectFourModel(object):
 
     def _process_draw(self):
         self.game_in_progress = False
+        self._increment_num_games_all_players()
         self.pubsub.publish(ModelAction.game_draw)
 
     def _process_next_player(self):
@@ -269,6 +280,10 @@ class ConnectFourModel(object):
     def _increment_first_player_index(self):
         self.first_player_index = ((self.first_player_index + 1)
                                    % self.get_num_players())
+
+    def _increment_num_games_all_players(self):
+        for player in self.players:
+            player.num_games += 1
 
     def get_num_rows(self):
         """Get the number of rows in the board.
@@ -387,6 +402,7 @@ class Player(object):
         self.is_ai = is_ai
         self.pk = pk
         self.num_wins = 0
+        self.num_games = 0
 
         if self.is_ai:
             self.difficulty = AI_HARD
@@ -407,6 +423,7 @@ class Player(object):
             'isAI': self.is_ai,
             'pk': self.pk,
             'numWins': self.num_wins,
+            'numGames': self.num_games,
         }
 
     def do_strategy(self, model):

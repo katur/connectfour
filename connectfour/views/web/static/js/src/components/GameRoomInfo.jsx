@@ -9,7 +9,7 @@ function mapStateToProps(state) {
 }
 
 
-let GameInfo = React.createClass({
+let GameRoomInfo = React.createClass({
   render: function() {
     return (
       <div id="game-info">
@@ -27,9 +27,9 @@ let GameInfo = React.createClass({
 });
 
 
-GameInfo = connect(
+GameRoomInfo = connect(
   mapStateToProps
-)(GameInfo);
+)(GameRoomInfo);
 
 
-export default GameInfo;
+export default GameRoomInfo;

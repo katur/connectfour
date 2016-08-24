@@ -1,7 +1,6 @@
 import React from "react";
-import GameNumber from "./GameNumber";
-import GamePlayers from "./GamePlayers";
 import GameStartButton from "./GameStartButton";
+import GamePlayers from "./GamePlayers";
 import ChangeBoardForm from "./ChangeBoardForm";
 
 
@@ -10,7 +9,6 @@ let GameControl = React.createClass({
     return (
       <div id="game-control">
         <GameStartButton />
-        <GameNumber />
         <GamePlayers />
         <ChangeBoardForm />
       </div>

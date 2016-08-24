@@ -92,12 +92,15 @@ class RoomData():
 
     def on_game_won(self, player, winning_positions):
         socketio.emit('gameWon', {
-            'player': player.get_json(),
+            'winner': player.get_json(),
+            'players': self.model.get_json_players(),
             'winningPositions': list(sorted(winning_positions)),
         }, room=self.room)
 
     def on_game_draw(self):
-        socketio.emit('gameDraw', {}, room=self.room)
+        socketio.emit('gameDraw', {
+            'players': self.model.get_json_players(),
+        }, room=self.room)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -136,8 +139,8 @@ def on_add_user(data):
     emit('roomJoined', {
         'pk': request.sid,
         'room': room,
-        'players': [player.get_json() for player in model.players],
-        'board': model.board.get_json() if model.board else None,
+        'players': model.get_json_players(),
+        'board': model.get_json_board(),
     })
 
     pubsub = room_data.pubsub
@@ -167,7 +170,6 @@ def on_disconnect():
 
 @socketio.on('createBoard')
 def on_create_board(data):
-    # TODO: add error checking
     num_rows = int(data['numRows'])
     num_columns = int(data['numColumns'])
     num_to_win = int(data['numToWin'])

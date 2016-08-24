@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import GameTitle from "./GameTitle";
-import GameInfo from "./GameInfo";
+import GameRoomInfo from "./GameRoomInfo";
 import GameFeedback from "./GameFeedback";
 import GameControl from "./GameControl";
 import GameBoard from "./GameBoard";
@@ -23,7 +23,7 @@ let GameScreen = React.createClass({
     return (
       <div id="game-screen">
         <GameTitle />
-        <GameInfo />
+        <GameRoomInfo />
         <GameFeedback />
         <GameBoard />
         <GameControl />

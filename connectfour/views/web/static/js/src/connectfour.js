@@ -85,12 +85,14 @@ window.ws.on("gameStarted", function(data) {
 
 window.ws.on("gameWon", function(data) {
   store.dispatch(stopGame());
+  store.dispatch(setPlayers(data.players));
   store.dispatch(blinkSquares(data.winningPositions));
-  store.dispatch(updatePlayer(data.player));
+  store.dispatch(updatePlayer(data.winner));
 });
 
 window.ws.on("gameDraw", function(data) {
   store.dispatch(stopGame());
+  store.dispatch(setPlayers(data.players));
   store.dispatch(reportDraw());
 });
 

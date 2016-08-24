@@ -144,12 +144,14 @@
 
 	window.ws.on("gameWon", function (data) {
 	  store.dispatch((0, _actions.stopGame)());
+	  store.dispatch((0, _actions.setPlayers)(data.players));
 	  store.dispatch((0, _actions.blinkSquares)(data.winningPositions));
-	  store.dispatch((0, _actions.updatePlayer)(data.player));
+	  store.dispatch((0, _actions.updatePlayer)(data.winner));
 	});
 
 	window.ws.on("gameDraw", function (data) {
 	  store.dispatch((0, _actions.stopGame)());
+	  store.dispatch((0, _actions.setPlayers)(data.players));
 	  store.dispatch((0, _actions.reportDraw)());
 	});
 
@@ -31220,9 +31222,9 @@
 
 	var _GameTitle2 = _interopRequireDefault(_GameTitle);
 
-	var _GameInfo = __webpack_require__(255);
+	var _GameRoomInfo = __webpack_require__(269);
 
-	var _GameInfo2 = _interopRequireDefault(_GameInfo);
+	var _GameRoomInfo2 = _interopRequireDefault(_GameRoomInfo);
 
 	var _GameFeedback = __webpack_require__(256);
 
@@ -31256,7 +31258,7 @@
 	      "div",
 	      { id: "game-screen" },
 	      _react2.default.createElement(_GameTitle2.default, null),
-	      _react2.default.createElement(_GameInfo2.default, null),
+	      _react2.default.createElement(_GameRoomInfo2.default, null),
 	      _react2.default.createElement(_GameFeedback2.default, null),
 	      _react2.default.createElement(_GameBoard2.default, null),
 	      _react2.default.createElement(_GameControl2.default, null)
@@ -31314,67 +31316,7 @@
 	exports.default = GameTitle;
 
 /***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(228);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    room: state.room
-	  };
-	}
-
-	var GameInfo = _react2.default.createClass({
-	  displayName: "GameInfo",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-info" },
-	      _react2.default.createElement(
-	        "table",
-	        null,
-	        _react2.default.createElement(
-	          "tbody",
-	          null,
-	          _react2.default.createElement(
-	            "tr",
-	            null,
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              "Room:"
-	            ),
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              this.props.room
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	GameInfo = (0, _reactRedux.connect)(mapStateToProps)(GameInfo);
-
-	exports.default = GameInfo;
-
-/***/ },
+/* 255 */,
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31428,17 +31370,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _GameNumber = __webpack_require__(258);
+	var _GameStartButton = __webpack_require__(260);
 
-	var _GameNumber2 = _interopRequireDefault(_GameNumber);
+	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
 
 	var _GamePlayers = __webpack_require__(259);
 
 	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
-
-	var _GameStartButton = __webpack_require__(260);
-
-	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
 
 	var _ChangeBoardForm = __webpack_require__(261);
 
@@ -31454,7 +31392,6 @@
 	      "div",
 	      { id: "game-control" },
 	      _react2.default.createElement(_GameStartButton2.default, null),
-	      _react2.default.createElement(_GameNumber2.default, null),
 	      _react2.default.createElement(_GamePlayers2.default, null),
 	      _react2.default.createElement(_ChangeBoardForm2.default, null)
 	    );
@@ -31464,47 +31401,7 @@
 	exports.default = GameControl;
 
 /***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(228);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    gameNumber: state.gameNumber
-	  };
-	}
-
-	var GameNumber = _react2.default.createClass({
-	  displayName: "GameNumber",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "span",
-	      { id: "game-number" },
-	      "Game ",
-	      this.props.gameNumber
-	    );
-	  }
-	});
-
-	GameNumber = (0, _reactRedux.connect)(mapStateToProps)(GameNumber);
-
-	exports.default = GameNumber;
-
-/***/ },
+/* 258 */,
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31568,7 +31465,9 @@
 	                "td",
 	                null,
 	                player.numWins,
-	                " wins"
+	                " wins / ",
+	                player.numGames,
+	                " games"
 	              )
 	            );
 	          })
@@ -32410,6 +32309,67 @@
 	    reason: reason
 	  };
 	}
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(228);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    room: state.room
+	  };
+	}
+
+	var GameRoomInfo = _react2.default.createClass({
+	  displayName: "GameRoomInfo",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-info" },
+	      _react2.default.createElement(
+	        "table",
+	        null,
+	        _react2.default.createElement(
+	          "tbody",
+	          null,
+	          _react2.default.createElement(
+	            "tr",
+	            null,
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              "Room:"
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              this.props.room
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	GameRoomInfo = (0, _reactRedux.connect)(mapStateToProps)(GameRoomInfo);
+
+	exports.default = GameRoomInfo;
 
 /***/ }
 /******/ ]);

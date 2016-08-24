@@ -40,7 +40,7 @@ let GamePlayers = React.createClass({
                   </td>
 
                   <td>
-                    {player.numWins} wins
+                    {player.numWins} wins / {player.numGames} games
                   </td>
                 </tr>
               );
