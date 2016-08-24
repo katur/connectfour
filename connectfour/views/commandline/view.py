@@ -1,5 +1,4 @@
 import sys
-import time
 
 from connectfour.model import (
     DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN, TryAgainReason)
@@ -11,7 +10,6 @@ MAX_NAME_LENGTH = 50
 MAX_ROWS = 100
 MAX_COLUMNS = 100
 MAX_TO_WIN = 100
-AI_WAIT_TIME = 1
 
 YES_RESPONSES = ['y', 'Y']
 
@@ -74,8 +72,6 @@ class CommandLineView(object):
     def on_next_player(self, player):
         if player.is_ai:
             self.out.write('AI player {} is playing\n'.format(player))
-            time.sleep(AI_WAIT_TIME)
-            self.pubsub.publish(ViewAction.request_ai_play)
         else:
             self._play(player)
 

@@ -80,7 +80,6 @@ class GUIView(object):
 
         if player.is_ai:
             self.game_frame.disable_play_buttons()
-            self.pubsub.publish(ViewAction.request_ai_play, trigger_queue=True)
         else:
             self.game_frame.enable_play_buttons()
 

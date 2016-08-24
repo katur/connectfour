@@ -17,8 +17,7 @@ class ModelAction(Enum):
 class ViewAction(Enum):
     (
         add_player, remove_player, create_board, start_game, play,
-        request_ai_play
-    ) = range(6)
+    ) = range(5)
 
 
 class PubSub(object):

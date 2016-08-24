@@ -1,12 +1,14 @@
+from enum import Enum
 import operator
 import random
-from enum import Enum
+import time
 
 from connectfour.pubsub import ModelAction, ViewAction
 
 DEFAULT_ROWS = 6
 DEFAULT_COLUMNS = 7
 DEFAULT_TO_WIN = 4
+AI_WAIT_TIME = 0.5
 
 
 class ConnectFourModel(object):
@@ -58,7 +60,6 @@ class ConnectFourModel(object):
             ViewAction.remove_player: self._remove_player,
             ViewAction.start_game: self._start_game,
             ViewAction.play: self._play,
-            ViewAction.request_ai_play: self._do_ai_play,
         }
 
         for action, response in responses.iteritems():
@@ -232,10 +233,6 @@ class ConnectFourModel(object):
         else:
             self.process_play(column)
 
-    def _do_ai_play(self):
-        player = self.get_current_player()
-        player.do_strategy(self)
-
     def process_play(self, column):
         player = self.get_current_player()
         row = self.board.add_color(player.color, column)
@@ -269,6 +266,9 @@ class ConnectFourModel(object):
     def _process_next_player(self):
         player = self.get_current_player()
         self.pubsub.publish(ModelAction.next_player, player=player)
+
+        if player.is_ai:
+            player.do_strategy(self)
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
@@ -431,6 +431,7 @@ class Player(object):
         }
 
         column = AI_STRATEGIES[self.difficulty](model)
+        time.sleep(AI_WAIT_TIME)
         model.process_play(column)
 
     def easy_ai_strategy(self, model):
