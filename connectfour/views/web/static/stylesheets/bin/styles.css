@@ -102,6 +102,12 @@ dl dd {
 dl:last-of-type {
   margin-bottom: none; }
 
+@keyframes blinker {
+  to {
+    opacity: 0.1; }
+  from {
+    opacity: 1.0; } }
+
 #setup-screen div {
   margin-bottom: 40px; }
   #setup-screen div:last-child {
@@ -136,21 +142,15 @@ dl:last-of-type {
     float: left; }
   #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
     width: 80%; }
+  #game-screen #game-board .game-column-button {
+    display: block;
+    margin: 0 10% 10% 10%; }
   #game-screen #game-board .game-square {
     height: 80%;
     margin: 10%;
     border-radius: 5px; }
-  #game-screen #game-board .game-column-button {
-    display: block;
-    margin: 0 10% 10% 10%; }
-
-@keyframes blinker {
-  from {
-    visibility: visible; }
-  to {
-    visibility: hidden; } }
-  #game-screen #game-board .blink-square {
-    animation: blinker steps(1) 500ms infinite alternate; }
+    #game-screen #game-board .game-square.blinking {
+      animation: blinker 500ms linear infinite alternate; }
 
 #game-screen #game-control {
   float: left;

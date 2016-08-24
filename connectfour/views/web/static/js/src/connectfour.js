@@ -85,7 +85,7 @@ window.ws.on("tryAgain", function(data) {
 });
 
 window.ws.on("gameWon", function(data) {
-  store.dispatch(gameWon(data.player));
+  store.dispatch(gameWon(data.player, data.winningPositions));
 });
 
 window.ws.on("gameDraw", function(data) {

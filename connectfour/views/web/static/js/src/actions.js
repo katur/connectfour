@@ -10,8 +10,9 @@ export const ADD_PLAYER = "ADD_PLAYER";
 export const REMOVE_PLAYER = "REMOVE_PLAYER";
 export const START_GAME = "START_GAME";
 export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
-export const COLOR_SQUARE = "COLOR_SQUARE";
 export const TRY_AGAIN = "TRY_AGAIN";
+export const COLOR_SQUARE = "COLOR_SQUARE";
+export const BLINK_SQUARES = "BLINK_SQUARES";
 export const GAME_WON = "GAME_WON";
 export const GAME_DRAW = "GAME_DRAW";
 
@@ -85,6 +86,13 @@ export function colorSquare(color, position) {
   }
 }
 
+export function blinkSquares(positions) {
+  return {
+    type: BLINK_SQUARES,
+    positions,
+  }
+}
+
 export function tryAgain(player, reason) {
   return {
     type: TRY_AGAIN,
@@ -93,10 +101,11 @@ export function tryAgain(player, reason) {
   }
 }
 
-export function gameWon(player) {
+export function gameWon(player, winningPositions) {
   return {
     type: GAME_WON,
     player,
+    winningPositions,
   }
 }
 

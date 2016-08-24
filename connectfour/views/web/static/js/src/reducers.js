@@ -2,7 +2,7 @@ import {
   SET_ROOM_DOES_NOT_EXIST, SET_LOGGED_IN_USER,
   INITIALIZE_BOARD, INITIALIZE_PLAYERS,
   ADD_PLAYER, REMOVE_PLAYER,
-  START_GAME, SET_NEXT_PLAYER, COLOR_SQUARE, TRY_AGAIN,
+  START_GAME, SET_NEXT_PLAYER, COLOR_SQUARE, BLINK_SQUARES, TRY_AGAIN,
   GAME_WON, GAME_DRAW,
 } from "./actions";
 
@@ -17,6 +17,7 @@ const initialState = {
   feedback: ``,
 
   grid: [[]],
+  blinkingSquares: [],
   numRows: null,
   numColumns: null,
   numToWin: null,
@@ -71,7 +72,6 @@ function appReducer(state = initialState, action) {
           ...state.players,
           action.player,
         ],
-        feedback: `${action.player.name} has joined the room`,
       });
 
     case REMOVE_PLAYER:
@@ -81,19 +81,18 @@ function appReducer(state = initialState, action) {
 
       return update(state, {
         players: newPlayers,
-        feedback: `${action.player.name} has left the room`,
       });
 
     case START_GAME:
       return update(state, {
         gameNumber: action.gameNumber,
         gameInProgress: true,
+        blinkingSquares: [],
       });
 
     case SET_NEXT_PLAYER:
       return update(state, {
         nextPlayer: action.player,
-        feedback: `${action.player.name} turn`,
       });
 
     case COLOR_SQUARE:
@@ -105,6 +104,11 @@ function appReducer(state = initialState, action) {
 
       return update(state, {
         grid: newGrid,
+      });
+
+    case BLINK_SQUARES:
+      return update(state, {
+        blinkingSquares: action.blinkingSquares,
       });
 
     case TRY_AGAIN:
@@ -121,7 +125,7 @@ function appReducer(state = initialState, action) {
         players: newPlayers,
         gameInProgress: false,
         nextPlayer: null,
-        feedback: `Game won by ${action.player.name}`,
+        blinkingSquares: action.winningPositions,
       })
 
     case GAME_DRAW:

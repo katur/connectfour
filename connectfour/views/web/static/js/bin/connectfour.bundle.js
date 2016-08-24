@@ -145,7 +145,7 @@
 	});
 
 	window.ws.on("gameWon", function (data) {
-	  store.dispatch((0, _actions.gameWon)(data.player));
+	  store.dispatch((0, _actions.gameWon)(data.player, data.winningPositions));
 	});
 
 	window.ws.on("gameDraw", function (data) {
@@ -31969,6 +31969,7 @@
 	function mapStateToProps(state) {
 	  return {
 	    grid: state.grid,
+	    blinkingSquares: state.blinkingSquares,
 	    numRows: state.numRows,
 	    numColumns: state.numColumns
 	  };
@@ -31985,12 +31986,42 @@
 
 	    for (var i = 0; i < this.props.numRows; i++) {
 	      var row = [];
+
 	      for (var j = 0; j < this.props.numColumns; j++) {
 	        var clear = j === 0 ? "left" : "none";
+	        var blinking = false;
+
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	          for (var _iterator = this.props.blinkingSquares[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var item = _step.value;
+
+	            if (item[0] == i && item[1] == j) {
+	              blinking = true;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	              _iterator.return();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
 
 	        row.push(_react2.default.createElement(_GameSquare2.default, {
 	          key: i + "-" + j,
 	          color: this.props.grid[i][j],
+	          blinking: blinking,
 	          style: {
 	            width: size,
 	            height: size,
@@ -32036,6 +32067,12 @@
 	  displayName: "GameSquare",
 
 	  render: function render() {
+	    var innerClassName = "game-square color-" + this.props.color;
+
+	    if (this.props.blinking) {
+	      innerClassName += " blinking";
+	    }
+
 	    return _react2.default.createElement(
 	      "div",
 	      {
@@ -32043,7 +32080,7 @@
 	        style: this.props.style
 	      },
 	      _react2.default.createElement("div", {
-	        className: "game-square color-" + this.props.color
+	        className: innerClassName
 	      })
 	    );
 	  }
@@ -32075,6 +32112,7 @@
 	  feedback: "",
 
 	  grid: [[]],
+	  blinkingSquares: [],
 	  numRows: null,
 	  numColumns: null,
 	  numToWin: null,
@@ -32126,8 +32164,7 @@
 
 	    case _actions.ADD_PLAYER:
 	      return update(state, {
-	        players: [].concat(_toConsumableArray(state.players), [action.player]),
-	        feedback: action.player.name + " has joined the room"
+	        players: [].concat(_toConsumableArray(state.players), [action.player])
 	      });
 
 	    case _actions.REMOVE_PLAYER:
@@ -32136,20 +32173,19 @@
 	      });
 
 	      return update(state, {
-	        players: newPlayers,
-	        feedback: action.player.name + " has left the room"
+	        players: newPlayers
 	      });
 
 	    case _actions.START_GAME:
 	      return update(state, {
 	        gameNumber: action.gameNumber,
-	        gameInProgress: true
+	        gameInProgress: true,
+	        blinkingSquares: []
 	      });
 
 	    case _actions.SET_NEXT_PLAYER:
 	      return update(state, {
-	        nextPlayer: action.player,
-	        feedback: action.player.name + " turn"
+	        nextPlayer: action.player
 	      });
 
 	    case _actions.COLOR_SQUARE:
@@ -32161,6 +32197,11 @@
 
 	      return update(state, {
 	        grid: newGrid
+	      });
+
+	    case _actions.BLINK_SQUARES:
+	      return update(state, {
+	        blinkingSquares: action.blinkingSquares
 	      });
 
 	    case _actions.TRY_AGAIN:
@@ -32177,7 +32218,7 @@
 	        players: newPlayers,
 	        gameInProgress: false,
 	        nextPlayer: null,
-	        feedback: "Game won by " + action.player.name
+	        blinkingSquares: action.winningPositions
 	      });
 
 	    case _actions.GAME_DRAW:
@@ -32212,6 +32253,7 @@
 	exports.startGame = startGame;
 	exports.setNextPlayer = setNextPlayer;
 	exports.colorSquare = colorSquare;
+	exports.blinkSquares = blinkSquares;
 	exports.tryAgain = tryAgain;
 	exports.gameWon = gameWon;
 	exports.gameDraw = gameDraw;
@@ -32227,8 +32269,9 @@
 	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
 	var START_GAME = exports.START_GAME = "START_GAME";
 	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
-	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
 	var TRY_AGAIN = exports.TRY_AGAIN = "TRY_AGAIN";
+	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
+	var BLINK_SQUARES = exports.BLINK_SQUARES = "BLINK_SQUARES";
 	var GAME_WON = exports.GAME_WON = "GAME_WON";
 	var GAME_DRAW = exports.GAME_DRAW = "GAME_DRAW";
 
@@ -32301,6 +32344,13 @@
 	  };
 	}
 
+	function blinkSquares(positions) {
+	  return {
+	    type: BLINK_SQUARES,
+	    positions: positions
+	  };
+	}
+
 	function tryAgain(player, reason) {
 	  return {
 	    type: TRY_AGAIN,
@@ -32309,10 +32359,11 @@
 	  };
 	}
 
-	function gameWon(player) {
+	function gameWon(player, winningPositions) {
 	  return {
 	    type: GAME_WON,
-	    player: player
+	    player: player,
+	    winningPositions: winningPositions
 	  };
 	}
 

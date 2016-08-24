@@ -23,23 +23,17 @@
     .game-square, .game-column-button
       width: 80%
 
+    .game-column-button
+      display: block
+      margin: 0 10% 10% 10%
+
     .game-square
       height: 80%
       margin: 10%
       border-radius: 5px
 
-    .game-column-button
-      display: block
-      margin: 0 10% 10% 10%
-
-    @keyframes blinker
-      from
-        visibility: visible
-      to
-        visibility: hidden
-
-    .blink-square
-      animation: blinker steps(1) 500ms infinite alternate
+      &.blinking
+        animation: blinker 500ms linear infinite alternate
 
   #game-control
     float: left

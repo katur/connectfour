@@ -6,6 +6,7 @@ import GameSquare from "./GameSquare";
 function mapStateToProps(state) {
   return {
     grid: state.grid,
+    blinkingSquares: state.blinkingSquares,
     numRows: state.numRows,
     numColumns: state.numColumns,
   }
@@ -22,13 +23,22 @@ let GameGrid = React.createClass({
 
     for (let i = 0; i < this.props.numRows; i++) {
       let row = [];
+
       for (let j = 0; j < this.props.numColumns; j++) {
-        let clear = (j === 0) ? "left" : "none";
+        const clear = (j === 0) ? "left" : "none";
+        let blinking = false;
+
+        for (var item of this.props.blinkingSquares) {
+          if (item[0] == i && item[1] == j) {
+            blinking = true;
+          }
+        }
 
         row.push(
           <GameSquare
             key={`${i}-${j}`}
             color={this.props.grid[i][j]}
+            blinking={blinking}
             style={{
               width: size,
               height: size,
