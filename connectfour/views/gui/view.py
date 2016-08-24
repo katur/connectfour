@@ -80,11 +80,9 @@ class GUIView(object):
 
         if player.is_ai:
             self.game_frame.disable_play_buttons()
-            self.pubsub.publish(ViewAction.request_ai_play)
+            self.pubsub.publish(ViewAction.request_ai_play, trigger_queue=True)
         else:
             self.game_frame.enable_play_buttons()
-
-        self.pubsub.do_queue()
 
     def on_try_again(self, player, reason):
         """Respond to the model reporting a try again event.
@@ -143,8 +141,7 @@ class GUIView(object):
             return
 
         self.pubsub.publish(
-            ViewAction.add_player, name=name, is_ai=is_ai)
-        self.pubsub.do_queue()
+            ViewAction.add_player, trigger_queue=True, name=name, is_ai=is_ai)
 
     def launch_game_frame(self):
         """Tell the model to create the board and start the first game.
@@ -165,8 +162,7 @@ class GUIView(object):
         # Move on to game frame
         self.setup_frame.remove()
         self.game_frame = GameFrame(self)
-        self.pubsub.publish(ViewAction.start_game)
-        self.pubsub.do_queue()
+        self.pubsub.publish(ViewAction.start_game, trigger_queue=True)
 
     def _create_board(self):
         num_rows = get_positive_int(
@@ -180,9 +176,8 @@ class GUIView(object):
             name='To Win', max_value=config.MAX_TO_WIN)
 
         self.pubsub.publish(
-            ViewAction.create_board, num_rows=num_rows,
+            ViewAction.create_board, trigger_queue=True, num_rows=num_rows,
             num_columns=num_columns, num_to_win=num_to_win)
-        self.pubsub.do_queue()
 
     def start_new_game(self):
         """Tell the model to start a new game.
@@ -190,8 +185,7 @@ class GUIView(object):
         This method also clears the game squares for the new game.
         """
         self.game_frame.reset_squares()
-        self.pubsub.publish(ViewAction.start_game)
-        self.pubsub.do_queue()
+        self.pubsub.publish(ViewAction.start_game, trigger_queue=True)
 
     def play(self, column):
         """Tell the model to make a play in a column.
@@ -201,8 +195,7 @@ class GUIView(object):
         Args:
             column (int): The column to play in.
         """
-        self.pubsub.publish(ViewAction.play, column=column)
-        self.pubsub.do_queue()
+        self.pubsub.publish(ViewAction.play, trigger_queue=True, column=column)
 
 
 class SetupFrame(object):

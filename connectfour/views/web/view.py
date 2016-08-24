@@ -143,8 +143,7 @@ def on_add_user(data):
 
     pubsub = room_data.pubsub
     pubsub.publish(
-        ViewAction.add_player, name=name, pk=request.sid)
-    pubsub.do_queue()
+        ViewAction.add_player, trigger_queue=True, name=name, pk=request.sid)
 
 
 @socketio.on('disconnect')
@@ -156,8 +155,7 @@ def on_disconnect():
 
     player = [p for p in model.players if p.pk == request.sid][0]
     pubsub = _get_room_data(request).pubsub
-    pubsub.publish(ViewAction.remove_player, player=player)
-    pubsub.do_queue()
+    pubsub.publish(ViewAction.remove_player, trigger_queue=True, player=player)
 
     room = sid_to_room[request.sid]
     del sid_to_room[request.sid]
@@ -174,17 +172,15 @@ def on_create_board(data):
 
     pubsub = _get_room_data(request).pubsub
     pubsub.publish(
-        ViewAction.create_board, num_rows=num_rows, num_columns=num_columns,
-        num_to_win=num_to_win)
-    pubsub.do_queue()
+        ViewAction.create_board, trigger_queue=True, num_rows=num_rows,
+        num_columns=num_columns, num_to_win=num_to_win)
 
 
 @socketio.on('startGame')
 def on_start_game(data):
     # TODO: add error checking
     pubsub = _get_room_data(request).pubsub
-    pubsub.publish(ViewAction.start_game)
-    pubsub.do_queue()
+    pubsub.publish(ViewAction.start_game, trigger_queue=True)
 
 
 @socketio.on('play')
@@ -192,8 +188,7 @@ def on_play(data):
     # TODO: add error checking (that current player really played)
     column = int(data['column'])
     pubsub = _get_room_data(request).pubsub
-    pubsub.publish(ViewAction.play, column=column)
-    pubsub.do_queue()
+    pubsub.publish(ViewAction.play, trigger_queue=True, column=column)
 
 
 ###########

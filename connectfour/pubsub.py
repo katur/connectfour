@@ -45,8 +45,7 @@ class PubSub(object):
 
         self.subscriptions[action].append(callback)
 
-    # TODO: add do_queue as arg to publish
-    def publish(self, action, *args, **kwargs):
+    def publish(self, action, trigger_queue=False, *args, **kwargs):
         """Publish that an action occurred.
 
         This calls any callbacks that are subscribed to the action.
@@ -64,3 +63,6 @@ class PubSub(object):
                 return callback(*args, **kwargs)
 
             self.queue.append(do_callback)
+
+        if trigger_queue:
+            self.do_queue()
