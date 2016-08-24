@@ -8,7 +8,6 @@ import {
 
 
 const initialState = {
-  username: ``,
   pk: ``,
   room: ``,
   roomDoesNotExist: false,

@@ -31329,7 +31329,6 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    username: state.username,
 	    room: state.room
 	  };
 	}
@@ -31347,20 +31346,6 @@
 	        _react2.default.createElement(
 	          "tbody",
 	          null,
-	          _react2.default.createElement(
-	            "tr",
-	            null,
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              "User:"
-	            ),
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              this.props.username
-	            )
-	          ),
 	          _react2.default.createElement(
 	            "tr",
 	            null,
@@ -31535,6 +31520,7 @@
 
 	function mapStateToProps(state) {
 	  return {
+	    pk: state.pk,
 	    players: state.players,
 	    nextPlayer: state.nextPlayer
 	  };
@@ -31544,7 +31530,8 @@
 	  displayName: "GamePlayers",
 
 	  render: function render() {
-	    var nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
+	    var you = this.props.pk;
+	    var next = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
 
 	    return _react2.default.createElement(
 	      "div",
@@ -31560,7 +31547,7 @@
 	              "tr",
 	              {
 	                key: player.pk,
-	                className: "" + (player.pk === nextPk ? 'current' : 'not-current')
+	                className: "" + (player.pk === next ? "current" : "not-current")
 	              },
 	              _react2.default.createElement(
 	                "td",
@@ -31570,7 +31557,8 @@
 	              _react2.default.createElement(
 	                "td",
 	                null,
-	                player.name
+	                player.name,
+	                player.pk === you ? " (you)" : ""
 	              ),
 	              _react2.default.createElement(
 	                "td",
@@ -32078,7 +32066,6 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var initialState = {
-	  username: "",
 	  pk: "",
 	  room: "",
 	  roomDoesNotExist: false,

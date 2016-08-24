@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 
 function mapStateToProps(state) {
   return {
+    pk: state.pk,
     players: state.players,
     nextPlayer: state.nextPlayer,
   }
@@ -12,7 +13,8 @@ function mapStateToProps(state) {
 
 let GamePlayers = React.createClass({
   render: function() {
-    const nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
+    const you = this.props.pk;
+    const next = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
 
     return (
       <div id="game-players">
@@ -23,7 +25,7 @@ let GamePlayers = React.createClass({
                 <tr
                   key={player.pk}
                   className={
-                    `${(player.pk === nextPk) ? 'current' : 'not-current'}`
+                    `${(player.pk === next) ? "current" : "not-current"}`
                   }
                 >
 
@@ -34,6 +36,7 @@ let GamePlayers = React.createClass({
 
                   <td>
                     {player.name}
+                    {(player.pk === you) ? " (you)" : ""}
                   </td>
 
                   <td>

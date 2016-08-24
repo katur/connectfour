@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 
 function mapStateToProps(state) {
   return {
-    username: state.username,
     room: state.room,
   }
 }
@@ -16,11 +15,6 @@ let GameInfo = React.createClass({
       <div id="game-info">
         <table>
           <tbody>
-            <tr>
-              <td>User:</td>
-              <td>{this.props.username}</td>
-            </tr>
-
             <tr>
               <td>Room:</td>
               <td>{this.props.room}</td>
