@@ -104,19 +104,15 @@
 	});
 
 	window.ws.on("roomJoined", function (data) {
-	  store.dispatch((0, _actions.setLoggedInUser)(data.pk, data.username, data.room));
+	  store.dispatch((0, _actions.setIDs)(data.pk, data.room));
 
 	  if (data.board) {
-	    store.dispatch((0, _actions.initializeBoard)(data.board));
+	    store.dispatch((0, _actions.setBoard)(data.board));
 	  }
 
 	  if (data.players) {
-	    store.dispatch((0, _actions.initializePlayers)(data.players));
+	    store.dispatch((0, _actions.setPlayers)(data.players));
 	  }
-	});
-
-	window.ws.on("boardCreated", function (data) {
-	  store.dispatch((0, _actions.initializeBoard)(data.board));
 	});
 
 	window.ws.on("playerAdded", function (data) {
@@ -127,13 +123,17 @@
 	  store.dispatch((0, _actions.removePlayer)(data.player));
 	});
 
-	window.ws.on("gameStarted", function (data) {
-	  store.dispatch((0, _actions.initializeBoard)(data.board));
-	  store.dispatch((0, _actions.startGame)(data.gameNumber));
-	});
-
 	window.ws.on("nextPlayer", function (data) {
 	  store.dispatch((0, _actions.setNextPlayer)(data.player));
+	});
+
+	window.ws.on("boardCreated", function (data) {
+	  store.dispatch((0, _actions.setBoard)(data.board));
+	});
+
+	window.ws.on("gameStarted", function (data) {
+	  store.dispatch((0, _actions.setBoard)(data.board));
+	  store.dispatch((0, _actions.startGame)(data.gameNumber));
 	});
 
 	window.ws.on("colorPlayed", function (data) {
@@ -29248,7 +29248,7 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    show: state.username ? false : true
+	    show: state.room ? false : true
 	  };
 	}
 
@@ -31002,7 +31002,6 @@
 	  play: function play(_ref3) {
 	    var column = _ref3.column;
 
-	    console.log(column);
 	    window.ws.emit("play", {
 	      "column": column
 	    });
@@ -31236,7 +31235,7 @@
 
 	function mapStateToProps(state) {
 	  return {
-	    show: state.username ? true : false
+	    show: state.room ? true : false
 	  };
 	}
 
@@ -32137,30 +32136,20 @@
 
 	  switch (action.type) {
 
+	    case _actions.SET_IDS:
+	      return update(state, {
+	        pk: action.pk,
+	        room: action.room
+	      });
+
 	    case _actions.SET_ROOM_DOES_NOT_EXIST:
 	      return update(state, {
 	        roomDoesNotExist: true
 	      });
 
-	    case _actions.SET_LOGGED_IN_USER:
-	      return update(state, {
-	        username: action.username,
-	        pk: action.pk,
-	        room: action.room
-	      });
-
-	    case _actions.INITIALIZE_PLAYERS:
+	    case _actions.SET_PLAYERS:
 	      return update(state, {
 	        players: action.players
-	      });
-
-	    case _actions.INITIALIZE_BOARD:
-	      return update(state, {
-	        numRows: action.board.numRows,
-	        numColumns: action.board.numColumns,
-	        numToWin: action.board.numToWin,
-	        grid: action.board.grid,
-	        blinkingSquares: []
 	      });
 
 	    case _actions.ADD_PLAYER:
@@ -32177,15 +32166,24 @@
 	        players: newPlayers
 	      });
 
+	    case _actions.SET_NEXT_PLAYER:
+	      return update(state, {
+	        nextPlayer: action.player
+	      });
+
+	    case _actions.SET_BOARD:
+	      return update(state, {
+	        numRows: action.board.numRows,
+	        numColumns: action.board.numColumns,
+	        numToWin: action.board.numToWin,
+	        grid: action.board.grid,
+	        blinkingSquares: []
+	      });
+
 	    case _actions.START_GAME:
 	      return update(state, {
 	        gameNumber: action.gameNumber,
 	        gameInProgress: true
-	      });
-
-	    case _actions.SET_NEXT_PLAYER:
-	      return update(state, {
-	        nextPlayer: action.player
 	      });
 
 	    case _actions.COLOR_SQUARE:
@@ -32197,11 +32195,6 @@
 
 	      return update(state, {
 	        grid: newGrid
-	      });
-
-	    case _actions.BLINK_SQUARES:
-	      return update(state, {
-	        blinkingSquares: action.blinkingSquares
 	      });
 
 	    case _actions.TRY_AGAIN:
@@ -32244,16 +32237,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.setIDs = setIDs;
 	exports.setRoomDoesNotExist = setRoomDoesNotExist;
-	exports.setLoggedInUser = setLoggedInUser;
-	exports.initializeBoard = initializeBoard;
-	exports.initializePlayers = initializePlayers;
+	exports.setPlayers = setPlayers;
 	exports.addPlayer = addPlayer;
 	exports.removePlayer = removePlayer;
-	exports.startGame = startGame;
 	exports.setNextPlayer = setNextPlayer;
+	exports.setBoard = setBoard;
+	exports.startGame = startGame;
 	exports.colorSquare = colorSquare;
-	exports.blinkSquares = blinkSquares;
 	exports.tryAgain = tryAgain;
 	exports.gameWon = gameWon;
 	exports.gameDraw = gameDraw;
@@ -32261,17 +32253,16 @@
 	 * action types
 	 */
 
+	var SET_IDS = exports.SET_IDS = "SET_IDS";
 	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
-	var SET_LOGGED_IN_USER = exports.SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
-	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
-	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
+	var SET_PLAYERS = exports.SET_PLAYERS = "SET_PLAYERS";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
 	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
-	var START_GAME = exports.START_GAME = "START_GAME";
 	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
-	var TRY_AGAIN = exports.TRY_AGAIN = "TRY_AGAIN";
+	var SET_BOARD = exports.SET_BOARD = "SET_BOARD";
+	var START_GAME = exports.START_GAME = "START_GAME";
 	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
-	var BLINK_SQUARES = exports.BLINK_SQUARES = "BLINK_SQUARES";
+	var TRY_AGAIN = exports.TRY_AGAIN = "TRY_AGAIN";
 	var GAME_WON = exports.GAME_WON = "GAME_WON";
 	var GAME_DRAW = exports.GAME_DRAW = "GAME_DRAW";
 
@@ -32279,31 +32270,23 @@
 	 * action creators
 	 */
 
+	function setIDs(pk, room) {
+	  return {
+	    type: SET_IDS,
+	    pk: pk,
+	    room: room
+	  };
+	}
+
 	function setRoomDoesNotExist() {
 	  return {
 	    type: SET_ROOM_DOES_NOT_EXIST
 	  };
 	}
 
-	function setLoggedInUser(pk, username, room) {
+	function setPlayers(players) {
 	  return {
-	    type: SET_LOGGED_IN_USER,
-	    pk: pk,
-	    username: username,
-	    room: room
-	  };
-	}
-
-	function initializeBoard(board) {
-	  return {
-	    type: INITIALIZE_BOARD,
-	    board: board
-	  };
-	}
-
-	function initializePlayers(players) {
-	  return {
-	    type: INITIALIZE_PLAYERS,
+	    type: SET_PLAYERS,
 	    players: players
 	  };
 	}
@@ -32322,17 +32305,24 @@
 	  };
 	}
 
-	function startGame(gameNumber) {
-	  return {
-	    type: START_GAME,
-	    gameNumber: gameNumber
-	  };
-	}
-
 	function setNextPlayer(player) {
 	  return {
 	    type: SET_NEXT_PLAYER,
 	    player: player
+	  };
+	}
+
+	function setBoard(board) {
+	  return {
+	    type: SET_BOARD,
+	    board: board
+	  };
+	}
+
+	function startGame(gameNumber) {
+	  return {
+	    type: START_GAME,
+	    gameNumber: gameNumber
 	  };
 	}
 
@@ -32341,13 +32331,6 @@
 	    type: COLOR_SQUARE,
 	    color: color,
 	    position: position
-	  };
-	}
-
-	function blinkSquares(positions) {
-	  return {
-	    type: BLINK_SQUARES,
-	    positions: positions
 	  };
 	}
 

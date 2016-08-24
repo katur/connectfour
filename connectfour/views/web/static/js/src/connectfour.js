@@ -7,9 +7,9 @@ import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
-  setRoomDoesNotExist, setLoggedInUser, initializeBoard, initializePlayers,
-  addPlayer, removePlayer, startGame, setNextPlayer, colorSquare, tryAgain,
-  gameWon, gameDraw,
+  setIDs, setRoomDoesNotExist,
+  setPlayers, addPlayer, removePlayer, setNextPlayer,
+  setBoard, startGame, colorSquare, tryAgain, gameWon, gameDraw,
 } from "./actions";
 
 
@@ -44,19 +44,15 @@ window.ws.on("roomDoesNotExist", function() {
 });
 
 window.ws.on("roomJoined", function(data) {
-  store.dispatch(setLoggedInUser(data.pk, data.username, data.room));
+  store.dispatch(setIDs(data.pk, data.room));
 
   if (data.board) {
-    store.dispatch(initializeBoard(data.board));
+    store.dispatch(setBoard(data.board));
   }
 
   if (data.players) {
-    store.dispatch(initializePlayers(data.players));
+    store.dispatch(setPlayers(data.players));
   }
-});
-
-window.ws.on("boardCreated", function(data) {
-  store.dispatch(initializeBoard(data.board));
 });
 
 window.ws.on("playerAdded", function(data) {
@@ -67,13 +63,17 @@ window.ws.on("playerRemoved", function(data) {
   store.dispatch(removePlayer(data.player));
 });
 
-window.ws.on("gameStarted", function(data) {
-  store.dispatch(initializeBoard(data.board));
-  store.dispatch(startGame(data.gameNumber));
-});
-
 window.ws.on("nextPlayer", function(data) {
   store.dispatch(setNextPlayer(data.player));
+});
+
+window.ws.on("boardCreated", function(data) {
+  store.dispatch(setBoard(data.board));
+});
+
+window.ws.on("gameStarted", function(data) {
+  store.dispatch(setBoard(data.board));
+  store.dispatch(startGame(data.gameNumber));
 });
 
 window.ws.on("colorPlayed", function(data) {

@@ -9,7 +9,7 @@ import GameBoard from "./GameBoard";
 
 function mapStateToProps(state) {
   return {
-    show: state.username ? true : false,
+    show: state.room ? true : false,
   }
 }
 

@@ -137,7 +137,6 @@ def on_add_user(data):
 
     emit('roomJoined', {
         'pk': request.sid,
-        'username': name,
         'room': room,
         'players': [player.get_json() for player in model.players],
         'board': model.board.get_json() if model.board else None,

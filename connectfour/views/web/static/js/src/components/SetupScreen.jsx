@@ -6,7 +6,7 @@ import JoinRoomForm from "./JoinRoomForm";
 
 function mapStateToProps(state) {
   return {
-    show: state.username ? false : true,
+    show: state.room ? false : true,
   }
 }
 

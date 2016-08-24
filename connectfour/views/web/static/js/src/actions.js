@@ -2,17 +2,16 @@
  * action types
  */
 
+export const SET_IDS = "SET_IDS";
 export const SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
-export const SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
-export const INITIALIZE_BOARD = "INITIALIZE_BOARD";
-export const INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
+export const SET_PLAYERS = "SET_PLAYERS";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const REMOVE_PLAYER = "REMOVE_PLAYER";
-export const START_GAME = "START_GAME";
 export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
-export const TRY_AGAIN = "TRY_AGAIN";
+export const SET_BOARD = "SET_BOARD";
+export const START_GAME = "START_GAME";
 export const COLOR_SQUARE = "COLOR_SQUARE";
-export const BLINK_SQUARES = "BLINK_SQUARES";
+export const TRY_AGAIN = "TRY_AGAIN";
 export const GAME_WON = "GAME_WON";
 export const GAME_DRAW = "GAME_DRAW";
 
@@ -21,31 +20,23 @@ export const GAME_DRAW = "GAME_DRAW";
  * action creators
  */
 
+export function setIDs(pk, room) {
+  return {
+    type: SET_IDS,
+    pk,
+    room,
+  }
+}
+
 export function setRoomDoesNotExist() {
   return {
     type: SET_ROOM_DOES_NOT_EXIST,
   }
 }
 
-export function setLoggedInUser(pk, username, room) {
+export function setPlayers(players) {
   return {
-    type: SET_LOGGED_IN_USER,
-    pk,
-    username,
-    room,
-  }
-}
-
-export function initializeBoard(board) {
-  return {
-    type: INITIALIZE_BOARD,
-    board,
-  }
-}
-
-export function initializePlayers(players) {
-  return {
-    type: INITIALIZE_PLAYERS,
+    type: SET_PLAYERS,
     players,
   }
 }
@@ -64,17 +55,24 @@ export function removePlayer(player) {
   }
 }
 
-export function startGame(gameNumber) {
-  return {
-    type: START_GAME,
-    gameNumber,
-  }
-}
-
 export function setNextPlayer(player) {
   return {
     type: SET_NEXT_PLAYER,
     player,
+  }
+}
+
+export function setBoard(board) {
+  return {
+    type: SET_BOARD,
+    board,
+  }
+}
+
+export function startGame(gameNumber) {
+  return {
+    type: START_GAME,
+    gameNumber,
   }
 }
 
@@ -83,13 +81,6 @@ export function colorSquare(color, position) {
     type: COLOR_SQUARE,
     color,
     position,
-  }
-}
-
-export function blinkSquares(positions) {
-  return {
-    type: BLINK_SQUARES,
-    positions,
   }
 }
 

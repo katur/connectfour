@@ -1,9 +1,7 @@
 import {
-  SET_ROOM_DOES_NOT_EXIST, SET_LOGGED_IN_USER,
-  INITIALIZE_BOARD, INITIALIZE_PLAYERS,
-  ADD_PLAYER, REMOVE_PLAYER,
-  START_GAME, SET_NEXT_PLAYER, COLOR_SQUARE, BLINK_SQUARES, TRY_AGAIN,
-  GAME_WON, GAME_DRAW,
+  SET_IDS, SET_ROOM_DOES_NOT_EXIST,
+  SET_PLAYERS, ADD_PLAYER, REMOVE_PLAYER, SET_NEXT_PLAYER,
+  SET_BOARD, START_GAME, COLOR_SQUARE, TRY_AGAIN, GAME_WON, GAME_DRAW,
 } from "./actions";
 
 
@@ -41,30 +39,20 @@ function update(state, mutations) {
 function appReducer(state = initialState, action) {
   switch(action.type) {
 
+    case SET_IDS:
+      return update(state, {
+        pk: action.pk,
+        room: action.room,
+      });
+
     case SET_ROOM_DOES_NOT_EXIST:
       return update(state, {
         roomDoesNotExist: true,
       });
 
-    case SET_LOGGED_IN_USER:
-      return update(state, {
-        username: action.username,
-        pk: action.pk,
-        room: action.room,
-      });
-
-    case INITIALIZE_PLAYERS:
+    case SET_PLAYERS:
       return update(state, {
         players: action.players,
-      });
-
-    case INITIALIZE_BOARD:
-      return update(state, {
-        numRows: action.board.numRows,
-        numColumns: action.board.numColumns,
-        numToWin: action.board.numToWin,
-        grid: action.board.grid,
-        blinkingSquares: [],
       });
 
     case ADD_PLAYER:
@@ -84,15 +72,24 @@ function appReducer(state = initialState, action) {
         players: newPlayers,
       });
 
+    case SET_NEXT_PLAYER:
+      return update(state, {
+        nextPlayer: action.player,
+      });
+
+    case SET_BOARD:
+      return update(state, {
+        numRows: action.board.numRows,
+        numColumns: action.board.numColumns,
+        numToWin: action.board.numToWin,
+        grid: action.board.grid,
+        blinkingSquares: [],
+      });
+
     case START_GAME:
       return update(state, {
         gameNumber: action.gameNumber,
         gameInProgress: true,
-      });
-
-    case SET_NEXT_PLAYER:
-      return update(state, {
-        nextPlayer: action.player,
       });
 
     case COLOR_SQUARE:
@@ -104,11 +101,6 @@ function appReducer(state = initialState, action) {
 
       return update(state, {
         grid: newGrid,
-      });
-
-    case BLINK_SQUARES:
-      return update(state, {
-        blinkingSquares: action.blinkingSquares,
       });
 
     case TRY_AGAIN:
