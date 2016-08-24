@@ -256,12 +256,12 @@ class ConnectFourModel(object):
             self._increment_current_player_index()
             self._process_next_player()
 
-    def _process_win(self, player, winning_positions):
+    def _process_win(self, winner, winning_positions):
         self.game_in_progress = False
         self._increment_num_games_all_players()
-        player.num_wins += 1
+        winner.num_wins += 1
         self.pubsub.publish(
-            ModelAction.game_won, player=player,
+            ModelAction.game_won, winner=winner,
             winning_positions=winning_positions)
 
     def _process_draw(self):

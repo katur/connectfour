@@ -109,14 +109,14 @@ class GUIView(object):
         """
         self.game_frame.update_square(color, position)
 
-    def on_game_won(self, player, winning_positions):
+    def on_game_won(self, winner, winning_positions):
         """Respond to the model reporting that a game was won.
 
         Args:
-            player (Player): The winner.
+            winner (Player): The winner.
             winning_positions: The positions that resulted in the win.
         """
-        self.game_frame.announce_win(player)
+        self.game_frame.announce_win(winner)
         self.game_frame.disable_play_buttons()
         self.game_frame.enable_play_again_button()
         self.game_frame.flash_squares(winning_positions)

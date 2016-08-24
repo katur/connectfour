@@ -86,8 +86,8 @@ class CommandLineView(object):
     def on_color_played(self, color, position):
         self._print_grid()
 
-    def on_game_won(self, player, winning_positions):
-        self.out.write('Game won by: {}. Winning positions:\n'.format(player))
+    def on_game_won(self, winner, winning_positions):
+        self.out.write('Game won by: {}. Winning positions:\n'.format(winner))
         self._print_grid(show_only=winning_positions)
         self._start_new_game()
 

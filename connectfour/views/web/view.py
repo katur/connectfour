@@ -90,9 +90,9 @@ class RoomData():
             'position': position,
         }, room=self.room)
 
-    def on_game_won(self, player, winning_positions):
+    def on_game_won(self, winner, winning_positions):
         socketio.emit('gameWon', {
-            'winner': player.get_json(),
+            'winner': winner.get_json(),
             'players': self.model.get_json_players(),
             'winningPositions': list(sorted(winning_positions)),
         }, room=self.room)
