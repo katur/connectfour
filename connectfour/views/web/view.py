@@ -5,8 +5,7 @@ from flask import Flask, render_template, request
 from flask_socketio import SocketIO, join_room, emit
 
 from connectfour.model import (
-    ConnectFourModel, get_colors, DEFAULT_ROWS, DEFAULT_COLUMNS,
-    DEFAULT_TO_WIN)
+    ConnectFourModel, DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
 
@@ -36,7 +35,6 @@ class RoomData():
         self.room = room
         self.pubsub = PubSub()
         self.model = ConnectFourModel(self.pubsub)
-        self.colors = get_colors()
         self._create_subscriptions()
 
     def _create_subscriptions(self):
@@ -145,10 +143,9 @@ def on_add_user(data):
         'board': model.board.get_json() if model.board else None,
     })
 
-    color = next(room_data.colors)
     pubsub = room_data.pubsub
     pubsub.publish(
-        ViewAction.add_player, name=name, color=color, pk=request.sid)
+        ViewAction.add_player, name=name, pk=request.sid)
     pubsub.do_queue()
 
 

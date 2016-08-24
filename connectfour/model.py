@@ -97,7 +97,7 @@ class ConnectFourModel(object):
         self.board = Board(num_rows, num_columns, num_to_win)
         self.pubsub.publish(ModelAction.board_created, board=self.board)
 
-    def _add_player(self, name, color, pk=None, is_ai=False):
+    def _add_player(self, name, color=None, pk=None, is_ai=False):
         """Add a player.
 
         Publishes a player_added ModelAction.
@@ -119,10 +119,25 @@ class ConnectFourModel(object):
         if color in self.used_colors:
             raise ValueError('Color {} is already used'.format(color))
 
+        if not color:
+            color = self._get_unassigned_color()
+            if not color:
+                raise ValueError('All colors taken')
+
         self.used_colors.add(color)
         player = Player(name=name, color=color, pk=pk, is_ai=is_ai)
         self.players.append(player)
         self.pubsub.publish(ModelAction.player_added, player=player)
+
+    def _get_unassigned_color(self):
+        if len(self.used_colors) == len(Color):
+            return None
+
+        for color in get_all_colors():
+            if color not in self.used_colors:
+                return color
+
+        return None
 
     def _remove_player(self, player):
         """Remove a player.
@@ -333,7 +348,7 @@ class Color(Enum):
         lime) = range(10)
 
 
-def get_colors():
+def get_all_colors():
     for color in Color:
         yield color
 
