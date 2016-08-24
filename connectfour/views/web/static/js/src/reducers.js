@@ -1,7 +1,7 @@
 import {
   SET_IDS, SET_ROOM_DOES_NOT_EXIST,
-  SET_PLAYERS, SET_NEXT_PLAYER, ADD_PLAYER, REMOVE_PLAYER, UPDATE_PLAYER,
-  SET_BOARD, RESET_BOARD, COLOR_SQUARE, BLINK_SQUARES, UNBLINK_SQUARES,
+  UPDATE_PLAYERS, UPDATE_PLAYER, ADD_PLAYER, REMOVE_PLAYER, SET_NEXT_PLAYER,
+  UPDATE_BOARD, RESET_BOARD, COLOR_SQUARE, BLINK_SQUARES, UNBLINK_SQUARES,
   START_GAME, STOP_GAME, REPORT_DRAW, REPORT_TRY_AGAIN,
 } from "./actions";
 
@@ -44,15 +44,19 @@ function appReducer(state = initialState, action) {
         roomDoesNotExist: true,
       });
 
-    case SET_PLAYERS:
+    case UPDATE_PLAYERS:
       return update(state, {
         players: action.players,
       });
 
-    case SET_NEXT_PLAYER:
-      return update(state, {
-        nextPlayer: action.player,
+    case UPDATE_PLAYER:
+      var newPlayers = state.players.map(function(player) {
+        return (player.pk === action.player.pk) ? action.player : player;
       });
+
+      return update(state, {
+        players: newPlayers,
+      })
 
     case ADD_PLAYER:
       return update(state, {
@@ -71,16 +75,12 @@ function appReducer(state = initialState, action) {
         players: newPlayers,
       });
 
-    case UPDATE_PLAYER:
-      var newPlayers = state.players.map(function(player) {
-        return (player.pk === action.player.pk) ? action.player : player;
+    case SET_NEXT_PLAYER:
+      return update(state, {
+        nextPlayer: action.player,
       });
 
-      return update(state, {
-        players: newPlayers,
-      })
-
-    case SET_BOARD:
+    case UPDATE_BOARD:
       return update(state, {
         numRows: action.board.numRows,
         numColumns: action.board.numColumns,

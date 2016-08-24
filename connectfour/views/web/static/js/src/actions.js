@@ -5,13 +5,13 @@
 export const SET_IDS = "SET_IDS";
 export const SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
 
-export const SET_PLAYERS = "SET_PLAYERS";
+export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
+export const UPDATE_PLAYER = "UPDATE_PLAYER";
 export const ADD_PLAYER = "ADD_PLAYER";
 export const REMOVE_PLAYER = "REMOVE_PLAYER";
-export const UPDATE_PLAYER = "UPDATE_PLAYER";
 export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
 
-export const SET_BOARD = "SET_BOARD";
+export const UPDATE_BOARD = "UPDATE_BOARD";
 export const RESET_BOARD = "RESET_BOARD";
 export const COLOR_SQUARE = "COLOR_SQUARE";
 export const BLINK_SQUARES = "BLINK_SQUARES";
@@ -41,10 +41,17 @@ export function setRoomDoesNotExist() {
   }
 }
 
-export function setPlayers(players) {
+export function updatePlayers(players) {
   return {
-    type: SET_PLAYERS,
+    type: UPDATE_PLAYERS,
     players,
+  }
+}
+
+export function updatePlayer(player) {
+  return {
+    type: UPDATE_PLAYER,
+    player,
   }
 }
 
@@ -62,13 +69,6 @@ export function removePlayer(player) {
   }
 }
 
-export function updatePlayer(player) {
-  return {
-    type: UPDATE_PLAYER,
-    player,
-  }
-}
-
 export function setNextPlayer(player) {
   return {
     type: SET_NEXT_PLAYER,
@@ -76,9 +76,9 @@ export function setNextPlayer(player) {
   }
 }
 
-export function setBoard(board) {
+export function updateBoard(board) {
   return {
-    type: SET_BOARD,
+    type: UPDATE_BOARD,
     board,
   }
 }

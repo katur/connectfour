@@ -103,20 +103,16 @@
 	  store.dispatch((0, _actions.setIDs)(data.pk, data.room));
 
 	  if (data.board) {
-	    store.dispatch((0, _actions.setBoard)(data.board));
+	    store.dispatch((0, _actions.updateBoard)(data.board));
 	  }
 
 	  if (data.players) {
-	    store.dispatch((0, _actions.setPlayers)(data.players));
+	    store.dispatch((0, _actions.updatePlayers)(data.players));
 	  }
 	});
 
 	window.ws.on("roomDoesNotExist", function () {
 	  store.dispatch((0, _actions.setRoomDoesNotExist)());
-	});
-
-	window.ws.on("nextPlayer", function (data) {
-	  store.dispatch((0, _actions.setNextPlayer)(data.player));
 	});
 
 	window.ws.on("playerAdded", function (data) {
@@ -127,9 +123,13 @@
 	  store.dispatch((0, _actions.removePlayer)(data.player));
 	});
 
+	window.ws.on("nextPlayer", function (data) {
+	  store.dispatch((0, _actions.setNextPlayer)(data.player));
+	});
+
 	window.ws.on("boardCreated", function (data) {
 	  store.dispatch((0, _actions.unblinkSquares)());
-	  store.dispatch((0, _actions.setBoard)(data.board));
+	  store.dispatch((0, _actions.updateBoard)(data.board));
 	});
 
 	window.ws.on("colorPlayed", function (data) {
@@ -144,14 +144,16 @@
 
 	window.ws.on("gameWon", function (data) {
 	  store.dispatch((0, _actions.stopGame)());
-	  store.dispatch((0, _actions.setPlayers)(data.players));
+	  store.dispatch((0, _actions.updatePlayers)(data.players));
 	  store.dispatch((0, _actions.blinkSquares)(data.winningPositions));
-	  store.dispatch((0, _actions.updatePlayer)(data.winner));
+
+	  // maybe blink the winner, too?
+	  // store.dispatch(updatePlayer(data.winner));
 	});
 
 	window.ws.on("gameDraw", function (data) {
 	  store.dispatch((0, _actions.stopGame)());
-	  store.dispatch((0, _actions.setPlayers)(data.players));
+	  store.dispatch((0, _actions.updatePlayers)(data.players));
 	  store.dispatch((0, _actions.reportDraw)());
 	});
 
@@ -32044,14 +32046,18 @@
 	        roomDoesNotExist: true
 	      });
 
-	    case _actions.SET_PLAYERS:
+	    case _actions.UPDATE_PLAYERS:
 	      return update(state, {
 	        players: action.players
 	      });
 
-	    case _actions.SET_NEXT_PLAYER:
+	    case _actions.UPDATE_PLAYER:
+	      var newPlayers = state.players.map(function (player) {
+	        return player.pk === action.player.pk ? action.player : player;
+	      });
+
 	      return update(state, {
-	        nextPlayer: action.player
+	        players: newPlayers
 	      });
 
 	    case _actions.ADD_PLAYER:
@@ -32068,16 +32074,12 @@
 	        players: newPlayers
 	      });
 
-	    case _actions.UPDATE_PLAYER:
-	      var newPlayers = state.players.map(function (player) {
-	        return player.pk === action.player.pk ? action.player : player;
-	      });
-
+	    case _actions.SET_NEXT_PLAYER:
 	      return update(state, {
-	        players: newPlayers
+	        nextPlayer: action.player
 	      });
 
-	    case _actions.SET_BOARD:
+	    case _actions.UPDATE_BOARD:
 	      return update(state, {
 	        numRows: action.board.numRows,
 	        numColumns: action.board.numColumns,
@@ -32156,12 +32158,12 @@
 	});
 	exports.setIDs = setIDs;
 	exports.setRoomDoesNotExist = setRoomDoesNotExist;
-	exports.setPlayers = setPlayers;
+	exports.updatePlayers = updatePlayers;
+	exports.updatePlayer = updatePlayer;
 	exports.addPlayer = addPlayer;
 	exports.removePlayer = removePlayer;
-	exports.updatePlayer = updatePlayer;
 	exports.setNextPlayer = setNextPlayer;
-	exports.setBoard = setBoard;
+	exports.updateBoard = updateBoard;
 	exports.resetBoard = resetBoard;
 	exports.colorSquare = colorSquare;
 	exports.blinkSquares = blinkSquares;
@@ -32177,13 +32179,13 @@
 	var SET_IDS = exports.SET_IDS = "SET_IDS";
 	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
 
-	var SET_PLAYERS = exports.SET_PLAYERS = "SET_PLAYERS";
+	var UPDATE_PLAYERS = exports.UPDATE_PLAYERS = "UPDATE_PLAYERS";
+	var UPDATE_PLAYER = exports.UPDATE_PLAYER = "UPDATE_PLAYER";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
 	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
-	var UPDATE_PLAYER = exports.UPDATE_PLAYER = "UPDATE_PLAYER";
 	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
 
-	var SET_BOARD = exports.SET_BOARD = "SET_BOARD";
+	var UPDATE_BOARD = exports.UPDATE_BOARD = "UPDATE_BOARD";
 	var RESET_BOARD = exports.RESET_BOARD = "RESET_BOARD";
 	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
 	var BLINK_SQUARES = exports.BLINK_SQUARES = "BLINK_SQUARES";
@@ -32212,10 +32214,17 @@
 	  };
 	}
 
-	function setPlayers(players) {
+	function updatePlayers(players) {
 	  return {
-	    type: SET_PLAYERS,
+	    type: UPDATE_PLAYERS,
 	    players: players
+	  };
+	}
+
+	function updatePlayer(player) {
+	  return {
+	    type: UPDATE_PLAYER,
+	    player: player
 	  };
 	}
 
@@ -32233,13 +32242,6 @@
 	  };
 	}
 
-	function updatePlayer(player) {
-	  return {
-	    type: UPDATE_PLAYER,
-	    player: player
-	  };
-	}
-
 	function setNextPlayer(player) {
 	  return {
 	    type: SET_NEXT_PLAYER,
@@ -32247,9 +32249,9 @@
 	  };
 	}
 
-	function setBoard(board) {
+	function updateBoard(board) {
 	  return {
-	    type: SET_BOARD,
+	    type: UPDATE_BOARD,
 	    board: board
 	  };
 	}

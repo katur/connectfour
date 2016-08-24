@@ -8,8 +8,8 @@ import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
   setIDs, setRoomDoesNotExist,
-  setPlayers, setNextPlayer, addPlayer, removePlayer, updatePlayer,
-  setBoard, resetBoard, colorSquare, blinkSquares, unblinkSquares,
+  updatePlayers, updatePlayer, addPlayer, removePlayer, setNextPlayer,
+  updateBoard, resetBoard, colorSquare, blinkSquares, unblinkSquares,
   startGame, stopGame, reportDraw, reportTryAgain,
 } from "./actions";
 
@@ -44,20 +44,16 @@ window.ws.on("roomJoined", function(data) {
   store.dispatch(setIDs(data.pk, data.room));
 
   if (data.board) {
-    store.dispatch(setBoard(data.board));
+    store.dispatch(updateBoard(data.board));
   }
 
   if (data.players) {
-    store.dispatch(setPlayers(data.players));
+    store.dispatch(updatePlayers(data.players));
   }
 });
 
 window.ws.on("roomDoesNotExist", function() {
   store.dispatch(setRoomDoesNotExist());
-});
-
-window.ws.on("nextPlayer", function(data) {
-  store.dispatch(setNextPlayer(data.player));
 });
 
 window.ws.on("playerAdded", function(data) {
@@ -68,9 +64,13 @@ window.ws.on("playerRemoved", function(data) {
   store.dispatch(removePlayer(data.player));
 });
 
+window.ws.on("nextPlayer", function(data) {
+  store.dispatch(setNextPlayer(data.player));
+});
+
 window.ws.on("boardCreated", function(data) {
   store.dispatch(unblinkSquares());
-  store.dispatch(setBoard(data.board));
+  store.dispatch(updateBoard(data.board));
 });
 
 window.ws.on("colorPlayed", function(data) {
@@ -85,14 +85,16 @@ window.ws.on("gameStarted", function() {
 
 window.ws.on("gameWon", function(data) {
   store.dispatch(stopGame());
-  store.dispatch(setPlayers(data.players));
+  store.dispatch(updatePlayers(data.players));
   store.dispatch(blinkSquares(data.winningPositions));
-  store.dispatch(updatePlayer(data.winner));
+
+  // maybe blink the winner, too?
+  // store.dispatch(updatePlayer(data.winner));
 });
 
 window.ws.on("gameDraw", function(data) {
   store.dispatch(stopGame());
-  store.dispatch(setPlayers(data.players));
+  store.dispatch(updatePlayers(data.players));
   store.dispatch(reportDraw());
 });
 
