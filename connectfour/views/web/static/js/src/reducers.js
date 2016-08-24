@@ -1,7 +1,8 @@
 import {
   SET_IDS, SET_ROOM_DOES_NOT_EXIST,
-  SET_PLAYERS, ADD_PLAYER, REMOVE_PLAYER, SET_NEXT_PLAYER,
-  SET_BOARD, START_GAME, COLOR_SQUARE, TRY_AGAIN, GAME_WON, GAME_DRAW,
+  SET_PLAYERS, SET_NEXT_PLAYER, ADD_PLAYER, REMOVE_PLAYER, UPDATE_PLAYER,
+  SET_BOARD, RESET_BOARD, COLOR_SQUARE, BLINK_SQUARES, UNBLINK_SQUARES,
+  START_GAME, STOP_GAME, REPORT_DRAW, REPORT_TRY_AGAIN,
 } from "./actions";
 
 
@@ -30,12 +31,6 @@ function update(state, mutations) {
 }
 
 
-// Later, try splitting reducers:
-// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
-
-// Also later, try using object spread operator
-// http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
-
 function appReducer(state = initialState, action) {
   switch(action.type) {
 
@@ -55,6 +50,11 @@ function appReducer(state = initialState, action) {
         players: action.players,
       });
 
+    case SET_NEXT_PLAYER:
+      return update(state, {
+        nextPlayer: action.player,
+      });
+
     case ADD_PLAYER:
       return update(state, {
         players: [
@@ -72,10 +72,14 @@ function appReducer(state = initialState, action) {
         players: newPlayers,
       });
 
-    case SET_NEXT_PLAYER:
-      return update(state, {
-        nextPlayer: action.player,
+    case UPDATE_PLAYER:
+      var newPlayers = state.players.map(function(player) {
+        return (player.pk === action.player.pk) ? action.player : player;
       });
+
+      return update(state, {
+        players: newPlayers,
+      })
 
     case SET_BOARD:
       return update(state, {
@@ -83,13 +87,17 @@ function appReducer(state = initialState, action) {
         numColumns: action.board.numColumns,
         numToWin: action.board.numToWin,
         grid: action.board.grid,
-        blinkingSquares: [],
       });
 
-    case START_GAME:
+    case RESET_BOARD:
+      var newGrid = state.grid.map(function(row) {
+        return row.map(function(column) {
+          return null;
+        });
+      });
+
       return update(state, {
-        gameNumber: action.gameNumber,
-        gameInProgress: true,
+        grid: newGrid,
       });
 
     case COLOR_SQUARE:
@@ -103,29 +111,37 @@ function appReducer(state = initialState, action) {
         grid: newGrid,
       });
 
-    case TRY_AGAIN:
+    case BLINK_SQUARES:
+      return update(state, {
+        blinkingSquares: action.positions,
+      });
+
+    case UNBLINK_SQUARES:
+      return update(state, {
+        blinkingSquares: [],
+      });
+
+    case START_GAME:
+      return update(state, {
+        gameInProgress: true,
+        gameNumber: action.gameNumber,
+      });
+
+    case STOP_GAME:
+      return update(state, {
+        gameInProgress: false,
+        nextPlayer: null,
+      });
+
+    case REPORT_DRAW:
+      return update(state, {
+        feedback: `Game ended in a draw`,
+      })
+
+    case REPORT_TRY_AGAIN:
       return update(state, {
         feedback: `${action.player.name} try again (${action.reason})`,
       });
-
-    case GAME_WON:
-      var newPlayers = state.players.map(function(player) {
-        return (player.pk === action.player.pk) ? action.player : player;
-      });
-
-      return update(state, {
-        players: newPlayers,
-        gameInProgress: false,
-        nextPlayer: null,
-        blinkingSquares: action.winningPositions,
-      })
-
-    case GAME_DRAW:
-      return update(state, {
-        gameInProgress: false,
-        nextPlayer: null,
-        feedback: `Game ended in a draw`,
-      })
 
     default:
       return state;

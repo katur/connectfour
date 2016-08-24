@@ -95,13 +95,9 @@
 	var WS_URL = "http://" + document.domain + ":" + location.port;
 	window.ws = (0, _socket2.default)(WS_URL);
 
-	//////////////////////////////////////////////////////////////////////
-	// Respond to WebSocket events (these will mostly update the store) //
-	//////////////////////////////////////////////////////////////////////
-
-	window.ws.on("roomDoesNotExist", function () {
-	  store.dispatch((0, _actions.setRoomDoesNotExist)());
-	});
+	/////////////////////////////////////////////////////////////////
+	// Respond to WebSocket events (these mostly update the store) //
+	/////////////////////////////////////////////////////////////////
 
 	window.ws.on("roomJoined", function (data) {
 	  store.dispatch((0, _actions.setIDs)(data.pk, data.room));
@@ -115,6 +111,14 @@
 	  }
 	});
 
+	window.ws.on("roomDoesNotExist", function () {
+	  store.dispatch((0, _actions.setRoomDoesNotExist)());
+	});
+
+	window.ws.on("nextPlayer", function (data) {
+	  store.dispatch((0, _actions.setNextPlayer)(data.player));
+	});
+
 	window.ws.on("playerAdded", function (data) {
 	  store.dispatch((0, _actions.addPlayer)(data.player));
 	});
@@ -123,33 +127,34 @@
 	  store.dispatch((0, _actions.removePlayer)(data.player));
 	});
 
-	window.ws.on("nextPlayer", function (data) {
-	  store.dispatch((0, _actions.setNextPlayer)(data.player));
-	});
-
 	window.ws.on("boardCreated", function (data) {
+	  store.dispatch((0, _actions.unblinkSquares)());
 	  store.dispatch((0, _actions.setBoard)(data.board));
-	});
-
-	window.ws.on("gameStarted", function (data) {
-	  store.dispatch((0, _actions.setBoard)(data.board));
-	  store.dispatch((0, _actions.startGame)(data.gameNumber));
 	});
 
 	window.ws.on("colorPlayed", function (data) {
 	  store.dispatch((0, _actions.colorSquare)(data.color, data.position));
 	});
 
-	window.ws.on("tryAgain", function (data) {
-	  store.dispatch((0, _actions.tryAgain)(data.player, data.reason));
+	window.ws.on("gameStarted", function (data) {
+	  store.dispatch((0, _actions.unblinkSquares)());
+	  store.dispatch((0, _actions.resetBoard)());
+	  store.dispatch((0, _actions.startGame)(data.gameNumber));
 	});
 
 	window.ws.on("gameWon", function (data) {
-	  store.dispatch((0, _actions.gameWon)(data.player, data.winningPositions));
+	  store.dispatch((0, _actions.stopGame)());
+	  store.dispatch((0, _actions.blinkSquares)(data.winningPositions));
+	  store.dispatch((0, _actions.updatePlayer)(data.player));
 	});
 
 	window.ws.on("gameDraw", function (data) {
-	  store.dispatch((0, _actions.gameDraw)());
+	  store.dispatch((0, _actions.stopGame)());
+	  store.dispatch((0, _actions.reportDraw)());
+	});
+
+	window.ws.on("tryAgain", function (data) {
+	  store.dispatch((0, _actions.reportTryAgain)(data.player, data.reason));
 	});
 
 	window.ws.on("message", function (message) {
@@ -32124,12 +32129,6 @@
 	  return Object.assign({}, state, mutations);
 	}
 
-	// Later, try splitting reducers:
-	// http://redux.js.org/docs/basics/Reducers.html#splitting-reducers
-
-	// Also later, try using object spread operator
-	// http://redux.js.org/docs/recipes/UsingObjectSpreadOperator.html
-
 	function appReducer() {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	  var action = arguments[1];
@@ -32152,6 +32151,11 @@
 	        players: action.players
 	      });
 
+	    case _actions.SET_NEXT_PLAYER:
+	      return update(state, {
+	        nextPlayer: action.player
+	      });
+
 	    case _actions.ADD_PLAYER:
 	      return update(state, {
 	        players: [].concat(_toConsumableArray(state.players), [action.player])
@@ -32166,9 +32170,13 @@
 	        players: newPlayers
 	      });
 
-	    case _actions.SET_NEXT_PLAYER:
+	    case _actions.UPDATE_PLAYER:
+	      var newPlayers = state.players.map(function (player) {
+	        return player.pk === action.player.pk ? action.player : player;
+	      });
+
 	      return update(state, {
-	        nextPlayer: action.player
+	        players: newPlayers
 	      });
 
 	    case _actions.SET_BOARD:
@@ -32176,14 +32184,18 @@
 	        numRows: action.board.numRows,
 	        numColumns: action.board.numColumns,
 	        numToWin: action.board.numToWin,
-	        grid: action.board.grid,
-	        blinkingSquares: []
+	        grid: action.board.grid
 	      });
 
-	    case _actions.START_GAME:
+	    case _actions.RESET_BOARD:
+	      var newGrid = state.grid.map(function (row) {
+	        return row.map(function (column) {
+	          return null;
+	        });
+	      });
+
 	      return update(state, {
-	        gameNumber: action.gameNumber,
-	        gameInProgress: true
+	        grid: newGrid
 	      });
 
 	    case _actions.COLOR_SQUARE:
@@ -32197,28 +32209,36 @@
 	        grid: newGrid
 	      });
 
-	    case _actions.TRY_AGAIN:
+	    case _actions.BLINK_SQUARES:
+	      return update(state, {
+	        blinkingSquares: action.positions
+	      });
+
+	    case _actions.UNBLINK_SQUARES:
+	      return update(state, {
+	        blinkingSquares: []
+	      });
+
+	    case _actions.START_GAME:
+	      return update(state, {
+	        gameInProgress: true,
+	        gameNumber: action.gameNumber
+	      });
+
+	    case _actions.STOP_GAME:
+	      return update(state, {
+	        gameInProgress: false,
+	        nextPlayer: null
+	      });
+
+	    case _actions.REPORT_DRAW:
+	      return update(state, {
+	        feedback: "Game ended in a draw"
+	      });
+
+	    case _actions.REPORT_TRY_AGAIN:
 	      return update(state, {
 	        feedback: action.player.name + " try again (" + action.reason + ")"
-	      });
-
-	    case _actions.GAME_WON:
-	      var newPlayers = state.players.map(function (player) {
-	        return player.pk === action.player.pk ? action.player : player;
-	      });
-
-	      return update(state, {
-	        players: newPlayers,
-	        gameInProgress: false,
-	        nextPlayer: null,
-	        blinkingSquares: action.winningPositions
-	      });
-
-	    case _actions.GAME_DRAW:
-	      return update(state, {
-	        gameInProgress: false,
-	        nextPlayer: null,
-	        feedback: "Game ended in a draw"
 	      });
 
 	    default:
@@ -32242,29 +32262,40 @@
 	exports.setPlayers = setPlayers;
 	exports.addPlayer = addPlayer;
 	exports.removePlayer = removePlayer;
+	exports.updatePlayer = updatePlayer;
 	exports.setNextPlayer = setNextPlayer;
 	exports.setBoard = setBoard;
-	exports.startGame = startGame;
+	exports.resetBoard = resetBoard;
 	exports.colorSquare = colorSquare;
-	exports.tryAgain = tryAgain;
-	exports.gameWon = gameWon;
-	exports.gameDraw = gameDraw;
+	exports.blinkSquares = blinkSquares;
+	exports.unblinkSquares = unblinkSquares;
+	exports.startGame = startGame;
+	exports.stopGame = stopGame;
+	exports.reportDraw = reportDraw;
+	exports.reportTryAgain = reportTryAgain;
 	/*
 	 * action types
 	 */
 
 	var SET_IDS = exports.SET_IDS = "SET_IDS";
 	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
+
 	var SET_PLAYERS = exports.SET_PLAYERS = "SET_PLAYERS";
 	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
 	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
+	var UPDATE_PLAYER = exports.UPDATE_PLAYER = "UPDATE_PLAYER";
 	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
+
 	var SET_BOARD = exports.SET_BOARD = "SET_BOARD";
-	var START_GAME = exports.START_GAME = "START_GAME";
+	var RESET_BOARD = exports.RESET_BOARD = "RESET_BOARD";
 	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
-	var TRY_AGAIN = exports.TRY_AGAIN = "TRY_AGAIN";
-	var GAME_WON = exports.GAME_WON = "GAME_WON";
-	var GAME_DRAW = exports.GAME_DRAW = "GAME_DRAW";
+	var BLINK_SQUARES = exports.BLINK_SQUARES = "BLINK_SQUARES";
+	var UNBLINK_SQUARES = exports.UNBLINK_SQUARES = "UNBLINK_SQUARES";
+
+	var START_GAME = exports.START_GAME = "START_GAME";
+	var STOP_GAME = exports.STOP_GAME = "STOP_GAME";
+	var REPORT_DRAW = exports.REPORT_DRAW = "REPORT_DRAW";
+	var REPORT_TRY_AGAIN = exports.REPORT_TRY_AGAIN = "REPORT_TRY_AGAIN";
 
 	/*
 	 * action creators
@@ -32305,6 +32336,13 @@
 	  };
 	}
 
+	function updatePlayer(player) {
+	  return {
+	    type: UPDATE_PLAYER,
+	    player: player
+	  };
+	}
+
 	function setNextPlayer(player) {
 	  return {
 	    type: SET_NEXT_PLAYER,
@@ -32319,10 +32357,9 @@
 	  };
 	}
 
-	function startGame(gameNumber) {
+	function resetBoard() {
 	  return {
-	    type: START_GAME,
-	    gameNumber: gameNumber
+	    type: RESET_BOARD
 	  };
 	}
 
@@ -32334,25 +32371,43 @@
 	  };
 	}
 
-	function tryAgain(player, reason) {
+	function blinkSquares(positions) {
 	  return {
-	    type: TRY_AGAIN,
+	    type: BLINK_SQUARES,
+	    positions: positions
+	  };
+	}
+
+	function unblinkSquares() {
+	  return {
+	    type: UNBLINK_SQUARES
+	  };
+	}
+
+	function startGame(gameNumber) {
+	  return {
+	    type: START_GAME,
+	    gameNumber: gameNumber
+	  };
+	}
+
+	function stopGame() {
+	  return {
+	    type: STOP_GAME
+	  };
+	}
+
+	function reportDraw() {
+	  return {
+	    type: REPORT_DRAW
+	  };
+	}
+
+	function reportTryAgain(player, reason) {
+	  return {
+	    type: REPORT_TRY_AGAIN,
 	    player: player,
 	    reason: reason
-	  };
-	}
-
-	function gameWon(player, winningPositions) {
-	  return {
-	    type: GAME_WON,
-	    player: player,
-	    winningPositions: winningPositions
-	  };
-	}
-
-	function gameDraw() {
-	  return {
-	    type: GAME_DRAW
 	  };
 	}
 

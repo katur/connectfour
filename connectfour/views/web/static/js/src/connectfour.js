@@ -8,8 +8,9 @@ import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
   setIDs, setRoomDoesNotExist,
-  setPlayers, addPlayer, removePlayer, setNextPlayer,
-  setBoard, startGame, colorSquare, tryAgain, gameWon, gameDraw,
+  setPlayers, setNextPlayer, addPlayer, removePlayer, updatePlayer,
+  setBoard, resetBoard, colorSquare, blinkSquares, unblinkSquares,
+  startGame, stopGame, reportDraw, reportTryAgain,
 } from "./actions";
 
 
@@ -35,13 +36,9 @@ const WS_URL = "http://" + document.domain + ":" + location.port;
 window.ws = wsClient(WS_URL);
 
 
-//////////////////////////////////////////////////////////////////////
-// Respond to WebSocket events (these will mostly update the store) //
-//////////////////////////////////////////////////////////////////////
-
-window.ws.on("roomDoesNotExist", function() {
-  store.dispatch(setRoomDoesNotExist());
-});
+/////////////////////////////////////////////////////////////////
+// Respond to WebSocket events (these mostly update the store) //
+/////////////////////////////////////////////////////////////////
 
 window.ws.on("roomJoined", function(data) {
   store.dispatch(setIDs(data.pk, data.room));
@@ -55,6 +52,14 @@ window.ws.on("roomJoined", function(data) {
   }
 });
 
+window.ws.on("roomDoesNotExist", function() {
+  store.dispatch(setRoomDoesNotExist());
+});
+
+window.ws.on("nextPlayer", function(data) {
+  store.dispatch(setNextPlayer(data.player));
+});
+
 window.ws.on("playerAdded", function(data) {
   store.dispatch(addPlayer(data.player));
 });
@@ -63,33 +68,34 @@ window.ws.on("playerRemoved", function(data) {
   store.dispatch(removePlayer(data.player));
 });
 
-window.ws.on("nextPlayer", function(data) {
-  store.dispatch(setNextPlayer(data.player));
-});
-
 window.ws.on("boardCreated", function(data) {
+  store.dispatch(unblinkSquares());
   store.dispatch(setBoard(data.board));
-});
-
-window.ws.on("gameStarted", function(data) {
-  store.dispatch(setBoard(data.board));
-  store.dispatch(startGame(data.gameNumber));
 });
 
 window.ws.on("colorPlayed", function(data) {
   store.dispatch(colorSquare(data.color, data.position));
 });
 
-window.ws.on("tryAgain", function(data) {
-  store.dispatch(tryAgain(data.player, data.reason));
+window.ws.on("gameStarted", function(data) {
+  store.dispatch(unblinkSquares());
+  store.dispatch(resetBoard());
+  store.dispatch(startGame(data.gameNumber));
 });
 
 window.ws.on("gameWon", function(data) {
-  store.dispatch(gameWon(data.player, data.winningPositions));
+  store.dispatch(stopGame());
+  store.dispatch(blinkSquares(data.winningPositions));
+  store.dispatch(updatePlayer(data.player));
 });
 
 window.ws.on("gameDraw", function(data) {
-  store.dispatch(gameDraw());
+  store.dispatch(stopGame());
+  store.dispatch(reportDraw());
+});
+
+window.ws.on("tryAgain", function(data) {
+  store.dispatch(reportTryAgain(data.player, data.reason));
 });
 
 window.ws.on("message", function(message) {
