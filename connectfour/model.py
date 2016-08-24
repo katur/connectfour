@@ -97,7 +97,7 @@ class ConnectFourModel(object):
         self.board = Board(num_rows, num_columns, num_to_win)
         self.pubsub.publish(ModelAction.board_created, board=self.board)
 
-    def _add_player(self, name, color=None, pk=None, is_ai=False):
+    def _add_player(self, name, color=None, is_ai=False, pk=None):
         """Add a player.
 
         Publishes a player_added ModelAction.
@@ -105,7 +105,12 @@ class ConnectFourModel(object):
         Args:
             name (str): The player's name. Must be non-empty. Does not need
                 to be unique (two Emilys are distinguishable by color).
-            color (Color): This player's playing color. Must be unique.
+            color (Optional[Color]): This player's playing color. Must be
+                unique. Defaults to next available color.
+            is_ai (Optional[bool]): Whether this player is AI.
+            pk (Optional): An identifier for this player. While not required,
+                might be useful in a view.
+
         Raises:
             RuntimeError: If a game is currently in progress.
             ValueError: If name is empty or if color is already in use.
@@ -125,7 +130,7 @@ class ConnectFourModel(object):
                 raise ValueError('All colors taken')
 
         self.used_colors.add(color)
-        player = Player(name=name, color=color, pk=pk, is_ai=is_ai)
+        player = Player(name=name, color=color, is_ai=is_ai, pk=pk)
         self.players.append(player)
         self.pubsub.publish(ModelAction.player_added, player=player)
 
@@ -367,25 +372,29 @@ AI_HARD = 'hard'
 class Player(object):
     """A Connect Four player."""
 
-    def __init__(self, name, color, pk=None, is_ai=False):
+    def __init__(self, name, color, is_ai=False, pk=None):
         """Create a player.
 
         Args:
             name (str): This player's name.
             color (Color): This player's playing color.
+            is_ai (Optional[bool]): Whether this player is AI.
+            pk (Optional): An identifier for this player. While not required,
+                might be useful in a view.
         """
         self.name = name
         self.color = color
-        self.pk = pk
         self.is_ai = is_ai
+        self.pk = pk
         self.num_wins = 0
 
         if self.is_ai:
             self.difficulty = AI_HARD
 
     def __repr__(self):
-        return '{} name={} color={} pk={}'.format(
-            self.__class__.__name__, self.name, self.color, self.pk)
+        return '{} name={} color={} is_ai={} pk={}'.format(
+            self.__class__.__name__, self.name, self.color, self.pk,
+            self.is_ai)
 
     def __str__(self):
         category = 'AI' if self.is_ai else 'Human'
@@ -395,8 +404,8 @@ class Player(object):
         return {
             'name': self.name,
             'color': self.color.name,
-            'pk': self.pk,
             'isAI': self.is_ai,
+            'pk': self.pk,
             'numWins': self.num_wins,
         }
 
