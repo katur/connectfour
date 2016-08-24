@@ -7,8 +7,9 @@ import { createStore } from "redux";
 import { Provider } from 'react-redux';
 import appReducer from "./reducers";
 import {
-  setLoggedInUser, initializeBoard, initializePlayers, addPlayer, removePlayer,
-  startGame, setNextPlayer, colorSquare, tryAgain, gameWon, gameDraw,
+  setRoomDoesNotExist, setLoggedInUser, initializeBoard, initializePlayers,
+  addPlayer, removePlayer, startGame, setNextPlayer, colorSquare, tryAgain,
+  gameWon, gameDraw,
 } from "./actions";
 
 
@@ -37,6 +38,10 @@ window.ws = wsClient(WS_URL);
 //////////////////////////////////////////////////////////////////////
 // Respond to WebSocket events (these will mostly update the store) //
 //////////////////////////////////////////////////////////////////////
+
+window.ws.on("roomDoesNotExist", function() {
+  store.dispatch(setRoomDoesNotExist());
+});
 
 window.ws.on("roomJoined", function(data) {
   store.dispatch(setLoggedInUser(data.pk, data.username, data.room));

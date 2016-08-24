@@ -1,6 +1,8 @@
 /*
  * action types
  */
+
+export const SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
 export const SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
 export const INITIALIZE_BOARD = "INITIALIZE_BOARD";
 export const INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
@@ -17,6 +19,12 @@ export const GAME_DRAW = "GAME_DRAW";
 /*
  * action creators
  */
+
+export function setRoomDoesNotExist() {
+  return {
+    type: SET_ROOM_DOES_NOT_EXIST,
+  }
+}
 
 export function setLoggedInUser(pk, username, room) {
   return {

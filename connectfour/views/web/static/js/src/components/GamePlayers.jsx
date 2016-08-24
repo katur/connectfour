@@ -13,7 +13,6 @@ function mapStateToProps(state) {
 let GamePlayers = React.createClass({
   render: function() {
     const nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
-    const arrow = String.fromCharCode("8592");
 
     return (
       <div id="game-players">
@@ -21,18 +20,24 @@ let GamePlayers = React.createClass({
           <tbody>
             {this.props.players.map(function(player, i) {
               return (
-                <tr key={player.pk}>
-                  <td className={`color-key color-${player.color}`}>
+                <tr
+                  key={player.pk}
+                  className={
+                    `${(player.pk === nextPk) ? 'current' : 'not-current'}`
+                  }
+                >
+
+                  <td>
+                    <div className={`color-key color-${player.color}`}>
+                    </div>
                   </td>
 
                   <td>
                     {player.name}
                   </td>
 
-                  <td>{player.numWins} wins</td>
-
                   <td>
-                    {player.pk === nextPk ? arrow : ''}
+                    {player.numWins} wins
                   </td>
                 </tr>
               );

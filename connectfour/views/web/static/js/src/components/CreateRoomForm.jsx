@@ -6,6 +6,7 @@ let CreateRoomForm = React.createClass({
   getInitialState: function() {
     return {
       username: ``,
+      usernameError: null,
     };
   },
 
@@ -17,6 +18,27 @@ let CreateRoomForm = React.createClass({
 
   _handleSubmit: function(e) {
     e.preventDefault();
+
+    if (!this.state.username) {
+      this.setState({
+        usernameError: "Username required",
+      });
+      return;
+    }
+
+    this.setState({
+      usernameError: null,
+    });
+
+    /*
+    this.setState({
+      usernameError: this.state.username ? null : "Username required",
+    });
+
+    if (this.state.usernameError) {
+      return;
+    }
+    */
 
     Emitters.addUser({
       username: this.state.username,
@@ -30,6 +52,11 @@ let CreateRoomForm = React.createClass({
   },
 
   render: function() {
+    var usernameError;
+    if (this.state.usernameError) {
+      usernameError = <span className="error">Username required</span>;
+    }
+
     return (
       <div>
         <h3>Create a game room?</h3>
@@ -41,14 +68,22 @@ let CreateRoomForm = React.createClass({
           onSubmit={this._handleSubmit}
         >
           <dl>
-            <dt>Your username</dt>
+            <dt>
+              <label htmlFor="username">
+                Your username
+              </label>
+            </dt>
+
             <dd>
               <input
+                id="username"
                 type="text"
                 name="username"
                 value={this.state.username}
                 onChange={this._handleInput}
               />
+
+              {usernameError}
             </dd>
           </dl>
 

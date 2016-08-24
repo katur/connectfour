@@ -51,12 +51,22 @@
     #game-players
       margin-top: $whitespace / 4
 
-      td
-        padding: 5px
+      table
+        white-space: nowrap
+        border-collapse: separate
 
-        &.color-key
-          height: 15px
-          width: 15px
+        tr
+          @include row-border(solid, 3px, $background-color, 5px)
+
+          &.current
+            @include row-border(solid, 3px, $yellow, 5px)
+
+          td
+            padding: 5px
+
+            .color-key
+              height: 10px
+              width: 10px
 
     #change-board
       input

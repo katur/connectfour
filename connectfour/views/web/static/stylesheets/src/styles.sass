@@ -28,6 +28,23 @@ $background-color: lighten($background-blue, 5%)
   &:last-child
     margin-bottom: none
 
+
+@mixin row-border($style, $size, $color, $radius)
+  td
+    border-top: $style $size $color
+    border-bottom: $style $size $color
+
+    &:first-child
+      border-left: $style $size $color
+      border-top-left-radius: $radius
+      border-bottom-left-radius: $radius
+
+    &:last-child
+      border-right: $style $size $color
+      border-top-right-radius: $radius
+      border-bottom-right-radius: $radius
+
+
 @import page
 @import font
 @import elements

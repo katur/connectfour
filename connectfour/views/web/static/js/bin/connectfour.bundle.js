@@ -99,6 +99,10 @@
 	// Respond to WebSocket events (these will mostly update the store) //
 	//////////////////////////////////////////////////////////////////////
 
+	window.ws.on("roomDoesNotExist", function () {
+	  store.dispatch((0, _actions.setRoomDoesNotExist)());
+	});
+
 	window.ws.on("roomJoined", function (data) {
 	  store.dispatch((0, _actions.setLoggedInUser)(data.pk, data.username, data.room));
 
@@ -30853,7 +30857,8 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      username: ""
+	      username: "",
+	      usernameError: null
 	    };
 	  },
 
@@ -30863,6 +30868,26 @@
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
+
+	    if (!this.state.username) {
+	      this.setState({
+	        usernameError: "Username required"
+	      });
+	      return;
+	    }
+
+	    this.setState({
+	      usernameError: null
+	    });
+
+	    /*
+	    this.setState({
+	      usernameError: this.state.username ? null : "Username required",
+	    });
+	     if (this.state.usernameError) {
+	      return;
+	    }
+	    */
 
 	    _emitters2.default.addUser({
 	      username: this.state.username
@@ -30876,6 +30901,15 @@
 	  },
 
 	  render: function render() {
+	    var usernameError;
+	    if (this.state.usernameError) {
+	      usernameError = _react2.default.createElement(
+	        "span",
+	        { className: "error" },
+	        "Username required"
+	      );
+	    }
+
 	    return _react2.default.createElement(
 	      "div",
 	      null,
@@ -30898,17 +30932,23 @@
 	          _react2.default.createElement(
 	            "dt",
 	            null,
-	            "Your username"
+	            _react2.default.createElement(
+	              "label",
+	              { htmlFor: "username" },
+	              "Your username"
+	            )
 	          ),
 	          _react2.default.createElement(
 	            "dd",
 	            null,
 	            _react2.default.createElement("input", {
+	              id: "username",
 	              type: "text",
 	              name: "username",
 	              value: this.state.username,
 	              onChange: this._handleInput
-	            })
+	            }),
+	            usernameError
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -30993,6 +31033,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(228);
+
 	var _emitters = __webpack_require__(251);
 
 	var _emitters2 = _interopRequireDefault(_emitters);
@@ -31001,13 +31043,21 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+	function mapStateToProps(state) {
+	  return {
+	    roomDoesNotExist: state.roomDoesNotExist
+	  };
+	}
+
 	var JoinRoomForm = _react2.default.createClass({
 	  displayName: "JoinRoomForm",
 
 	  getInitialState: function getInitialState() {
 	    return {
 	      username: "",
-	      room: ""
+	      usernameError: null,
+	      room: "",
+	      roomError: null
 	    };
 	  },
 
@@ -31018,6 +31068,43 @@
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
 
+	    if (!this.state.room) {
+	      this.setState({
+	        roomError: "Room required"
+	      });
+	      return;
+	    } else if (this.props.roomDoesNotExist) {
+	      this.setState({
+	        roomError: "Room does not exist"
+	      });
+	      return;
+	    } else {
+	      this.setState({
+	        roomError: null
+	      });
+	    }
+
+	    if (!this.state.username) {
+	      this.setState({
+	        usernameError: "Username required"
+	      });
+	      return;
+	    } else {
+	      this.setState({
+	        usernameError: null
+	      });
+	    }
+
+	    /*
+	    this.setState({
+	      usernameError: this.state.username ? null : "Username required",
+	      roomError: this.state.room ? null : "Room required",
+	    });
+	     if (this.state.usernameError || this.state.roomError) {
+	      return;
+	    }
+	    */
+
 	    _emitters2.default.addUser({
 	      username: this.state.username,
 	      room: this.state.room
@@ -31025,6 +31112,24 @@
 	  },
 
 	  render: function render() {
+	    var usernameError;
+	    if (this.state.usernameError) {
+	      usernameError = _react2.default.createElement(
+	        "span",
+	        { className: "error" },
+	        this.state.usernameError
+	      );
+	    }
+
+	    var roomError;
+	    if (this.state.roomError) {
+	      roomError = _react2.default.createElement(
+	        "span",
+	        { className: "error" },
+	        this.state.roomError
+	      );
+	    }
+
 	    return _react2.default.createElement(
 	      "div",
 	      null,
@@ -31057,7 +31162,8 @@
 	              name: "room",
 	              value: this.state.room,
 	              onChange: this._handleInput
-	            })
+	            }),
+	            roomError
 	          ),
 	          _react2.default.createElement(
 	            "dt",
@@ -31072,7 +31178,8 @@
 	              name: "username",
 	              value: this.state.username,
 	              onChange: this._handleInput
-	            })
+	            }),
+	            usernameError
 	          )
 	        ),
 	        _react2.default.createElement(
@@ -31084,6 +31191,8 @@
 	    );
 	  }
 	});
+
+	JoinRoomForm = (0, _reactRedux.connect)(mapStateToProps)(JoinRoomForm);
 
 	exports.default = JoinRoomForm;
 
@@ -31436,7 +31545,6 @@
 
 	  render: function render() {
 	    var nextPk = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
-	    var arrow = String.fromCharCode("8592");
 
 	    return _react2.default.createElement(
 	      "div",
@@ -31450,8 +31558,15 @@
 	          this.props.players.map(function (player, i) {
 	            return _react2.default.createElement(
 	              "tr",
-	              { key: player.pk },
-	              _react2.default.createElement("td", { className: "color-key color-" + player.color }),
+	              {
+	                key: player.pk,
+	                className: "" + (player.pk === nextPk ? 'current' : 'not-current')
+	              },
+	              _react2.default.createElement(
+	                "td",
+	                null,
+	                _react2.default.createElement("div", { className: "color-key color-" + player.color })
+	              ),
 	              _react2.default.createElement(
 	                "td",
 	                null,
@@ -31462,11 +31577,6 @@
 	                null,
 	                player.numWins,
 	                " wins"
-	              ),
-	              _react2.default.createElement(
-	                "td",
-	                null,
-	                player.pk === nextPk ? arrow : ''
 	              )
 	            );
 	          })
@@ -31971,6 +32081,7 @@
 	  username: "",
 	  pk: "",
 	  room: "",
+	  roomDoesNotExist: false,
 
 	  gameNumber: 0,
 	  gameInProgress: false,
@@ -32000,6 +32111,11 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
+
+	    case _actions.SET_ROOM_DOES_NOT_EXIST:
+	      return update(state, {
+	        roomDoesNotExist: true
+	      });
 
 	    case _actions.SET_LOGGED_IN_USER:
 	      return update(state, {
@@ -32073,12 +32189,14 @@
 	      return update(state, {
 	        players: newPlayers,
 	        gameInProgress: false,
+	        nextPlayer: null,
 	        feedback: "Game won by " + action.player.name
 	      });
 
 	    case _actions.GAME_DRAW:
 	      return update(state, {
 	        gameInProgress: false,
+	        nextPlayer: null,
 	        feedback: "Game ended in a draw"
 	      });
 
@@ -32098,6 +32216,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.setRoomDoesNotExist = setRoomDoesNotExist;
 	exports.setLoggedInUser = setLoggedInUser;
 	exports.initializeBoard = initializeBoard;
 	exports.initializePlayers = initializePlayers;
@@ -32112,6 +32231,8 @@
 	/*
 	 * action types
 	 */
+
+	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
 	var SET_LOGGED_IN_USER = exports.SET_LOGGED_IN_USER = "SET_LOGGED_IN_USER";
 	var INITIALIZE_BOARD = exports.INITIALIZE_BOARD = "INITIALIZE_BOARD";
 	var INITIALIZE_PLAYERS = exports.INITIALIZE_PLAYERS = "INITIALIZE_PLAYERS";
@@ -32127,6 +32248,12 @@
 	/*
 	 * action creators
 	 */
+
+	function setRoomDoesNotExist() {
+	  return {
+	    type: SET_ROOM_DOES_NOT_EXIST
+	  };
+	}
 
 	function setLoggedInUser(pk, username, room) {
 	  return {

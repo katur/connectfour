@@ -1,15 +1,9 @@
 import {
-  SET_LOGGED_IN_USER,
-  INITIALIZE_BOARD,
-  INITIALIZE_PLAYERS,
-  ADD_PLAYER,
-  REMOVE_PLAYER,
-  START_GAME,
-  SET_NEXT_PLAYER,
-  COLOR_SQUARE,
-  TRY_AGAIN,
-  GAME_WON,
-  GAME_DRAW,
+  SET_ROOM_DOES_NOT_EXIST, SET_LOGGED_IN_USER,
+  INITIALIZE_BOARD, INITIALIZE_PLAYERS,
+  ADD_PLAYER, REMOVE_PLAYER,
+  START_GAME, SET_NEXT_PLAYER, COLOR_SQUARE, TRY_AGAIN,
+  GAME_WON, GAME_DRAW,
 } from "./actions";
 
 
@@ -17,6 +11,7 @@ const initialState = {
   username: ``,
   pk: ``,
   room: ``,
+  roomDoesNotExist: false,
 
   gameNumber: 0,
   gameInProgress: false,
@@ -45,6 +40,11 @@ function update(state, mutations) {
 
 function appReducer(state = initialState, action) {
   switch(action.type) {
+
+    case SET_ROOM_DOES_NOT_EXIST:
+      return update(state, {
+        roomDoesNotExist: true,
+      });
 
     case SET_LOGGED_IN_USER:
       return update(state, {
@@ -121,12 +121,14 @@ function appReducer(state = initialState, action) {
       return update(state, {
         players: newPlayers,
         gameInProgress: false,
+        nextPlayer: null,
         feedback: `Game won by ${action.player.name}`,
       })
 
     case GAME_DRAW:
       return update(state, {
         gameInProgress: false,
+        nextPlayer: null,
         feedback: `Game ended in a draw`,
       })
 

@@ -120,8 +120,15 @@ def index():
 def on_add_user(data):
     name = data['username']
 
-    if 'room' in data and data['room']:
+    if 'room' in data:
         room = data['room']
+
+        if room not in room_to_data:
+            emit('roomDoesNotExist', {
+              'room': room,
+            })
+            return
+
     else:
         room = _create_new_room()
 
@@ -162,9 +169,6 @@ def on_disconnect():
 
     if not model.players:
         del room_to_data[room]
-
-    print sid_to_room
-    print room_to_data
 
 
 @socketio.on('createBoard')
