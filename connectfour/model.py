@@ -143,16 +143,6 @@ class ConnectFourModel(object):
         self.players.append(player)
         self.pubsub.publish(ModelAction.player_added, player=player)
 
-    def _get_unassigned_color(self):
-        if len(self.used_colors) == len(Color):
-            return None
-
-        for color in get_all_colors():
-            if color not in self.used_colors:
-                return color
-
-        return None
-
     def _remove_player(self, player):
         """Remove a player.
 
@@ -269,6 +259,16 @@ class ConnectFourModel(object):
 
         if player.is_ai:
             player.do_strategy(self)
+
+    def _get_unassigned_color(self):
+        if len(self.used_colors) == len(Color):
+            return None
+
+        for color in get_all_colors():
+            if color not in self.used_colors:
+                return color
+
+        return None
 
     def _increment_current_player_index(self):
         self.current_player_index = ((self.current_player_index + 1)
