@@ -136,10 +136,10 @@
 	  store.dispatch((0, _actions.colorSquare)(data.color, data.position));
 	});
 
-	window.ws.on("gameStarted", function (data) {
+	window.ws.on("gameStarted", function () {
 	  store.dispatch((0, _actions.unblinkSquares)());
 	  store.dispatch((0, _actions.resetBoard)());
-	  store.dispatch((0, _actions.startGame)(data.gameNumber));
+	  store.dispatch((0, _actions.startGame)());
 	});
 
 	window.ws.on("gameWon", function (data) {
@@ -32010,7 +32010,6 @@
 	  room: "",
 	  roomDoesNotExist: false,
 
-	  gameNumber: 0,
 	  gameInProgress: false,
 	  feedback: "",
 
@@ -32120,8 +32119,7 @@
 
 	    case _actions.START_GAME:
 	      return update(state, {
-	        gameInProgress: true,
-	        gameNumber: action.gameNumber
+	        gameInProgress: true
 	      });
 
 	    case _actions.STOP_GAME:
@@ -32283,10 +32281,9 @@
 	  };
 	}
 
-	function startGame(gameNumber) {
+	function startGame() {
 	  return {
-	    type: START_GAME,
-	    gameNumber: gameNumber
+	    type: START_GAME
 	  };
 	}
 

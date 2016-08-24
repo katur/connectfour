@@ -11,7 +11,6 @@ const initialState = {
   room: ``,
   roomDoesNotExist: false,
 
-  gameNumber: 0,
   gameInProgress: false,
   feedback: ``,
 
@@ -124,7 +123,6 @@ function appReducer(state = initialState, action) {
     case START_GAME:
       return update(state, {
         gameInProgress: true,
-        gameNumber: action.gameNumber,
       });
 
     case STOP_GAME:

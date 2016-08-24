@@ -68,10 +68,8 @@ class RoomData():
             'board': board.get_json(),
         }, room=self.room)
 
-    def on_game_started(self, game_number):
-        socketio.emit('gameStarted', {
-            'gameNumber': game_number,
-        }, room=self.room)
+    def on_game_started(self):
+        socketio.emit('gameStarted', {}, room=self.room)
 
     def on_next_player(self, player):
         socketio.emit('nextPlayer', {

@@ -42,7 +42,6 @@ class ConnectFourModel(object):
         self.used_colors = set()
 
         self.game_in_progress = False
-        self.game_number = 0
 
         # After being incremented, which player goes first in the next game
         self.first_player_index = -1
@@ -199,9 +198,7 @@ class ConnectFourModel(object):
 
         self.board.reset()
         self.game_in_progress = True
-        self.game_number += 1
-        self.pubsub.publish(
-            ModelAction.game_started, game_number=self.game_number)
+        self.pubsub.publish(ModelAction.game_started)
 
         self._process_next_player()
 

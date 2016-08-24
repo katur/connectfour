@@ -67,8 +67,8 @@ class CommandLineView(object):
         else:
             self.pubsub.publish(ViewAction.start_game)
 
-    def on_game_started(self, game_number):
-        self.out.write('Game {} started\n'.format(game_number))
+    def on_game_started(self):
+        self.out.write('Game started\n')
         self._print_grid()
 
     def on_next_player(self, player):

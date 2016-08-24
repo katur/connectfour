@@ -110,10 +110,9 @@ export function unblinkSquares() {
   }
 }
 
-export function startGame(gameNumber) {
+export function startGame() {
   return {
     type: START_GAME,
-    gameNumber,
   }
 }
 

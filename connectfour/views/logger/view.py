@@ -37,8 +37,8 @@ class LogView(object):
     def on_player_added(self, player):
         self.out.write('Player added: {}\n'.format(player))
 
-    def on_game_started(self, game_number):
-        self.out.write('Game {} started\n'.format(game_number))
+    def on_game_started(self):
+        self.out.write('Game started\n')
 
     def on_next_player(self, player):
         self.out.write('Next turn: {}\n'.format(player))

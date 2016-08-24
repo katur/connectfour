@@ -79,9 +79,6 @@ class TestModel_BeforeFirstGameStarted(unittest.TestCase):
     def test_game_in_progress_before_first_game(self):
         self.assertFalse(self.model.game_in_progress)
 
-    def test_game_number_before_first_game(self):
-        self.assertEqual(self.model.game_number, 0)
-
     def test_get_num_rows(self):
         self.assertEqual(self.model.get_num_rows(), TEST_ROWS)
 

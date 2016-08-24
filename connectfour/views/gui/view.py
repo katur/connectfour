@@ -65,12 +65,8 @@ class GUIView(object):
         # Enable launch once first player is added
         self.setup_frame.enable_launch_button()
 
-    def on_game_started(self, game_number):
-        """Respond to the model reporting that a new game started.
-
-        Args:
-            game_number (int): The number of the game that started.
-        """
+    def on_game_started(self):
+        """Respond to the model reporting that a new game started."""
         self.game_frame.disable_play_again_button()
         self.game_frame.enable_play_buttons()
 

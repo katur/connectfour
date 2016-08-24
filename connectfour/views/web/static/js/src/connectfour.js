@@ -77,10 +77,10 @@ window.ws.on("colorPlayed", function(data) {
   store.dispatch(colorSquare(data.color, data.position));
 });
 
-window.ws.on("gameStarted", function(data) {
+window.ws.on("gameStarted", function() {
   store.dispatch(unblinkSquares());
   store.dispatch(resetBoard());
-  store.dispatch(startGame(data.gameNumber));
+  store.dispatch(startGame());
 });
 
 window.ws.on("gameWon", function(data) {
