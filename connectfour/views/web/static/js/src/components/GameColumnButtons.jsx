@@ -13,8 +13,15 @@ function mapStateToProps(state) {
   }
 }
 
-
 let GameColumnButtons = React.createClass({
+  propTypes: {
+    numRows: React.PropTypes.number.isRequired,
+    numColumns: React.PropTypes.number.isRequired,
+    gameInProgress: React.PropTypes.bool.isRequired,
+    pk: React.PropTypes.string.isRequired,
+    nextPlayer: React.PropTypes.object,
+  },
+
   render: function() {
     const percentage = 90.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
@@ -46,7 +53,7 @@ let GameColumnButtons = React.createClass({
 
 GameColumnButtons = connect(
   mapStateToProps
-)(GameColumnButtons);
+)(GameColumnButtons)
 
 
 export default GameColumnButtons;

@@ -1,19 +1,23 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 
 function mapStateToProps(state) {
   return {
-    text: state.feedback,
+    feedback: state.feedback,
   }
 }
 
 
 let GameFeedback = React.createClass({
+  propTypes: {
+    feedback: React.PropTypes.string.isRequired,
+  },
+
   render: function() {
     return (
       <div id="game-feedback">
-        {this.props.text}
+        {this.props.feedback}
       </div>
     );
   },

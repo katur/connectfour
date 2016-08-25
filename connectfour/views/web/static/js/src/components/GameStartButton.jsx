@@ -11,6 +11,10 @@ function mapStateToProps(state) {
 
 
 let GameStartButton = React.createClass({
+  propTypes: {
+    gameInProgress: React.PropTypes.bool.isRequired,
+  },
+
   _handleSubmit: function(e) {
     e.preventDefault();
     Emitters.startGame();

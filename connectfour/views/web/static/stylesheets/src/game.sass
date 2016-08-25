@@ -1,18 +1,23 @@
 #game-screen
-  #game-info, #game-feedback
+  #game-start, #game-room, #game-feedback
     padding: $whitespace / 4
     position: absolute
     top: 0
     opacity: 0.75
 
-  #game-info
+  #game-start
     left: 0
+
+  #game-room
+    right: 0
 
     td
       padding-right: 5px
 
   #game-feedback
-    right: 0
+    left: 0
+    width: 100%
+    text-align: center
 
   #game-board
     float: left
@@ -38,9 +43,6 @@
   #game-control
     float: left
     margin-left: $whitespace * 3
-
-    #game-start
-      margin-bottom: $whitespace
 
     #game-players
       margin-top: $whitespace / 4

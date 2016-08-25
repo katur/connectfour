@@ -7,8 +7,8 @@ import {
 
 
 const initialState = {
-  pk: ``,
-  room: ``,
+  pk: null,
+  room: null,
   roomDoesNotExist: false,
 
   gameInProgress: false,

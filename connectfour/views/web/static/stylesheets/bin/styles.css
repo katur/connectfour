@@ -51,7 +51,7 @@ body {
 h1 {
   width: 100%;
   text-align: center;
-  margin-bottom: 20px; }
+  margin-bottom: 40px; }
 
 body {
   font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
@@ -122,19 +122,24 @@ dl:last-of-type {
 #setup-screen .error {
   margin-left: 20px; }
 
-#game-screen #game-info, #game-screen #game-feedback {
+#game-screen #game-start, #game-screen #game-room, #game-screen #game-feedback {
   padding: 10px;
   position: absolute;
   top: 0;
   opacity: 0.75; }
 
-#game-screen #game-info {
+#game-screen #game-start {
   left: 0; }
-  #game-screen #game-info td {
+
+#game-screen #game-room {
+  right: 0; }
+  #game-screen #game-room td {
     padding-right: 5px; }
 
 #game-screen #game-feedback {
-  right: 0; }
+  left: 0;
+  width: 100%;
+  text-align: center; }
 
 #game-screen #game-board {
   float: left; }
@@ -155,8 +160,6 @@ dl:last-of-type {
 #game-screen #game-control {
   float: left;
   margin-left: 120px; }
-  #game-screen #game-control #game-start {
-    margin-bottom: 40px; }
   #game-screen #game-control #game-players {
     margin-top: 10px;
     margin-bottom: 40px; }

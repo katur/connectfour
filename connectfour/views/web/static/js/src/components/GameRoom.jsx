@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 
 function mapStateToProps(state) {
@@ -9,10 +9,14 @@ function mapStateToProps(state) {
 }
 
 
-let GameRoomInfo = React.createClass({
+let GameRoom = React.createClass({
+  propTypes: {
+    room: React.PropTypes.string.isRequired,
+  },
+
   render: function() {
     return (
-      <div id="game-info">
+      <div id="game-room">
         <table>
           <tbody>
             <tr>
@@ -27,9 +31,9 @@ let GameRoomInfo = React.createClass({
 });
 
 
-GameRoomInfo = connect(
+GameRoom = connect(
   mapStateToProps
-)(GameRoomInfo);
+)(GameRoom);
 
 
-export default GameRoomInfo;
+export default GameRoom;

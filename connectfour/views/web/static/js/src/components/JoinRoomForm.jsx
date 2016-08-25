@@ -11,6 +11,10 @@ function mapStateToProps(state) {
 
 
 let JoinRoomForm = React.createClass({
+  propTypes: {
+    roomDoesNotExist: React.PropTypes.bool.isRequired,
+  },
+
   getInitialState: function() {
     return {
       username: ``,
@@ -99,10 +103,16 @@ let JoinRoomForm = React.createClass({
           onSubmit={this._handleSubmit}
         >
           <dl>
-            <dt>Room ID</dt>
+            <dt>
+              <label htmlFor="room">
+                Room ID
+              </label>
+            </dt>
+
             <dd>
               <input
                 type="text"
+                id="room"
                 name="room"
                 value={this.state.room}
                 onChange={this._handleInput}
@@ -111,10 +121,16 @@ let JoinRoomForm = React.createClass({
               {roomError}
             </dd>
 
-            <dt>Your username</dt>
+            <dt>
+              <label htmlFor="username">
+                Your username
+              </label>
+            </dt>
+
             <dd>
               <input
                 type="text"
+                id="username"
                 name="username"
                 value={this.state.username}
                 onChange={this._handleInput}

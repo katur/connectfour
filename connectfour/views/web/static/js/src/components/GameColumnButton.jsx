@@ -3,8 +3,14 @@ import Emitters from "../emitters";
 
 
 const GameColumnButton = React.createClass({
+  propTypes: {
+    disabled: React.PropTypes.bool.isRequired,
+    style: React.PropTypes.object.isRequired,
+  },
+
   _handleSubmit: function(e) {
     e.preventDefault();
+
     Emitters.play({
       column: this.props.column,
     });

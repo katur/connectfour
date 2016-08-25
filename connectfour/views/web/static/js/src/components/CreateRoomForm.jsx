@@ -2,7 +2,7 @@ import React from "react";
 import Emitters from "../emitters";
 
 
-let CreateRoomForm = React.createClass({
+const CreateRoomForm = React.createClass({
   getInitialState: function() {
     return {
       username: ``,
@@ -76,8 +76,8 @@ let CreateRoomForm = React.createClass({
 
             <dd>
               <input
-                id="username"
                 type="text"
+                id="username"
                 name="username"
                 value={this.state.username}
                 onChange={this._handleInput}

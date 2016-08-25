@@ -1,5 +1,5 @@
 import React from "react";
-import { connect } from 'react-redux'
+import { connect } from "react-redux";
 
 
 function mapStateToProps(state) {
@@ -10,11 +10,15 @@ function mapStateToProps(state) {
 
 
 let GameTitle = React.createClass({
+  propTypes: {
+    numToWin: React.PropTypes.number,
+  },
+
   render: function() {
     return (
       <div>
         <h1>
-          Connect {this.props.numToWin}
+          Connect {this.props.numToWin || "X"}
         </h1>
       </div>
     );

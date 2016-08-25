@@ -14,6 +14,13 @@ function mapStateToProps(state) {
 
 
 let ChangeBoardForm = React.createClass({
+  propTypes: {
+    gameInProgress: React.PropTypes.bool.isRequired,
+    numRows: React.PropTypes.number,
+    numColumns: React.PropTypes.number,
+    numToWin: React.PropTypes.number,
+  },
+
   getInitialState: function() {
     return {
       numRows: `${window.DEFAULT_ROWS}`,
