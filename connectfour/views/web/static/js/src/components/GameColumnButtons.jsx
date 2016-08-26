@@ -23,7 +23,7 @@ let GameColumnButtons = React.createClass({
   },
 
   render: function() {
-    const percentage = 90.0 / Math.max(this.props.numRows,
+    const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
     const size = percentage + "vmin";
 

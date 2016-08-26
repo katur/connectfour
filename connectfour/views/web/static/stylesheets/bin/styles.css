@@ -129,16 +129,19 @@ dl:last-of-type {
   opacity: 0.75; }
 
 #game-screen #game-start {
-  left: 0; }
+  left: 0;
+  z-index: 3; }
 
 #game-screen #game-room {
-  right: 0; }
+  right: 0;
+  z-index: 2; }
   #game-screen #game-room td {
     padding-right: 5px; }
 
 #game-screen #game-feedback {
   left: 0;
   width: 100%;
+  z-index: 1;
   text-align: center; }
 
 #game-screen #game-board {

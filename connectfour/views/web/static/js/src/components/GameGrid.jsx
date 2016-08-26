@@ -7,6 +7,8 @@ function mapStateToProps(state) {
   return {
     numRows: state.numRows,
     numColumns: state.numColumns,
+    grid: state.grid,
+    blinkingSquares: state.blinkingSquares,
   }
 }
 
@@ -15,10 +17,12 @@ let GameGrid = React.createClass({
   propTypes: {
     numRows: React.PropTypes.number.isRequired,
     numColumns: React.PropTypes.number.isRequired,
+    grid: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    blinkingSquares: React.PropTypes.array.isRequired,
   },
 
   render: function() {
-    const percentage = 90.0 / Math.max(this.props.numRows,
+    const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
     const size = percentage + "vmin";
 
@@ -30,11 +34,21 @@ let GameGrid = React.createClass({
       for (let j = 0; j < this.props.numColumns; j++) {
         const clear = (j === 0) ? "left" : "none";
 
+        // TODO: restructure blinking to not require this iteration (set?)
+        let blinking = false;
+
+        for (let b of this.props.blinkingSquares) {
+          if (b[0] == i && b[1] == j) {
+            blinking = true;
+            break;
+          }
+        }
+
         row.push(
           <GameSquare
             key={`${i}-${j}`}
-            row={i}
-            col={j}
+            color={this.props.grid[i][j]}
+            blinking={blinking}
             style={{
               width: size,
               height: size,

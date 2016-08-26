@@ -68,11 +68,11 @@
 
 	var _reactRedux = __webpack_require__(227);
 
-	var _reducers = __webpack_require__(266);
+	var _reducers = __webpack_require__(264);
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _actions = __webpack_require__(267);
+	var _actions = __webpack_require__(265);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31229,31 +31229,31 @@
 
 	var _GameTitle2 = _interopRequireDefault(_GameTitle);
 
-	var _GameStartButton = __webpack_require__(258);
+	var _GameStartButton = __webpack_require__(255);
 
 	var _GameStartButton2 = _interopRequireDefault(_GameStartButton);
 
-	var _GameRoom = __webpack_require__(268);
+	var _GameRoom = __webpack_require__(256);
 
 	var _GameRoom2 = _interopRequireDefault(_GameRoom);
 
-	var _GameFeedback = __webpack_require__(256);
+	var _GameFeedback = __webpack_require__(257);
 
 	var _GameFeedback2 = _interopRequireDefault(_GameFeedback);
 
-	var _GameColumnButtons = __webpack_require__(262);
+	var _GameColumnButtons = __webpack_require__(258);
 
 	var _GameColumnButtons2 = _interopRequireDefault(_GameColumnButtons);
 
-	var _GameGrid = __webpack_require__(264);
+	var _GameGrid = __webpack_require__(260);
 
 	var _GameGrid2 = _interopRequireDefault(_GameGrid);
 
-	var _GamePlayers = __webpack_require__(259);
+	var _GamePlayers = __webpack_require__(262);
 
 	var _GamePlayers2 = _interopRequireDefault(_GamePlayers);
 
-	var _GameBoardForm = __webpack_require__(269);
+	var _GameBoardForm = __webpack_require__(263);
 
 	var _GameBoardForm2 = _interopRequireDefault(_GameBoardForm);
 
@@ -31354,53 +31354,7 @@
 	exports.default = GameTitle;
 
 /***/ },
-/* 255 */,
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    feedback: state.feedback
-	  };
-	}
-
-	var GameFeedback = _react2.default.createClass({
-	  displayName: "GameFeedback",
-
-	  propTypes: {
-	    feedback: _react2.default.PropTypes.string.isRequired
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-feedback" },
-	      this.props.feedback
-	    );
-	  }
-	});
-
-	GameFeedback = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
-
-	exports.default = GameFeedback;
-
-/***/ },
-/* 257 */,
-/* 258 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31468,7 +31422,411 @@
 	exports.default = GameStartButton;
 
 /***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    room: state.room
+	  };
+	}
+
+	var GameRoom = _react2.default.createClass({
+	  displayName: "GameRoom",
+
+	  propTypes: {
+	    room: _react2.default.PropTypes.string.isRequired
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-room" },
+	      _react2.default.createElement(
+	        "table",
+	        null,
+	        _react2.default.createElement(
+	          "tbody",
+	          null,
+	          _react2.default.createElement(
+	            "tr",
+	            null,
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              "Room:"
+	            ),
+	            _react2.default.createElement(
+	              "td",
+	              null,
+	              this.props.room
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	GameRoom = (0, _reactRedux.connect)(mapStateToProps)(GameRoom);
+
+	exports.default = GameRoom;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    feedback: state.feedback
+	  };
+	}
+
+	var GameFeedback = _react2.default.createClass({
+	  displayName: "GameFeedback",
+
+	  propTypes: {
+	    feedback: _react2.default.PropTypes.string.isRequired
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-feedback" },
+	      this.props.feedback
+	    );
+	  }
+	});
+
+	GameFeedback = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
+
+	exports.default = GameFeedback;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	var _GameColumnButton = __webpack_require__(259);
+
+	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    numRows: state.numRows,
+	    numColumns: state.numColumns,
+	    gameInProgress: state.gameInProgress,
+	    pk: state.pk,
+	    nextPlayer: state.nextPlayer
+	  };
+	}
+
+	var GameColumnButtons = _react2.default.createClass({
+	  displayName: "GameColumnButtons",
+
+	  propTypes: {
+	    numRows: _react2.default.PropTypes.number.isRequired,
+	    numColumns: _react2.default.PropTypes.number.isRequired,
+	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
+	    pk: _react2.default.PropTypes.string.isRequired,
+	    nextPlayer: _react2.default.PropTypes.object
+	  },
+
+	  render: function render() {
+	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var size = percentage + "vmin";
+
+	    var row = [];
+	    var enabled = this.props.gameInProgress && this.props.nextPlayer && this.props.pk === this.props.nextPlayer.pk;
+
+	    for (var i = 0; i < this.props.numColumns; i++) {
+	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
+	        key: i,
+	        column: i,
+	        style: {
+	          width: size
+	        },
+	        disabled: !enabled
+	      }));
+	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-column-buttons" },
+	      row
+	    );
+	  }
+	});
+
+	GameColumnButtons = (0, _reactRedux.connect)(mapStateToProps)(GameColumnButtons);
+
+	exports.default = GameColumnButtons;
+
+/***/ },
 /* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _emitters = __webpack_require__(251);
+
+	var _emitters2 = _interopRequireDefault(_emitters);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameColumnButton = _react2.default.createClass({
+	  displayName: "GameColumnButton",
+
+	  propTypes: {
+	    disabled: _react2.default.PropTypes.bool.isRequired,
+	    style: _react2.default.PropTypes.object.isRequired
+	  },
+
+	  _handleSubmit: function _handleSubmit(e) {
+	    e.preventDefault();
+
+	    _emitters2.default.play({
+	      column: this.props.column
+	    });
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "form",
+	      {
+	        action: "",
+	        method: "post",
+	        onSubmit: this._handleSubmit
+	      },
+	      _react2.default.createElement(
+	        "div",
+	        {
+	          className: "game-column-button-wrapper",
+	          style: this.props.style
+	        },
+	        _react2.default.createElement(
+	          "button",
+	          {
+	            className: "game-column-button",
+	            disabled: this.props.disabled
+	          },
+	          "Drop"
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = GameColumnButton;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(227);
+
+	var _GameSquare = __webpack_require__(261);
+
+	var _GameSquare2 = _interopRequireDefault(_GameSquare);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function mapStateToProps(state) {
+	  return {
+	    numRows: state.numRows,
+	    numColumns: state.numColumns,
+	    grid: state.grid,
+	    blinkingSquares: state.blinkingSquares
+	  };
+	}
+
+	var GameGrid = _react2.default.createClass({
+	  displayName: "GameGrid",
+
+	  propTypes: {
+	    numRows: _react2.default.PropTypes.number.isRequired,
+	    numColumns: _react2.default.PropTypes.number.isRequired,
+	    grid: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.array).isRequired,
+	    blinkingSquares: _react2.default.PropTypes.array.isRequired
+	  },
+
+	  render: function render() {
+	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
+	    var size = percentage + "vmin";
+
+	    var rows = [];
+
+	    for (var i = 0; i < this.props.numRows; i++) {
+	      var row = [];
+
+	      for (var j = 0; j < this.props.numColumns; j++) {
+	        var clear = j === 0 ? "left" : "none";
+
+	        // TODO: restructure blinking to not require this iteration (set?)
+	        var blinking = false;
+
+	        var _iteratorNormalCompletion = true;
+	        var _didIteratorError = false;
+	        var _iteratorError = undefined;
+
+	        try {
+	          for (var _iterator = this.props.blinkingSquares[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var b = _step.value;
+
+	            if (b[0] == i && b[1] == j) {
+	              blinking = true;
+	              break;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError = true;
+	          _iteratorError = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	              _iterator.return();
+	            }
+	          } finally {
+	            if (_didIteratorError) {
+	              throw _iteratorError;
+	            }
+	          }
+	        }
+
+	        row.push(_react2.default.createElement(_GameSquare2.default, {
+	          key: i + "-" + j,
+	          color: this.props.grid[i][j],
+	          blinking: blinking,
+	          style: {
+	            width: size,
+	            height: size,
+	            clear: clear
+	          }
+	        }));
+	      }
+
+	      rows.push(row);
+	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      { id: "game-grid" },
+	      rows
+	    );
+	  }
+	});
+
+	GameGrid = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
+
+	exports.default = GameGrid;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(52);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var GameSquare = _react2.default.createClass({
+	  displayName: "GameSquare",
+
+	  propTypes: {
+	    blinking: _react2.default.PropTypes.bool.isRequired,
+	    color: _react2.default.PropTypes.string
+	  },
+
+	  render: function render() {
+	    var innerClassName = "game-square color-" + this.props.color;
+
+	    if (this.props.blinking) {
+	      innerClassName += " blinking";
+	    }
+
+	    return _react2.default.createElement(
+	      "div",
+	      {
+	        className: "game-square-wrapper",
+	        style: this.props.style
+	      },
+	      _react2.default.createElement("div", {
+	        className: innerClassName
+	      })
+	    );
+	  }
+	});
+
+	exports.default = GameSquare;
+
+/***/ },
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -31548,81 +31906,6 @@
 	exports.default = GamePlayers;
 
 /***/ },
-/* 260 */,
-/* 261 */,
-/* 262 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	var _GameColumnButton = __webpack_require__(263);
-
-	var _GameColumnButton2 = _interopRequireDefault(_GameColumnButton);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    numRows: state.numRows,
-	    numColumns: state.numColumns,
-	    gameInProgress: state.gameInProgress,
-	    pk: state.pk,
-	    nextPlayer: state.nextPlayer
-	  };
-	}
-
-	var GameColumnButtons = _react2.default.createClass({
-	  displayName: "GameColumnButtons",
-
-	  propTypes: {
-	    numRows: _react2.default.PropTypes.number.isRequired,
-	    numColumns: _react2.default.PropTypes.number.isRequired,
-	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
-	    pk: _react2.default.PropTypes.string.isRequired,
-	    nextPlayer: _react2.default.PropTypes.object
-	  },
-
-	  render: function render() {
-	    var percentage = 90.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + "vmin";
-
-	    var row = [];
-	    var enabled = this.props.gameInProgress && this.props.nextPlayer && this.props.pk === this.props.nextPlayer.pk;
-
-	    for (var i = 0; i < this.props.numColumns; i++) {
-	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
-	        key: i,
-	        column: i,
-	        style: {
-	          width: size
-	        },
-	        disabled: !enabled
-	      }));
-	    }
-
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-column-buttons" },
-	      row
-	    );
-	  }
-	});
-
-	GameColumnButtons = (0, _reactRedux.connect)(mapStateToProps)(GameColumnButtons);
-
-	exports.default = GameColumnButtons;
-
-/***/ },
 /* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -31636,56 +31919,134 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(227);
+
 	var _emitters = __webpack_require__(251);
 
 	var _emitters2 = _interopRequireDefault(_emitters);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var GameColumnButton = _react2.default.createClass({
-	  displayName: "GameColumnButton",
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function mapStateToProps(state) {
+	  return {
+	    gameInProgress: state.gameInProgress,
+	    numRows: state.numRows,
+	    numColumns: state.numColumns,
+	    numToWin: state.numToWin
+	  };
+	}
+
+	var ChangeBoardForm = _react2.default.createClass({
+	  displayName: "ChangeBoardForm",
 
 	  propTypes: {
-	    disabled: _react2.default.PropTypes.bool.isRequired,
-	    style: _react2.default.PropTypes.object.isRequired
+	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
+	    numRows: _react2.default.PropTypes.number,
+	    numColumns: _react2.default.PropTypes.number,
+	    numToWin: _react2.default.PropTypes.number
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return {
+	      numRows: "" + window.DEFAULT_ROWS,
+	      numColumns: "" + window.DEFAULT_COLUMNS,
+	      numToWin: "" + window.DEFAULT_TO_WIN,
+	      username: ""
+	    };
+	  },
+
+	  _handleInput: function _handleInput(e) {
+	    this.setState(_defineProperty({}, e.target.name, e.target.value));
 	  },
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
 
-	    _emitters2.default.play({
-	      column: this.props.column
+	    _emitters2.default.createBoard({
+	      numRows: this.state.numRows,
+	      numColumns: this.state.numColumns,
+	      numToWin: this.state.numToWin
 	    });
 	  },
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "form",
-	      {
-	        action: "",
-	        method: "post",
-	        onSubmit: this._handleSubmit
-	      },
+	      "div",
+	      { id: "change-board" },
 	      _react2.default.createElement(
-	        "div",
+	        "form",
 	        {
-	          className: "game-column-button-wrapper",
-	          style: this.props.style
+	          action: "",
+	          method: "post",
+	          onSubmit: this._handleSubmit
 	        },
+	        _react2.default.createElement(
+	          "dl",
+	          null,
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num rows"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numRows",
+	              value: this.state.numRows,
+	              onChange: this._handleInput
+	            })
+	          ),
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num columns"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numColumns",
+	              value: this.state.numColumns,
+	              onChange: this._handleInput
+	            })
+	          ),
+	          _react2.default.createElement(
+	            "dt",
+	            null,
+	            "Num to win"
+	          ),
+	          _react2.default.createElement(
+	            "dd",
+	            null,
+	            _react2.default.createElement("input", {
+	              type: "text",
+	              name: "numToWin",
+	              value: this.state.numToWin,
+	              onChange: this._handleInput
+	            })
+	          )
+	        ),
 	        _react2.default.createElement(
 	          "button",
 	          {
-	            className: "game-column-button",
-	            disabled: this.props.disabled
+	            type: "submit",
+	            disabled: this.props.gameInProgress
 	          },
-	          "Drop"
+	          "Change board"
 	        )
 	      )
 	    );
 	  }
 	});
 
-	exports.default = GameColumnButton;
+	ChangeBoardForm = (0, _reactRedux.connect)(mapStateToProps)(ChangeBoardForm);
+
+	exports.default = ChangeBoardForm;
 
 /***/ },
 /* 264 */
@@ -31697,167 +32058,7 @@
 	  value: true
 	});
 
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	var _GameSquare = __webpack_require__(265);
-
-	var _GameSquare2 = _interopRequireDefault(_GameSquare);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    numRows: state.numRows,
-	    numColumns: state.numColumns
-	  };
-	}
-
-	var GameGrid = _react2.default.createClass({
-	  displayName: "GameGrid",
-
-	  propTypes: {
-	    numRows: _react2.default.PropTypes.number.isRequired,
-	    numColumns: _react2.default.PropTypes.number.isRequired
-	  },
-
-	  render: function render() {
-	    var percentage = 90.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + "vmin";
-
-	    var rows = [];
-
-	    for (var i = 0; i < this.props.numRows; i++) {
-	      var row = [];
-
-	      for (var j = 0; j < this.props.numColumns; j++) {
-	        var clear = j === 0 ? "left" : "none";
-
-	        row.push(_react2.default.createElement(_GameSquare2.default, {
-	          key: i + "-" + j,
-	          row: i,
-	          col: j,
-	          style: {
-	            width: size,
-	            height: size,
-	            clear: clear
-	          }
-	        }));
-	      }
-
-	      rows.push(row);
-	    }
-
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-grid" },
-	      rows
-	    );
-	  }
-	});
-
-	GameGrid = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
-
-	exports.default = GameGrid;
-
-/***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    grid: state.grid,
-	    blinkingSquares: state.blinkingSquares
-	  };
-	}
-
-	var GameSquare = _react2.default.createClass({
-	  displayName: "GameSquare",
-
-	  propTypes: {
-	    grid: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.array).isRequired,
-	    blinkingSquares: _react2.default.PropTypes.array.isRequired
-	  },
-
-	  render: function render() {
-	    var color = this.props.grid[this.props.row][this.props.col];
-	    var innerClassName = "game-square color-" + color;
-
-	    // TODO: restructure blinking to not require this iteration
-	    // (instead index into 2D blink array)
-	    var _iteratorNormalCompletion = true;
-	    var _didIteratorError = false;
-	    var _iteratorError = undefined;
-
-	    try {
-	      for (var _iterator = this.props.blinkingSquares[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	        var b = _step.value;
-
-	        if (b[0] == this.props.row && b[1] == this.props.col) {
-	          innerClassName += " blinking";
-	          break;
-	        }
-	      }
-	    } catch (err) {
-	      _didIteratorError = true;
-	      _iteratorError = err;
-	    } finally {
-	      try {
-	        if (!_iteratorNormalCompletion && _iterator.return) {
-	          _iterator.return();
-	        }
-	      } finally {
-	        if (_didIteratorError) {
-	          throw _iteratorError;
-	        }
-	      }
-	    }
-
-	    return _react2.default.createElement(
-	      "div",
-	      {
-	        className: "game-square-wrapper",
-	        style: this.props.style
-	      },
-	      _react2.default.createElement("div", {
-	        className: innerClassName
-	      })
-	    );
-	  }
-	});
-
-	GameSquare = (0, _reactRedux.connect)(mapStateToProps)(GameSquare);
-
-	exports.default = GameSquare;
-
-/***/ },
-/* 266 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _actions = __webpack_require__(267);
+	var _actions = __webpack_require__(265);
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -32002,7 +32203,7 @@
 	exports.default = appReducer;
 
 /***/ },
-/* 267 */
+/* 265 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32162,214 +32363,6 @@
 	    reason: reason
 	  };
 	}
-
-/***/ },
-/* 268 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function mapStateToProps(state) {
-	  return {
-	    room: state.room
-	  };
-	}
-
-	var GameRoom = _react2.default.createClass({
-	  displayName: "GameRoom",
-
-	  propTypes: {
-	    room: _react2.default.PropTypes.string.isRequired
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-room" },
-	      _react2.default.createElement(
-	        "table",
-	        null,
-	        _react2.default.createElement(
-	          "tbody",
-	          null,
-	          _react2.default.createElement(
-	            "tr",
-	            null,
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              "Room:"
-	            ),
-	            _react2.default.createElement(
-	              "td",
-	              null,
-	              this.props.room
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-
-	GameRoom = (0, _reactRedux.connect)(mapStateToProps)(GameRoom);
-
-	exports.default = GameRoom;
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(52);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(227);
-
-	var _emitters = __webpack_require__(251);
-
-	var _emitters2 = _interopRequireDefault(_emitters);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	function mapStateToProps(state) {
-	  return {
-	    gameInProgress: state.gameInProgress,
-	    numRows: state.numRows,
-	    numColumns: state.numColumns,
-	    numToWin: state.numToWin
-	  };
-	}
-
-	var ChangeBoardForm = _react2.default.createClass({
-	  displayName: "ChangeBoardForm",
-
-	  propTypes: {
-	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
-	    numRows: _react2.default.PropTypes.number,
-	    numColumns: _react2.default.PropTypes.number,
-	    numToWin: _react2.default.PropTypes.number
-	  },
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      numRows: "" + window.DEFAULT_ROWS,
-	      numColumns: "" + window.DEFAULT_COLUMNS,
-	      numToWin: "" + window.DEFAULT_TO_WIN,
-	      username: ""
-	    };
-	  },
-
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
-
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-
-	    _emitters2.default.createBoard({
-	      numRows: this.state.numRows,
-	      numColumns: this.state.numColumns,
-	      numToWin: this.state.numToWin
-	    });
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { id: "change-board" },
-	      _react2.default.createElement(
-	        "form",
-	        {
-	          action: "",
-	          method: "post",
-	          onSubmit: this._handleSubmit
-	        },
-	        _react2.default.createElement(
-	          "dl",
-	          null,
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num rows"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numRows",
-	              value: this.state.numRows,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num columns"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numColumns",
-	              value: this.state.numColumns,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            "dt",
-	            null,
-	            "Num to win"
-	          ),
-	          _react2.default.createElement(
-	            "dd",
-	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numToWin",
-	              value: this.state.numToWin,
-	              onChange: this._handleInput
-	            })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          "button",
-	          {
-	            type: "submit",
-	            disabled: this.props.gameInProgress
-	          },
-	          "Change board"
-	        )
-	      )
-	    );
-	  }
-	});
-
-	ChangeBoardForm = (0, _reactRedux.connect)(mapStateToProps)(ChangeBoardForm);
-
-	exports.default = ChangeBoardForm;
 
 /***/ }
 /******/ ]);
