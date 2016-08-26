@@ -9,7 +9,7 @@ from connectfour.model import (
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
 from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
 
-ROOM_ID_LENGTH = 5
+ROOM_ID_LENGTH = 4
 
 
 # Set up application
