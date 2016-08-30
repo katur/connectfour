@@ -31867,7 +31867,7 @@
 	              'tr',
 	              {
 	                key: player.pk,
-	                className: '' + (player.pk !== next ? 'current' : 'not-current')
+	                className: '' + (player.pk === next ? 'current' : 'not-current')
 	              },
 	              _react2.default.createElement(
 	                'td',
