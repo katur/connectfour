@@ -1,5 +1,6 @@
 import React from 'react';
-import Emitters from '../emitters';
+
+import { emitPlay } from '../emitters';
 
 
 const GameColumnButton = React.createClass({
@@ -11,7 +12,7 @@ const GameColumnButton = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
 
-    Emitters.play({
+    emitPlay({
       column: this.props.column,
     });
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Emitters from '../emitters';
+import { emitAddUser } from '../emitters';
 
 
 function mapStateToProps(state) {
@@ -37,12 +37,14 @@ let JoinRoomForm = React.createClass({
       this.setState({
         roomError: 'Room required',
       });
+
       return;
 
     } else if (this.props.roomDoesNotExist) {
       this.setState({
         roomError: 'Room does not exist',
       });
+
       return;
 
     } else {
@@ -55,6 +57,7 @@ let JoinRoomForm = React.createClass({
       this.setState({
         usernameError: 'Username required',
       });
+
       return;
 
     } else {
@@ -74,7 +77,7 @@ let JoinRoomForm = React.createClass({
     }
     */
 
-    Emitters.addUser({
+    emitAddUser({
       username: this.state.username,
       room: this.state.room,
     });
@@ -82,12 +85,14 @@ let JoinRoomForm = React.createClass({
   },
 
   render: function() {
-    var usernameError;
+    let usernameError;
+
     if (this.state.usernameError) {
       usernameError = <span className='error'>{this.state.usernameError}</span>;
     }
 
-    var roomError;
+    let roomError;
+
     if (this.state.roomError) {
       roomError = <span className='error'>{this.state.roomError}</span>;
     }

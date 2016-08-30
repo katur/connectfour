@@ -1,5 +1,6 @@
 import React from 'react';
-import Emitters from '../emitters';
+
+import { emitAddUser, emitCreateBoard } from '../emitters';
 
 
 const CreateRoomForm = React.createClass({
@@ -23,6 +24,7 @@ const CreateRoomForm = React.createClass({
       this.setState({
         usernameError: 'Username required',
       });
+
       return;
     }
 
@@ -40,11 +42,11 @@ const CreateRoomForm = React.createClass({
     }
     */
 
-    Emitters.addUser({
+    emitAddUser({
       username: this.state.username,
     });
 
-    Emitters.createBoard({
+    emitCreateBoard({
       numRows: window.DEFAULT_ROWS,
       numColumns: window.DEFAULT_COLUMNS,
       numToWin: window.DEFAULT_TO_WIN,
@@ -52,7 +54,8 @@ const CreateRoomForm = React.createClass({
   },
 
   render: function() {
-    var usernameError;
+    let usernameError;
+
     if (this.state.usernameError) {
       usernameError = <span className='error'>Username required</span>;
     }

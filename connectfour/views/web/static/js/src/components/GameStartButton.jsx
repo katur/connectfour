@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Emitters from '../emitters';
+import { emitStartGame } from '../emitters';
 
 
 function mapStateToProps(state) {
@@ -17,7 +17,7 @@ let GameStartButton = React.createClass({
 
   _handleSubmit: function(e) {
     e.preventDefault();
-    Emitters.startGame();
+    emitStartGame();
   },
 
   render: function() {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import GameTitle from './GameTitle';
 import GameStartButton from './GameStartButton';
 import GameRoom from './GameRoom';

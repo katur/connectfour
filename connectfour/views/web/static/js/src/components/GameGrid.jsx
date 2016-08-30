@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import GameSquare from './GameSquare';
 
 
@@ -24,9 +25,9 @@ let GameGrid = React.createClass({
   render: function() {
     const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
-    const size = percentage + 'vmin';
+    const size = `${percentage}vmin`;
 
-    let rows = [];
+    const rows = [];
 
     for (let i = 0; i < this.props.numRows; i++) {
       let row = [];
@@ -72,7 +73,7 @@ let GameGrid = React.createClass({
 
 GameGrid = connect(
   mapStateToProps
-)(GameGrid)
+)(GameGrid);
 
 
 export default GameGrid;

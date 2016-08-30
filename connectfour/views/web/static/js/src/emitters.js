@@ -1,29 +1,15 @@
-const Emitters = {
-  addUser: function ({ username, room }) {
-    window.ws.emit('addUser', {
-      'username': username,
-      'room': room,
-    });
-  },
+export function emitAddUser(data) {
+  window.ws.emit('addUser', data);
+}
 
-  createBoard: function({ numRows, numColumns, numToWin }) {
-    window.ws.emit('createBoard', {
-      'numRows': numRows,
-      'numColumns': numColumns,
-      'numToWin': numToWin,
-    });
-  },
+export function emitCreateBoard(data) {
+  window.ws.emit('createBoard', data);
+}
 
-  startGame: function() {
-    window.ws.emit('startGame', {});
-  },
+export function emitStartGame(data) {
+  window.ws.emit('startGame', {});
+}
 
-  play: function({ column }) {
-    window.ws.emit('play', {
-      'column': column,
-    });
-  },
-};
-
-
-export default Emitters;
+export function emitPlay(data) {
+  window.ws.emit('play', data);
+}

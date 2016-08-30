@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import GameColumnButton from './GameColumnButton';
 
 
@@ -25,11 +26,13 @@ let GameColumnButtons = React.createClass({
   render: function() {
     const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
-    const size = percentage + 'vmin';
+    const size = `${percentage}vmin`;
 
-    let row = [];
-    let enabled = this.props.gameInProgress && this.props.nextPlayer &&
-        this.props.pk === this.props.nextPlayer.pk;
+    const enabled = this.props.gameInProgress
+      && this.props.nextPlayer
+      && this.props.pk === this.props.nextPlayer.pk;
+
+    const row = [];
 
     for (let i = 0; i < this.props.numColumns; i++) {
       row.push(
@@ -53,7 +56,7 @@ let GameColumnButtons = React.createClass({
 
 GameColumnButtons = connect(
   mapStateToProps
-)(GameColumnButtons)
+)(GameColumnButtons);
 
 
 export default GameColumnButtons;

@@ -25,7 +25,7 @@ let GamePlayers = React.createClass({
                 <tr
                   key={player.pk}
                   className={
-                    `${(player.pk === next) ? 'current' : 'not-current'}`
+                    `${(player.pk !== next) ? 'current' : 'not-current'}`
                   }
                 >
 
@@ -36,7 +36,7 @@ let GamePlayers = React.createClass({
 
                   <td>
                     {player.name}
-                    {(player.pk === you) ? ' (you)' : ''}
+                    {(player.pk === you) && ' (you)'}
                   </td>
 
                   <td>

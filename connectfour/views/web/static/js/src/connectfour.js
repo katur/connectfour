@@ -1,24 +1,35 @@
 import wsClient from 'socket.io-client';
-import '../../stylesheets/src/styles';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/App';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+
+import App from './components/App';
 import appReducer from './reducers';
 import {
-  setIDs, setRoomDoesNotExist,
-  updatePlayers, updatePlayer, addPlayer, removePlayer, setNextPlayer,
-  updateBoard, resetBoard, colorSquare, blinkSquares, unblinkSquares,
-  startGame, stopGame, reportDraw, reportTryAgain,
+  setIDs, setRoomDoesNotExist, updatePlayers, updatePlayer, addPlayer,
+  removePlayer, setNextPlayer, updateBoard, resetBoard, colorSquare,
+  blinkSquares, unblinkSquares, startGame, stopGame, reportDraw,
+  reportTryAgain,
 } from './actions';
+
+// This is where webpack compiles my sass to css
+import '../../stylesheets/src/styles';
+
+
+//////////////////////////
+// Connect to WebSocket //
+//////////////////////////
+
+const WS_URL = `http://${document.domain}:${location.port}`;
+window.ws = wsClient(WS_URL);
 
 
 /////////////////////////////////////////////
 // Create Redux store and render React app //
 /////////////////////////////////////////////
 
-let store = createStore(appReducer);
+const store = createStore(appReducer);
 
 ReactDOM.render(
   <Provider store={store}>
@@ -26,14 +37,6 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('react-root')
 );
-
-
-//////////////////////////
-// Connect to WebSocket //
-//////////////////////////
-
-const WS_URL = 'http://' + document.domain + ':' + location.port;
-window.ws = wsClient(WS_URL);
 
 
 /////////////////////////////////////////////////////////////////
@@ -56,25 +59,25 @@ window.ws.on('roomDoesNotExist', function() {
   store.dispatch(setRoomDoesNotExist());
 });
 
-window.ws.on('playerAdded', function(data) {
-  store.dispatch(addPlayer(data.player));
+window.ws.on('playerAdded', function({ player }) {
+  store.dispatch(addPlayer(player));
 });
 
-window.ws.on('playerRemoved', function(data) {
-  store.dispatch(removePlayer(data.player));
+window.ws.on('playerRemoved', function({ player }) {
+  store.dispatch(removePlayer(player));
 });
 
-window.ws.on('nextPlayer', function(data) {
-  store.dispatch(setNextPlayer(data.player));
+window.ws.on('nextPlayer', function({ player }) {
+  store.dispatch(setNextPlayer(player));
 });
 
-window.ws.on('boardCreated', function(data) {
+window.ws.on('boardCreated', function({ board }) {
   store.dispatch(unblinkSquares());
-  store.dispatch(updateBoard(data.board));
+  store.dispatch(updateBoard(board));
 });
 
-window.ws.on('colorPlayed', function(data) {
-  store.dispatch(colorSquare(data.color, data.position));
+window.ws.on('colorPlayed', function({ color, position }) {
+  store.dispatch(colorSquare(color, position));
 });
 
 window.ws.on('gameStarted', function() {
@@ -83,25 +86,21 @@ window.ws.on('gameStarted', function() {
   store.dispatch(startGame());
 });
 
-window.ws.on('gameWon', function(data) {
+window.ws.on('gameWon', function({ winner, winningPositions, players }) {
   store.dispatch(stopGame());
-  store.dispatch(updatePlayers(data.players));
-  store.dispatch(blinkSquares(data.winningPositions));
+  store.dispatch(blinkSquares(winningPositions));
+  store.dispatch(updatePlayers(players));
 
   // maybe blink the winner, too?
   // store.dispatch(updatePlayer(data.winner));
 });
 
-window.ws.on('gameDraw', function(data) {
+window.ws.on('gameDraw', function({ players }) {
   store.dispatch(stopGame());
-  store.dispatch(updatePlayers(data.players));
+  store.dispatch(updatePlayers(players));
   store.dispatch(reportDraw());
 });
 
-window.ws.on('tryAgain', function(data) {
-  store.dispatch(reportTryAgain(data.player, data.reason));
-});
-
-window.ws.on('message', function(message) {
-  console.log(message);
+window.ws.on('tryAgain', function({ player, reason }) {
+  store.dispatch(reportTryAgain(player, reason));
 });

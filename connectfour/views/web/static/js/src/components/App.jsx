@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import SetupScreen from './SetupScreen';
 import GameScreen from './GameScreen';
 
@@ -28,7 +29,7 @@ let App = React.createClass({
 
 App = connect(
   mapStateToProps
-)(App)
+)(App);
 
 
 export default App;

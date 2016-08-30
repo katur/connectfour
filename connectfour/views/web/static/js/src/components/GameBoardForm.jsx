@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Emitters from '../emitters';
+
+import { emitCreateBoard } from '../emitters';
 
 
 function mapStateToProps(state) {
@@ -13,7 +14,7 @@ function mapStateToProps(state) {
 }
 
 
-let ChangeBoardForm = React.createClass({
+let GameBoardForm = React.createClass({
   propTypes: {
     gameInProgress: React.PropTypes.bool.isRequired,
     numRows: React.PropTypes.number,
@@ -39,7 +40,7 @@ let ChangeBoardForm = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
 
-    Emitters.createBoard({
+    emitCreateBoard({
       numRows: this.state.numRows,
       numColumns: this.state.numColumns,
       numToWin: this.state.numToWin,
@@ -100,9 +101,9 @@ let ChangeBoardForm = React.createClass({
 });
 
 
-ChangeBoardForm = connect(
+GameBoardForm = connect(
   mapStateToProps
-)(ChangeBoardForm);
+)(GameBoardForm);
 
 
-export default ChangeBoardForm;
+export default GameBoardForm;
