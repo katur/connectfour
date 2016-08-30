@@ -20,25 +20,20 @@ function mapStateToProps(state) {
 }
 
 
-let GameScreen = React.createClass({
-  propTypes: {
-    showRoom: React.PropTypes.bool.isRequired,
-    showFeedback: React.PropTypes.bool.isRequired,
-    showBoard: React.PropTypes.bool.isRequired,
-  },
-
-  render: function() {
+class GameScreen extends React.Component {
+  render() {
+    const { showRoom, showFeedback, showBoard } = this.props;
     return (
       <div id="game-screen">
         <GameTitle />
 
         <GameStartButton />
 
-        {this.props.showRoom && <GameRoom />}
+        {showRoom && <GameRoom />}
 
-        {this.props.showFeedback && <GameFeedback />}
+        {showFeedback && <GameFeedback />}
 
-        {this.props.showBoard &&
+        {showBoard &&
           <div id="game-board">
             <GameColumnButtons />
             <GameGrid />
@@ -51,13 +46,15 @@ let GameScreen = React.createClass({
         </div>
       </div>
     );
-  },
-});
+  }
+}
 
 
-GameScreen = connect(
-  mapStateToProps
-)(GameScreen);
+GameScreen.propTypes = {
+  showRoom: React.PropTypes.bool.isRequired,
+  showFeedback: React.PropTypes.bool.isRequired,
+  showBoard: React.PropTypes.bool.isRequired,
+}
 
 
-export default GameScreen;
+export default connect(mapStateToProps)(GameScreen);

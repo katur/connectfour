@@ -12,24 +12,22 @@ function mapStateToProps(state) {
 }
 
 
-let App = React.createClass({
-  propTypes: {
-    showGameScreen: React.PropTypes.bool.isRequired,
-  },
+class App extends React.Component {
+  render() {
+    const { showGameScreen } = this.props;
 
-  render: function() {
     return (
       <div>
-        {this.props.showGameScreen ? <GameScreen /> : <SetupScreen />}
+        {showGameScreen ? <GameScreen /> : <SetupScreen />}
       </div>
     );
-  },
-});
+  }
+}
 
 
-App = connect(
-  mapStateToProps
-)(App);
+App.propTypes = {
+  showGameScreen: React.PropTypes.bool.isRequired,
+}
 
 
-export default App;
+export default connect(mapStateToProps)(App);

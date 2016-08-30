@@ -4,8 +4,8 @@ import CreateRoomForm from './CreateRoomForm';
 import JoinRoomForm from './JoinRoomForm';
 
 
-const SetupScreen = React.createClass({
-  render: function() {
+class SetupScreen extends React.Component {
+  render() {
     return (
       <div id="setup-screen">
         <h1>Connect X</h1>
@@ -13,8 +13,8 @@ const SetupScreen = React.createClass({
         <JoinRoomForm />
       </div>
     );
-  },
-});
+  }
+}
 
 
 export default SetupScreen;
