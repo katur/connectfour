@@ -7,7 +7,7 @@ import JoinRoomForm from './JoinRoomForm';
 const SetupScreen = React.createClass({
   render: function() {
     return (
-      <div id='setup-screen'>
+      <div id="setup-screen">
         <h1>Connect X</h1>
         <CreateRoomForm />
         <JoinRoomForm />

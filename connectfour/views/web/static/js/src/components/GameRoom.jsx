@@ -16,7 +16,7 @@ let GameRoom = React.createClass({
 
   render: function() {
     return (
-      <div id='game-room'>
+      <div id="game-room">
         <table>
           <tbody>
             <tr>

@@ -49,18 +49,18 @@ let GameBoardForm = React.createClass({
 
   render: function() {
     return (
-      <div id='change-board'>
+      <div id="change-board">
         <form
-          action=''
-          method='post'
+          action=""
+          method="post"
           onSubmit={this._handleSubmit}
         >
           <dl>
             <dt>Num rows</dt>
             <dd>
               <input
-                type='text'
-                name='numRows'
+                type="text"
+                name="numRows"
                 value={this.state.numRows}
                 onChange={this._handleInput}
               />
@@ -69,8 +69,8 @@ let GameBoardForm = React.createClass({
             <dt>Num columns</dt>
             <dd>
               <input
-                type='text'
-                name='numColumns'
+                type="text"
+                name="numColumns"
                 value={this.state.numColumns}
                 onChange={this._handleInput}
               />
@@ -79,8 +79,8 @@ let GameBoardForm = React.createClass({
             <dt>Num to win</dt>
             <dd>
               <input
-                type='text'
-                name='numToWin'
+                type="text"
+                name="numToWin"
                 value={this.state.numToWin}
                 onChange={this._handleInput}
               />
@@ -89,7 +89,7 @@ let GameBoardForm = React.createClass({
           </dl>
 
           <button
-            type='submit'
+            type="submit"
             disabled={this.props.gameInProgress}
           >
             Change board

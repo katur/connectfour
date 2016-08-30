@@ -88,13 +88,13 @@ let JoinRoomForm = React.createClass({
     let usernameError;
 
     if (this.state.usernameError) {
-      usernameError = <span className='error'>{this.state.usernameError}</span>;
+      usernameError = <span className="error">{this.state.usernameError}</span>;
     }
 
     let roomError;
 
     if (this.state.roomError) {
-      roomError = <span className='error'>{this.state.roomError}</span>;
+      roomError = <span className="error">{this.state.roomError}</span>;
     }
 
     return (
@@ -102,23 +102,23 @@ let JoinRoomForm = React.createClass({
         <h3>Join a game room?</h3>
 
         <form
-          id='join-room-form'
-          action=''
-          method='post'
+          id="join-room-form"
+          action=""
+          method="post"
           onSubmit={this._handleSubmit}
         >
           <dl>
             <dt>
-              <label htmlFor='room'>
+              <label htmlFor="room">
                 Room ID
               </label>
             </dt>
 
             <dd>
               <input
-                type='text'
-                id='room'
-                name='room'
+                type="text"
+                id="room"
+                name="room"
                 value={this.state.room}
                 onChange={this._handleInput}
               />
@@ -127,16 +127,16 @@ let JoinRoomForm = React.createClass({
             </dd>
 
             <dt>
-              <label htmlFor='username'>
+              <label htmlFor="username">
                 Your username
               </label>
             </dt>
 
             <dd>
               <input
-                type='text'
-                id='username'
-                name='username'
+                type="text"
+                id="username"
+                name="username"
                 value={this.state.username}
                 onChange={this._handleInput}
               />
@@ -145,7 +145,7 @@ let JoinRoomForm = React.createClass({
             </dd>
           </dl>
 
-          <button type='submit'>Submit</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     );

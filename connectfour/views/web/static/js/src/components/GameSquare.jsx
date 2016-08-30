@@ -16,7 +16,7 @@ const GameSquare = React.createClass({
 
     return (
       <div
-        className='game-square-wrapper'
+        className="game-square-wrapper"
         style={this.props.style}
       >
         <div

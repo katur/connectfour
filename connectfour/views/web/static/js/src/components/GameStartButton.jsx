@@ -22,14 +22,14 @@ let GameStartButton = React.createClass({
 
   render: function() {
     return (
-      <div id='game-start'>
+      <div id="game-start">
         <form
-          action=''
-          method='post'
+          action=""
+          method="post"
           onSubmit={this._handleSubmit}
         >
           <button
-            type='submit'
+            type="submit"
             disabled={this.props.gameInProgress}
           >
             Start Game

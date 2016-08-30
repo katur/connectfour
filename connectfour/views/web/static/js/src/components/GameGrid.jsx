@@ -63,7 +63,7 @@ let GameGrid = React.createClass({
     }
 
     return (
-      <div id='game-grid'>
+      <div id="game-grid">
         {rows}
       </div>
     );

@@ -17,7 +17,7 @@ let GamePlayers = React.createClass({
     const next = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
 
     return (
-      <div id='game-players'>
+      <div id="game-players">
         <table>
           <tbody>
             {this.props.players.map(function(player, i) {
@@ -25,7 +25,7 @@ let GamePlayers = React.createClass({
                 <tr
                   key={player.pk}
                   className={
-                    `${(player.pk !== next) ? 'current' : 'not-current'}`
+                    `${(player.pk === next) ? 'current' : 'not-current'}`
                   }
                 >
 

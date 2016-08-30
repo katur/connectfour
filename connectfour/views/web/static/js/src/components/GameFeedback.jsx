@@ -16,7 +16,7 @@ let GameFeedback = React.createClass({
 
   render: function() {
     return (
-      <div id='game-feedback'>
+      <div id="game-feedback">
         {this.props.feedback}
       </div>
     );

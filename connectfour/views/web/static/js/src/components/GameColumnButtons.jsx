@@ -48,7 +48,7 @@ let GameColumnButtons = React.createClass({
     }
 
     return (
-      <div id='game-column-buttons'>{row}</div>
+      <div id="game-column-buttons">{row}</div>
     );
   },
 });

@@ -57,7 +57,7 @@ const CreateRoomForm = React.createClass({
     let usernameError;
 
     if (this.state.usernameError) {
-      usernameError = <span className='error'>Username required</span>;
+      usernameError = <span className="error">Username required</span>;
     }
 
     return (
@@ -65,23 +65,23 @@ const CreateRoomForm = React.createClass({
         <h3>Create a game room?</h3>
 
         <form
-          id='create-room-form'
-          action=''
-          method='post'
+          id="create-room-form"
+          action=""
+          method="post"
           onSubmit={this._handleSubmit}
         >
           <dl>
             <dt>
-              <label htmlFor='username'>
+              <label htmlFor="username">
                 Your username
               </label>
             </dt>
 
             <dd>
               <input
-                type='text'
-                id='username'
-                name='username'
+                type="text"
+                id="username"
+                name="username"
                 value={this.state.username}
                 onChange={this._handleInput}
               />
@@ -90,7 +90,7 @@ const CreateRoomForm = React.createClass({
             </dd>
           </dl>
 
-          <button type='submit'>Submit</button>
+          <button type="submit">Submit</button>
         </form>
       </div>
     );

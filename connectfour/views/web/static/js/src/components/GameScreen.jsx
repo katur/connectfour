@@ -29,7 +29,7 @@ let GameScreen = React.createClass({
 
   render: function() {
     return (
-      <div id='game-screen'>
+      <div id="game-screen">
         <GameTitle />
 
         <GameStartButton />
@@ -39,13 +39,13 @@ let GameScreen = React.createClass({
         {this.props.showFeedback && <GameFeedback />}
 
         {this.props.showBoard &&
-          <div id='game-board'>
+          <div id="game-board">
             <GameColumnButtons />
             <GameGrid />
           </div>
         }
 
-        <div id='game-control'>
+        <div id="game-control">
           <GamePlayers />
           <GameBoardForm />
         </div>
