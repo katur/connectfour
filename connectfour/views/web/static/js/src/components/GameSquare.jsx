@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 
 const GameSquare = React.createClass({
@@ -11,12 +11,12 @@ const GameSquare = React.createClass({
     let innerClassName = `game-square color-${this.props.color}`;
 
     if (this.props.blinking) {
-      innerClassName += " blinking";
+      innerClassName += ' blinking';
     }
 
     return (
       <div
-        className="game-square-wrapper"
+        className='game-square-wrapper'
         style={this.props.style}
       >
         <div

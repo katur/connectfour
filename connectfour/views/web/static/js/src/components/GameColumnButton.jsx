@@ -1,5 +1,5 @@
-import React from "react";
-import Emitters from "../emitters";
+import React from 'react';
+import Emitters from '../emitters';
 
 
 const GameColumnButton = React.createClass({
@@ -19,16 +19,16 @@ const GameColumnButton = React.createClass({
   render: function() {
     return (
       <form
-        action=""
-        method="post"
+        action=''
+        method='post'
         onSubmit={this._handleSubmit}
       >
         <div
-          className="game-column-button-wrapper"
+          className='game-column-button-wrapper'
           style={this.props.style}
         >
           <button
-            className="game-column-button"
+            className='game-column-button'
             disabled={this.props.disabled}
           >
             Drop

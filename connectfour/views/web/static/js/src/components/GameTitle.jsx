@@ -1,5 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
 
 function mapStateToProps(state) {
@@ -18,7 +18,7 @@ let GameTitle = React.createClass({
     return (
       <div>
         <h1>
-          Connect {this.props.numToWin || "X"}
+          Connect {this.props.numToWin || 'X'}
         </h1>
       </div>
     );

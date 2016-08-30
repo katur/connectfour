@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import GameSquare from "./GameSquare";
+import React from 'react';
+import { connect } from 'react-redux';
+import GameSquare from './GameSquare';
 
 
 function mapStateToProps(state) {
@@ -24,7 +24,7 @@ let GameGrid = React.createClass({
   render: function() {
     const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
-    const size = percentage + "vmin";
+    const size = percentage + 'vmin';
 
     let rows = [];
 
@@ -32,7 +32,7 @@ let GameGrid = React.createClass({
       let row = [];
 
       for (let j = 0; j < this.props.numColumns; j++) {
-        const clear = (j === 0) ? "left" : "none";
+        const clear = (j === 0) ? 'left' : 'none';
 
         // TODO: restructure blinking to not require this iteration (set?)
         let blinking = false;
@@ -62,7 +62,7 @@ let GameGrid = React.createClass({
     }
 
     return (
-      <div id="game-grid">
+      <div id='game-grid'>
         {rows}
       </div>
     );

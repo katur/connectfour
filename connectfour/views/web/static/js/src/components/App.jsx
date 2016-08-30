@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import SetupScreen from "./SetupScreen";
-import GameScreen from "./GameScreen";
+import React from 'react';
+import { connect } from 'react-redux';
+import SetupScreen from './SetupScreen';
+import GameScreen from './GameScreen';
 
 
 function mapStateToProps(state) {

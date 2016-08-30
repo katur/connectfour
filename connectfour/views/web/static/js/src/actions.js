@@ -2,25 +2,25 @@
  * action types
  */
 
-export const SET_IDS = "SET_IDS";
-export const SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
+export const SET_IDS = 'SET_IDS';
+export const SET_ROOM_DOES_NOT_EXIST = 'SET_ROOM_DOES_NOT_EXIST';
 
-export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
-export const UPDATE_PLAYER = "UPDATE_PLAYER";
-export const ADD_PLAYER = "ADD_PLAYER";
-export const REMOVE_PLAYER = "REMOVE_PLAYER";
-export const SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
+export const UPDATE_PLAYERS = 'UPDATE_PLAYERS';
+export const UPDATE_PLAYER = 'UPDATE_PLAYER';
+export const ADD_PLAYER = 'ADD_PLAYER';
+export const REMOVE_PLAYER = 'REMOVE_PLAYER';
+export const SET_NEXT_PLAYER = 'SET_NEXT_PLAYER';
 
-export const UPDATE_BOARD = "UPDATE_BOARD";
-export const RESET_BOARD = "RESET_BOARD";
-export const COLOR_SQUARE = "COLOR_SQUARE";
-export const BLINK_SQUARES = "BLINK_SQUARES";
-export const UNBLINK_SQUARES = "UNBLINK_SQUARES";
+export const UPDATE_BOARD = 'UPDATE_BOARD';
+export const RESET_BOARD = 'RESET_BOARD';
+export const COLOR_SQUARE = 'COLOR_SQUARE';
+export const BLINK_SQUARES = 'BLINK_SQUARES';
+export const UNBLINK_SQUARES = 'UNBLINK_SQUARES';
 
-export const START_GAME = "START_GAME";
-export const STOP_GAME = "STOP_GAME";
-export const REPORT_DRAW = "REPORT_DRAW";
-export const REPORT_TRY_AGAIN = "REPORT_TRY_AGAIN";
+export const START_GAME = 'START_GAME';
+export const STOP_GAME = 'STOP_GAME';
+export const REPORT_DRAW = 'REPORT_DRAW';
+export const REPORT_TRY_AGAIN = 'REPORT_TRY_AGAIN';
 
 
 /*

@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var _socket = __webpack_require__(1);
 
@@ -86,20 +86,20 @@
 	  _reactRedux.Provider,
 	  { store: store },
 	  _react2.default.createElement(_App2.default, null)
-	), document.getElementById("react-root"));
+	), document.getElementById('react-root'));
 
 	//////////////////////////
 	// Connect to WebSocket //
 	//////////////////////////
 
-	var WS_URL = "http://" + document.domain + ":" + location.port;
+	var WS_URL = 'http://' + document.domain + ':' + location.port;
 	window.ws = (0, _socket2.default)(WS_URL);
 
 	/////////////////////////////////////////////////////////////////
 	// Respond to WebSocket events (these mostly update the store) //
 	/////////////////////////////////////////////////////////////////
 
-	window.ws.on("roomJoined", function (data) {
+	window.ws.on('roomJoined', function (data) {
 	  store.dispatch((0, _actions.setIDs)(data.pk, data.room));
 
 	  if (data.board) {
@@ -111,38 +111,38 @@
 	  }
 	});
 
-	window.ws.on("roomDoesNotExist", function () {
+	window.ws.on('roomDoesNotExist', function () {
 	  store.dispatch((0, _actions.setRoomDoesNotExist)());
 	});
 
-	window.ws.on("playerAdded", function (data) {
+	window.ws.on('playerAdded', function (data) {
 	  store.dispatch((0, _actions.addPlayer)(data.player));
 	});
 
-	window.ws.on("playerRemoved", function (data) {
+	window.ws.on('playerRemoved', function (data) {
 	  store.dispatch((0, _actions.removePlayer)(data.player));
 	});
 
-	window.ws.on("nextPlayer", function (data) {
+	window.ws.on('nextPlayer', function (data) {
 	  store.dispatch((0, _actions.setNextPlayer)(data.player));
 	});
 
-	window.ws.on("boardCreated", function (data) {
+	window.ws.on('boardCreated', function (data) {
 	  store.dispatch((0, _actions.unblinkSquares)());
 	  store.dispatch((0, _actions.updateBoard)(data.board));
 	});
 
-	window.ws.on("colorPlayed", function (data) {
+	window.ws.on('colorPlayed', function (data) {
 	  store.dispatch((0, _actions.colorSquare)(data.color, data.position));
 	});
 
-	window.ws.on("gameStarted", function () {
+	window.ws.on('gameStarted', function () {
 	  store.dispatch((0, _actions.unblinkSquares)());
 	  store.dispatch((0, _actions.resetBoard)());
 	  store.dispatch((0, _actions.startGame)());
 	});
 
-	window.ws.on("gameWon", function (data) {
+	window.ws.on('gameWon', function (data) {
 	  store.dispatch((0, _actions.stopGame)());
 	  store.dispatch((0, _actions.updatePlayers)(data.players));
 	  store.dispatch((0, _actions.blinkSquares)(data.winningPositions));
@@ -151,17 +151,17 @@
 	  // store.dispatch(updatePlayer(data.winner));
 	});
 
-	window.ws.on("gameDraw", function (data) {
+	window.ws.on('gameDraw', function (data) {
 	  store.dispatch((0, _actions.stopGame)());
 	  store.dispatch((0, _actions.updatePlayers)(data.players));
 	  store.dispatch((0, _actions.reportDraw)());
 	});
 
-	window.ws.on("tryAgain", function (data) {
+	window.ws.on('tryAgain', function (data) {
 	  store.dispatch((0, _actions.reportTryAgain)(data.player, data.reason));
 	});
 
-	window.ws.on("message", function (message) {
+	window.ws.on('message', function (message) {
 	  console.log(message);
 	});
 
@@ -29194,7 +29194,7 @@
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -29223,7 +29223,7 @@
 	}
 
 	var App = _react2.default.createClass({
-	  displayName: "App",
+	  displayName: 'App',
 
 	  propTypes: {
 	    showGameScreen: _react2.default.PropTypes.bool.isRequired
@@ -29231,7 +29231,7 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
+	      'div',
 	      null,
 	      this.props.showGameScreen ? _react2.default.createElement(_GameScreen2.default, null) : _react2.default.createElement(_SetupScreen2.default, null)
 	    );
@@ -30798,7 +30798,7 @@
 /* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -30819,16 +30819,16 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SetupScreen = _react2.default.createClass({
-	  displayName: "SetupScreen",
+	  displayName: 'SetupScreen',
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "setup-screen" },
+	      'div',
+	      { id: 'setup-screen' },
 	      _react2.default.createElement(
-	        "h1",
+	        'h1',
 	        null,
-	        "Connect X"
+	        'Connect X'
 	      ),
 	      _react2.default.createElement(_CreateRoomForm2.default, null),
 	      _react2.default.createElement(_JoinRoomForm2.default, null)
@@ -30842,7 +30842,7 @@
 /* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -30861,11 +30861,11 @@
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	var CreateRoomForm = _react2.default.createClass({
-	  displayName: "CreateRoomForm",
+	  displayName: 'CreateRoomForm',
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      username: "",
+	      username: '',
 	      usernameError: null
 	    };
 	  },
@@ -30879,7 +30879,7 @@
 
 	    if (!this.state.username) {
 	      this.setState({
-	        usernameError: "Username required"
+	        usernameError: 'Username required'
 	      });
 	      return;
 	    }
@@ -30890,7 +30890,7 @@
 
 	    /*
 	    this.setState({
-	      usernameError: this.state.username ? null : "Username required",
+	      usernameError: this.state.username ? null : 'Username required',
 	    });
 	     if (this.state.usernameError) {
 	      return;
@@ -30912,47 +30912,47 @@
 	    var usernameError;
 	    if (this.state.usernameError) {
 	      usernameError = _react2.default.createElement(
-	        "span",
-	        { className: "error" },
-	        "Username required"
+	        'span',
+	        { className: 'error' },
+	        'Username required'
 	      );
 	    }
 
 	    return _react2.default.createElement(
-	      "div",
+	      'div',
 	      null,
 	      _react2.default.createElement(
-	        "h3",
+	        'h3',
 	        null,
-	        "Create a game room?"
+	        'Create a game room?'
 	      ),
 	      _react2.default.createElement(
-	        "form",
+	        'form',
 	        {
-	          id: "create-room-form",
-	          action: "",
-	          method: "post",
+	          id: 'create-room-form',
+	          action: '',
+	          method: 'post',
 	          onSubmit: this._handleSubmit
 	        },
 	        _react2.default.createElement(
-	          "dl",
+	          'dl',
 	          null,
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
 	            _react2.default.createElement(
-	              "label",
-	              { htmlFor: "username" },
-	              "Your username"
+	              'label',
+	              { htmlFor: 'username' },
+	              'Your username'
 	            )
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              id: "username",
-	              name: "username",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              id: 'username',
+	              name: 'username',
 	              value: this.state.username,
 	              onChange: this._handleInput
 	            }),
@@ -30960,9 +30960,9 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "button",
-	          { type: "submit" },
-	          "Submit"
+	          'button',
+	          { type: 'submit' },
+	          'Submit'
 	        )
 	      )
 	    );
@@ -30975,7 +30975,7 @@
 /* 251 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -30985,9 +30985,9 @@
 	    var username = _ref.username;
 	    var room = _ref.room;
 
-	    window.ws.emit("addUser", {
-	      "username": username,
-	      "room": room
+	    window.ws.emit('addUser', {
+	      'username': username,
+	      'room': room
 	    });
 	  },
 
@@ -30996,22 +30996,22 @@
 	    var numColumns = _ref2.numColumns;
 	    var numToWin = _ref2.numToWin;
 
-	    window.ws.emit("createBoard", {
-	      "numRows": numRows,
-	      "numColumns": numColumns,
-	      "numToWin": numToWin
+	    window.ws.emit('createBoard', {
+	      'numRows': numRows,
+	      'numColumns': numColumns,
+	      'numToWin': numToWin
 	    });
 	  },
 
 	  startGame: function startGame() {
-	    window.ws.emit("startGame", {});
+	    window.ws.emit('startGame', {});
 	  },
 
 	  play: function play(_ref3) {
 	    var column = _ref3.column;
 
-	    window.ws.emit("play", {
-	      "column": column
+	    window.ws.emit('play', {
+	      'column': column
 	    });
 	  }
 	};
@@ -31022,7 +31022,7 @@
 /* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31049,7 +31049,7 @@
 	}
 
 	var JoinRoomForm = _react2.default.createClass({
-	  displayName: "JoinRoomForm",
+	  displayName: 'JoinRoomForm',
 
 	  propTypes: {
 	    roomDoesNotExist: _react2.default.PropTypes.bool.isRequired
@@ -31057,9 +31057,9 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      username: "",
+	      username: '',
 	      usernameError: null,
-	      room: "",
+	      room: '',
 	      roomError: null
 	    };
 	  },
@@ -31073,12 +31073,12 @@
 
 	    if (!this.state.room) {
 	      this.setState({
-	        roomError: "Room required"
+	        roomError: 'Room required'
 	      });
 	      return;
 	    } else if (this.props.roomDoesNotExist) {
 	      this.setState({
-	        roomError: "Room does not exist"
+	        roomError: 'Room does not exist'
 	      });
 	      return;
 	    } else {
@@ -31089,7 +31089,7 @@
 
 	    if (!this.state.username) {
 	      this.setState({
-	        usernameError: "Username required"
+	        usernameError: 'Username required'
 	      });
 	      return;
 	    } else {
@@ -31100,8 +31100,8 @@
 
 	    /*
 	    this.setState({
-	      usernameError: this.state.username ? null : "Username required",
-	      roomError: this.state.room ? null : "Room required",
+	      usernameError: this.state.username ? null : 'Username required',
+	      roomError: this.state.room ? null : 'Room required',
 	    });
 	     if (this.state.usernameError || this.state.roomError) {
 	      return;
@@ -31118,8 +31118,8 @@
 	    var usernameError;
 	    if (this.state.usernameError) {
 	      usernameError = _react2.default.createElement(
-	        "span",
-	        { className: "error" },
+	        'span',
+	        { className: 'error' },
 	        this.state.usernameError
 	      );
 	    }
@@ -31127,68 +31127,68 @@
 	    var roomError;
 	    if (this.state.roomError) {
 	      roomError = _react2.default.createElement(
-	        "span",
-	        { className: "error" },
+	        'span',
+	        { className: 'error' },
 	        this.state.roomError
 	      );
 	    }
 
 	    return _react2.default.createElement(
-	      "div",
+	      'div',
 	      null,
 	      _react2.default.createElement(
-	        "h3",
+	        'h3',
 	        null,
-	        "Join a game room?"
+	        'Join a game room?'
 	      ),
 	      _react2.default.createElement(
-	        "form",
+	        'form',
 	        {
-	          id: "join-room-form",
-	          action: "",
-	          method: "post",
+	          id: 'join-room-form',
+	          action: '',
+	          method: 'post',
 	          onSubmit: this._handleSubmit
 	        },
 	        _react2.default.createElement(
-	          "dl",
+	          'dl',
 	          null,
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
 	            _react2.default.createElement(
-	              "label",
-	              { htmlFor: "room" },
-	              "Room ID"
+	              'label',
+	              { htmlFor: 'room' },
+	              'Room ID'
 	            )
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              id: "room",
-	              name: "room",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              id: 'room',
+	              name: 'room',
 	              value: this.state.room,
 	              onChange: this._handleInput
 	            }),
 	            roomError
 	          ),
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
 	            _react2.default.createElement(
-	              "label",
-	              { htmlFor: "username" },
-	              "Your username"
+	              'label',
+	              { htmlFor: 'username' },
+	              'Your username'
 	            )
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              id: "username",
-	              name: "username",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              id: 'username',
+	              name: 'username',
 	              value: this.state.username,
 	              onChange: this._handleInput
 	            }),
@@ -31196,9 +31196,9 @@
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "button",
-	          { type: "submit" },
-	          "Submit"
+	          'button',
+	          { type: 'submit' },
+	          'Submit'
 	        )
 	      )
 	    );
@@ -31213,7 +31213,7 @@
 /* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31268,7 +31268,7 @@
 	}
 
 	var GameScreen = _react2.default.createClass({
-	  displayName: "GameScreen",
+	  displayName: 'GameScreen',
 
 	  propTypes: {
 	    showRoom: _react2.default.PropTypes.bool.isRequired,
@@ -31278,21 +31278,21 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-screen" },
+	      'div',
+	      { id: 'game-screen' },
 	      _react2.default.createElement(_GameTitle2.default, null),
 	      _react2.default.createElement(_GameStartButton2.default, null),
 	      this.props.showRoom && _react2.default.createElement(_GameRoom2.default, null),
 	      this.props.showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
 	      this.props.showBoard && _react2.default.createElement(
-	        "div",
-	        { id: "game-board" },
+	        'div',
+	        { id: 'game-board' },
 	        _react2.default.createElement(_GameColumnButtons2.default, null),
 	        _react2.default.createElement(_GameGrid2.default, null)
 	      ),
 	      _react2.default.createElement(
-	        "div",
-	        { id: "game-control" },
+	        'div',
+	        { id: 'game-control' },
 	        _react2.default.createElement(_GamePlayers2.default, null),
 	        _react2.default.createElement(_GameBoardForm2.default, null)
 	      )
@@ -31308,7 +31308,7 @@
 /* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31329,7 +31329,7 @@
 	}
 
 	var GameTitle = _react2.default.createClass({
-	  displayName: "GameTitle",
+	  displayName: 'GameTitle',
 
 	  propTypes: {
 	    numToWin: _react2.default.PropTypes.number
@@ -31337,13 +31337,13 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
+	      'div',
 	      null,
 	      _react2.default.createElement(
-	        "h1",
+	        'h1',
 	        null,
-	        "Connect ",
-	        this.props.numToWin || "X"
+	        'Connect ',
+	        this.props.numToWin || 'X'
 	      )
 	    );
 	  }
@@ -31357,7 +31357,7 @@
 /* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31382,7 +31382,7 @@
 	}
 
 	var GameStartButton = _react2.default.createClass({
-	  displayName: "GameStartButton",
+	  displayName: 'GameStartButton',
 
 	  propTypes: {
 	    gameInProgress: _react2.default.PropTypes.bool.isRequired
@@ -31395,22 +31395,22 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-start" },
+	      'div',
+	      { id: 'game-start' },
 	      _react2.default.createElement(
-	        "form",
+	        'form',
 	        {
-	          action: "",
-	          method: "post",
+	          action: '',
+	          method: 'post',
 	          onSubmit: this._handleSubmit
 	        },
 	        _react2.default.createElement(
-	          "button",
+	          'button',
 	          {
-	            type: "submit",
+	            type: 'submit',
 	            disabled: this.props.gameInProgress
 	          },
-	          "Start Game"
+	          'Start Game'
 	        )
 	      )
 	    );
@@ -31425,7 +31425,7 @@
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31446,7 +31446,7 @@
 	}
 
 	var GameRoom = _react2.default.createClass({
-	  displayName: "GameRoom",
+	  displayName: 'GameRoom',
 
 	  propTypes: {
 	    room: _react2.default.PropTypes.string.isRequired
@@ -31454,24 +31454,24 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-room" },
+	      'div',
+	      { id: 'game-room' },
 	      _react2.default.createElement(
-	        "table",
+	        'table',
 	        null,
 	        _react2.default.createElement(
-	          "tbody",
+	          'tbody',
 	          null,
 	          _react2.default.createElement(
-	            "tr",
+	            'tr',
 	            null,
 	            _react2.default.createElement(
-	              "td",
+	              'td',
 	              null,
-	              "Room:"
+	              'Room:'
 	            ),
 	            _react2.default.createElement(
-	              "td",
+	              'td',
 	              null,
 	              this.props.room
 	            )
@@ -31490,7 +31490,7 @@
 /* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31511,7 +31511,7 @@
 	}
 
 	var GameFeedback = _react2.default.createClass({
-	  displayName: "GameFeedback",
+	  displayName: 'GameFeedback',
 
 	  propTypes: {
 	    feedback: _react2.default.PropTypes.string.isRequired
@@ -31519,8 +31519,8 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-feedback" },
+	      'div',
+	      { id: 'game-feedback' },
 	      this.props.feedback
 	    );
 	  }
@@ -31534,7 +31534,7 @@
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31563,7 +31563,7 @@
 	}
 
 	var GameColumnButtons = _react2.default.createClass({
-	  displayName: "GameColumnButtons",
+	  displayName: 'GameColumnButtons',
 
 	  propTypes: {
 	    numRows: _react2.default.PropTypes.number.isRequired,
@@ -31575,7 +31575,7 @@
 
 	  render: function render() {
 	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + "vmin";
+	    var size = percentage + 'vmin';
 
 	    var row = [];
 	    var enabled = this.props.gameInProgress && this.props.nextPlayer && this.props.pk === this.props.nextPlayer.pk;
@@ -31592,8 +31592,8 @@
 	    }
 
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-column-buttons" },
+	      'div',
+	      { id: 'game-column-buttons' },
 	      row
 	    );
 	  }
@@ -31607,7 +31607,7 @@
 /* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31624,7 +31624,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var GameColumnButton = _react2.default.createClass({
-	  displayName: "GameColumnButton",
+	  displayName: 'GameColumnButton',
 
 	  propTypes: {
 	    disabled: _react2.default.PropTypes.bool.isRequired,
@@ -31641,25 +31641,25 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "form",
+	      'form',
 	      {
-	        action: "",
-	        method: "post",
+	        action: '',
+	        method: 'post',
 	        onSubmit: this._handleSubmit
 	      },
 	      _react2.default.createElement(
-	        "div",
+	        'div',
 	        {
-	          className: "game-column-button-wrapper",
+	          className: 'game-column-button-wrapper',
 	          style: this.props.style
 	        },
 	        _react2.default.createElement(
-	          "button",
+	          'button',
 	          {
-	            className: "game-column-button",
+	            className: 'game-column-button',
 	            disabled: this.props.disabled
 	          },
-	          "Drop"
+	          'Drop'
 	        )
 	      )
 	    );
@@ -31672,7 +31672,7 @@
 /* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31700,7 +31700,7 @@
 	}
 
 	var GameGrid = _react2.default.createClass({
-	  displayName: "GameGrid",
+	  displayName: 'GameGrid',
 
 	  propTypes: {
 	    numRows: _react2.default.PropTypes.number.isRequired,
@@ -31711,7 +31711,7 @@
 
 	  render: function render() {
 	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + "vmin";
+	    var size = percentage + 'vmin';
 
 	    var rows = [];
 
@@ -31719,7 +31719,7 @@
 	      var row = [];
 
 	      for (var j = 0; j < this.props.numColumns; j++) {
-	        var clear = j === 0 ? "left" : "none";
+	        var clear = j === 0 ? 'left' : 'none';
 
 	        // TODO: restructure blinking to not require this iteration (set?)
 	        var blinking = false;
@@ -31753,7 +31753,7 @@
 	        }
 
 	        row.push(_react2.default.createElement(_GameSquare2.default, {
-	          key: i + "-" + j,
+	          key: i + '-' + j,
 	          color: this.props.grid[i][j],
 	          blinking: blinking,
 	          style: {
@@ -31768,8 +31768,8 @@
 	    }
 
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-grid" },
+	      'div',
+	      { id: 'game-grid' },
 	      rows
 	    );
 	  }
@@ -31783,7 +31783,7 @@
 /* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31796,7 +31796,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var GameSquare = _react2.default.createClass({
-	  displayName: "GameSquare",
+	  displayName: 'GameSquare',
 
 	  propTypes: {
 	    blinking: _react2.default.PropTypes.bool.isRequired,
@@ -31804,19 +31804,19 @@
 	  },
 
 	  render: function render() {
-	    var innerClassName = "game-square color-" + this.props.color;
+	    var innerClassName = 'game-square color-' + this.props.color;
 
 	    if (this.props.blinking) {
-	      innerClassName += " blinking";
+	      innerClassName += ' blinking';
 	    }
 
 	    return _react2.default.createElement(
-	      "div",
+	      'div',
 	      {
-	        className: "game-square-wrapper",
+	        className: 'game-square-wrapper',
 	        style: this.props.style
 	      },
-	      _react2.default.createElement("div", {
+	      _react2.default.createElement('div', {
 	        className: innerClassName
 	      })
 	    );
@@ -31829,7 +31829,7 @@
 /* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31852,46 +31852,46 @@
 	}
 
 	var GamePlayers = _react2.default.createClass({
-	  displayName: "GamePlayers",
+	  displayName: 'GamePlayers',
 
 	  render: function render() {
 	    var you = this.props.pk;
 	    var next = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
 
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "game-players" },
+	      'div',
+	      { id: 'game-players' },
 	      _react2.default.createElement(
-	        "table",
+	        'table',
 	        null,
 	        _react2.default.createElement(
-	          "tbody",
+	          'tbody',
 	          null,
 	          this.props.players.map(function (player, i) {
 	            return _react2.default.createElement(
-	              "tr",
+	              'tr',
 	              {
 	                key: player.pk,
-	                className: "" + (player.pk === next ? "current" : "not-current")
+	                className: '' + (player.pk === next ? 'current' : 'not-current')
 	              },
 	              _react2.default.createElement(
-	                "td",
+	                'td',
 	                null,
-	                _react2.default.createElement("div", { className: "color-key color-" + player.color })
+	                _react2.default.createElement('div', { className: 'color-key color-' + player.color })
 	              ),
 	              _react2.default.createElement(
-	                "td",
+	                'td',
 	                null,
 	                player.name,
-	                player.pk === you ? " (you)" : ""
+	                player.pk === you ? ' (you)' : ''
 	              ),
 	              _react2.default.createElement(
-	                "td",
+	                'td',
 	                null,
 	                player.numWins,
-	                " wins / ",
+	                ' wins / ',
 	                player.numGames,
-	                " games"
+	                ' games'
 	              )
 	            );
 	          })
@@ -31909,7 +31909,7 @@
 /* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -31939,7 +31939,7 @@
 	}
 
 	var ChangeBoardForm = _react2.default.createClass({
-	  displayName: "ChangeBoardForm",
+	  displayName: 'ChangeBoardForm',
 
 	  propTypes: {
 	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
@@ -31950,10 +31950,10 @@
 
 	  getInitialState: function getInitialState() {
 	    return {
-	      numRows: "" + window.DEFAULT_ROWS,
-	      numColumns: "" + window.DEFAULT_COLUMNS,
-	      numToWin: "" + window.DEFAULT_TO_WIN,
-	      username: ""
+	      numRows: '' + window.DEFAULT_ROWS,
+	      numColumns: '' + window.DEFAULT_COLUMNS,
+	      numToWin: '' + window.DEFAULT_TO_WIN,
+	      username: ''
 	    };
 	  },
 
@@ -31973,71 +31973,71 @@
 
 	  render: function render() {
 	    return _react2.default.createElement(
-	      "div",
-	      { id: "change-board" },
+	      'div',
+	      { id: 'change-board' },
 	      _react2.default.createElement(
-	        "form",
+	        'form',
 	        {
-	          action: "",
-	          method: "post",
+	          action: '',
+	          method: 'post',
 	          onSubmit: this._handleSubmit
 	        },
 	        _react2.default.createElement(
-	          "dl",
+	          'dl',
 	          null,
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
-	            "Num rows"
+	            'Num rows'
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numRows",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              name: 'numRows',
 	              value: this.state.numRows,
 	              onChange: this._handleInput
 	            })
 	          ),
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
-	            "Num columns"
+	            'Num columns'
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numColumns",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              name: 'numColumns',
 	              value: this.state.numColumns,
 	              onChange: this._handleInput
 	            })
 	          ),
 	          _react2.default.createElement(
-	            "dt",
+	            'dt',
 	            null,
-	            "Num to win"
+	            'Num to win'
 	          ),
 	          _react2.default.createElement(
-	            "dd",
+	            'dd',
 	            null,
-	            _react2.default.createElement("input", {
-	              type: "text",
-	              name: "numToWin",
+	            _react2.default.createElement('input', {
+	              type: 'text',
+	              name: 'numToWin',
 	              value: this.state.numToWin,
 	              onChange: this._handleInput
 	            })
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "button",
+	          'button',
 	          {
-	            type: "submit",
+	            type: 'submit',
 	            disabled: this.props.gameInProgress
 	          },
-	          "Change board"
+	          'Change board'
 	        )
 	      )
 	    );
@@ -32052,7 +32052,7 @@
 /* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -32068,7 +32068,7 @@
 	  roomDoesNotExist: false,
 
 	  gameInProgress: false,
-	  feedback: "",
+	  feedback: '',
 
 	  grid: [[]],
 	  blinkingSquares: [],
@@ -32187,12 +32187,12 @@
 
 	    case _actions.REPORT_DRAW:
 	      return update(state, {
-	        feedback: "Game ended in a draw"
+	        feedback: 'Game ended in a draw'
 	      });
 
 	    case _actions.REPORT_TRY_AGAIN:
 	      return update(state, {
-	        feedback: action.player.name + " try again (" + action.reason + ")"
+	        feedback: action.player.name + ' try again (' + action.reason + ')'
 	      });
 
 	    default:
@@ -32206,7 +32206,7 @@
 /* 265 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -32231,25 +32231,25 @@
 	 * action types
 	 */
 
-	var SET_IDS = exports.SET_IDS = "SET_IDS";
-	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = "SET_ROOM_DOES_NOT_EXIST";
+	var SET_IDS = exports.SET_IDS = 'SET_IDS';
+	var SET_ROOM_DOES_NOT_EXIST = exports.SET_ROOM_DOES_NOT_EXIST = 'SET_ROOM_DOES_NOT_EXIST';
 
-	var UPDATE_PLAYERS = exports.UPDATE_PLAYERS = "UPDATE_PLAYERS";
-	var UPDATE_PLAYER = exports.UPDATE_PLAYER = "UPDATE_PLAYER";
-	var ADD_PLAYER = exports.ADD_PLAYER = "ADD_PLAYER";
-	var REMOVE_PLAYER = exports.REMOVE_PLAYER = "REMOVE_PLAYER";
-	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = "SET_NEXT_PLAYER";
+	var UPDATE_PLAYERS = exports.UPDATE_PLAYERS = 'UPDATE_PLAYERS';
+	var UPDATE_PLAYER = exports.UPDATE_PLAYER = 'UPDATE_PLAYER';
+	var ADD_PLAYER = exports.ADD_PLAYER = 'ADD_PLAYER';
+	var REMOVE_PLAYER = exports.REMOVE_PLAYER = 'REMOVE_PLAYER';
+	var SET_NEXT_PLAYER = exports.SET_NEXT_PLAYER = 'SET_NEXT_PLAYER';
 
-	var UPDATE_BOARD = exports.UPDATE_BOARD = "UPDATE_BOARD";
-	var RESET_BOARD = exports.RESET_BOARD = "RESET_BOARD";
-	var COLOR_SQUARE = exports.COLOR_SQUARE = "COLOR_SQUARE";
-	var BLINK_SQUARES = exports.BLINK_SQUARES = "BLINK_SQUARES";
-	var UNBLINK_SQUARES = exports.UNBLINK_SQUARES = "UNBLINK_SQUARES";
+	var UPDATE_BOARD = exports.UPDATE_BOARD = 'UPDATE_BOARD';
+	var RESET_BOARD = exports.RESET_BOARD = 'RESET_BOARD';
+	var COLOR_SQUARE = exports.COLOR_SQUARE = 'COLOR_SQUARE';
+	var BLINK_SQUARES = exports.BLINK_SQUARES = 'BLINK_SQUARES';
+	var UNBLINK_SQUARES = exports.UNBLINK_SQUARES = 'UNBLINK_SQUARES';
 
-	var START_GAME = exports.START_GAME = "START_GAME";
-	var STOP_GAME = exports.STOP_GAME = "STOP_GAME";
-	var REPORT_DRAW = exports.REPORT_DRAW = "REPORT_DRAW";
-	var REPORT_TRY_AGAIN = exports.REPORT_TRY_AGAIN = "REPORT_TRY_AGAIN";
+	var START_GAME = exports.START_GAME = 'START_GAME';
+	var STOP_GAME = exports.STOP_GAME = 'STOP_GAME';
+	var REPORT_DRAW = exports.REPORT_DRAW = 'REPORT_DRAW';
+	var REPORT_TRY_AGAIN = exports.REPORT_TRY_AGAIN = 'REPORT_TRY_AGAIN';
 
 	/*
 	 * action creators

@@ -1,13 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
-import GameTitle from "./GameTitle";
-import GameStartButton from "./GameStartButton";
-import GameRoom from "./GameRoom";
-import GameFeedback from "./GameFeedback";
-import GameColumnButtons from "./GameColumnButtons";
-import GameGrid from "./GameGrid";
-import GamePlayers from "./GamePlayers";
-import GameBoardForm from "./GameBoardForm";
+import React from 'react';
+import { connect } from 'react-redux';
+import GameTitle from './GameTitle';
+import GameStartButton from './GameStartButton';
+import GameRoom from './GameRoom';
+import GameFeedback from './GameFeedback';
+import GameColumnButtons from './GameColumnButtons';
+import GameGrid from './GameGrid';
+import GamePlayers from './GamePlayers';
+import GameBoardForm from './GameBoardForm';
 
 
 function mapStateToProps(state) {
@@ -28,7 +28,7 @@ let GameScreen = React.createClass({
 
   render: function() {
     return (
-      <div id="game-screen">
+      <div id='game-screen'>
         <GameTitle />
 
         <GameStartButton />
@@ -38,13 +38,13 @@ let GameScreen = React.createClass({
         {this.props.showFeedback && <GameFeedback />}
 
         {this.props.showBoard &&
-          <div id="game-board">
+          <div id='game-board'>
             <GameColumnButtons />
             <GameGrid />
           </div>
         }
 
-        <div id="game-control">
+        <div id='game-control'>
           <GamePlayers />
           <GameBoardForm />
         </div>

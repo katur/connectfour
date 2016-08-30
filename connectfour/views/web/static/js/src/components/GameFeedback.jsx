@@ -1,5 +1,5 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 
 
 function mapStateToProps(state) {
@@ -16,7 +16,7 @@ let GameFeedback = React.createClass({
 
   render: function() {
     return (
-      <div id="game-feedback">
+      <div id='game-feedback'>
         {this.props.feedback}
       </div>
     );

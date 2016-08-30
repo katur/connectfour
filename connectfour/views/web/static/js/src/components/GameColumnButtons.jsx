@@ -1,6 +1,6 @@
-import React from "react";
-import { connect } from "react-redux";
-import GameColumnButton from "./GameColumnButton";
+import React from 'react';
+import { connect } from 'react-redux';
+import GameColumnButton from './GameColumnButton';
 
 
 function mapStateToProps(state) {
@@ -25,7 +25,7 @@ let GameColumnButtons = React.createClass({
   render: function() {
     const percentage = 80.0 / Math.max(this.props.numRows,
                                        this.props.numColumns);
-    const size = percentage + "vmin";
+    const size = percentage + 'vmin';
 
     let row = [];
     let enabled = this.props.gameInProgress && this.props.nextPlayer &&
@@ -45,7 +45,7 @@ let GameColumnButtons = React.createClass({
     }
 
     return (
-      <div id="game-column-buttons">{row}</div>
+      <div id='game-column-buttons'>{row}</div>
     );
   },
 });
