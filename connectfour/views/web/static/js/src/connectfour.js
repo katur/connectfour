@@ -43,7 +43,7 @@ ReactDOM.render(
 // Respond to WebSocket events (these mostly update the store) //
 /////////////////////////////////////////////////////////////////
 
-window.ws.on('roomJoined', function(data) {
+window.ws.on('roomJoined', (data) => {
   store.dispatch(setIDs(data.pk, data.room));
 
   if (data.board) {
@@ -55,38 +55,38 @@ window.ws.on('roomJoined', function(data) {
   }
 });
 
-window.ws.on('roomDoesNotExist', function() {
-  store.dispatch(setRoomDoesNotExist());
+window.ws.on('roomDoesNotExist', () => {
+  store.dispatch(setRoomDoesNotExist())
 });
 
-window.ws.on('playerAdded', function({ player }) {
-  store.dispatch(addPlayer(player));
+window.ws.on('playerAdded', ({ player }) => {
+  store.dispatch(addPlayer(player))
 });
 
-window.ws.on('playerRemoved', function({ player }) {
-  store.dispatch(removePlayer(player));
+window.ws.on('playerRemoved', ({ player }) => {
+  store.dispatch(removePlayer(player))
 });
 
-window.ws.on('nextPlayer', function({ player }) {
-  store.dispatch(setNextPlayer(player));
+window.ws.on('nextPlayer', ({ player }) => {
+  store.dispatch(setNextPlayer(player))
 });
 
-window.ws.on('boardCreated', function({ board }) {
+window.ws.on('boardCreated', ({ board }) => {
   store.dispatch(unblinkSquares());
   store.dispatch(updateBoard(board));
 });
 
-window.ws.on('colorPlayed', function({ color, position }) {
+window.ws.on('colorPlayed', ({ color, position }) => {
   store.dispatch(colorSquare(color, position));
 });
 
-window.ws.on('gameStarted', function() {
+window.ws.on('gameStarted', () => {
   store.dispatch(unblinkSquares());
   store.dispatch(resetBoard());
   store.dispatch(startGame());
 });
 
-window.ws.on('gameWon', function({ winner, winningPositions, players }) {
+window.ws.on('gameWon', ({ winner, winningPositions, players }) => {
   store.dispatch(stopGame());
   store.dispatch(blinkSquares(winningPositions));
   store.dispatch(updatePlayers(players));
@@ -95,12 +95,12 @@ window.ws.on('gameWon', function({ winner, winningPositions, players }) {
   // store.dispatch(updatePlayer(data.winner));
 });
 
-window.ws.on('gameDraw', function({ players }) {
+window.ws.on('gameDraw', ({ players }) => {
   store.dispatch(stopGame());
   store.dispatch(updatePlayers(players));
   store.dispatch(reportDraw());
 });
 
-window.ws.on('tryAgain', function({ player, reason }) {
+window.ws.on('tryAgain', ({ player, reason }) => {
   store.dispatch(reportTryAgain(player, reason));
 });

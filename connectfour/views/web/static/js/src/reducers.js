@@ -53,9 +53,8 @@ function appReducer(state = initialState, action) {
     }
 
     case UPDATE_PLAYER: {
-      let newPlayers = state.players.map(function(player) {
-        return (player.pk === action.player.pk) ? action.player : player;
-      });
+      const newPlayers = state.players.map(player =>
+        (player.pk === action.player.pk) ? action.player : player);
 
       return update(state, {
         players: newPlayers,
@@ -72,9 +71,8 @@ function appReducer(state = initialState, action) {
     }
 
     case REMOVE_PLAYER: {
-      let newPlayers = state.players.filter(function(player) {
-        return player.pk !== action.player.pk;
-      });
+      let newPlayers = state.players.filter(player =>
+        player.pk !== action.player.pk);
 
       return update(state, {
         players: newPlayers,
@@ -97,11 +95,7 @@ function appReducer(state = initialState, action) {
     }
 
     case RESET_BOARD: {
-      let newGrid = state.grid.map(function(row) {
-        return row.map(function(column) {
-          return null;
-        });
-      });
+      let newGrid = state.grid.map(row => row.map(column => null));
 
       return update(state, {
         grid: newGrid,
@@ -109,9 +103,7 @@ function appReducer(state = initialState, action) {
     }
 
     case COLOR_SQUARE: {
-      let newGrid = state.grid.map(function(row) {
-        return row.slice();
-      });
+      let newGrid = state.grid.map(row => row.slice());
 
       newGrid[action.position[0]][action.position[1]] = action.color;
 

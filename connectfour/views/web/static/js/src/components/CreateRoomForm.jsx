@@ -4,7 +4,7 @@ import { emitAddUser, emitCreateBoard } from '../emitters';
 
 
 const CreateRoomForm = React.createClass({
-  getInitialState: function() {
+  getInitialState: () => {
     return {
       username: ``,
       usernameError: null,
