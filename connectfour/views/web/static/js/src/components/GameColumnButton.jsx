@@ -1,14 +1,14 @@
-import React from 'react';
-
+import React, { PropTypes } from 'react';
 import { emitPlay } from '../emitters';
 
 
-const GameColumnButton = React.createClass({
-  propTypes: {
-    disabled: React.PropTypes.bool.isRequired,
-    style: React.PropTypes.object.isRequired,
-  },
+const propTypes = {
+  disabled: PropTypes.bool.isRequired,
+  style: PropTypes.object.isRequired,
+}
 
+
+const GameColumnButton = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
 
@@ -40,5 +40,7 @@ const GameColumnButton = React.createClass({
   },
 });
 
+
+GameColumnButton.propTypes = propTypes;
 
 export default GameColumnButton;

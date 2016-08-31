@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { emitAddUser, emitCreateBoard } from '../emitters';
 
 

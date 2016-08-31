@@ -1,39 +1,35 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ room }) {
   return {
-    room: state.room,
-  }
+    room,
+  };
 }
 
 
-let GameRoom = React.createClass({
-  propTypes: {
-    room: React.PropTypes.string.isRequired,
-  },
-
-  render: function() {
-    return (
-      <div id="game-room">
-        <table>
-          <tbody>
-            <tr>
-              <td>Room:</td>
-              <td>{this.props.room}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  },
-});
+const propTypes = {
+  room: PropTypes.string.isRequired,
+};
 
 
-GameRoom = connect(
-  mapStateToProps
-)(GameRoom);
+function GameRoom({ room }) {
+  return (
+    <div id="game-room">
+      <table>
+        <tbody>
+          <tr>
+            <td>Room:</td>
+            <td>{room}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 
-export default GameRoom;
+GameRoom.propTypes = propTypes;
+
+export default connect(mapStateToProps)(GameRoom);

@@ -1,27 +1,27 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import { emitCreateBoard } from '../emitters';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ gameInProgress, numRows, numColumns, numToWin }) {
   return {
-    gameInProgress: state.gameInProgress,
-    numRows: state.numRows,
-    numColumns: state.numColumns,
-    numToWin: state.numToWin,
-  }
+    gameInProgress,
+    numRows,
+    numColumns,
+    numToWin,
+  };
 }
 
 
-let GameBoardForm = React.createClass({
-  propTypes: {
-    gameInProgress: React.PropTypes.bool.isRequired,
-    numRows: React.PropTypes.number,
-    numColumns: React.PropTypes.number,
-    numToWin: React.PropTypes.number,
-  },
+const propTypes = {
+  gameInProgress: PropTypes.bool.isRequired,
+  numRows: PropTypes.number,
+  numColumns: PropTypes.number,
+  numToWin: PropTypes.number,
+};
 
+
+const GameBoardForm = React.createClass({
   getInitialState: function() {
     return {
       numRows: `${window.DEFAULT_ROWS}`,
@@ -101,9 +101,6 @@ let GameBoardForm = React.createClass({
 });
 
 
-GameBoardForm = connect(
-  mapStateToProps
-)(GameBoardForm);
+GameBoardForm.propTypes = propTypes;
 
-
-export default GameBoardForm;
+export default connect(mapStateToProps)(GameBoardForm);

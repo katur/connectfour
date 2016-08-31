@@ -1,32 +1,31 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 
-const GameSquare = React.createClass({
-  propTypes: {
-    blinking: React.PropTypes.bool.isRequired,
-    color: React.PropTypes.string,
-  },
+const propTypes = {
+  blinking: PropTypes.bool.isRequired,
+  color: PropTypes.string,
+};
 
-  render: function() {
-    let innerClassName = `game-square color-${this.props.color}`;
 
-    if (this.props.blinking) {
-      innerClassName += ' blinking';
-    }
+function GameSquare({ color, blinking, style }) {
+  let innerClassName = `game-square color-${color}`;
 
-    return (
-      <div
-        className="game-square-wrapper"
-        style={this.props.style}
-      >
-        <div
-          className={innerClassName}
-        >
-        </div>
+  if (blinking) {
+    innerClassName += ' blinking';
+  }
+
+  return (
+    <div
+      className="game-square-wrapper"
+      style={style}
+    >
+      <div className={innerClassName}>
       </div>
-    );
-  },
-});
+    </div>
+  );
+}
 
+
+GameSquare.propTypes = propTypes;
 
 export default GameSquare;

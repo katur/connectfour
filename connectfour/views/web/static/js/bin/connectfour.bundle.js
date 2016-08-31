@@ -30765,8 +30765,6 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _react = __webpack_require__(51);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -30783,47 +30781,29 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function mapStateToProps(_ref) {
+	  var room = _ref.room;
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function mapStateToProps(state) {
 	  return {
-	    showGameScreen: state.room ? true : false
+	    showGameScreen: room ? true : false
 	  };
 	}
 
-	var App = function (_React$Component) {
-	  _inherits(App, _React$Component);
-
-	  function App() {
-	    _classCallCheck(this, App);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
-
-	  _createClass(App, [{
-	    key: 'render',
-	    value: function render() {
-	      var showGameScreen = this.props.showGameScreen;
-
-
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        showGameScreen ? _react2.default.createElement(_GameScreen2.default, null) : _react2.default.createElement(_SetupScreen2.default, null)
-	      );
-	    }
-	  }]);
-
-	  return App;
-	}(_react2.default.Component);
-
-	App.propTypes = {
-	  showGameScreen: _react2.default.PropTypes.bool.isRequired
+	var propTypes = {
+	  showGameScreen: _react.PropTypes.bool.isRequired
 	};
+
+	function App(_ref2) {
+	  var showGameScreen = _ref2.showGameScreen;
+
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    showGameScreen ? _react2.default.createElement(_GameScreen2.default, null) : _react2.default.createElement(_SetupScreen2.default, null)
+	  );
+	}
+
+	App.propTypes = propTypes;
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(App);
 
@@ -30836,8 +30816,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(51);
 
@@ -30853,40 +30831,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SetupScreen = function (_React$Component) {
-	  _inherits(SetupScreen, _React$Component);
-
-	  function SetupScreen() {
-	    _classCallCheck(this, SetupScreen);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(SetupScreen).apply(this, arguments));
-	  }
-
-	  _createClass(SetupScreen, [{
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'setup-screen' },
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Connect X'
-	        ),
-	        _react2.default.createElement(_CreateRoomForm2.default, null),
-	        _react2.default.createElement(_JoinRoomForm2.default, null)
-	      );
-	    }
-	  }]);
-
-	  return SetupScreen;
-	}(_react2.default.Component);
+	function SetupScreen() {
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'setup-screen' },
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      'Connect X'
+	    ),
+	    _react2.default.createElement(_CreateRoomForm2.default, null),
+	    _react2.default.createElement(_JoinRoomForm2.default, null)
+	  );
+	}
 
 	exports.default = SetupScreen;
 
@@ -31074,18 +31031,20 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var roomDoesNotExist = _ref.roomDoesNotExist;
+
 	  return {
-	    roomDoesNotExist: state.roomDoesNotExist
+	    roomDoesNotExist: roomDoesNotExist
 	  };
 	}
 
+	var propTypes = {
+	  roomDoesNotExist: _react.PropTypes.bool.isRequired
+	};
+
 	var JoinRoomForm = _react2.default.createClass({
 	  displayName: 'JoinRoomForm',
-
-	  propTypes: {
-	    roomDoesNotExist: _react2.default.PropTypes.bool.isRequired
-	  },
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -31242,9 +31201,9 @@
 	  }
 	});
 
-	JoinRoomForm = (0, _reactRedux.connect)(mapStateToProps)(JoinRoomForm);
+	JoinRoomForm.propTypes = propTypes;
 
-	exports.default = JoinRoomForm;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(JoinRoomForm);
 
 /***/ },
 /* 252 */
@@ -31255,8 +31214,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(51);
 
@@ -31298,68 +31255,54 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function mapStateToProps(_ref) {
+	  var room = _ref.room;
+	  var feedback = _ref.feedback;
+	  var numRows = _ref.numRows;
+	  var numColumns = _ref.numColumns;
+	  var grid = _ref.grid;
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	function mapStateToProps(state) {
 	  return {
-	    showRoom: !!state.room,
-	    showFeedback: !!state.feedback,
-	    showBoard: !!state.numRows && !!state.numColumns && !!state.grid
+	    showRoom: !!room,
+	    showFeedback: !!feedback,
+	    showBoard: !!numRows && !!numColumns && !!grid
 	  };
 	}
 
-	var GameScreen = function (_React$Component) {
-	  _inherits(GameScreen, _React$Component);
-
-	  function GameScreen() {
-	    _classCallCheck(this, GameScreen);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(GameScreen).apply(this, arguments));
-	  }
-
-	  _createClass(GameScreen, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var showRoom = _props.showRoom;
-	      var showFeedback = _props.showFeedback;
-	      var showBoard = _props.showBoard;
-
-	      return _react2.default.createElement(
-	        'div',
-	        { id: 'game-screen' },
-	        _react2.default.createElement(_GameTitle2.default, null),
-	        _react2.default.createElement(_GameStartButton2.default, null),
-	        showRoom && _react2.default.createElement(_GameRoom2.default, null),
-	        showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
-	        showBoard && _react2.default.createElement(
-	          'div',
-	          { id: 'game-board' },
-	          _react2.default.createElement(_GameColumnButtons2.default, null),
-	          _react2.default.createElement(_GameGrid2.default, null)
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { id: 'game-control' },
-	          _react2.default.createElement(_GamePlayers2.default, null),
-	          _react2.default.createElement(_GameBoardForm2.default, null)
-	        )
-	      );
-	    }
-	  }]);
-
-	  return GameScreen;
-	}(_react2.default.Component);
-
-	GameScreen.propTypes = {
-	  showRoom: _react2.default.PropTypes.bool.isRequired,
-	  showFeedback: _react2.default.PropTypes.bool.isRequired,
-	  showBoard: _react2.default.PropTypes.bool.isRequired
+	var propTypes = {
+	  showRoom: _react.PropTypes.bool.isRequired,
+	  showFeedback: _react.PropTypes.bool.isRequired,
+	  showBoard: _react.PropTypes.bool.isRequired
 	};
+
+	function GameScreen(_ref2) {
+	  var showRoom = _ref2.showRoom;
+	  var showFeedback = _ref2.showFeedback;
+	  var showBoard = _ref2.showBoard;
+
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-screen' },
+	    _react2.default.createElement(_GameTitle2.default, null),
+	    _react2.default.createElement(_GameStartButton2.default, null),
+	    showRoom && _react2.default.createElement(_GameRoom2.default, null),
+	    showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
+	    showBoard && _react2.default.createElement(
+	      'div',
+	      { id: 'game-board' },
+	      _react2.default.createElement(_GameColumnButtons2.default, null),
+	      _react2.default.createElement(_GameGrid2.default, null)
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { id: 'game-control' },
+	      _react2.default.createElement(_GamePlayers2.default, null),
+	      _react2.default.createElement(_GameBoardForm2.default, null)
+	    )
+	  );
+	}
+
+	GameScreen.propTypes = propTypes;
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameScreen);
 
@@ -31381,36 +31324,36 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var numToWin = _ref.numToWin;
+
 	  return {
-	    numToWin: state.numToWin
+	    numToWin: numToWin
 	  };
 	}
 
-	var GameTitle = _react2.default.createClass({
-	  displayName: 'GameTitle',
+	var propTypes = {
+	  numToWin: _react.PropTypes.number
+	};
 
-	  propTypes: {
-	    numToWin: _react2.default.PropTypes.number
-	  },
+	function GameTitle(_ref2) {
+	  var numToWin = _ref2.numToWin;
 
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h1',
 	      null,
-	      _react2.default.createElement(
-	        'h1',
-	        null,
-	        'Connect ',
-	        this.props.numToWin || 'X'
-	      )
-	    );
-	  }
-	});
+	      'Connect ',
+	      numToWin || 'X'
+	    )
+	  );
+	}
 
-	GameTitle = (0, _reactRedux.connect)(mapStateToProps)(GameTitle);
+	GameTitle.propTypes = propTypes;
 
-	exports.default = GameTitle;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameTitle);
 
 /***/ },
 /* 254 */
@@ -31432,18 +31375,20 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var gameInProgress = _ref.gameInProgress;
+
 	  return {
-	    gameInProgress: state.gameInProgress
+	    gameInProgress: gameInProgress
 	  };
 	}
 
+	var propTypes = {
+	  gameInProgress: _react.PropTypes.bool.isRequired
+	};
+
 	var GameStartButton = _react2.default.createClass({
 	  displayName: 'GameStartButton',
-
-	  propTypes: {
-	    gameInProgress: _react2.default.PropTypes.bool.isRequired
-	  },
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
@@ -31474,9 +31419,9 @@
 	  }
 	});
 
-	GameStartButton = (0, _reactRedux.connect)(mapStateToProps)(GameStartButton);
+	GameStartButton.propTypes = propTypes;
 
-	exports.default = GameStartButton;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameStartButton);
 
 /***/ },
 /* 255 */
@@ -31496,52 +31441,52 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var room = _ref.room;
+
 	  return {
-	    room: state.room
+	    room: room
 	  };
 	}
 
-	var GameRoom = _react2.default.createClass({
-	  displayName: 'GameRoom',
+	var propTypes = {
+	  room: _react.PropTypes.string.isRequired
+	};
 
-	  propTypes: {
-	    room: _react2.default.PropTypes.string.isRequired
-	  },
+	function GameRoom(_ref2) {
+	  var room = _ref2.room;
 
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-room' },
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-room' },
+	    _react2.default.createElement(
+	      'table',
+	      null,
 	      _react2.default.createElement(
-	        'table',
+	        'tbody',
 	        null,
 	        _react2.default.createElement(
-	          'tbody',
+	          'tr',
 	          null,
 	          _react2.default.createElement(
-	            'tr',
+	            'td',
 	            null,
-	            _react2.default.createElement(
-	              'td',
-	              null,
-	              'Room:'
-	            ),
-	            _react2.default.createElement(
-	              'td',
-	              null,
-	              this.props.room
-	            )
+	            'Room:'
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            room
 	          )
 	        )
 	      )
-	    );
-	  }
-	});
+	    )
+	  );
+	}
 
-	GameRoom = (0, _reactRedux.connect)(mapStateToProps)(GameRoom);
+	GameRoom.propTypes = propTypes;
 
-	exports.default = GameRoom;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameRoom);
 
 /***/ },
 /* 256 */
@@ -31561,31 +31506,31 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var feedback = _ref.feedback;
+
 	  return {
-	    feedback: state.feedback
+	    feedback: feedback
 	  };
 	}
 
-	var GameFeedback = _react2.default.createClass({
-	  displayName: 'GameFeedback',
+	var propTypes = {
+	  feedback: _react.PropTypes.string.isRequired
+	};
 
-	  propTypes: {
-	    feedback: _react2.default.PropTypes.string.isRequired
-	  },
+	function GameFeedback(_ref2) {
+	  var feedback = _ref2.feedback;
 
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-feedback' },
-	      this.props.feedback
-	    );
-	  }
-	});
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-feedback' },
+	    feedback
+	  );
+	}
 
-	GameFeedback = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
+	GameFeedback.propTypes = propTypes;
 
-	exports.default = GameFeedback;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameFeedback);
 
 /***/ },
 /* 257 */
@@ -31610,56 +31555,63 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function mapStateToProps(state) {
+	  var numRows = state.numRows;
+	  var numColumns = state.numColumns;
+	  var gameInProgress = state.gameInProgress;
+	  var nextPlayer = state.nextPlayer;
+	  var pk = state.pk;
+
+
 	  return {
-	    numRows: state.numRows,
-	    numColumns: state.numColumns,
-	    gameInProgress: state.gameInProgress,
-	    pk: state.pk,
-	    nextPlayer: state.nextPlayer
+	    numRows: numRows,
+	    numColumns: numColumns,
+	    gameInProgress: gameInProgress,
+	    nextPlayer: nextPlayer,
+	    pk: pk
 	  };
 	}
 
-	var GameColumnButtons = _react2.default.createClass({
-	  displayName: 'GameColumnButtons',
+	var propTypes = {
+	  numRows: _react.PropTypes.number.isRequired,
+	  numColumns: _react.PropTypes.number.isRequired,
+	  gameInProgress: _react.PropTypes.bool.isRequired,
+	  nextPlayer: _react.PropTypes.object,
+	  pk: _react.PropTypes.string.isRequired
+	};
 
-	  propTypes: {
-	    numRows: _react2.default.PropTypes.number.isRequired,
-	    numColumns: _react2.default.PropTypes.number.isRequired,
-	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
-	    pk: _react2.default.PropTypes.string.isRequired,
-	    nextPlayer: _react2.default.PropTypes.object
-	  },
+	function GameColumnButtons(_ref) {
+	  var numRows = _ref.numRows;
+	  var numColumns = _ref.numColumns;
+	  var gameInProgress = _ref.gameInProgress;
+	  var nextPlayer = _ref.nextPlayer;
+	  var pk = _ref.pk;
 
-	  render: function render() {
-	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + 'vmin';
+	  var percentage = 80.0 / Math.max(numRows, numColumns);
+	  var size = percentage + 'vmin';
+	  var enabled = gameInProgress && nextPlayer && pk === nextPlayer.pk;
+	  var row = [];
 
-	    var enabled = this.props.gameInProgress && this.props.nextPlayer && this.props.pk === this.props.nextPlayer.pk;
-
-	    var row = [];
-
-	    for (var i = 0; i < this.props.numColumns; i++) {
-	      row.push(_react2.default.createElement(_GameColumnButton2.default, {
-	        key: i,
-	        column: i,
-	        style: {
-	          width: size
-	        },
-	        disabled: !enabled
-	      }));
-	    }
-
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-column-buttons' },
-	      row
-	    );
+	  for (var i = 0; i < numColumns; i++) {
+	    row.push(_react2.default.createElement(_GameColumnButton2.default, {
+	      key: i,
+	      column: i,
+	      style: {
+	        width: size
+	      },
+	      disabled: !enabled
+	    }));
 	  }
-	});
 
-	GameColumnButtons = (0, _reactRedux.connect)(mapStateToProps)(GameColumnButtons);
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-column-buttons' },
+	    row
+	  );
+	}
 
-	exports.default = GameColumnButtons;
+	GameColumnButtons.propTypes = propTypes;
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameColumnButtons);
 
 /***/ },
 /* 258 */
@@ -31679,13 +31631,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var propTypes = {
+	  disabled: _react.PropTypes.bool.isRequired,
+	  style: _react.PropTypes.object.isRequired
+	};
+
 	var GameColumnButton = _react2.default.createClass({
 	  displayName: 'GameColumnButton',
-
-	  propTypes: {
-	    disabled: _react2.default.PropTypes.bool.isRequired,
-	    style: _react2.default.PropTypes.object.isRequired
-	  },
 
 	  _handleSubmit: function _handleSubmit(e) {
 	    e.preventDefault();
@@ -31722,6 +31674,8 @@
 	  }
 	});
 
+	GameColumnButton.propTypes = propTypes;
+
 	exports.default = GameColumnButton;
 
 /***/ },
@@ -31746,94 +31700,99 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var numRows = _ref.numRows;
+	  var numColumns = _ref.numColumns;
+	  var grid = _ref.grid;
+	  var blinkingSquares = _ref.blinkingSquares;
+
 	  return {
-	    numRows: state.numRows,
-	    numColumns: state.numColumns,
-	    grid: state.grid,
-	    blinkingSquares: state.blinkingSquares
+	    numRows: numRows,
+	    numColumns: numColumns,
+	    grid: grid,
+	    blinkingSquares: blinkingSquares
 	  };
 	}
 
-	var GameGrid = _react2.default.createClass({
-	  displayName: 'GameGrid',
+	var propTypes = {
+	  numRows: _react.PropTypes.number.isRequired,
+	  numColumns: _react.PropTypes.number.isRequired,
+	  grid: _react.PropTypes.arrayOf(_react.PropTypes.array).isRequired,
+	  blinkingSquares: _react.PropTypes.array.isRequired
+	};
 
-	  propTypes: {
-	    numRows: _react2.default.PropTypes.number.isRequired,
-	    numColumns: _react2.default.PropTypes.number.isRequired,
-	    grid: _react2.default.PropTypes.arrayOf(_react2.default.PropTypes.array).isRequired,
-	    blinkingSquares: _react2.default.PropTypes.array.isRequired
-	  },
+	function GameGrid(_ref2) {
+	  var numRows = _ref2.numRows;
+	  var numColumns = _ref2.numColumns;
+	  var grid = _ref2.grid;
+	  var blinkingSquares = _ref2.blinkingSquares;
 
-	  render: function render() {
-	    var percentage = 80.0 / Math.max(this.props.numRows, this.props.numColumns);
-	    var size = percentage + 'vmin';
+	  var percentage = 80.0 / Math.max(numRows, numColumns);
+	  var size = percentage + 'vmin';
+	  var rows = [];
 
-	    var rows = [];
+	  for (var i = 0; i < numRows; i++) {
+	    var row = [];
 
-	    for (var i = 0; i < this.props.numRows; i++) {
-	      var row = [];
+	    for (var j = 0; j < numColumns; j++) {
+	      var clear = j === 0 ? 'left' : 'none';
 
-	      for (var j = 0; j < this.props.numColumns; j++) {
-	        var clear = j === 0 ? 'left' : 'none';
+	      // TODO: restructure blinking to not require this iteration (set?)
+	      var blinking = false;
 
-	        // TODO: restructure blinking to not require this iteration (set?)
-	        var blinking = false;
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
 
-	        var _iteratorNormalCompletion = true;
-	        var _didIteratorError = false;
-	        var _iteratorError = undefined;
+	      try {
+	        for (var _iterator = blinkingSquares[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var b = _step.value;
 
-	        try {
-	          for (var _iterator = this.props.blinkingSquares[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	            var b = _step.value;
-
-	            if (b[0] == i && b[1] == j) {
-	              blinking = true;
-	              break;
-	            }
-	          }
-	        } catch (err) {
-	          _didIteratorError = true;
-	          _iteratorError = err;
-	        } finally {
-	          try {
-	            if (!_iteratorNormalCompletion && _iterator.return) {
-	              _iterator.return();
-	            }
-	          } finally {
-	            if (_didIteratorError) {
-	              throw _iteratorError;
-	            }
+	          if (b[0] == i && b[1] == j) {
+	            blinking = true;
+	            break;
 	          }
 	        }
-
-	        row.push(_react2.default.createElement(_GameSquare2.default, {
-	          key: i + '-' + j,
-	          color: this.props.grid[i][j],
-	          blinking: blinking,
-	          style: {
-	            width: size,
-	            height: size,
-	            clear: clear
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
 	          }
-	        }));
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
 	      }
 
-	      rows.push(row);
+	      row.push(_react2.default.createElement(_GameSquare2.default, {
+	        key: i + '-' + j,
+	        color: grid[i][j],
+	        blinking: blinking,
+	        style: {
+	          width: size,
+	          height: size,
+	          clear: clear
+	        }
+	      }));
 	    }
 
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-grid' },
-	      rows
-	    );
+	    rows.push(row);
 	  }
-	});
 
-	GameGrid = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-grid' },
+	    rows
+	  );
+	}
 
-	exports.default = GameGrid;
+	GameGrid.propTypes = propTypes;
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameGrid);
 
 /***/ },
 /* 260 */
@@ -31851,33 +31810,33 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var GameSquare = _react2.default.createClass({
-	  displayName: 'GameSquare',
+	var propTypes = {
+	  blinking: _react.PropTypes.bool.isRequired,
+	  color: _react.PropTypes.string
+	};
 
-	  propTypes: {
-	    blinking: _react2.default.PropTypes.bool.isRequired,
-	    color: _react2.default.PropTypes.string
-	  },
+	function GameSquare(_ref) {
+	  var color = _ref.color;
+	  var blinking = _ref.blinking;
+	  var style = _ref.style;
 
-	  render: function render() {
-	    var innerClassName = 'game-square color-' + this.props.color;
+	  var innerClassName = 'game-square color-' + color;
 
-	    if (this.props.blinking) {
-	      innerClassName += ' blinking';
-	    }
-
-	    return _react2.default.createElement(
-	      'div',
-	      {
-	        className: 'game-square-wrapper',
-	        style: this.props.style
-	      },
-	      _react2.default.createElement('div', {
-	        className: innerClassName
-	      })
-	    );
+	  if (blinking) {
+	    innerClassName += ' blinking';
 	  }
-	});
+
+	  return _react2.default.createElement(
+	    'div',
+	    {
+	      className: 'game-square-wrapper',
+	      style: style
+	    },
+	    _react2.default.createElement('div', { className: innerClassName })
+	  );
+	}
+
+	GameSquare.propTypes = propTypes;
 
 	exports.default = GameSquare;
 
@@ -31899,67 +31858,76 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var pk = _ref.pk;
+	  var players = _ref.players;
+	  var nextPlayer = _ref.nextPlayer;
+
 	  return {
-	    pk: state.pk,
-	    players: state.players,
-	    nextPlayer: state.nextPlayer
+	    pk: pk,
+	    players: players,
+	    nextPlayer: nextPlayer
 	  };
 	}
 
-	var GamePlayers = _react2.default.createClass({
-	  displayName: 'GamePlayers',
+	var propTypes = {
+	  pk: _react.PropTypes.string.isRequired,
+	  players: _react.PropTypes.array.isRequired,
+	  nextPlayer: _react.PropTypes.object
+	};
 
-	  render: function render() {
-	    var you = this.props.pk;
-	    var next = this.props.nextPlayer ? this.props.nextPlayer.pk : '';
+	function GamePlayers(_ref2) {
+	  var pk = _ref2.pk;
+	  var players = _ref2.players;
+	  var nextPlayer = _ref2.nextPlayer;
 
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-players' },
+	  var nextPk = nextPlayer ? nextPlayer.pk : '';
+
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-players' },
+	    _react2.default.createElement(
+	      'table',
+	      null,
 	      _react2.default.createElement(
-	        'table',
+	        'tbody',
 	        null,
-	        _react2.default.createElement(
-	          'tbody',
-	          null,
-	          this.props.players.map(function (player, i) {
-	            return _react2.default.createElement(
-	              'tr',
-	              {
-	                key: player.pk,
-	                className: '' + (player.pk === next ? 'current' : 'not-current')
-	              },
-	              _react2.default.createElement(
-	                'td',
-	                null,
-	                _react2.default.createElement('div', { className: 'color-key color-' + player.color })
-	              ),
-	              _react2.default.createElement(
-	                'td',
-	                null,
-	                player.name,
-	                player.pk === you && ' (you)'
-	              ),
-	              _react2.default.createElement(
-	                'td',
-	                null,
-	                player.numWins,
-	                ' wins / ',
-	                player.numGames,
-	                ' games'
-	              )
-	            );
-	          })
-	        )
+	        players.map(function (player, i) {
+	          return _react2.default.createElement(
+	            'tr',
+	            {
+	              key: player.pk,
+	              className: '' + (player.pk === nextPk ? 'current' : 'not-current')
+	            },
+	            _react2.default.createElement(
+	              'td',
+	              null,
+	              _react2.default.createElement('div', { className: 'color-key color-' + player.color })
+	            ),
+	            _react2.default.createElement(
+	              'td',
+	              null,
+	              player.name,
+	              player.pk === pk && ' (you)'
+	            ),
+	            _react2.default.createElement(
+	              'td',
+	              null,
+	              player.numWins,
+	              ' wins / ',
+	              player.numGames,
+	              ' games'
+	            )
+	          );
+	        })
 	      )
-	    );
-	  }
-	});
+	    )
+	  );
+	}
 
-	GamePlayers = (0, _reactRedux.connect)(mapStateToProps)(GamePlayers);
+	GamePlayers.propTypes = propTypes;
 
-	exports.default = GamePlayers;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GamePlayers);
 
 /***/ },
 /* 262 */
@@ -31983,24 +31951,29 @@
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	function mapStateToProps(state) {
+	function mapStateToProps(_ref) {
+	  var gameInProgress = _ref.gameInProgress;
+	  var numRows = _ref.numRows;
+	  var numColumns = _ref.numColumns;
+	  var numToWin = _ref.numToWin;
+
 	  return {
-	    gameInProgress: state.gameInProgress,
-	    numRows: state.numRows,
-	    numColumns: state.numColumns,
-	    numToWin: state.numToWin
+	    gameInProgress: gameInProgress,
+	    numRows: numRows,
+	    numColumns: numColumns,
+	    numToWin: numToWin
 	  };
 	}
 
+	var propTypes = {
+	  gameInProgress: _react.PropTypes.bool.isRequired,
+	  numRows: _react.PropTypes.number,
+	  numColumns: _react.PropTypes.number,
+	  numToWin: _react.PropTypes.number
+	};
+
 	var GameBoardForm = _react2.default.createClass({
 	  displayName: 'GameBoardForm',
-
-	  propTypes: {
-	    gameInProgress: _react2.default.PropTypes.bool.isRequired,
-	    numRows: _react2.default.PropTypes.number,
-	    numColumns: _react2.default.PropTypes.number,
-	    numToWin: _react2.default.PropTypes.number
-	  },
 
 	  getInitialState: function getInitialState() {
 	    return {
@@ -32098,9 +32071,9 @@
 	  }
 	});
 
-	GameBoardForm = (0, _reactRedux.connect)(mapStateToProps)(GameBoardForm);
+	GameBoardForm.propTypes = propTypes;
 
-	exports.default = GameBoardForm;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GameBoardForm);
 
 /***/ },
 /* 263 */

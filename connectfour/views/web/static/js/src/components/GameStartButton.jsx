@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { emitStartGame } from '../emitters';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ gameInProgress }) {
   return {
-    gameInProgress: state.gameInProgress,
-  }
+    gameInProgress,
+  };
 }
 
 
-let GameStartButton = React.createClass({
-  propTypes: {
-    gameInProgress: React.PropTypes.bool.isRequired,
-  },
+const propTypes = {
+  gameInProgress: PropTypes.bool.isRequired,
+};
 
+
+const GameStartButton = React.createClass({
   _handleSubmit: function(e) {
     e.preventDefault();
     emitStartGame();
@@ -41,9 +42,6 @@ let GameStartButton = React.createClass({
 });
 
 
-GameStartButton = connect(
-  mapStateToProps
-)(GameStartButton);
+GameStartButton.propTypes = propTypes;
 
-
-export default GameStartButton;
+export default connect(mapStateToProps)(GameStartButton);

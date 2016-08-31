@@ -1,34 +1,30 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ numToWin }) {
   return {
-    numToWin: state.numToWin,
-  }
+    numToWin,
+  };
 }
 
 
-let GameTitle = React.createClass({
-  propTypes: {
-    numToWin: React.PropTypes.number,
-  },
-
-  render: function() {
-    return (
-      <div>
-        <h1>
-          Connect {this.props.numToWin || 'X'}
-        </h1>
-      </div>
-    );
-  },
-});
+const propTypes = {
+  numToWin: PropTypes.number,
+};
 
 
-GameTitle = connect(
-  mapStateToProps
-)(GameTitle);
+function GameTitle({ numToWin }) {
+  return (
+    <div>
+      <h1>
+        Connect {numToWin || 'X'}
+      </h1>
+    </div>
+  );
+}
 
 
-export default GameTitle;
+GameTitle.propTypes = propTypes;
+
+export default connect(mapStateToProps)(GameTitle);

@@ -1,20 +1,21 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { emitAddUser } from '../emitters';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ roomDoesNotExist }) {
   return {
-    roomDoesNotExist: state.roomDoesNotExist,
-  }
+    roomDoesNotExist,
+  };
 }
 
 
-let JoinRoomForm = React.createClass({
-  propTypes: {
-    roomDoesNotExist: React.PropTypes.bool.isRequired,
-  },
+const propTypes = {
+  roomDoesNotExist: PropTypes.bool.isRequired,
+};
 
+
+const JoinRoomForm = React.createClass({
   getInitialState: function() {
     return {
       username: ``,
@@ -153,9 +154,6 @@ let JoinRoomForm = React.createClass({
 });
 
 
-JoinRoomForm = connect(
-  mapStateToProps
-)(JoinRoomForm);
+JoinRoomForm.propTypes = propTypes;
 
-
-export default JoinRoomForm;
+export default connect(mapStateToProps)(JoinRoomForm);

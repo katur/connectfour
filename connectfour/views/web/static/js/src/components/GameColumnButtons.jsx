@@ -1,62 +1,55 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import GameColumnButton from './GameColumnButton';
 
 
 function mapStateToProps(state) {
+  const { numRows, numColumns, gameInProgress, nextPlayer, pk } = state;
+
   return {
-    numRows: state.numRows,
-    numColumns: state.numColumns,
-    gameInProgress: state.gameInProgress,
-    pk: state.pk,
-    nextPlayer: state.nextPlayer,
-  }
+    numRows,
+    numColumns,
+    gameInProgress,
+    nextPlayer,
+    pk,
+  };
 }
 
-let GameColumnButtons = React.createClass({
-  propTypes: {
-    numRows: React.PropTypes.number.isRequired,
-    numColumns: React.PropTypes.number.isRequired,
-    gameInProgress: React.PropTypes.bool.isRequired,
-    pk: React.PropTypes.string.isRequired,
-    nextPlayer: React.PropTypes.object,
-  },
 
-  render: function() {
-    const percentage = 80.0 / Math.max(this.props.numRows,
-                                       this.props.numColumns);
-    const size = `${percentage}vmin`;
+const propTypes = {
+  numRows: PropTypes.number.isRequired,
+  numColumns: PropTypes.number.isRequired,
+  gameInProgress: PropTypes.bool.isRequired,
+  nextPlayer: PropTypes.object,
+  pk: PropTypes.string.isRequired,
+};
 
-    const enabled = this.props.gameInProgress
-      && this.props.nextPlayer
-      && this.props.pk === this.props.nextPlayer.pk;
 
-    const row = [];
+function GameColumnButtons({ numRows, numColumns, gameInProgress, nextPlayer, pk }) {
+  const percentage = 80.0 / Math.max(numRows, numColumns);
+  const size = `${percentage}vmin`;
+  const enabled = gameInProgress && nextPlayer && pk === nextPlayer.pk;
+  const row = [];
 
-    for (let i = 0; i < this.props.numColumns; i++) {
-      row.push(
-        <GameColumnButton
-          key={i}
-          column={i}
-          style={{
-            width: size,
-          }}
-          disabled={!enabled}
-        />
-      );
-    }
-
-    return (
-      <div id="game-column-buttons">{row}</div>
+  for (let i = 0; i < numColumns; i++) {
+    row.push(
+      <GameColumnButton
+        key={i}
+        column={i}
+        style={{
+          width: size,
+        }}
+        disabled={!enabled}
+      />
     );
-  },
-});
+  }
+
+  return (
+    <div id="game-column-buttons">{row}</div>
+  );
+}
 
 
-GameColumnButtons = connect(
-  mapStateToProps
-)(GameColumnButtons);
+GameColumnButtons.propTypes = propTypes;
 
-
-export default GameColumnButtons;
+export default connect(mapStateToProps)(GameColumnButtons);

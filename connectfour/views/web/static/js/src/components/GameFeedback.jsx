@@ -1,32 +1,28 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ feedback }) {
   return {
-    feedback: state.feedback,
-  }
+    feedback,
+  };
 }
 
 
-let GameFeedback = React.createClass({
-  propTypes: {
-    feedback: React.PropTypes.string.isRequired,
-  },
-
-  render: function() {
-    return (
-      <div id="game-feedback">
-        {this.props.feedback}
-      </div>
-    );
-  },
-});
+const propTypes = {
+  feedback: PropTypes.string.isRequired,
+};
 
 
-GameFeedback = connect(
-  mapStateToProps
-)(GameFeedback);
+function GameFeedback({ feedback }) {
+  return (
+    <div id="game-feedback">
+      {feedback}
+    </div>
+  );
+}
 
 
-export default GameFeedback;
+GameFeedback.propTypes = propTypes;
+
+export default connect(mapStateToProps)(GameFeedback);

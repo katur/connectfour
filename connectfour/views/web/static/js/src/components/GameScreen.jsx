@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import GameTitle from './GameTitle';
 import GameStartButton from './GameStartButton';
 import GameRoom from './GameRoom';
@@ -11,50 +10,49 @@ import GamePlayers from './GamePlayers';
 import GameBoardForm from './GameBoardForm';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ room, feedback, numRows, numColumns, grid }) {
   return {
-    showRoom: !!state.room,
-    showFeedback: !!state.feedback,
-    showBoard: !!state.numRows && !!state.numColumns && !!state.grid,
+    showRoom: !!room,
+    showFeedback: !!feedback,
+    showBoard: !!numRows && !!numColumns && !!grid,
   }
 }
 
 
-class GameScreen extends React.Component {
-  render() {
-    const { showRoom, showFeedback, showBoard } = this.props;
-    return (
-      <div id="game-screen">
-        <GameTitle />
+const propTypes = {
+  showRoom: PropTypes.bool.isRequired,
+  showFeedback: PropTypes.bool.isRequired,
+  showBoard: PropTypes.bool.isRequired,
+}
 
-        <GameStartButton />
 
-        {showRoom && <GameRoom />}
+function GameScreen({ showRoom, showFeedback, showBoard }) {
+  return (
+    <div id="game-screen">
+      <GameTitle />
 
-        {showFeedback && <GameFeedback />}
+      <GameStartButton />
 
-        {showBoard &&
-          <div id="game-board">
-            <GameColumnButtons />
-            <GameGrid />
-          </div>
-        }
+      {showRoom && <GameRoom />}
 
-        <div id="game-control">
-          <GamePlayers />
-          <GameBoardForm />
+      {showFeedback && <GameFeedback />}
+
+      {showBoard &&
+        <div id="game-board">
+          <GameColumnButtons />
+          <GameGrid />
         </div>
+      }
+
+      <div id="game-control">
+        <GamePlayers />
+        <GameBoardForm />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 
-GameScreen.propTypes = {
-  showRoom: React.PropTypes.bool.isRequired,
-  showFeedback: React.PropTypes.bool.isRequired,
-  showBoard: React.PropTypes.bool.isRequired,
-}
-
+GameScreen.propTypes = propTypes;
 
 export default connect(mapStateToProps)(GameScreen);

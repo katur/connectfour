@@ -1,33 +1,30 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import SetupScreen from './SetupScreen';
 import GameScreen from './GameScreen';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ room }) {
   return {
-    showGameScreen: state.room ? true : false,
-  }
+    showGameScreen: room ? true : false,
+  };
 }
 
 
-class App extends React.Component {
-  render() {
-    const { showGameScreen } = this.props;
+const propTypes = {
+  showGameScreen: PropTypes.bool.isRequired,
+};
 
-    return (
-      <div>
-        {showGameScreen ? <GameScreen /> : <SetupScreen />}
-      </div>
-    );
-  }
+
+function App({ showGameScreen }) {
+  return (
+    <div>
+      {showGameScreen ? <GameScreen /> : <SetupScreen />}
+    </div>
+  );
 }
 
 
-App.propTypes = {
-  showGameScreen: React.PropTypes.bool.isRequired,
-}
-
+App.propTypes = propTypes;
 
 export default connect(mapStateToProps)(App);

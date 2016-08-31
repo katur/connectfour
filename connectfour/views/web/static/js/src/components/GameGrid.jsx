@@ -1,79 +1,72 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
 import GameSquare from './GameSquare';
 
 
-function mapStateToProps(state) {
+function mapStateToProps({ numRows, numColumns, grid, blinkingSquares }) {
   return {
-    numRows: state.numRows,
-    numColumns: state.numColumns,
-    grid: state.grid,
-    blinkingSquares: state.blinkingSquares,
-  }
+    numRows,
+    numColumns,
+    grid,
+    blinkingSquares,
+  };
 }
 
 
-let GameGrid = React.createClass({
-  propTypes: {
-    numRows: React.PropTypes.number.isRequired,
-    numColumns: React.PropTypes.number.isRequired,
-    grid: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
-    blinkingSquares: React.PropTypes.array.isRequired,
-  },
+const propTypes = {
+  numRows: PropTypes.number.isRequired,
+  numColumns: PropTypes.number.isRequired,
+  grid: PropTypes.arrayOf(PropTypes.array).isRequired,
+  blinkingSquares: PropTypes.array.isRequired,
+};
 
-  render: function() {
-    const percentage = 80.0 / Math.max(this.props.numRows,
-                                       this.props.numColumns);
-    const size = `${percentage}vmin`;
 
-    const rows = [];
+function GameGrid({ numRows, numColumns, grid, blinkingSquares }) {
+  const percentage = 80.0 / Math.max(numRows, numColumns);
+  const size = `${percentage}vmin`;
+  const rows = [];
 
-    for (let i = 0; i < this.props.numRows; i++) {
-      let row = [];
+  for (let i = 0; i < numRows; i++) {
+    let row = [];
 
-      for (let j = 0; j < this.props.numColumns; j++) {
-        const clear = (j === 0) ? 'left' : 'none';
+    for (let j = 0; j < numColumns; j++) {
+      let clear = (j === 0) ? 'left' : 'none';
 
-        // TODO: restructure blinking to not require this iteration (set?)
-        let blinking = false;
+      // TODO: restructure blinking to not require this iteration (set?)
+      let blinking = false;
 
-        for (let b of this.props.blinkingSquares) {
-          if (b[0] == i && b[1] == j) {
-            blinking = true;
-            break;
-          }
+      for (let b of blinkingSquares) {
+        if (b[0] == i && b[1] == j) {
+          blinking = true;
+          break;
         }
-
-        row.push(
-          <GameSquare
-            key={`${i}-${j}`}
-            color={this.props.grid[i][j]}
-            blinking={blinking}
-            style={{
-              width: size,
-              height: size,
-              clear: clear,
-            }}
-          />
-        );
       }
 
-      rows.push(row);
+      row.push(
+        <GameSquare
+          key={`${i}-${j}`}
+          color={grid[i][j]}
+          blinking={blinking}
+          style={{
+            width: size,
+            height: size,
+            clear: clear,
+          }}
+        />
+      );
     }
 
-    return (
-      <div id="game-grid">
-        {rows}
-      </div>
-    );
-  },
-});
+    rows.push(row);
+  }
+
+  return (
+    <div id="game-grid">
+      {rows}
+    </div>
+  );
+}
 
 
-GameGrid = connect(
-  mapStateToProps
-)(GameGrid);
+GameGrid.propTypes = propTypes;
 
-
-export default GameGrid;
+export default connect(mapStateToProps)(GameGrid);
