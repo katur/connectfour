@@ -31293,15 +31293,19 @@
 	    showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
 	    showBoard && _react2.default.createElement(
 	      'div',
-	      { id: 'game-board' },
-	      _react2.default.createElement(_GameColumnButtons2.default, null),
-	      _react2.default.createElement(_GameGrid2.default, null)
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { id: 'game-control' },
-	      _react2.default.createElement(_GamePlayers2.default, null),
-	      _react2.default.createElement(_GameBoardForm2.default, null)
+	      null,
+	      _react2.default.createElement(
+	        'div',
+	        { id: 'game-board' },
+	        _react2.default.createElement(_GameColumnButtons2.default, null),
+	        _react2.default.createElement(_GameGrid2.default, null)
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { id: 'game-control' },
+	        _react2.default.createElement(_GamePlayers2.default, null),
+	        _react2.default.createElement(_GameBoardForm2.default, null)
+	      )
 	    )
 	  );
 	}
@@ -32011,9 +32015,9 @@
 
 	var propTypes = {
 	  gameInProgress: _react.PropTypes.bool.isRequired,
-	  numRows: _react.PropTypes.number,
-	  numColumns: _react.PropTypes.number,
-	  numToWin: _react.PropTypes.number
+	  numRows: _react.PropTypes.number.isRequired,
+	  numColumns: _react.PropTypes.number.isRequired,
+	  numToWin: _react.PropTypes.number.isRequired
 	};
 
 	var GameBoardForm = function (_React$Component) {
@@ -32025,9 +32029,9 @@
 	    var _this = _possibleConstructorReturn(this, (GameBoardForm.__proto__ || Object.getPrototypeOf(GameBoardForm)).call(this, props));
 
 	    _this.state = {
-	      numRows: '' + window.DEFAULT_ROWS,
-	      numColumns: '' + window.DEFAULT_COLUMNS,
-	      numToWin: '' + window.DEFAULT_TO_WIN,
+	      numRows: props.numRows,
+	      numColumns: props.numColumns,
+	      numToWin: props.numToWin,
 	      username: ''
 	    };
 
@@ -32038,6 +32042,19 @@
 	  }
 
 	  _createClass(GameBoardForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(_ref2) {
+	      var numRows = _ref2.numRows;
+	      var numColumns = _ref2.numColumns;
+	      var numToWin = _ref2.numToWin;
+
+	      this.setState({
+	        numRows: numRows,
+	        numColumns: numColumns,
+	        numToWin: numToWin
+	      });
+	    }
+	  }, {
 	    key: '_handleInput',
 	    value: function _handleInput(e) {
 	      this.setState(_defineProperty({}, e.target.name, e.target.value));

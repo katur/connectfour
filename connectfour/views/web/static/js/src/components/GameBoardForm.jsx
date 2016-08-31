@@ -15,9 +15,9 @@ function mapStateToProps({ gameInProgress, numRows, numColumns, numToWin }) {
 
 const propTypes = {
   gameInProgress: PropTypes.bool.isRequired,
-  numRows: PropTypes.number,
-  numColumns: PropTypes.number,
-  numToWin: PropTypes.number,
+  numRows: PropTypes.number.isRequired,
+  numColumns: PropTypes.number.isRequired,
+  numToWin: PropTypes.number.isRequired,
 };
 
 
@@ -26,15 +26,23 @@ class GameBoardForm extends React.Component {
     super(props);
 
     this.state = {
-      numRows: `${window.DEFAULT_ROWS}`,
-      numColumns: `${window.DEFAULT_COLUMNS}`,
-      numToWin: `${window.DEFAULT_TO_WIN}`,
-      username: ``,
+      numRows: props.numRows,
+      numColumns: props.numColumns,
+      numToWin: props.numToWin,
+      username: '',
     };
 
     // Bind callbacks to make `this` the correct context
     this._handleInput = this._handleInput.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps({ numRows, numColumns, numToWin }) {
+    this.setState({
+      numRows,
+      numColumns,
+      numToWin,
+    });
   }
 
   _handleInput(e) {

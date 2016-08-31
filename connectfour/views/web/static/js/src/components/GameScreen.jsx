@@ -38,16 +38,19 @@ function GameScreen({ showRoom, showFeedback, showBoard }) {
       {showFeedback && <GameFeedback />}
 
       {showBoard &&
-        <div id="game-board">
-          <GameColumnButtons />
-          <GameGrid />
+        <div>
+          <div id="game-board">
+            <GameColumnButtons />
+            <GameGrid />
+          </div>
+
+          <div id="game-control">
+            <GamePlayers />
+            <GameBoardForm />
+          </div>
         </div>
       }
 
-      <div id="game-control">
-        <GamePlayers />
-        <GameBoardForm />
-      </div>
     </div>
   );
 }
