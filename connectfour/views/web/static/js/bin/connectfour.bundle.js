@@ -31925,6 +31925,7 @@
 	  var players = _ref2.players;
 	  var nextPlayer = _ref2.nextPlayer;
 
+	  var youPk = pk;
 	  var nextPk = nextPlayer ? nextPlayer.pk : '';
 
 	  return _react2.default.createElement(
@@ -31941,7 +31942,7 @@
 	          'div',
 	          { className: 'name' },
 	          player.name,
-	          player.pk === pk && ' (you)',
+	          player.pk === youPk && ' (you)',
 	          _react2.default.createElement('div', { className: 'color-key color-' + player.color })
 	        ),
 	        _react2.default.createElement(

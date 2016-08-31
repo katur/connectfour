@@ -19,6 +19,7 @@ const propTypes = {
 
 
 function GamePlayers({ pk, players, nextPlayer }) {
+  const youPk = pk;
   const nextPk = nextPlayer ? nextPlayer.pk : '';
 
   return (
@@ -30,13 +31,13 @@ function GamePlayers({ pk, players, nextPlayer }) {
             `player ${(player.pk === nextPk) ? 'current' : 'not-current'}`
           }
         >
-          <div className={`name`}>
+          <div className="name">
             {player.name}
-            {(player.pk === pk) && ' (you)'}
+            {(player.pk === youPk) && ' (you)'}
             <div className={`color-key color-${player.color}`} />
           </div>
 
-          <div className={`stats`}>
+          <div className="stats">
             {player.numWins} wins / {player.numGames}
           </div>
         </div>
