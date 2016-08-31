@@ -30881,6 +30881,11 @@
 	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 
+	      // Reset error state, in case there was a previous error
+	      this.setState({
+	        usernameError: null
+	      });
+
 	      if (!this.state.username) {
 	        this.setState({
 	          usernameError: 'Username required'
@@ -30888,11 +30893,6 @@
 
 	        return;
 	      }
-
-	      // In case need to reset state from previous error
-	      this.setState({
-	        usernameError: null
-	      });
 
 	      (0, _emitters.emitAddUser)({
 	        username: this.state.username
@@ -31052,10 +31052,11 @@
 	    var _this = _possibleConstructorReturn(this, (JoinRoomForm.__proto__ || Object.getPrototypeOf(JoinRoomForm)).call(this, props));
 
 	    _this.state = {
+	      roomDoesNotExist: props.roomDoesNotExist,
 	      username: '',
-	      usernameError: null,
+	      usernameError: '',
 	      room: '',
-	      roomError: null
+	      roomError: ''
 	    };
 
 	    // Bind callbacks to make `this` the correct context
@@ -31065,6 +31066,15 @@
 	  }
 
 	  _createClass(JoinRoomForm, [{
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(_ref2) {
+	      var roomDoesNotExist = _ref2.roomDoesNotExist;
+
+	      this.setState({
+	        roomDoesNotExist: roomDoesNotExist
+	      });
+	    }
+	  }, {
 	    key: '_handleInput',
 	    value: function _handleInput(e) {
 	      this.setState(_defineProperty({}, e.target.name, e.target.value));
@@ -31074,10 +31084,16 @@
 	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 
+	      // Reset error state, in case there was a previous error
+	      this.setState({
+	        roomError: '',
+	        usernameError: ''
+	      });
+
 	      var _state = this.state;
 	      var room = _state.room;
 	      var username = _state.username;
-	      var roomDoesNotExist = this.props.roomDoesNotExist;
+	      var roomDoesNotExist = _state.roomDoesNotExist;
 
 
 	      if (!username) {
@@ -31101,11 +31117,6 @@
 	      if (!username || !room || roomDoesNotExist) {
 	        return;
 	      }
-
-	      this.setState({
-	        roomError: null,
-	        usernameError: null
-	      });
 
 	      (0, _emitters.emitAddUser)({
 	        username: this.state.username,

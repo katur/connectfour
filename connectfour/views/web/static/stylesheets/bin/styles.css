@@ -76,7 +76,7 @@ h1, h2, h3, h4 {
 .error {
   font-style: italic;
   letter-spacing: 1px;
-  color: hotpink; }
+  color: #b36200; }
 
 input, button {
   background: #eee; }

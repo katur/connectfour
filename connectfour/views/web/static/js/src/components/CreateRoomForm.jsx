@@ -25,6 +25,11 @@ class CreateRoomForm extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
 
+    // Reset error state, in case there was a previous error
+    this.setState({
+      usernameError: null,
+    });
+
     if (!this.state.username) {
       this.setState({
         usernameError: 'Username required',
@@ -32,11 +37,6 @@ class CreateRoomForm extends React.Component {
 
       return;
     }
-
-    // In case need to reset state from previous error
-    this.setState({
-      usernameError: null,
-    });
 
     emitAddUser({
       username: this.state.username,
