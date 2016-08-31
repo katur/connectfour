@@ -23,33 +23,24 @@ function GamePlayers({ pk, players, nextPlayer }) {
 
   return (
     <div id="game-players">
-      <table>
-        <tbody>
-          {players.map((player, i) => (
-            <tr
-              key={player.pk}
-              className={
-                `${(player.pk === nextPk) ? 'current' : 'not-current'}`
-              }
-            >
+      {players.map((player, i) => (
+        <div
+          key={player.pk}
+          className={
+            `player ${(player.pk === nextPk) ? 'current' : 'not-current'}`
+          }
+        >
+          <div className={`name`}>
+            {player.name}
+            {(player.pk === pk) && ' (you)'}
+            <div className={`color-key color-${player.color}`} />
+          </div>
 
-              <td>
-                <div className={`color-key color-${player.color}`}>
-                </div>
-              </td>
-
-              <td>
-                {player.name}
-                {(player.pk === pk) && ' (you)'}
-              </td>
-
-              <td>
-                {player.numWins} wins / {player.numGames} games
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <div className={`stats`}>
+            {player.numWins} wins / {player.numGames}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

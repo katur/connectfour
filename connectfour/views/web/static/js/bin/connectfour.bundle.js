@@ -30814,7 +30814,7 @@
 	    { id: 'setup-screen' },
 	    _react2.default.createElement(
 	      'h1',
-	      null,
+	      { id: 'top-bar' },
 	      'Connect X'
 	    ),
 	    _react2.default.createElement(_CreateRoomForm2.default, null),
@@ -31288,25 +31288,25 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { id: 'game-screen' },
-	    _react2.default.createElement(_GameTitle2.default, null),
-	    _react2.default.createElement(_GameStartButton2.default, null),
-	    showRoom && _react2.default.createElement(_GameRoom2.default, null),
-	    showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
+	    _react2.default.createElement(
+	      'div',
+	      { id: 'top-bar' },
+	      _react2.default.createElement(_GameStartButton2.default, null),
+	      _react2.default.createElement(_GameTitle2.default, null),
+	      showRoom && _react2.default.createElement(_GameRoom2.default, null)
+	    ),
 	    showBoard && _react2.default.createElement(
 	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'div',
-	        { id: 'game-board' },
-	        _react2.default.createElement(_GameColumnButtons2.default, null),
-	        _react2.default.createElement(_GameGrid2.default, null)
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { id: 'game-control' },
-	        _react2.default.createElement(_GamePlayers2.default, null),
-	        _react2.default.createElement(_GameBoardForm2.default, null)
-	      )
+	      { id: 'game-info' },
+	      _react2.default.createElement(_GamePlayers2.default, null),
+	      showFeedback && _react2.default.createElement(_GameFeedback2.default, null),
+	      _react2.default.createElement(_GameBoardForm2.default, null)
+	    ),
+	    showBoard && _react2.default.createElement(
+	      'div',
+	      { id: 'game-board' },
+	      _react2.default.createElement(_GameColumnButtons2.default, null),
+	      _react2.default.createElement(_GameGrid2.default, null)
 	    )
 	  );
 	}
@@ -31333,6 +31333,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var NUMBER_WORDS = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+
 	function mapStateToProps(_ref) {
 	  var numToWin = _ref.numToWin;
 
@@ -31348,6 +31350,9 @@
 	function GameTitle(_ref2) {
 	  var numToWin = _ref2.numToWin;
 
+	  if (numToWin < NUMBER_WORDS.length) {
+	    numToWin = NUMBER_WORDS[numToWin];
+	  }
 	  return _react2.default.createElement(
 	    'h1',
 	    null,
@@ -31441,7 +31446,7 @@
 	              type: 'submit',
 	              disabled: gameInProgress
 	            },
-	            'Start Game'
+	            'Start'
 	          )
 	        )
 	      );
@@ -31927,42 +31932,29 @@
 	  return _react2.default.createElement(
 	    'div',
 	    { id: 'game-players' },
-	    _react2.default.createElement(
-	      'table',
-	      null,
-	      _react2.default.createElement(
-	        'tbody',
-	        null,
-	        players.map(function (player, i) {
-	          return _react2.default.createElement(
-	            'tr',
-	            {
-	              key: player.pk,
-	              className: '' + (player.pk === nextPk ? 'current' : 'not-current')
-	            },
-	            _react2.default.createElement(
-	              'td',
-	              null,
-	              _react2.default.createElement('div', { className: 'color-key color-' + player.color })
-	            ),
-	            _react2.default.createElement(
-	              'td',
-	              null,
-	              player.name,
-	              player.pk === pk && ' (you)'
-	            ),
-	            _react2.default.createElement(
-	              'td',
-	              null,
-	              player.numWins,
-	              ' wins / ',
-	              player.numGames,
-	              ' games'
-	            )
-	          );
-	        })
-	      )
-	    )
+	    players.map(function (player, i) {
+	      return _react2.default.createElement(
+	        'div',
+	        {
+	          key: player.pk,
+	          className: 'player ' + (player.pk === nextPk ? 'current' : 'not-current')
+	        },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'name' },
+	          player.name,
+	          player.pk === pk && ' (you)',
+	          _react2.default.createElement('div', { className: 'color-key color-' + player.color })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'stats' },
+	          player.numWins,
+	          ' wins / ',
+	          player.numGames
+	        )
+	      );
+	    })
 	  );
 	}
 
@@ -32083,7 +32075,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        { id: 'change-board' },
+	        { id: 'game-board-form' },
 	        _react2.default.createElement(
 	          'form',
 	          {
@@ -32097,7 +32089,7 @@
 	            _react2.default.createElement(
 	              'dt',
 	              null,
-	              'Num rows'
+	              'Rows'
 	            ),
 	            _react2.default.createElement(
 	              'dd',
@@ -32112,7 +32104,7 @@
 	            _react2.default.createElement(
 	              'dt',
 	              null,
-	              'Num columns'
+	              'Columns'
 	            ),
 	            _react2.default.createElement(
 	              'dd',
@@ -32127,7 +32119,7 @@
 	            _react2.default.createElement(
 	              'dt',
 	              null,
-	              'Num to win'
+	              'To win'
 	            ),
 	            _react2.default.createElement(
 	              'dd',
@@ -32146,7 +32138,7 @@
 	              type: 'submit',
 	              disabled: gameInProgress
 	            },
-	            'Change board'
+	            'Change'
 	          )
 	        )
 	      );

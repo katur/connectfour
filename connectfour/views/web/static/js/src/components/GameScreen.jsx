@@ -29,28 +29,29 @@ const propTypes = {
 function GameScreen({ showRoom, showFeedback, showBoard }) {
   return (
     <div id="game-screen">
-      <GameTitle />
+      <div id="top-bar">
+        <GameStartButton />
 
-      <GameStartButton />
+        <GameTitle />
 
-      {showRoom && <GameRoom />}
+        {showRoom && <GameRoom />}
+      </div>
 
-      {showFeedback && <GameFeedback />}
 
       {showBoard &&
-        <div>
-          <div id="game-board">
-            <GameColumnButtons />
-            <GameGrid />
-          </div>
-
-          <div id="game-control">
-            <GamePlayers />
-            <GameBoardForm />
-          </div>
+        <div id="game-info">
+          <GamePlayers />
+          {showFeedback && <GameFeedback />}
+          <GameBoardForm />
         </div>
       }
 
+      {showBoard &&
+        <div id="game-board">
+          <GameColumnButtons />
+          <GameGrid />
+        </div>
+      }
     </div>
   );
 }

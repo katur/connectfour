@@ -6,7 +6,7 @@ import JoinRoomForm from './JoinRoomForm';
 function SetupScreen() {
   return (
     <div id="setup-screen">
-      <h1>Connect X</h1>
+      <h1 id="top-bar">Connect X</h1>
       <CreateRoomForm />
       <JoinRoomForm />
     </div>

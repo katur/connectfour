@@ -66,14 +66,14 @@ class GameBoardForm extends React.Component {
     const { gameInProgress } = this.props;
 
     return (
-      <div id="change-board">
+      <div id="game-board-form">
         <form
           action=""
           method="post"
           onSubmit={this._handleSubmit}
         >
           <dl>
-            <dt>Num rows</dt>
+            <dt>Rows</dt>
             <dd>
               <input
                 type="text"
@@ -83,7 +83,7 @@ class GameBoardForm extends React.Component {
               />
             </dd>
 
-            <dt>Num columns</dt>
+            <dt>Columns</dt>
             <dd>
               <input
                 type="text"
@@ -93,7 +93,7 @@ class GameBoardForm extends React.Component {
               />
             </dd>
 
-            <dt>Num to win</dt>
+            <dt>To win</dt>
             <dd>
               <input
                 type="text"
@@ -109,7 +109,7 @@ class GameBoardForm extends React.Component {
             type="submit"
             disabled={gameInProgress}
           >
-            Change board
+            Change
           </button>
         </form>
       </div>

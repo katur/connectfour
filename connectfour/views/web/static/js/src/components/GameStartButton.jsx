@@ -42,7 +42,7 @@ class GameStartButton extends React.Component {
             type="submit"
             disabled={gameInProgress}
           >
-            Start Game
+            Start
           </button>
         </form>
       </div>

@@ -1,29 +1,93 @@
 #game-screen
-  #game-start, #game-room, #game-feedback
-    padding: $whitespace / 4
-    position: absolute
-    top: 0
-    opacity: 0.75
+  #top-bar
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    margin-bottom: $whitespace
 
-  #game-start
-    left: 0
-    z-index: 3
+    #game-title, #game-start, #game-room
+      width: $whitespace * 2
+      white-space: nowrap
+      opacity: 0.75
 
-  #game-room
-    right: 0
-    z-index: 2
+  #game-info
+    display: flex
+    flex-direction: row
+    justify-content: space-between
+    align-items: center
+    margin-bottom: $whitespace / 2
 
-    td
-      padding-right: 5px
+    #game-players
+      display: flex
+      flex-direction: row
+      justify-content: flex-start
+      border: solid 3px darken($background-color, 7%)
+      border-radius: 5px
+      z-index: 2
 
-  #game-feedback
-    left: 0
-    width: 100%
-    z-index: 1
-    text-align: center
+      .player
+        display: flex
+        flex-direction: column
+        align-items: center
+        padding: $whitespace / 4
+        border-right: solid 3px darken($background-color, 5%)
+        z-index: 1
+
+        &:last-of-type
+          border-right: none
+
+        &.current
+          background: $yellow
+
+        .name, .stats
+          padding: 5px
+
+        .name
+          .color-key
+            display: inline-block
+            width: 15px
+            height: 15px
+            margin: 0 0 -3px 8px
+            border-radius: 3px
+
+        .stats
+          font-size: $base-font-size - 3
+
+    #game-feedback
+      display: absolute
+      width: 100%
+
+    #game-board-form
+      dl, dt, dd, button
+        display: inline-block
+
+      dl
+        font-size: $base-font-size - 3
+
+      dt
+        margin-right: $whitespace / 8
+
+      dd
+        margin-right: $whitespace / 4
+
+        input
+          width: 20px
+          text-align: center
+
+      button
+        margin-left: $whitespace / 4
+
 
   #game-board
-    float: left
+    display: flex
+    flex-direction: column
+    justify-content: flex-start
+    align-items: center
+
+    #game-column-buttons
+      display: flex
+      flex-direction: row
+      justify-content: flex-start
 
     .game-square-wrapper, .game-column-button-wrapper
       float: left
@@ -42,36 +106,6 @@
 
       &.blinking
         animation: blinker 500ms linear infinite alternate
-
-  #game-control
-    float: left
-    margin-left: $whitespace * 3
-
-    #game-players
-      margin-top: $whitespace / 4
-      margin-bottom: $whitespace
-
-      table
-        white-space: nowrap
-        border-collapse: separate
-
-        tr
-          @include row-border(solid, 3px, $background-color, 5px)
-
-          &.current
-            @include row-border(solid, 3px, $yellow, 5px)
-
-          td
-            padding: 5px
-
-            .color-key
-              height: 10px
-              width: 10px
-
-    #change-board
-      input
-        width: 30px
-
 
 .color
   &-null
