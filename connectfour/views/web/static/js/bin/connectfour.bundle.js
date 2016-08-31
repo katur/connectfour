@@ -32271,7 +32271,8 @@
 	        });
 
 	        return update(state, {
-	          grid: newGrid
+	          grid: newGrid,
+	          nextPlayer: null
 	        });
 	      }
 

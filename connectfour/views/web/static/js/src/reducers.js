@@ -99,6 +99,7 @@ function appReducer(state = initialState, action) {
 
       return update(state, {
         grid: newGrid,
+        nextPlayer: null,
       });
     }
 
