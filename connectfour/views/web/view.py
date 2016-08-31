@@ -24,12 +24,12 @@ socketio = SocketIO(app, async_mode=async_mode)
 # To map user session ids to room
 sid_to_room = {}
 
-# To map rooms to room-specific data
-room_to_data = {}
+# To map rooms to room-specific state
+room_to_state = {}
 
 
-class RoomData():
-    """Room-specific data, including model and model event handlers."""
+class RoomState():
+    """Room-specific state, including model and model event handlers."""
 
     def __init__(self, room):
         self.room = room
@@ -120,7 +120,7 @@ def on_add_user(data):
     if 'room' in data:
         room = data['room']
 
-        if room not in room_to_data:
+        if room not in room_to_state:
             emit('roomDoesNotExist', {
               'room': room,
             })
@@ -131,8 +131,8 @@ def on_add_user(data):
 
     join_room(room)
     sid_to_room[request.sid] = room
-    room_data = _get_room_data(request)
-    model = room_data.model
+    room_state = _get_room_state(request)
+    model = room_state.model
 
     emit('roomJoined', {
         'pk': request.sid,
@@ -141,7 +141,7 @@ def on_add_user(data):
         'board': model.get_json_board(),
     })
 
-    pubsub = room_data.pubsub
+    pubsub = room_state.pubsub
     pubsub.publish(
         ViewAction.add_player, trigger_queue=True, name=name, pk=request.sid)
 
@@ -149,19 +149,19 @@ def on_add_user(data):
 @socketio.on('disconnect')
 def on_disconnect():
     try:
-        model = _get_room_data(request).model
+        model = _get_room_state(request).model
     except KeyError:
         return
 
     player = [p for p in model.players if p.pk == request.sid][0]
-    pubsub = _get_room_data(request).pubsub
+    pubsub = _get_room_state(request).pubsub
     pubsub.publish(ViewAction.remove_player, trigger_queue=True, player=player)
 
     room = sid_to_room[request.sid]
     del sid_to_room[request.sid]
 
     if not model.players:
-        del room_to_data[room]
+        del room_to_state[room]
 
 
 @socketio.on('createBoard')
@@ -170,7 +170,7 @@ def on_create_board(data):
     num_columns = int(data['numColumns'])
     num_to_win = int(data['numToWin'])
 
-    pubsub = _get_room_data(request).pubsub
+    pubsub = _get_room_state(request).pubsub
     pubsub.publish(
         ViewAction.create_board, trigger_queue=True, num_rows=num_rows,
         num_columns=num_columns, num_to_win=num_to_win)
@@ -179,7 +179,7 @@ def on_create_board(data):
 @socketio.on('startGame')
 def on_start_game(data):
     # TODO: add error checking
-    pubsub = _get_room_data(request).pubsub
+    pubsub = _get_room_state(request).pubsub
     pubsub.publish(ViewAction.start_game, trigger_queue=True)
 
 
@@ -187,7 +187,7 @@ def on_start_game(data):
 def on_play(data):
     # TODO: add error checking (that current player really played)
     column = int(data['column'])
-    pubsub = _get_room_data(request).pubsub
+    pubsub = _get_room_state(request).pubsub
     pubsub.publish(ViewAction.play, trigger_queue=True, column=column)
 
 
@@ -195,13 +195,13 @@ def on_play(data):
 # Helpers #
 ###########
 
-def _get_room_data(request):
-    return room_to_data[sid_to_room[request.sid]]
+def _get_room_state(request):
+    return room_to_state[sid_to_room[request.sid]]
 
 
 def _create_new_room():
     room = _get_random_string(ROOM_ID_LENGTH)
-    room_to_data[room] = RoomData(room)
+    room_to_state[room] = RoomState(room)
     return room
 
 
