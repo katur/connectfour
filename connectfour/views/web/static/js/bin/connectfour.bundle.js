@@ -31052,7 +31052,6 @@
 	    var _this = _possibleConstructorReturn(this, (JoinRoomForm.__proto__ || Object.getPrototypeOf(JoinRoomForm)).call(this, props));
 
 	    _this.state = {
-	      roomDoesNotExist: props.roomDoesNotExist,
 	      username: '',
 	      usernameError: '',
 	      room: '',
@@ -31066,15 +31065,6 @@
 	  }
 
 	  _createClass(JoinRoomForm, [{
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(_ref2) {
-	      var roomDoesNotExist = _ref2.roomDoesNotExist;
-
-	      this.setState({
-	        roomDoesNotExist: roomDoesNotExist
-	      });
-	    }
-	  }, {
 	    key: '_handleInput',
 	    value: function _handleInput(e) {
 	      this.setState(_defineProperty({}, e.target.name, e.target.value));
@@ -31093,7 +31083,6 @@
 	      var _state = this.state;
 	      var room = _state.room;
 	      var username = _state.username;
-	      var roomDoesNotExist = _state.roomDoesNotExist;
 
 
 	      if (!username) {
@@ -31108,13 +31097,7 @@
 	        });
 	      }
 
-	      if (roomDoesNotExist) {
-	        this.setState({
-	          roomError: 'Room does not exist'
-	        });
-	      }
-
-	      if (!username || !room || roomDoesNotExist) {
+	      if (!username || !room) {
 	        return;
 	      }
 
@@ -31130,8 +31113,15 @@
 	      var username = _state2.username;
 	      var room = _state2.room;
 	      var usernameError = _state2.usernameError;
-	      var roomError = _state2.roomError;
 
+
+	      var roomError = void 0;
+
+	      if (this.state.roomError) {
+	        roomError = this.state.roomError;
+	      } else if (this.props.roomDoesNotExist) {
+	        roomError = 'Room does not exist';
+	      }
 
 	      return _react2.default.createElement(
 	        'div',

@@ -20,7 +20,6 @@ class JoinRoomForm extends React.Component {
     super(props);
 
     this.state = {
-      roomDoesNotExist: props.roomDoesNotExist,
       username: '',
       usernameError: '',
       room: '',
@@ -30,12 +29,6 @@ class JoinRoomForm extends React.Component {
     // Bind callbacks to make `this` the correct context
     this._handleInput = this._handleInput.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
-  }
-
-  componentWillReceiveProps({ roomDoesNotExist }) {
-    this.setState({
-      roomDoesNotExist,
-    });
   }
 
   _handleInput(e) {
@@ -53,7 +46,7 @@ class JoinRoomForm extends React.Component {
       usernameError: '',
     });
 
-    const { room, username, roomDoesNotExist } = this.state;
+    const { room, username } = this.state;
 
     if (!username) {
       this.setState({
@@ -67,13 +60,7 @@ class JoinRoomForm extends React.Component {
       });
     }
 
-    if (roomDoesNotExist) {
-      this.setState({
-        roomError: 'Room does not exist',
-      });
-    }
-
-    if (!username || !room || roomDoesNotExist) {
+    if (!username || !room) {
       return;
     }
 
@@ -84,7 +71,15 @@ class JoinRoomForm extends React.Component {
   }
 
   render() {
-    const { username, room, usernameError, roomError } = this.state;
+    const { username, room, usernameError } = this.state;
+
+    let roomError;
+
+    if (this.state.roomError) {
+      roomError = this.state.roomError;
+    } else if (this.props.roomDoesNotExist) {
+      roomError = 'Room does not exist';
+    }
 
     return (
       <div>
