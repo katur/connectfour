@@ -9,31 +9,42 @@ const propTypes = {
 }
 
 
-function GameColumnButton({ column, style, disabled }) {
-  return (
-    <form
-      action=""
-      method="post"
-      onSubmit={(e) => {
-        e.preventDefault();
-        emitPlay({
-          column: column,
-        });
-      }}
-    >
-      <div
-        className="game-column-button-wrapper"
-        style={style}
+class GameColumnButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    emitPlay({
+      column: this.props.column,
+    });
+  }
+
+  render() {
+    const { style, disabled } = this.props;
+
+    return (
+      <form
+        action=""
+        method="post"
+        onSubmit={this.onSubmit}
       >
-        <button
-          className="game-column-button"
-          disabled={disabled}
+        <div
+          className="game-column-button-wrapper"
+          style={style}
         >
-          Drop
-        </button>
-      </div>
-    </form>
-  );
+          <button
+            className="game-column-button"
+            disabled={disabled}
+          >
+            Drop
+          </button>
+        </div>
+      </form>
+    );
+  }
 }
 
 

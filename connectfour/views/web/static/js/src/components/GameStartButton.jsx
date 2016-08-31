@@ -15,26 +15,37 @@ const propTypes = {
 };
 
 
-function GameStartButton({ gameInProgress }) {
-  return (
-    <div id="game-start">
-      <form
-        action=""
-        method="post"
-        onSubmit={(e) => {
-          e.preventDefault();
-          emitStartGame();
-        }}
-      >
-        <button
-          type="submit"
-          disabled={gameInProgress}
+class GameStartButton extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    emitStartGame();
+  }
+
+  render() {
+    const { gameInProgress } = this.props;
+
+    return (
+      <div id="game-start">
+        <form
+          action=""
+          method="post"
+          onSubmit={this.onSubmit}
         >
-          Start Game
-        </button>
-      </form>
-    </div>
-  );
+          <button
+            type="submit"
+            disabled={gameInProgress}
+          >
+            Start Game
+          </button>
+        </form>
+      </div>
+    );
+  }
 }
 
 

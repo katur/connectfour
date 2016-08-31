@@ -31361,6 +31361,8 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(51);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -31370,6 +31372,12 @@
 	var _emitters = __webpack_require__(250);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	function mapStateToProps(_ref) {
 	  var gameInProgress = _ref.gameInProgress;
@@ -31383,33 +31391,55 @@
 	  gameInProgress: _react.PropTypes.bool.isRequired
 	};
 
-	function GameStartButton(_ref2) {
-	  var gameInProgress = _ref2.gameInProgress;
+	var GameStartButton = function (_React$Component) {
+	  _inherits(GameStartButton, _React$Component);
 
-	  return _react2.default.createElement(
-	    'div',
-	    { id: 'game-start' },
-	    _react2.default.createElement(
-	      'form',
-	      {
-	        action: '',
-	        method: 'post',
-	        onSubmit: function onSubmit(e) {
-	          e.preventDefault();
-	          (0, _emitters.emitStartGame)();
-	        }
-	      },
-	      _react2.default.createElement(
-	        'button',
-	        {
-	          type: 'submit',
-	          disabled: gameInProgress
-	        },
-	        'Start Game'
-	      )
-	    )
-	  );
-	}
+	  function GameStartButton(props) {
+	    _classCallCheck(this, GameStartButton);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameStartButton).call(this, props));
+
+	    _this.onSubmit = _this.onSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(GameStartButton, [{
+	    key: 'onSubmit',
+	    value: function onSubmit(e) {
+	      e.preventDefault();
+	      (0, _emitters.emitStartGame)();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var gameInProgress = this.props.gameInProgress;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        { id: 'game-start' },
+	        _react2.default.createElement(
+	          'form',
+	          {
+	            action: '',
+	            method: 'post',
+	            onSubmit: this.onSubmit
+	          },
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              type: 'submit',
+	              disabled: gameInProgress
+	            },
+	            'Start Game'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return GameStartButton;
+	}(_react2.default.Component);
 
 	GameStartButton.propTypes = propTypes;
 
@@ -31595,6 +31625,8 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(51);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -31603,46 +31635,74 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 	var propTypes = {
 	  column: _react.PropTypes.number.isRequired,
 	  disabled: _react.PropTypes.bool.isRequired,
 	  style: _react.PropTypes.object.isRequired
 	};
 
-	function GameColumnButton(_ref) {
-	  var column = _ref.column;
-	  var style = _ref.style;
-	  var disabled = _ref.disabled;
+	var GameColumnButton = function (_React$Component) {
+	  _inherits(GameColumnButton, _React$Component);
 
-	  return _react2.default.createElement(
-	    'form',
-	    {
-	      action: '',
-	      method: 'post',
-	      onSubmit: function onSubmit(e) {
-	        e.preventDefault();
-	        (0, _emitters.emitPlay)({
-	          column: column
-	        });
-	      }
-	    },
-	    _react2.default.createElement(
-	      'div',
-	      {
-	        className: 'game-column-button-wrapper',
-	        style: style
-	      },
-	      _react2.default.createElement(
-	        'button',
+	  function GameColumnButton(props) {
+	    _classCallCheck(this, GameColumnButton);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameColumnButton).call(this, props));
+
+	    _this.onSubmit = _this.onSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(GameColumnButton, [{
+	    key: 'onSubmit',
+	    value: function onSubmit(e) {
+	      e.preventDefault();
+	      (0, _emitters.emitPlay)({
+	        column: this.props.column
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var style = _props.style;
+	      var disabled = _props.disabled;
+
+
+	      return _react2.default.createElement(
+	        'form',
 	        {
-	          className: 'game-column-button',
-	          disabled: disabled
+	          action: '',
+	          method: 'post',
+	          onSubmit: this.onSubmit
 	        },
-	        'Drop'
-	      )
-	    )
-	  );
-	}
+	        _react2.default.createElement(
+	          'div',
+	          {
+	            className: 'game-column-button-wrapper',
+	            style: style
+	          },
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              className: 'game-column-button',
+	              disabled: disabled
+	            },
+	            'Drop'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return GameColumnButton;
+	}(_react2.default.Component);
 
 	GameColumnButton.propTypes = propTypes;
 
