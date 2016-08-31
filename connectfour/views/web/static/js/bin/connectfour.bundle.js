@@ -31340,14 +31340,10 @@
 	  var numToWin = _ref2.numToWin;
 
 	  return _react2.default.createElement(
-	    'div',
+	    'h1',
 	    null,
-	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      'Connect ',
-	      numToWin || 'X'
-	    )
+	    'Connect ',
+	    numToWin || 'X'
 	  );
 	}
 
@@ -31387,37 +31383,33 @@
 	  gameInProgress: _react.PropTypes.bool.isRequired
 	};
 
-	var GameStartButton = _react2.default.createClass({
-	  displayName: 'GameStartButton',
+	function GameStartButton(_ref2) {
+	  var gameInProgress = _ref2.gameInProgress;
 
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-	    (0, _emitters.emitStartGame)();
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'game-start' },
+	  return _react2.default.createElement(
+	    'div',
+	    { id: 'game-start' },
+	    _react2.default.createElement(
+	      'form',
+	      {
+	        action: '',
+	        method: 'post',
+	        onSubmit: function onSubmit(e) {
+	          e.preventDefault();
+	          (0, _emitters.emitStartGame)();
+	        }
+	      },
 	      _react2.default.createElement(
-	        'form',
+	        'button',
 	        {
-	          action: '',
-	          method: 'post',
-	          onSubmit: this._handleSubmit
+	          type: 'submit',
+	          disabled: gameInProgress
 	        },
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            type: 'submit',
-	            disabled: this.props.gameInProgress
-	          },
-	          'Start Game'
-	        )
+	        'Start Game'
 	      )
-	    );
-	  }
-	});
+	    )
+	  );
+	}
 
 	GameStartButton.propTypes = propTypes;
 
@@ -31457,30 +31449,10 @@
 	  var room = _ref2.room;
 
 	  return _react2.default.createElement(
-	    'div',
+	    'span',
 	    { id: 'game-room' },
-	    _react2.default.createElement(
-	      'table',
-	      null,
-	      _react2.default.createElement(
-	        'tbody',
-	        null,
-	        _react2.default.createElement(
-	          'tr',
-	          null,
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            'Room:'
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            room
-	          )
-	        )
-	      )
-	    )
+	    'Room: ',
+	    room
 	  );
 	}
 
@@ -31632,47 +31604,45 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var propTypes = {
+	  column: _react.PropTypes.number.isRequired,
 	  disabled: _react.PropTypes.bool.isRequired,
 	  style: _react.PropTypes.object.isRequired
 	};
 
-	var GameColumnButton = _react2.default.createClass({
-	  displayName: 'GameColumnButton',
+	function GameColumnButton(_ref) {
+	  var column = _ref.column;
+	  var style = _ref.style;
+	  var disabled = _ref.disabled;
 
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-
-	    (0, _emitters.emitPlay)({
-	      column: this.props.column
-	    });
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'form',
+	  return _react2.default.createElement(
+	    'form',
+	    {
+	      action: '',
+	      method: 'post',
+	      onSubmit: function onSubmit(e) {
+	        e.preventDefault();
+	        (0, _emitters.emitPlay)({
+	          column: column
+	        });
+	      }
+	    },
+	    _react2.default.createElement(
+	      'div',
 	      {
-	        action: '',
-	        method: 'post',
-	        onSubmit: this._handleSubmit
+	        className: 'game-column-button-wrapper',
+	        style: style
 	      },
 	      _react2.default.createElement(
-	        'div',
+	        'button',
 	        {
-	          className: 'game-column-button-wrapper',
-	          style: this.props.style
+	          className: 'game-column-button',
+	          disabled: disabled
 	        },
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            className: 'game-column-button',
-	            disabled: this.props.disabled
-	          },
-	          'Drop'
-	        )
+	        'Drop'
 	      )
-	    );
-	  }
-	});
+	    )
+	  );
+	}
 
 	GameColumnButton.propTypes = propTypes;
 

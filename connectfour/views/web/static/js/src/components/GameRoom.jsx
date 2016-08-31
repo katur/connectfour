@@ -16,16 +16,7 @@ const propTypes = {
 
 function GameRoom({ room }) {
   return (
-    <div id="game-room">
-      <table>
-        <tbody>
-          <tr>
-            <td>Room:</td>
-            <td>{room}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <span id="game-room">Room: {room}</span>
   );
 }
 

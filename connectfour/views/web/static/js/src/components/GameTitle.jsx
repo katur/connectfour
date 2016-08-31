@@ -15,13 +15,7 @@ const propTypes = {
 
 
 function GameTitle({ numToWin }) {
-  return (
-    <div>
-      <h1>
-        Connect {numToWin || 'X'}
-      </h1>
-    </div>
-  );
+  return <h1>Connect {numToWin || 'X'}</h1>;
 }
 
 

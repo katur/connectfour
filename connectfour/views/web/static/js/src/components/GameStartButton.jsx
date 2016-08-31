@@ -15,31 +15,27 @@ const propTypes = {
 };
 
 
-const GameStartButton = React.createClass({
-  _handleSubmit: function(e) {
-    e.preventDefault();
-    emitStartGame();
-  },
-
-  render: function() {
-    return (
-      <div id="game-start">
-        <form
-          action=""
-          method="post"
-          onSubmit={this._handleSubmit}
+function GameStartButton({ gameInProgress }) {
+  return (
+    <div id="game-start">
+      <form
+        action=""
+        method="post"
+        onSubmit={(e) => {
+          e.preventDefault();
+          emitStartGame();
+        }}
+      >
+        <button
+          type="submit"
+          disabled={gameInProgress}
         >
-          <button
-            type="submit"
-            disabled={this.props.gameInProgress}
-          >
-            Start Game
-          </button>
-        </form>
-      </div>
-    );
-  },
-});
+          Start Game
+        </button>
+      </form>
+    </div>
+  );
+}
 
 
 GameStartButton.propTypes = propTypes;

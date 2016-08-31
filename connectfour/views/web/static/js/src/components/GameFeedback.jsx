@@ -15,11 +15,7 @@ const propTypes = {
 
 
 function GameFeedback({ feedback }) {
-  return (
-    <div id="game-feedback">
-      {feedback}
-    </div>
-  );
+  return <div id="game-feedback">{feedback}</div>;
 }
 
 
