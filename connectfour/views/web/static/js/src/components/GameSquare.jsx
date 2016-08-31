@@ -19,8 +19,7 @@ function GameSquare({ color, blinking, style }) {
       className="game-square-wrapper"
       style={style}
     >
-      <div className={innerClassName}>
-      </div>
+      <div className={innerClassName} />
     </div>
   );
 }

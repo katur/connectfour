@@ -59,11 +59,7 @@ function GameGrid({ numRows, numColumns, grid, blinkingSquares }) {
     rows.push(row);
   }
 
-  return (
-    <div id="game-grid">
-      {rows}
-    </div>
-  );
+  return <div id="game-grid">{rows}</div>;
 }
 
 

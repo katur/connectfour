@@ -15,9 +15,7 @@ const propTypes = {
 
 
 function GameRoom({ room }) {
-  return (
-    <span id="game-room">Room: {room}</span>
-  );
+  return <span id="game-room">Room: {room}</span>;
 }
 
 
