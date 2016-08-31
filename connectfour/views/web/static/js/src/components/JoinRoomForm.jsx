@@ -15,88 +15,69 @@ const propTypes = {
 };
 
 
-const JoinRoomForm = React.createClass({
-  getInitialState: function() {
-    return {
-      username: ``,
-      usernameError: null,
-      room: ``,
-      roomError: null,
-    };
-  },
+class JoinRoomForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  _handleInput: function(e) {
+    this.state = {
+      username: '',
+      usernameError: null,
+      room: '',
+      roomError: null,
+    }
+
+    // Bind callbacks to make `this` the correct context
+    this._handleInput = this._handleInput.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  _handleInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  },
+  }
 
-  _handleSubmit: function(e) {
+  _handleSubmit(e) {
     e.preventDefault();
 
-    if (!this.state.room) {
-      this.setState({
-        roomError: 'Room required',
-      });
+    const { room, username } = this.state;
+    const { roomDoesNotExist } = this.props;
 
-      return;
-
-    } else if (this.props.roomDoesNotExist) {
-      this.setState({
-        roomError: 'Room does not exist',
-      });
-
-      return;
-
-    } else {
-      this.setState({
-        roomError: null,
-      });
-    }
-
-    if (!this.state.username) {
+    if (!username) {
       this.setState({
         usernameError: 'Username required',
       });
+    }
 
-      return;
-
-    } else {
+    if (!room) {
       this.setState({
-        usernameError: null,
+        roomError: 'Room required',
       });
     }
 
-    /*
-    this.setState({
-      usernameError: this.state.username ? null : 'Username required',
-      roomError: this.state.room ? null : 'Room required',
-    });
+    if (roomDoesNotExist) {
+      this.setState({
+        roomError: 'Room does not exist',
+      });
+    }
 
-    if (this.state.usernameError || this.state.roomError) {
+    if (!username || !room || roomDoesNotExist) {
       return;
     }
-    */
+
+    this.setState({
+      roomError: null,
+      usernameError: null,
+    });
 
     emitAddUser({
       username: this.state.username,
       room: this.state.room,
     });
+  }
 
-  },
-
-  render: function() {
-    let usernameError;
-
-    if (this.state.usernameError) {
-      usernameError = <span className="error">{this.state.usernameError}</span>;
-    }
-
-    let roomError;
-
-    if (this.state.roomError) {
-      roomError = <span className="error">{this.state.roomError}</span>;
-    }
+  render() {
+    const { username, room, usernameError, roomError } = this.state;
 
     return (
       <div>
@@ -120,11 +101,13 @@ const JoinRoomForm = React.createClass({
                 type="text"
                 id="room"
                 name="room"
-                value={this.state.room}
+                value={room}
                 onChange={this._handleInput}
               />
 
-              {roomError}
+              {roomError &&
+                <span className="error">{roomError}</span>
+              }
             </dd>
 
             <dt>
@@ -138,11 +121,13 @@ const JoinRoomForm = React.createClass({
                 type="text"
                 id="username"
                 name="username"
-                value={this.state.username}
+                value={username}
                 onChange={this._handleInput}
               />
 
-              {usernameError}
+              {usernameError &&
+                <span className="error">{usernameError}</span>
+              }
             </dd>
           </dl>
 
@@ -150,8 +135,8 @@ const JoinRoomForm = React.createClass({
         </form>
       </div>
     );
-  },
-});
+  }
+}
 
 
 JoinRoomForm.propTypes = propTypes;

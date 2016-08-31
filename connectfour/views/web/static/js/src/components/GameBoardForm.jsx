@@ -21,23 +21,29 @@ const propTypes = {
 };
 
 
-const GameBoardForm = React.createClass({
-  getInitialState: function() {
-    return {
+class GameBoardForm extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       numRows: `${window.DEFAULT_ROWS}`,
       numColumns: `${window.DEFAULT_COLUMNS}`,
       numToWin: `${window.DEFAULT_TO_WIN}`,
       username: ``,
     };
-  },
 
-  _handleInput: function(e) {
+    // Bind callbacks to make `this` the correct context
+    this._handleInput = this._handleInput.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  _handleInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  },
+  }
 
-  _handleSubmit: function(e) {
+  _handleSubmit(e) {
     e.preventDefault();
 
     emitCreateBoard({
@@ -45,9 +51,12 @@ const GameBoardForm = React.createClass({
       numColumns: this.state.numColumns,
       numToWin: this.state.numToWin,
     });
-  },
+  }
 
-  render: function() {
+  render() {
+    const { numRows, numColumns, numToWin } = this.state;
+    const { gameInProgress } = this.props;
+
     return (
       <div id="change-board">
         <form
@@ -61,7 +70,7 @@ const GameBoardForm = React.createClass({
               <input
                 type="text"
                 name="numRows"
-                value={this.state.numRows}
+                value={numRows}
                 onChange={this._handleInput}
               />
             </dd>
@@ -71,7 +80,7 @@ const GameBoardForm = React.createClass({
               <input
                 type="text"
                 name="numColumns"
-                value={this.state.numColumns}
+                value={numColumns}
                 onChange={this._handleInput}
               />
             </dd>
@@ -81,7 +90,7 @@ const GameBoardForm = React.createClass({
               <input
                 type="text"
                 name="numToWin"
-                value={this.state.numToWin}
+                value={numToWin}
                 onChange={this._handleInput}
               />
             </dd>
@@ -90,15 +99,15 @@ const GameBoardForm = React.createClass({
 
           <button
             type="submit"
-            disabled={this.props.gameInProgress}
+            disabled={gameInProgress}
           >
             Change board
           </button>
         </form>
       </div>
     );
-  },
-});
+  }
+}
 
 
 GameBoardForm.propTypes = propTypes;

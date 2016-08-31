@@ -18,10 +18,12 @@ const propTypes = {
 class GameStartButton extends React.Component {
   constructor(props) {
     super(props);
-    this.onSubmit = this.onSubmit.bind(this);
+
+    // Bind callbacks to make `this` the correct context
+    this._handleSubmit = this._handleSubmit.bind(this);
   }
 
-  onSubmit(e) {
+  _handleSubmit(e) {
     e.preventDefault();
     emitStartGame();
   }
@@ -34,7 +36,7 @@ class GameStartButton extends React.Component {
         <form
           action=""
           method="post"
-          onSubmit={this.onSubmit}
+          onSubmit={this._handleSubmit}
         >
           <button
             type="submit"

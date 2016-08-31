@@ -30825,7 +30825,7 @@
 
 	var _CreateRoomForm2 = _interopRequireDefault(_CreateRoomForm);
 
-	var _JoinRoomForm = __webpack_require__(251);
+	var _JoinRoomForm = __webpack_require__(250);
 
 	var _JoinRoomForm2 = _interopRequireDefault(_JoinRoomForm);
 
@@ -30857,131 +30857,354 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(51);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _emitters = __webpack_require__(250);
+	var _emitters = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	var CreateRoomForm = _react2.default.createClass({
-	  displayName: 'CreateRoomForm',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	  getInitialState: function getInitialState() {
-	    return {
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var CreateRoomForm = function (_React$Component) {
+	  _inherits(CreateRoomForm, _React$Component);
+
+	  function CreateRoomForm(props) {
+	    _classCallCheck(this, CreateRoomForm);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CreateRoomForm).call(this, props));
+
+	    _this.state = {
 	      username: '',
 	      usernameError: null
 	    };
-	  },
 
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
+	    // Bind callbacks to make `this` the correct context
+	    _this._handleInput = _this._handleInput.bind(_this);
+	    _this._handleSubmit = _this._handleSubmit.bind(_this);
+	    return _this;
+	  }
 
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
+	  _createClass(CreateRoomForm, [{
+	    key: '_handleInput',
+	    value: function _handleInput(e) {
+	      this.setState(_defineProperty({}, e.target.name, e.target.value));
+	    }
+	  }, {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
+	      e.preventDefault();
 
-	    if (!this.state.username) {
+	      if (!this.state.username) {
+	        this.setState({
+	          usernameError: 'Username required'
+	        });
+
+	        return;
+	      }
+
+	      // In case need to reset state from previous error
 	      this.setState({
-	        usernameError: 'Username required'
+	        usernameError: null
 	      });
 
-	      return;
+	      (0, _emitters.emitAddUser)({
+	        username: this.state.username
+	      });
+
+	      (0, _emitters.emitCreateBoard)({
+	        numRows: window.DEFAULT_ROWS,
+	        numColumns: window.DEFAULT_COLUMNS,
+	        numToWin: window.DEFAULT_TO_WIN
+	      });
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var username = _state.username;
+	      var usernameError = _state.usernameError;
 
-	    this.setState({
-	      usernameError: null
-	    });
 
-	    /*
-	    this.setState({
-	      usernameError: this.state.username ? null : 'Username required',
-	    });
-	     if (this.state.usernameError) {
-	      return;
-	    }
-	    */
-
-	    (0, _emitters.emitAddUser)({
-	      username: this.state.username
-	    });
-
-	    (0, _emitters.emitCreateBoard)({
-	      numRows: window.DEFAULT_ROWS,
-	      numColumns: window.DEFAULT_COLUMNS,
-	      numToWin: window.DEFAULT_TO_WIN
-	    });
-	  },
-
-	  render: function render() {
-	    var usernameError = void 0;
-
-	    if (this.state.usernameError) {
-	      usernameError = _react2.default.createElement(
-	        'span',
-	        { className: 'error' },
-	        'Username required'
-	      );
-	    }
-
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'h3',
+	      return _react2.default.createElement(
+	        'div',
 	        null,
-	        'Create a game room?'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        {
-	          id: 'create-room-form',
-	          action: '',
-	          method: 'post',
-	          onSubmit: this._handleSubmit
-	        },
 	        _react2.default.createElement(
-	          'dl',
+	          'h3',
 	          null,
+	          'Create a game room?'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          {
+	            id: 'create-room-form',
+	            action: '',
+	            method: 'post',
+	            onSubmit: this._handleSubmit
+	          },
 	          _react2.default.createElement(
-	            'dt',
+	            'dl',
 	            null,
 	            _react2.default.createElement(
-	              'label',
-	              { htmlFor: 'username' },
-	              'Your username'
+	              'dt',
+	              null,
+	              _react2.default.createElement(
+	                'label',
+	                { htmlFor: 'username' },
+	                'Your username'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                id: 'username',
+	                name: 'username',
+	                value: username,
+	                onChange: this._handleInput
+	              }),
+	              usernameError && _react2.default.createElement(
+	                'span',
+	                { className: 'error' },
+	                usernameError
+	              )
 	            )
 	          ),
 	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              id: 'username',
-	              name: 'username',
-	              value: this.state.username,
-	              onChange: this._handleInput
-	            }),
-	            usernameError
+	            'button',
+	            { type: 'submit' },
+	            'Submit'
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit' },
-	          'Submit'
 	        )
-	      )
-	    );
-	  }
-	});
+	      );
+	    }
+	  }]);
+
+	  return CreateRoomForm;
+	}(_react2.default.Component);
 
 	exports.default = CreateRoomForm;
 
 /***/ },
 /* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(51);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRedux = __webpack_require__(238);
+
+	var _emitters = __webpack_require__(251);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function mapStateToProps(_ref) {
+	  var roomDoesNotExist = _ref.roomDoesNotExist;
+
+	  return {
+	    roomDoesNotExist: roomDoesNotExist
+	  };
+	}
+
+	var propTypes = {
+	  roomDoesNotExist: _react.PropTypes.bool.isRequired
+	};
+
+	var JoinRoomForm = function (_React$Component) {
+	  _inherits(JoinRoomForm, _React$Component);
+
+	  function JoinRoomForm(props) {
+	    _classCallCheck(this, JoinRoomForm);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(JoinRoomForm).call(this, props));
+
+	    _this.state = {
+	      username: '',
+	      usernameError: null,
+	      room: '',
+	      roomError: null
+	    };
+
+	    // Bind callbacks to make `this` the correct context
+	    _this._handleInput = _this._handleInput.bind(_this);
+	    _this._handleSubmit = _this._handleSubmit.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(JoinRoomForm, [{
+	    key: '_handleInput',
+	    value: function _handleInput(e) {
+	      this.setState(_defineProperty({}, e.target.name, e.target.value));
+	    }
+	  }, {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
+	      e.preventDefault();
+
+	      var _state = this.state;
+	      var room = _state.room;
+	      var username = _state.username;
+	      var roomDoesNotExist = this.props.roomDoesNotExist;
+
+
+	      if (!username) {
+	        this.setState({
+	          usernameError: 'Username required'
+	        });
+	      }
+
+	      if (!room) {
+	        this.setState({
+	          roomError: 'Room required'
+	        });
+	      }
+
+	      if (roomDoesNotExist) {
+	        this.setState({
+	          roomError: 'Room does not exist'
+	        });
+	      }
+
+	      if (!username || !room || roomDoesNotExist) {
+	        return;
+	      }
+
+	      this.setState({
+	        roomError: null,
+	        usernameError: null
+	      });
+
+	      (0, _emitters.emitAddUser)({
+	        username: this.state.username,
+	        room: this.state.room
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state2 = this.state;
+	      var username = _state2.username;
+	      var room = _state2.room;
+	      var usernameError = _state2.usernameError;
+	      var roomError = _state2.roomError;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Join a game room?'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          {
+	            id: 'join-room-form',
+	            action: '',
+	            method: 'post',
+	            onSubmit: this._handleSubmit
+	          },
+	          _react2.default.createElement(
+	            'dl',
+	            null,
+	            _react2.default.createElement(
+	              'dt',
+	              null,
+	              _react2.default.createElement(
+	                'label',
+	                { htmlFor: 'room' },
+	                'Room ID'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                id: 'room',
+	                name: 'room',
+	                value: room,
+	                onChange: this._handleInput
+	              }),
+	              roomError && _react2.default.createElement(
+	                'span',
+	                { className: 'error' },
+	                roomError
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'dt',
+	              null,
+	              _react2.default.createElement(
+	                'label',
+	                { htmlFor: 'username' },
+	                'Your username'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                id: 'username',
+	                name: 'username',
+	                value: username,
+	                onChange: this._handleInput
+	              }),
+	              usernameError && _react2.default.createElement(
+	                'span',
+	                { className: 'error' },
+	                usernameError
+	              )
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'submit' },
+	            'Submit'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return JoinRoomForm;
+	}(_react2.default.Component);
+
+	JoinRoomForm.propTypes = propTypes;
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(JoinRoomForm);
+
+/***/ },
+/* 251 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31008,202 +31231,6 @@
 	function emitPlay(data) {
 	  window.ws.emit('play', data);
 	}
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(51);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRedux = __webpack_require__(238);
-
-	var _emitters = __webpack_require__(250);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	function mapStateToProps(_ref) {
-	  var roomDoesNotExist = _ref.roomDoesNotExist;
-
-	  return {
-	    roomDoesNotExist: roomDoesNotExist
-	  };
-	}
-
-	var propTypes = {
-	  roomDoesNotExist: _react.PropTypes.bool.isRequired
-	};
-
-	var JoinRoomForm = _react2.default.createClass({
-	  displayName: 'JoinRoomForm',
-
-	  getInitialState: function getInitialState() {
-	    return {
-	      username: '',
-	      usernameError: null,
-	      room: '',
-	      roomError: null
-	    };
-	  },
-
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
-
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-
-	    if (!this.state.room) {
-	      this.setState({
-	        roomError: 'Room required'
-	      });
-
-	      return;
-	    } else if (this.props.roomDoesNotExist) {
-	      this.setState({
-	        roomError: 'Room does not exist'
-	      });
-
-	      return;
-	    } else {
-	      this.setState({
-	        roomError: null
-	      });
-	    }
-
-	    if (!this.state.username) {
-	      this.setState({
-	        usernameError: 'Username required'
-	      });
-
-	      return;
-	    } else {
-	      this.setState({
-	        usernameError: null
-	      });
-	    }
-
-	    /*
-	    this.setState({
-	      usernameError: this.state.username ? null : 'Username required',
-	      roomError: this.state.room ? null : 'Room required',
-	    });
-	     if (this.state.usernameError || this.state.roomError) {
-	      return;
-	    }
-	    */
-
-	    (0, _emitters.emitAddUser)({
-	      username: this.state.username,
-	      room: this.state.room
-	    });
-	  },
-
-	  render: function render() {
-	    var usernameError = void 0;
-
-	    if (this.state.usernameError) {
-	      usernameError = _react2.default.createElement(
-	        'span',
-	        { className: 'error' },
-	        this.state.usernameError
-	      );
-	    }
-
-	    var roomError = void 0;
-
-	    if (this.state.roomError) {
-	      roomError = _react2.default.createElement(
-	        'span',
-	        { className: 'error' },
-	        this.state.roomError
-	      );
-	    }
-
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'h3',
-	        null,
-	        'Join a game room?'
-	      ),
-	      _react2.default.createElement(
-	        'form',
-	        {
-	          id: 'join-room-form',
-	          action: '',
-	          method: 'post',
-	          onSubmit: this._handleSubmit
-	        },
-	        _react2.default.createElement(
-	          'dl',
-	          null,
-	          _react2.default.createElement(
-	            'dt',
-	            null,
-	            _react2.default.createElement(
-	              'label',
-	              { htmlFor: 'room' },
-	              'Room ID'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              id: 'room',
-	              name: 'room',
-	              value: this.state.room,
-	              onChange: this._handleInput
-	            }),
-	            roomError
-	          ),
-	          _react2.default.createElement(
-	            'dt',
-	            null,
-	            _react2.default.createElement(
-	              'label',
-	              { htmlFor: 'username' },
-	              'Your username'
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              id: 'username',
-	              name: 'username',
-	              value: this.state.username,
-	              onChange: this._handleInput
-	            }),
-	            usernameError
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'submit' },
-	          'Submit'
-	        )
-	      )
-	    );
-	  }
-	});
-
-	JoinRoomForm.propTypes = propTypes;
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(JoinRoomForm);
 
 /***/ },
 /* 252 */
@@ -31369,7 +31396,7 @@
 
 	var _reactRedux = __webpack_require__(238);
 
-	var _emitters = __webpack_require__(250);
+	var _emitters = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31397,15 +31424,16 @@
 	  function GameStartButton(props) {
 	    _classCallCheck(this, GameStartButton);
 
+	    // Bind callbacks to make `this` the correct context
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameStartButton).call(this, props));
 
-	    _this.onSubmit = _this.onSubmit.bind(_this);
+	    _this._handleSubmit = _this._handleSubmit.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(GameStartButton, [{
-	    key: 'onSubmit',
-	    value: function onSubmit(e) {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 	      (0, _emitters.emitStartGame)();
 	    }
@@ -31423,7 +31451,7 @@
 	          {
 	            action: '',
 	            method: 'post',
-	            onSubmit: this.onSubmit
+	            onSubmit: this._handleSubmit
 	          },
 	          _react2.default.createElement(
 	            'button',
@@ -31631,7 +31659,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _emitters = __webpack_require__(250);
+	var _emitters = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31653,15 +31681,16 @@
 	  function GameColumnButton(props) {
 	    _classCallCheck(this, GameColumnButton);
 
+	    // Bind callbacks to make `this` the correct context
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameColumnButton).call(this, props));
 
-	    _this.onSubmit = _this.onSubmit.bind(_this);
+	    _this._handleSubmit = _this._handleSubmit.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(GameColumnButton, [{
-	    key: 'onSubmit',
-	    value: function onSubmit(e) {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
 	      e.preventDefault();
 	      (0, _emitters.emitPlay)({
 	        column: this.props.column
@@ -31680,7 +31709,7 @@
 	        {
 	          action: '',
 	          method: 'post',
-	          onSubmit: this.onSubmit
+	          onSubmit: this._handleSubmit
 	        },
 	        _react2.default.createElement(
 	          'div',
@@ -31969,17 +31998,25 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	var _react = __webpack_require__(51);
 
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRedux = __webpack_require__(238);
 
-	var _emitters = __webpack_require__(250);
+	var _emitters = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	function mapStateToProps(_ref) {
 	  var gameInProgress = _ref.gameInProgress;
@@ -32002,104 +32039,127 @@
 	  numToWin: _react.PropTypes.number
 	};
 
-	var GameBoardForm = _react2.default.createClass({
-	  displayName: 'GameBoardForm',
+	var GameBoardForm = function (_React$Component) {
+	  _inherits(GameBoardForm, _React$Component);
 
-	  getInitialState: function getInitialState() {
-	    return {
+	  function GameBoardForm(props) {
+	    _classCallCheck(this, GameBoardForm);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameBoardForm).call(this, props));
+
+	    _this.state = {
 	      numRows: '' + window.DEFAULT_ROWS,
 	      numColumns: '' + window.DEFAULT_COLUMNS,
 	      numToWin: '' + window.DEFAULT_TO_WIN,
 	      username: ''
 	    };
-	  },
 
-	  _handleInput: function _handleInput(e) {
-	    this.setState(_defineProperty({}, e.target.name, e.target.value));
-	  },
-
-	  _handleSubmit: function _handleSubmit(e) {
-	    e.preventDefault();
-
-	    (0, _emitters.emitCreateBoard)({
-	      numRows: this.state.numRows,
-	      numColumns: this.state.numColumns,
-	      numToWin: this.state.numToWin
-	    });
-	  },
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'div',
-	      { id: 'change-board' },
-	      _react2.default.createElement(
-	        'form',
-	        {
-	          action: '',
-	          method: 'post',
-	          onSubmit: this._handleSubmit
-	        },
-	        _react2.default.createElement(
-	          'dl',
-	          null,
-	          _react2.default.createElement(
-	            'dt',
-	            null,
-	            'Num rows'
-	          ),
-	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              name: 'numRows',
-	              value: this.state.numRows,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            'dt',
-	            null,
-	            'Num columns'
-	          ),
-	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              name: 'numColumns',
-	              value: this.state.numColumns,
-	              onChange: this._handleInput
-	            })
-	          ),
-	          _react2.default.createElement(
-	            'dt',
-	            null,
-	            'Num to win'
-	          ),
-	          _react2.default.createElement(
-	            'dd',
-	            null,
-	            _react2.default.createElement('input', {
-	              type: 'text',
-	              name: 'numToWin',
-	              value: this.state.numToWin,
-	              onChange: this._handleInput
-	            })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          {
-	            type: 'submit',
-	            disabled: this.props.gameInProgress
-	          },
-	          'Change board'
-	        )
-	      )
-	    );
+	    // Bind callbacks to make `this` the correct context
+	    _this._handleInput = _this._handleInput.bind(_this);
+	    _this._handleSubmit = _this._handleSubmit.bind(_this);
+	    return _this;
 	  }
-	});
+
+	  _createClass(GameBoardForm, [{
+	    key: '_handleInput',
+	    value: function _handleInput(e) {
+	      this.setState(_defineProperty({}, e.target.name, e.target.value));
+	    }
+	  }, {
+	    key: '_handleSubmit',
+	    value: function _handleSubmit(e) {
+	      e.preventDefault();
+
+	      (0, _emitters.emitCreateBoard)({
+	        numRows: this.state.numRows,
+	        numColumns: this.state.numColumns,
+	        numToWin: this.state.numToWin
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _state = this.state;
+	      var numRows = _state.numRows;
+	      var numColumns = _state.numColumns;
+	      var numToWin = _state.numToWin;
+	      var gameInProgress = this.props.gameInProgress;
+
+
+	      return _react2.default.createElement(
+	        'div',
+	        { id: 'change-board' },
+	        _react2.default.createElement(
+	          'form',
+	          {
+	            action: '',
+	            method: 'post',
+	            onSubmit: this._handleSubmit
+	          },
+	          _react2.default.createElement(
+	            'dl',
+	            null,
+	            _react2.default.createElement(
+	              'dt',
+	              null,
+	              'Num rows'
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                name: 'numRows',
+	                value: numRows,
+	                onChange: this._handleInput
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'dt',
+	              null,
+	              'Num columns'
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                name: 'numColumns',
+	                value: numColumns,
+	                onChange: this._handleInput
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'dt',
+	              null,
+	              'Num to win'
+	            ),
+	            _react2.default.createElement(
+	              'dd',
+	              null,
+	              _react2.default.createElement('input', {
+	                type: 'text',
+	                name: 'numToWin',
+	                value: numToWin,
+	                onChange: this._handleInput
+	              })
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            {
+	              type: 'submit',
+	              disabled: gameInProgress
+	            },
+	            'Change board'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return GameBoardForm;
+	}(_react2.default.Component);
 
 	GameBoardForm.propTypes = propTypes;
 

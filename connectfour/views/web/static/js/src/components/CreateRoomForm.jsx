@@ -2,21 +2,27 @@ import React from 'react';
 import { emitAddUser, emitCreateBoard } from '../emitters';
 
 
-const CreateRoomForm = React.createClass({
-  getInitialState: () => {
-    return {
-      username: ``,
-      usernameError: null,
-    };
-  },
+class CreateRoomForm extends React.Component {
+  constructor(props) {
+    super(props);
 
-  _handleInput: function(e) {
+    this.state = {
+      username: '',
+      usernameError: null,
+    }
+
+    // Bind callbacks to make `this` the correct context
+    this._handleInput = this._handleInput.bind(this);
+    this._handleSubmit = this._handleSubmit.bind(this);
+  }
+
+  _handleInput(e) {
     this.setState({
       [e.target.name]: e.target.value,
     });
-  },
+  }
 
-  _handleSubmit: function(e) {
+  _handleSubmit(e) {
     e.preventDefault();
 
     if (!this.state.username) {
@@ -27,19 +33,10 @@ const CreateRoomForm = React.createClass({
       return;
     }
 
+    // In case need to reset state from previous error
     this.setState({
       usernameError: null,
     });
-
-    /*
-    this.setState({
-      usernameError: this.state.username ? null : 'Username required',
-    });
-
-    if (this.state.usernameError) {
-      return;
-    }
-    */
 
     emitAddUser({
       username: this.state.username,
@@ -50,14 +47,10 @@ const CreateRoomForm = React.createClass({
       numColumns: window.DEFAULT_COLUMNS,
       numToWin: window.DEFAULT_TO_WIN,
     });
-  },
+  }
 
-  render: function() {
-    let usernameError;
-
-    if (this.state.usernameError) {
-      usernameError = <span className="error">Username required</span>;
-    }
+  render() {
+    const { username, usernameError } = this.state;
 
     return (
       <div>
@@ -81,11 +74,13 @@ const CreateRoomForm = React.createClass({
                 type="text"
                 id="username"
                 name="username"
-                value={this.state.username}
+                value={username}
                 onChange={this._handleInput}
               />
 
-              {usernameError}
+              {usernameError &&
+                <span className="error">{usernameError}</span>
+              }
             </dd>
           </dl>
 
@@ -93,8 +88,8 @@ const CreateRoomForm = React.createClass({
         </form>
       </div>
     );
-  },
-});
+  }
+}
 
 
 export default CreateRoomForm;

@@ -12,10 +12,12 @@ const propTypes = {
 class GameColumnButton extends React.Component {
   constructor(props) {
     super(props);
-    this.onSubmit = this.onSubmit.bind(this);
+
+    // Bind callbacks to make `this` the correct context
+    this._handleSubmit = this._handleSubmit.bind(this);
   }
 
-  onSubmit(e) {
+  _handleSubmit(e) {
     e.preventDefault();
     emitPlay({
       column: this.props.column,
@@ -29,7 +31,7 @@ class GameColumnButton extends React.Component {
       <form
         action=""
         method="post"
-        onSubmit={this.onSubmit}
+        onSubmit={this._handleSubmit}
       >
         <div
           className="game-column-button-wrapper"
