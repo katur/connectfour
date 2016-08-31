@@ -90,9 +90,6 @@ window.ws.on('gameWon', ({ winner, winningPositions, players }) => {
   store.dispatch(stopGame());
   store.dispatch(blinkSquares(winningPositions));
   store.dispatch(updatePlayers(players));
-
-  // maybe blink the winner, too?
-  // store.dispatch(updatePlayer(data.winner));
 });
 
 window.ws.on('gameDraw', ({ players }) => {
