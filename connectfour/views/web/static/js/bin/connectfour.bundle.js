@@ -31781,8 +31781,6 @@
 	    var row = [];
 
 	    for (var j = 0; j < numColumns; j++) {
-	      var clear = j === 0 ? 'left' : 'none';
-
 	      // TODO: restructure blinking to not require this iteration (set?)
 	      var blinking = false;
 
@@ -31820,13 +31818,16 @@
 	        blinking: blinking,
 	        style: {
 	          width: size,
-	          height: size,
-	          clear: clear
+	          height: size
 	        }
 	      }));
 	    }
 
-	    rows.push(row);
+	    rows.push(_react2.default.createElement(
+	      'div',
+	      { key: i, className: 'game-grid-row' },
+	      row
+	    ));
 	  }
 
 	  return _react2.default.createElement(

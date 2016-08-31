@@ -191,10 +191,18 @@ dl:last-of-type {
   flex-direction: column;
   justify-content: flex-start;
   align-items: center; }
-  #game-screen #game-board #game-column-buttons {
+  #game-screen #game-board #game-column-buttons, #game-screen #game-board #game-grid {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start; }
+    justify-content: flex-start;
+    align-items: center; }
+  #game-screen #game-board #game-column-buttons {
+    flex-direction: row; }
+  #game-screen #game-board #game-grid {
+    flex-direction: column; }
+    #game-screen #game-board #game-grid #game-grid-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start; }
   #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
     float: left; }
   #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {

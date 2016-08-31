@@ -30,8 +30,6 @@ function GameGrid({ numRows, numColumns, grid, blinkingSquares }) {
     let row = [];
 
     for (let j = 0; j < numColumns; j++) {
-      let clear = (j === 0) ? 'left' : 'none';
-
       // TODO: restructure blinking to not require this iteration (set?)
       let blinking = false;
 
@@ -50,13 +48,12 @@ function GameGrid({ numRows, numColumns, grid, blinkingSquares }) {
           style={{
             width: size,
             height: size,
-            clear: clear,
           }}
         />
       );
     }
 
-    rows.push(row);
+    rows.push(<div key={i} className="game-grid-row">{row}</div>);
   }
 
   return <div id="game-grid">{rows}</div>;

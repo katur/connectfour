@@ -84,10 +84,21 @@
     justify-content: flex-start
     align-items: center
 
-    #game-column-buttons
+    #game-column-buttons, #game-grid
       display: flex
-      flex-direction: row
       justify-content: flex-start
+      align-items: center
+
+    #game-column-buttons
+      flex-direction: row
+
+    #game-grid
+      flex-direction: column
+
+      #game-grid-row
+        display: flex
+        flex-direction: row
+        justify-content: flex-start
 
     .game-square-wrapper, .game-column-button-wrapper
       float: left
