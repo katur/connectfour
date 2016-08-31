@@ -132,8 +132,7 @@ dl:last-of-type {
   margin-bottom: 40px; }
   #game-screen #top-bar #game-title, #game-screen #top-bar #game-start, #game-screen #top-bar #game-room {
     width: 80px;
-    white-space: nowrap;
-    opacity: 0.75; }
+    white-space: nowrap; }
 
 #game-screen #game-info {
   display: flex;
