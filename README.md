@@ -48,12 +48,24 @@ To install JS dev dependencies (listed in [package.json](package.json)):
 npm install
 ```
 
-To bundle JS and CSS (configured in [webpack.config.js](webpack.config.js)):
+If you install any new JS dev dependencies, use the `--save-dev` option to list
+in [package.json](package.json):
+```
+npm install <package-name> --save-dev
+```
+
+To bundle JS and CSS for the web (configured in
+[webpack.config.js](webpack.config.js)):
+```
+webpack
+```
+
+To automate the above while developing:
 ```
 webpack --watch
 ```
 
-To launch:
+To launch the web app:
 ```
 ./run_web.py
 ```
@@ -77,27 +89,8 @@ To start the command line app (from root dir):
 ```
 
 
-## Web app dev dependencies
 
-To do development work on the web app, first install js dependencies (listed
-in [package.json](package.json)):
-```
-npm install
-```
-
-If you install any new js dependencies, use the `--save-dev` option to list
-as a devDependency in [package.json](package.json):
-```
-npm install <package-name> --save-dev
-```
-
-To have webpack auto-compile JS and CSS during dev:
-```
-webpack --watch
-```
-
-
-## Tests
+### Tests
 
 To run all unit tests (from root dir):
 ```
