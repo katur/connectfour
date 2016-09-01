@@ -8,7 +8,7 @@ as well as variable board dimensions and a variable number of players.
 
 ## Code
 
-The game logic code is in Python.
+The game logic is in Python.
 
 Python version is listed in [runtime.txt](runtime.txt).
 
