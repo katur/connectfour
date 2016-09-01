@@ -87,7 +87,6 @@
     #game-column-buttons, #game-grid
       display: flex
       justify-content: flex-start
-      align-items: center
 
     #game-column-buttons
       flex-direction: row
@@ -95,16 +94,16 @@
     #game-grid
       flex-direction: column
 
-      #game-grid-row
+      .game-grid-row
         display: flex
         flex-direction: row
-        justify-content: flex-start
 
     .game-square-wrapper, .game-column-button-wrapper
-      float: left
+      flex-grow: 1
 
     .game-square, .game-column-button
       width: 80%
+      border-radius: 5px
 
     .game-column-button
       display: block
@@ -113,7 +112,6 @@
     .game-square
       height: 80%
       margin: 10%
-      border-radius: 5px
 
       &.blinking
         animation: blinker 500ms linear infinite alternate

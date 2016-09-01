@@ -204,27 +204,25 @@ button {
   align-items: center; }
   #game-screen #game-board #game-column-buttons, #game-screen #game-board #game-grid {
     display: flex;
-    justify-content: flex-start;
-    align-items: center; }
+    justify-content: flex-start; }
   #game-screen #game-board #game-column-buttons {
     flex-direction: row; }
   #game-screen #game-board #game-grid {
     flex-direction: column; }
-    #game-screen #game-board #game-grid #game-grid-row {
+    #game-screen #game-board #game-grid .game-grid-row {
       display: flex;
-      flex-direction: row;
-      justify-content: flex-start; }
+      flex-direction: row; }
   #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
-    float: left; }
+    flex-grow: 1; }
   #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
-    width: 80%; }
+    width: 80%;
+    border-radius: 5px; }
   #game-screen #game-board .game-column-button {
     display: block;
     margin: 0 10% 10% 10%; }
   #game-screen #game-board .game-square {
     height: 80%;
-    margin: 10%;
-    border-radius: 5px; }
+    margin: 10%; }
     #game-screen #game-board .game-square.blinking {
       animation: blinker 500ms linear infinite alternate; }
 
