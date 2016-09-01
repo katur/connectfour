@@ -80,21 +80,26 @@ h1, h2, h3, h4 {
   letter-spacing: 1px;
   color: #b36200; }
 
-input, button {
-  background: #eee; }
-
 input {
   padding: 3px;
   border: none;
-  border-radius: 1px; }
+  border-radius: 1px;
+  background: gainsboro; }
 
 button {
   padding: 5px 8px;
   border: none;
-  border-radius: 3px; }
+  border-radius: 3px;
+  background: slateblue;
+  color: gainsboro;
+  font-size: 16px;
+  letter-spacing: 1px; }
   button:hover:enabled {
-    background: #aaa;
+    background: #3b2d94;
     cursor: pointer; }
+  button:disabled {
+    background: #b1a8e5;
+    color: #c3c3c3; }
 
 @keyframes blinker {
   to {
@@ -169,7 +174,6 @@ button {
     display: absolute;
     width: 100%; }
   #game-screen #game-info #game-board-form dl {
-    font-size: 13px;
     margin-bottom: 10px; }
     #game-screen #game-info #game-board-form dl dt, #game-screen #game-info #game-board-form dl dd {
       display: inline-block; }
