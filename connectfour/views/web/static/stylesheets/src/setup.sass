@@ -1,21 +1,34 @@
 #setup-screen
-  div
-    @include sectionify($whitespace * 1.5)
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
 
-  h3
-    margin-bottom: $whitespace / 2
+  #top-bar
+    width: 100%
 
-  dl
-    margin-bottom: $whitespace / 3
+  #forms
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-around
 
-    dt
-      margin-bottom: 5px
+    #create-room-wrapper, #join-room-wrapper
+      margin-bottom: $whitespace * 2
 
-    dd
-      margin-bottom: 10px
+      h3
+        margin-bottom: $whitespace / 2
 
-    &:last-of-type
-      margin-bottom: none
+      dl
+        margin-bottom: $whitespace / 3
 
-  .error
-    margin-left: $whitespace / 2
+        dt
+          margin-bottom: 5px
+
+        dd
+          margin-bottom: 10px
+
+          &:last-of-type
+            margin-bottom: none
+
+          .error
+            margin-left: $whitespace / 2

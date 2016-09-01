@@ -77,8 +77,9 @@ h1, h2, h3, h4 {
 
 .error {
   font-style: italic;
+  font-weight: bold;
   letter-spacing: 1px;
-  color: #b36200; }
+  color: firebrick; }
 
 input, button {
   font-family: "Lora", "Palatino Linotype", Palatino, serif;
@@ -110,25 +111,31 @@ button {
   from {
     opacity: 1.0; } }
 
-#setup-screen div {
-  margin-bottom: 60px; }
-  #setup-screen div:last-child {
-    margin-bottom: none; }
-
-#setup-screen h3 {
-  margin-bottom: 20px; }
-
-#setup-screen dl {
-  margin-bottom: 13.33333px; }
-  #setup-screen dl dt {
-    margin-bottom: 5px; }
-  #setup-screen dl dd {
-    margin-bottom: 10px; }
-  #setup-screen dl:last-of-type {
-    margin-bottom: none; }
-
-#setup-screen .error {
-  margin-left: 20px; }
+#setup-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; }
+  #setup-screen #top-bar {
+    width: 100%; }
+  #setup-screen #forms {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around; }
+    #setup-screen #forms #create-room-wrapper, #setup-screen #forms #join-room-wrapper {
+      margin-bottom: 80px; }
+      #setup-screen #forms #create-room-wrapper h3, #setup-screen #forms #join-room-wrapper h3 {
+        margin-bottom: 20px; }
+      #setup-screen #forms #create-room-wrapper dl, #setup-screen #forms #join-room-wrapper dl {
+        margin-bottom: 13.33333px; }
+        #setup-screen #forms #create-room-wrapper dl dt, #setup-screen #forms #join-room-wrapper dl dt {
+          margin-bottom: 5px; }
+        #setup-screen #forms #create-room-wrapper dl dd, #setup-screen #forms #join-room-wrapper dl dd {
+          margin-bottom: 10px; }
+          #setup-screen #forms #create-room-wrapper dl dd:last-of-type, #setup-screen #forms #join-room-wrapper dl dd:last-of-type {
+            margin-bottom: none; }
+          #setup-screen #forms #create-room-wrapper dl dd .error, #setup-screen #forms #join-room-wrapper dl dd .error {
+            margin-left: 20px; }
 
 #game-screen #top-bar, #game-screen #game-info {
   display: flex;
@@ -184,6 +191,7 @@ button {
       #game-screen #game-info #game-board-form dl dd:last-of-type {
         margin-right: 0; }
       #game-screen #game-info #game-board-form dl dd input {
+        padding: 2px 5px;
         width: 20px;
         text-align: center; }
   #game-screen #game-info #game-board-form button {

@@ -30814,8 +30814,12 @@
 	      { id: 'top-bar' },
 	      'Connect X'
 	    ),
-	    _react2.default.createElement(_CreateRoomForm2.default, null),
-	    _react2.default.createElement(_JoinRoomForm2.default, null)
+	    _react2.default.createElement(
+	      'div',
+	      { id: 'forms' },
+	      _react2.default.createElement(_CreateRoomForm2.default, null),
+	      _react2.default.createElement(_JoinRoomForm2.default, null)
+	    )
 	  );
 	}
 
@@ -30911,7 +30915,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { id: 'create-room-wrapper' },
 	        _react2.default.createElement(
 	          'h3',
 	          null,
@@ -31122,7 +31126,7 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { id: 'join-room-wrapper' },
 	        _react2.default.createElement(
 	          'h3',
 	          null,

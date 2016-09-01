@@ -7,8 +7,10 @@ function SetupScreen() {
   return (
     <div id="setup-screen">
       <h1 id="top-bar">Connect X</h1>
-      <CreateRoomForm />
-      <JoinRoomForm />
+      <div id="forms">
+        <CreateRoomForm />
+        <JoinRoomForm />
+      </div>
     </div>
   );
 }

@@ -82,7 +82,7 @@ class JoinRoomForm extends React.Component {
     }
 
     return (
-      <div>
+      <div id="join-room-wrapper">
         <h3>Join a game room?</h3>
 
         <form

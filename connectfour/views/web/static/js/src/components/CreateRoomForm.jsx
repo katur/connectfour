@@ -53,7 +53,7 @@ class CreateRoomForm extends React.Component {
     const { username, usernameError } = this.state;
 
     return (
-      <div>
+      <div id="create-room-wrapper">
         <h3>Create a game room?</h3>
 
         <form
