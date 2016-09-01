@@ -21,16 +21,15 @@ pip install -r requirements.txt
 
 ### Web app
 
-The goal of the web app was to use as many "hip technologies" as I could cram
+The goal of the web app was to use as many "hip" technologies as I could cram
 into one project:
 
 - WebSockets, with
-  [socket.io](http://socket.io/) on the client side and
-  [Flask-SocketIO](https://flask-socketio.readthedocs.io/) on the
-  server side
+    [socket.io](http://socket.io/) on the client side and
+    [Flask-SocketIO](https://flask-socketio.readthedocs.io/) on the server side
 - Javascript uses:
   - [ES6](http://es6-features.org/#Constants) (aiming to follow
-    [this style guide](https://github.com/airbnb/javascript))
+    [the Airbnb style guide](https://github.com/airbnb/javascript))
   - [React](https://facebook.github.io/react/)
   - [Redux](http://redux.js.org/)
   - [webpack](http://webpack.github.io/) to bundle for the web
