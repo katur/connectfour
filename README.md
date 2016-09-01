@@ -29,10 +29,11 @@ into one project:
   [Flask-SocketIO](https://flask-socketio.readthedocs.io/) on the
   server side
 - Javascript uses:
-  - [ES6](http://es6-features.org/#Constants)
+  - [ES6](http://es6-features.org/#Constants) (aiming to follow
+    [these style conventions](https://github.com/airbnb/javascript))
   - [React](https://facebook.github.io/react/)
   - [Redux](http://redux.js.org/)
-  - [webpack](http://webpack.github.io/)
+  - [webpack](http://webpack.github.io/) to bundle for the web
 - CSS uses:
   - [SASS](http://sass-lang.com/)
   - [Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
@@ -41,6 +42,16 @@ into one project:
   - The [Flask](http://flask.pocoo.org/) framework
   - (maybe upcoming) asyncio with Python 3
 
+
+To install JS dev dependencies (listed in [package.json](package.json):
+```
+npm install
+```
+
+To bundle JS and CSS (configured in [webpack.config.js](webpack.config.js)):
+```
+webpack --watch
+```
 
 To launch:
 ```
