@@ -1,25 +1,29 @@
+input, button
+  font-family: $base-font-family
+  font-size: $base-font-size - 2
+
+
 input
-  padding: 3px
+  padding: 5px
   border: none
   border-radius: 1px
   background: $very-light-gray
 
 
 button
-  padding: 5px 8px
+  padding: 8px 12px
   border: none
   border-radius: 3px
   background: $button-color
   color: $very-light-gray
-  font-size: $base-font-size
   letter-spacing: 1px
 
   &:hover:enabled
-    background: darken($button-color, 20%)
+    background: $button-hover
     cursor: pointer
 
   &:disabled
-    background: lighten($button-color, 20%)
+    background: $button-disabled
     color: darken($very-light-gray, 10%)
 
 

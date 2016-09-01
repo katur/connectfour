@@ -1,26 +1,23 @@
 #game-screen
-  #top-bar
+  #top-bar, #game-info
     display: flex
     flex-direction: row
     justify-content: space-between
-    margin-bottom: $whitespace
+    margin-bottom: $whitespace / 2
 
+  #top-bar
     #game-title, #game-start, #game-room
       width: $whitespace * 2
       white-space: nowrap
 
   #game-info
-    display: flex
-    flex-direction: row
-    justify-content: space-between
     align-items: center
-    margin-bottom: $whitespace / 2
 
     #game-players
       display: flex
       flex-direction: row
       justify-content: flex-start
-      border: solid 3px darken($background-color, 7%)
+      border: solid 3px $button-disabled
       border-radius: 5px
       z-index: 2
 
@@ -29,7 +26,7 @@
         flex-direction: column
         align-items: center
         padding: $whitespace / 4
-        border-right: solid 3px darken($background-color, 5%)
+        border-right: solid 3px $button-disabled
         z-index: 1
 
         &:last-of-type

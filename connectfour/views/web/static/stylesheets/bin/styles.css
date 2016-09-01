@@ -58,7 +58,7 @@ body {
 
 h1 {
   font-size: 64px;
-  color: white;
+  color: snow;
   text-align: center;
   font-family: "Raleway", sans-serif;
   letter-spacing: 1px; }
@@ -80,22 +80,25 @@ h1, h2, h3, h4 {
   letter-spacing: 1px;
   color: #b36200; }
 
+input, button {
+  font-family: "Lora", "Palatino Linotype", Palatino, serif;
+  font-size: 14px; }
+
 input {
-  padding: 3px;
+  padding: 5px;
   border: none;
   border-radius: 1px;
   background: gainsboro; }
 
 button {
-  padding: 5px 8px;
+  padding: 8px 12px;
   border: none;
   border-radius: 3px;
   background: slateblue;
   color: gainsboro;
-  font-size: 16px;
   letter-spacing: 1px; }
   button:hover:enabled {
-    background: #3b2d94;
+    background: darkslateblue;
     cursor: pointer; }
   button:disabled {
     background: #b1a8e5;
@@ -127,26 +130,23 @@ button {
 #setup-screen .error {
   margin-left: 20px; }
 
-#game-screen #top-bar {
+#game-screen #top-bar, #game-screen #game-info {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 40px; }
-  #game-screen #top-bar #game-title, #game-screen #top-bar #game-start, #game-screen #top-bar #game-room {
-    width: 80px;
-    white-space: nowrap; }
+  margin-bottom: 20px; }
+
+#game-screen #top-bar #game-title, #game-screen #top-bar #game-start, #game-screen #top-bar #game-room {
+  width: 80px;
+  white-space: nowrap; }
 
 #game-screen #game-info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px; }
+  align-items: center; }
   #game-screen #game-info #game-players {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    border: solid 3px #5b8fec;
+    border: solid 3px #b1a8e5;
     border-radius: 5px;
     z-index: 2; }
     #game-screen #game-info #game-players .player {
@@ -154,7 +154,7 @@ button {
       flex-direction: column;
       align-items: center;
       padding: 10px;
-      border-right: solid 3px cornflowerblue;
+      border-right: solid 3px #b1a8e5;
       z-index: 1; }
       #game-screen #game-info #game-players .player:last-of-type {
         border-right: none; }

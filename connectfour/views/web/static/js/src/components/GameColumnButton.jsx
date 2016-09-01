@@ -41,7 +41,7 @@ class GameColumnButton extends React.Component {
             className="game-column-button"
             disabled={disabled}
           >
-            Drop
+            ↓
           </button>
         </div>
       </form>

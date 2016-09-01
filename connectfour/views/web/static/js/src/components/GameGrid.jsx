@@ -22,7 +22,7 @@ const propTypes = {
 
 
 function GameGrid({ numRows, numColumns, grid, blinkingSquares }) {
-  const percentage = 80.0 / Math.max(numRows, numColumns);
+  const percentage = 70.0 / Math.max(numRows, numColumns);
   const size = `${percentage}vmin`;
   const rows = [];
 

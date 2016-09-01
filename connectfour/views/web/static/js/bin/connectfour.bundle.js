@@ -31600,7 +31600,7 @@
 	  var nextPlayer = _ref.nextPlayer;
 	  var pk = _ref.pk;
 
-	  var percentage = 80.0 / Math.max(numRows, numColumns);
+	  var percentage = 70.0 / Math.max(numRows, numColumns);
 	  var size = percentage + 'vmin';
 	  var enabled = gameInProgress && nextPlayer && pk === nextPlayer.pk;
 	  var row = [];
@@ -31707,7 +31707,7 @@
 	              className: 'game-column-button',
 	              disabled: disabled
 	            },
-	            'Drop'
+	            '↓'
 	          )
 	        )
 	      );
@@ -31770,7 +31770,7 @@
 	  var grid = _ref2.grid;
 	  var blinkingSquares = _ref2.blinkingSquares;
 
-	  var percentage = 80.0 / Math.max(numRows, numColumns);
+	  var percentage = 70.0 / Math.max(numRows, numColumns);
 	  var size = percentage + 'vmin';
 	  var rows = [];
 
