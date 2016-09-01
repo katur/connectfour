@@ -37,6 +37,7 @@ into one project:
   - [SASS](http://sass-lang.com/)
   - [Flexbox layout](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
   - Only [named HTML colors](http://www.crockford.com/wrrrld/color.html)
+      (maybe not hip, but definitely artisanal)
 - Python uses:
   - The [Flask](http://flask.pocoo.org/) framework
   - (maybe upcoming) asyncio with Python 3
