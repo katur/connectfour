@@ -36,8 +36,8 @@ into one project:
   - [webpack](http://webpack.github.io/) to bundle for the web
 - CSS uses:
   - [SASS](http://sass-lang.com/)
-  - [Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
-  - [Named HTML colors](http://www.crockford.com/wrrrld/color.html) only
+  - [Flexbox layout](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+  - Only [named HTML colors](http://www.crockford.com/wrrrld/color.html)
 - Python uses:
   - The [Flask](http://flask.pocoo.org/) framework
   - (maybe upcoming) asyncio with Python 3
