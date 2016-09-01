@@ -25,10 +25,13 @@ const propTypes = {
 };
 
 
-function GameColumnButtons({ numRows, numColumns, gameInProgress, nextPlayer, pk }) {
-  const percentage = 70.0 / Math.max(numRows, numColumns);
-  const size = `${percentage}vmin`;
+function GameColumnButtons({ numRows, numColumns, gameInProgress,
+    nextPlayer, pk }) {
   const enabled = gameInProgress && nextPlayer && pk === nextPlayer.pk;
+
+  const percent = 85.0 / Math.max(numRows, numColumns);
+  const size = `${percent}vmin`;
+
   const row = [];
 
   for (let i = 0; i < numColumns; i++) {

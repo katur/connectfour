@@ -31604,9 +31604,11 @@
 	  var nextPlayer = _ref.nextPlayer;
 	  var pk = _ref.pk;
 
-	  var percentage = 70.0 / Math.max(numRows, numColumns);
-	  var size = percentage + 'vmin';
 	  var enabled = gameInProgress && nextPlayer && pk === nextPlayer.pk;
+
+	  var percent = 85.0 / Math.max(numRows, numColumns);
+	  var size = percent + 'vmin';
+
 	  var row = [];
 
 	  for (var i = 0; i < numColumns; i++) {
@@ -31774,8 +31776,9 @@
 	  var grid = _ref2.grid;
 	  var blinkingSquares = _ref2.blinkingSquares;
 
-	  var percentage = 70.0 / Math.max(numRows, numColumns);
-	  var size = percentage + 'vmin';
+	  var percent = 85.0 / Math.max(numRows, numColumns);
+	  var size = percent + 'vmin';
+
 	  var rows = [];
 
 	  for (var i = 0; i < numRows; i++) {
