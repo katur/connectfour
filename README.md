@@ -30,7 +30,7 @@ into one project:
   server side
 - Javascript uses:
   - [ES6](http://es6-features.org/#Constants) (aiming to follow
-    [these style conventions](https://github.com/airbnb/javascript))
+    [this style guide](https://github.com/airbnb/javascript))
   - [React](https://facebook.github.io/react/)
   - [Redux](http://redux.js.org/)
   - [webpack](http://webpack.github.io/) to bundle for the web
