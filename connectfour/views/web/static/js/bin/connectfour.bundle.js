@@ -31356,7 +31356,7 @@
 	  }
 	  return _react2.default.createElement(
 	    'h1',
-	    null,
+	    { id: 'game-title' },
 	    'Connect ',
 	    numToWin || 'X'
 	  );

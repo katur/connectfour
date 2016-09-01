@@ -24,7 +24,7 @@ function GameTitle({ numToWin }) {
   if (numToWin < NUMBER_WORDS.length) {
     numToWin = NUMBER_WORDS[numToWin];
   }
-  return <h1>Connect {numToWin || 'X'}</h1>;
+  return <h1 id="game-title">Connect {numToWin || 'X'}</h1>;
 }
 
 

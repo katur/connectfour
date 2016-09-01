@@ -1,17 +1,31 @@
 #game-screen
-  #top-bar, #game-info
-    display: flex
-    flex-direction: row
-    justify-content: space-between
-    margin-bottom: $whitespace / 2
+  display: flex
+  flex-direction: column
 
   #top-bar
-    #game-title, #game-start, #game-room
-      width: $whitespace * 2
-      white-space: nowrap
+    display: flex
+    flex-direction: row
+    margin-bottom: $whitespace / 2
+
+    #game-start, #game-room
+      flex-basis: 10%
+
+    #game-room
+      text-align: right
+
+    #game-title
+      flex-basis: 80%
+      padding: 0 10px
 
   #game-info
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    justify-content: space-between
     align-items: center
+
+    #game-players, #game-board-form
+      margin-bottom: $whitespace / 2
 
     #game-players
       display: flex
@@ -19,15 +33,13 @@
       justify-content: flex-start
       border: solid 3px $button-disabled
       border-radius: 5px
-      z-index: 2
 
       .player
         display: flex
         flex-direction: column
         align-items: center
-        padding: $whitespace / 4
+        padding: $whitespace / 2
         border-right: solid 3px $button-disabled
-        z-index: 1
 
         &:last-of-type
           border-right: none
@@ -35,10 +47,9 @@
         &.current
           background: $yellow
 
-        .name, .stats
-          padding: 5px
-
         .name
+          margin-bottom: 5px
+
           .color-key
             display: inline-block
             width: 15px
@@ -48,10 +59,6 @@
 
         .stats
           font-size: $base-font-size - 3
-
-    #game-feedback
-      display: absolute
-      width: 100%
 
     #game-board-form
       dl

@@ -46,22 +46,19 @@ table {
 body {
   box-sizing: border-box;
   background: #7ba5f0;
-  padding: 20px 5vmin; }
-
-#top-bar {
-  width: 100%;
-  margin-bottom: 40px; }
+  padding: 20px 2.5%; }
 
 body {
   font-family: "Lora", "Palatino Linotype", Palatino, serif;
   font-size: 16px; }
 
 h1 {
-  font-size: 64px;
-  color: snow;
-  text-align: center;
   font-family: "Raleway", sans-serif;
-  letter-spacing: 1px; }
+  font-size: 64px;
+  letter-spacing: 1px;
+  line-height: 0.8;
+  text-align: center;
+  color: snow; }
 
 h2 {
   font-size: 38px; }
@@ -116,7 +113,7 @@ button {
   flex-direction: column;
   justify-content: flex-start; }
   #setup-screen #top-bar {
-    width: 100%; }
+    margin-bottom: 40px; }
   #setup-screen #forms {
     display: flex;
     flex-direction: row;
@@ -137,94 +134,98 @@ button {
           #setup-screen #forms #create-room-wrapper dl dd .error, #setup-screen #forms #join-room-wrapper dl dd .error {
             margin-left: 20px; }
 
-#game-screen #top-bar, #game-screen #game-info {
+#game-screen {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 20px; }
-
-#game-screen #top-bar #game-title, #game-screen #top-bar #game-start, #game-screen #top-bar #game-room {
-  width: 80px;
-  white-space: nowrap; }
-
-#game-screen #game-info {
-  align-items: center; }
-  #game-screen #game-info #game-players {
+  flex-direction: column; }
+  #game-screen #top-bar {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    border: solid 3px #b1a8e5;
-    border-radius: 5px;
-    z-index: 2; }
-    #game-screen #game-info #game-players .player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px;
-      border-right: solid 3px #b1a8e5;
-      z-index: 1; }
-      #game-screen #game-info #game-players .player:last-of-type {
-        border-right: none; }
-      #game-screen #game-info #game-players .player.current {
-        background: gold; }
-      #game-screen #game-info #game-players .player .name, #game-screen #game-info #game-players .player .stats {
-        padding: 5px; }
-      #game-screen #game-info #game-players .player .name .color-key {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        margin: 0 0 -3px 8px;
-        border-radius: 3px; }
-      #game-screen #game-info #game-players .player .stats {
-        font-size: 13px; }
-  #game-screen #game-info #game-feedback {
-    display: absolute;
-    width: 100%; }
-  #game-screen #game-info #game-board-form dl {
-    margin-bottom: 10px; }
-    #game-screen #game-info #game-board-form dl dt, #game-screen #game-info #game-board-form dl dd {
-      display: inline-block; }
-    #game-screen #game-info #game-board-form dl dt {
-      margin-right: 5px; }
-    #game-screen #game-info #game-board-form dl dd {
-      margin-right: 10px; }
-      #game-screen #game-info #game-board-form dl dd:last-of-type {
-        margin-right: 0; }
-      #game-screen #game-info #game-board-form dl dd input {
-        padding: 2px 5px;
-        width: 20px;
-        text-align: center; }
-  #game-screen #game-info #game-board-form button {
-    float: right; }
-
-#game-screen #game-board {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center; }
-  #game-screen #game-board #game-column-buttons, #game-screen #game-board #game-grid {
+    margin-bottom: 20px; }
+    #game-screen #top-bar #game-start, #game-screen #top-bar #game-room {
+      flex-basis: 10%; }
+    #game-screen #top-bar #game-room {
+      text-align: right; }
+    #game-screen #top-bar #game-title {
+      flex-basis: 80%;
+      padding: 0 10px; }
+  #game-screen #game-info {
     display: flex;
-    justify-content: flex-start; }
-  #game-screen #game-board #game-column-buttons {
-    flex-direction: row; }
-  #game-screen #game-board #game-grid {
-    flex-direction: column; }
-    #game-screen #game-board #game-grid .game-grid-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center; }
+    #game-screen #game-info #game-players, #game-screen #game-info #game-board-form {
+      margin-bottom: 20px; }
+    #game-screen #game-info #game-players {
       display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      border: solid 3px #b1a8e5;
+      border-radius: 5px; }
+      #game-screen #game-info #game-players .player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        border-right: solid 3px #b1a8e5; }
+        #game-screen #game-info #game-players .player:last-of-type {
+          border-right: none; }
+        #game-screen #game-info #game-players .player.current {
+          background: gold; }
+        #game-screen #game-info #game-players .player .name {
+          margin-bottom: 5px; }
+          #game-screen #game-info #game-players .player .name .color-key {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin: 0 0 -3px 8px;
+            border-radius: 3px; }
+        #game-screen #game-info #game-players .player .stats {
+          font-size: 13px; }
+    #game-screen #game-info #game-board-form dl {
+      margin-bottom: 10px; }
+      #game-screen #game-info #game-board-form dl dt, #game-screen #game-info #game-board-form dl dd {
+        display: inline-block; }
+      #game-screen #game-info #game-board-form dl dt {
+        margin-right: 5px; }
+      #game-screen #game-info #game-board-form dl dd {
+        margin-right: 10px; }
+        #game-screen #game-info #game-board-form dl dd:last-of-type {
+          margin-right: 0; }
+        #game-screen #game-info #game-board-form dl dd input {
+          padding: 2px 5px;
+          width: 20px;
+          text-align: center; }
+    #game-screen #game-info #game-board-form button {
+      float: right; }
+  #game-screen #game-board {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center; }
+    #game-screen #game-board #game-column-buttons, #game-screen #game-board #game-grid {
+      display: flex;
+      justify-content: flex-start; }
+    #game-screen #game-board #game-column-buttons {
       flex-direction: row; }
-  #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
-    flex-grow: 1; }
-  #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
-    width: 80%;
-    border-radius: 5px; }
-  #game-screen #game-board .game-column-button {
-    display: block;
-    margin: 0 10% 10% 10%; }
-  #game-screen #game-board .game-square {
-    height: 80%;
-    margin: 10%; }
-    #game-screen #game-board .game-square.blinking {
-      animation: blinker 500ms linear infinite alternate; }
+    #game-screen #game-board #game-grid {
+      flex-direction: column; }
+      #game-screen #game-board #game-grid .game-grid-row {
+        display: flex;
+        flex-direction: row; }
+    #game-screen #game-board .game-square-wrapper, #game-screen #game-board .game-column-button-wrapper {
+      flex-grow: 1; }
+    #game-screen #game-board .game-square, #game-screen #game-board .game-column-button {
+      width: 80%;
+      border-radius: 5px; }
+    #game-screen #game-board .game-column-button {
+      display: block;
+      margin: 0 10% 10% 10%; }
+    #game-screen #game-board .game-square {
+      height: 80%;
+      margin: 10%; }
+      #game-screen #game-board .game-square.blinking {
+        animation: blinker 500ms linear infinite alternate; }
 
 .color-null {
   background: gold; }
