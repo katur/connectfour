@@ -57,24 +57,28 @@
       width: 100%
 
     #game-board-form
-      dl, dt, dd, button
-        display: inline-block
-
       dl
         font-size: $base-font-size - 3
+        margin-bottom: $whitespace / 4
 
-      dt
-        margin-right: $whitespace / 8
+        dt, dd
+          display: inline-block
 
-      dd
-        margin-right: $whitespace / 4
+        dt
+          margin-right: $whitespace / 8
 
-        input
-          width: 20px
-          text-align: center
+        dd
+          margin-right: $whitespace / 4
+
+          &:last-of-type
+            margin-right: 0
+
+          input
+            width: 20px
+            text-align: center
 
       button
-        margin-left: $whitespace / 4
+        float: right
 
 
   #game-board

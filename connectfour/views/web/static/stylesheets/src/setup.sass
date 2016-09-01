@@ -1,12 +1,21 @@
 #setup-screen
   div
-    @include sectionify($whitespace)
+    @include sectionify($whitespace * 1.5)
 
   h3
-    margin-bottom: $whitespace / 3
+    margin-bottom: $whitespace / 2
 
   dl
     margin-bottom: $whitespace / 3
+
+    dt
+      margin-bottom: 5px
+
+    dd
+      margin-bottom: 10px
+
+    &:last-of-type
+      margin-bottom: none
 
   .error
     margin-left: $whitespace / 2
