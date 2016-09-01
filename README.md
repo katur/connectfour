@@ -43,7 +43,7 @@ into one project:
   - (maybe upcoming) asyncio with Python 3
 
 
-To install JS dev dependencies (listed in [package.json](package.json):
+To install JS dev dependencies (listed in [package.json](package.json)):
 ```
 npm install
 ```
