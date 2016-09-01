@@ -18,33 +18,51 @@ To install (preferably in a new [virtualenv](https://virtualenv.pypa.io)):
 pip install -r requirements.txt
 ```
 
+
+### Web app
+
+The goal of the web app was to use as many "hip technologies" as I could cram
+into one project:
+
+- WebSockets, with
+  [socket.io](http://socket.io/) on the client side and
+  [Flask-SocketIO](https://flask-socketio.readthedocs.io/) on the
+  server side
+- Javascript uses:
+  - [ES6](http://es6-features.org/#Constants)
+  - [React](https://facebook.github.io/react/)
+  - [Redux](http://redux.js.org/)
+  - [webpack](http://webpack.github.io/)
+- CSS uses:
+  - [SASS](http://sass-lang.com/)
+  - [Flexbox](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)
+  - [Named HTML colors](http://www.crockford.com/wrrrld/color.html) only
+- Python uses:
+  - The [Flask](http://flask.pocoo.org/) framework
+  - (maybe upcoming) asyncio with Python 3
+
+
+To launch:
+```
+./run_web.py
+```
+
+
+### GUI app
+
 The GUI view uses Python's built-in Tkinter library.
 
-The web view uses the [Flask](http://flask.pocoo.org/) framework, and the
-WebSocket protocol to communicate between client and server
-([socket.io](http://socket.io/) on the client side and
-[Flask-SocketIO](https://flask-socketio.readthedocs.io/en/latest/) on the
-server side).
-The front end uses [React](https://facebook.github.io/react/)
-with [Redux](http://redux.js.org/), and is packed with
-[webpack](http://webpack.github.io/).
+To launch:
+```
+./run_gui.py
+```
 
 
-## App
+### Command line app
 
 To start the command line app (from root dir):
 ```
-python commandline_app.py
-```
-
-To start the GUI app (from root dir):
-```
-python gui_app.py
-```
-
-To start the web app (from root dir):
-```
-python web_app.py
+./run_cli.py
 ```
 
 
