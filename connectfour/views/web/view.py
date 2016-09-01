@@ -206,5 +206,5 @@ def _create_new_room():
 
 
 def _get_random_string(length):
-    return ''.join(random.choice(string.ascii_uppercase + string.digits)
+    return ''.join(random.choice(string.ascii_uppercase)
                    for _ in range(length))
