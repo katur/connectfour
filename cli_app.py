@@ -2,7 +2,7 @@ import argparse
 
 from connectfour.model import ConnectFourModel
 from connectfour.pubsub import PubSub
-from connectfour.views.commandline.view import CommandLineView
+from connectfour.cli.view import CommandLineView
 
 
 parser = argparse.ArgumentParser(

@@ -3,7 +3,7 @@ import sys
 from connectfour.model import (
     DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN, TryAgainReason)
 from connectfour.pubsub import ModelAction, ViewAction
-from connectfour.views.util import (
+from connectfour.util import (
     get_positive_int, get_int, get_stripped_nonempty_string)
 
 MAX_NAME_LENGTH = 50

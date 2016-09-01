@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, join_room, emit
 from connectfour.model import (
     ConnectFourModel, DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
-from connectfour.views.web.localsettings import DEBUG, SECRET_KEY
+from connectfour.web.localsettings import DEBUG, SECRET_KEY
 
 ROOM_ID_LENGTH = 4
 

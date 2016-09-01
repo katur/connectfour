@@ -1,4 +1,4 @@
-from connectfour.views.gui.config import (
+from connectfour.gui.config import (
     FLASH_CYCLES, FLASH_CYCLE_TIME, FLASH_WAIT_TIME)
 
 

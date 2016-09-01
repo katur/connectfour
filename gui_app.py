@@ -2,8 +2,8 @@ import argparse
 
 from connectfour.model import ConnectFourModel
 from connectfour.pubsub import PubSub
-from connectfour.views.gui.view import GUIView
-from connectfour.views.logger.view import LogView
+from connectfour.gui.view import GUIView
+from connectfour.logger.view import LogView
 
 
 parser = argparse.ArgumentParser(

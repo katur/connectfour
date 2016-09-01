@@ -3,10 +3,10 @@ import tkMessageBox
 
 from connectfour.model import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
 from connectfour.pubsub import ModelAction, ViewAction
-from connectfour.views.gui import config
-from connectfour.views.gui.util import flash
-from connectfour.views.util import (
+from connectfour.util import (
     get_stripped_nonempty_string, get_positive_int)
+from connectfour.gui import config
+from connectfour.gui.util import flash
 
 
 class GUIView(object):
