@@ -46,8 +46,11 @@ class GameBoardForm extends React.Component {
   }
 
   _handleInput(e) {
+    let val = e.target.value;
+    val = val.replace(/[^\d]/g, '');
+
     this.setState({
-      [e.target.name]: e.target.value,
+      [e.target.name]: val,
     });
   }
 

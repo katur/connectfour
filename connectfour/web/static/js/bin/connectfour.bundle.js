@@ -32056,7 +32056,10 @@
 	  }, {
 	    key: '_handleInput',
 	    value: function _handleInput(e) {
-	      this.setState(_defineProperty({}, e.target.name, e.target.value));
+	      var val = e.target.value;
+	      val = val.replace(/[^\d]/g, '');
+
+	      this.setState(_defineProperty({}, e.target.name, val));
 	    }
 	  }, {
 	    key: '_handleSubmit',
