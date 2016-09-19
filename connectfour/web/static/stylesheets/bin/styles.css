@@ -50,7 +50,8 @@ body {
 
 body {
   font-family: "Lora", "Palatino Linotype", Palatino, serif;
-  font-size: 16px; }
+  font-size: 16px;
+  color: black; }
 
 h1 {
   font-family: "Raleway", sans-serif;
@@ -87,6 +88,8 @@ input {
   border: none;
   border-radius: 1px;
   background: gainsboro; }
+  input:disabled {
+    color: #8c8c8c; }
 
 button {
   padding: 8px 12px;

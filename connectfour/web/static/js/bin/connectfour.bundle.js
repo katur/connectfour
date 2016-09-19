@@ -32105,6 +32105,7 @@
 	              null,
 	              _react2.default.createElement('input', {
 	                type: 'text',
+	                disabled: gameInProgress,
 	                name: 'numRows',
 	                value: numRows,
 	                onChange: this._handleInput
@@ -32120,6 +32121,7 @@
 	              null,
 	              _react2.default.createElement('input', {
 	                type: 'text',
+	                disabled: gameInProgress,
 	                name: 'numColumns',
 	                value: numColumns,
 	                onChange: this._handleInput
@@ -32135,6 +32137,7 @@
 	              null,
 	              _react2.default.createElement('input', {
 	                type: 'text',
+	                disabled: gameInProgress,
 	                name: 'numToWin',
 	                value: numToWin,
 	                onChange: this._handleInput

@@ -80,6 +80,7 @@ class GameBoardForm extends React.Component {
             <dd>
               <input
                 type="text"
+                disabled={gameInProgress}
                 name="numRows"
                 value={numRows}
                 onChange={this._handleInput}
@@ -90,6 +91,7 @@ class GameBoardForm extends React.Component {
             <dd>
               <input
                 type="text"
+                disabled={gameInProgress}
                 name="numColumns"
                 value={numColumns}
                 onChange={this._handleInput}
@@ -100,6 +102,7 @@ class GameBoardForm extends React.Component {
             <dd>
               <input
                 type="text"
+                disabled={gameInProgress}
                 name="numToWin"
                 value={numToWin}
                 onChange={this._handleInput}
