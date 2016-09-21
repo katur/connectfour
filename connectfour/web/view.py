@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, join_room, emit
 from connectfour.model import (
     ConnectFourModel, DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN)
 from connectfour.pubsub import ModelAction, ViewAction, PubSub
-from connectfour.web.localsettings import DEBUG, SECRET_KEY
+from connectfour.web.localsettings import DEBUG
 
 ROOM_ID_LENGTH = 4
 
@@ -17,7 +17,6 @@ async_mode = None
 app = Flask(__name__)
 app.config.update(
     DEBUG=DEBUG,
-    SECRET_KEY=SECRET_KEY,
 )
 socketio = SocketIO(app, async_mode=async_mode)
 
