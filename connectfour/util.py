@@ -51,7 +51,7 @@ def get_positive_int(num, name='Number', max_value=None,
     return num
 
 
-def get_stripped_nonempty_string(s, name='String', max_len=None):
+def get_stripped_string(s, name='String', max_len=None, check_nonempty=False):
     """Return s if nonempty, raising an error otherwise.
 
     Args:
@@ -66,7 +66,7 @@ def get_stripped_nonempty_string(s, name='String', max_len=None):
     """
     s = s.strip()
 
-    if not len(s):
+    if check_nonempty and not len(s):
         raise ValueError('{} must be non-empty'.format(name))
 
     if max_len and len(s) > max_len:

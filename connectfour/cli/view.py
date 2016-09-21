@@ -4,7 +4,7 @@ from connectfour.model import (
     DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN, TryAgainReason)
 from connectfour.pubsub import ModelAction, ViewAction
 from connectfour.util import (
-    get_positive_int, get_int, get_stripped_nonempty_string)
+    get_positive_int, get_int, get_stripped_string)
 
 MAX_NAME_LENGTH = 50
 MAX_ROWS = 100
@@ -119,7 +119,7 @@ class CommandLineView(object):
 
     def _add_player(self):
         name = self._prompt_until_valid(
-            prompt='Player name: ', condition=get_stripped_nonempty_string,
+            prompt='Player name: ', condition=get_stripped_string,
             name='Name', max_len=50)
         is_ai = self._prompt_yes_no('Is AI?')
         self.pubsub.publish(

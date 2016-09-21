@@ -127,9 +127,6 @@ class ConnectFourModel(object):
         if self.game_in_progress:
             raise RuntimeError('Cannot add player while a game is in progress')
 
-        if not name:
-            raise ValueError('Name is required and must be non-empty')
-
         if color in self.used_colors:
             raise ValueError('Color {} is already used'.format(color))
 
@@ -137,6 +134,9 @@ class ConnectFourModel(object):
             color = self._get_unassigned_color()
             if not color:
                 raise ValueError('All colors taken')
+
+        if not name:
+            name = color.name
 
         self.used_colors.add(color)
         player = Player(name=name, color=color, is_ai=is_ai, pk=pk)

@@ -3,8 +3,7 @@ import tkMessageBox
 
 from connectfour.model import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
 from connectfour.pubsub import ModelAction, ViewAction
-from connectfour.util import (
-    get_stripped_nonempty_string, get_positive_int)
+from connectfour.util import get_stripped_string, get_positive_int
 from connectfour.gui import config
 from connectfour.gui.util import flash
 
@@ -131,9 +130,10 @@ class GUIView(object):
         invalid, a popup appears alerting the user to fix the error.
         """
         try:
-            name = get_stripped_nonempty_string(
+            name = get_stripped_string(
                 self.setup_frame.parse_player_entry(),
-                name='Name', max_len=config.MAX_NAME_LENGTH)
+                name='Name', max_len=config.MAX_NAME_LENGTH,
+                check_nonempty=True)
             is_ai = self.setup_frame.parse_is_ai_bool()
         except ValueError as e:
             tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
