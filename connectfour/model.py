@@ -62,7 +62,7 @@ class ConnectFourModel(object):
             ViewAction.play: self._play,
         }
 
-        for action, response in responses.iteritems():
+        for action, response in responses.items():
             self.pubsub.subscribe(action, response)
 
     def __repr__(self):

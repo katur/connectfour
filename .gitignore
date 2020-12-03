@@ -8,3 +8,6 @@ node_modules
 
 # Flask local config
 *localsettings.py
+
+# Python virtual environment
+connectfour-venv

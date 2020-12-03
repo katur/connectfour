@@ -13,7 +13,7 @@ The game logic is in Python.
 Python version is listed in [runtime.txt](runtime.txt).
 
 Package dependencies are listed in [requirements.txt](requirements.txt).
-To install (preferably in a new [virtualenv](https://virtualenv.pypa.io)):
+To install (preferably in a new venv):
 ```
 pip install -r requirements.txt
 ```
