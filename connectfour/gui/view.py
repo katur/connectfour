@@ -1,5 +1,4 @@
-import Tkinter as tk
-import tkMessageBox
+import tkinter as tk
 
 from connectfour.model import DEFAULT_ROWS, DEFAULT_COLUMNS, DEFAULT_TO_WIN
 from connectfour.pubsub import ModelAction, ViewAction
@@ -136,7 +135,7 @@ class GUIView(object):
                 check_nonempty=True)
             is_ai = self.setup_frame.parse_is_ai_bool()
         except ValueError as e:
-            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
+            tk.messagebox.showerror(config.ALERT_TEXT['title'], e)
             return
 
         self.pubsub.publish(
@@ -155,7 +154,7 @@ class GUIView(object):
         try:
             self._create_board()
         except ValueError as e:
-            tkMessageBox.showerror(config.ALERT_TEXT['title'], e)
+            tk.messagebox.showerror(config.ALERT_TEXT['title'], e)
             return
 
         # Move on to game frame
