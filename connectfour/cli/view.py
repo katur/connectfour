@@ -138,10 +138,10 @@ class CommandLineView(object):
     def _prompt_until_valid(self, prompt, condition, **kwargs):
         while True:
             try:
-                return condition(raw_input(prompt), **kwargs)
+                return condition(input(prompt), **kwargs)
             except ValueError as e:
                 self.out.write('Try again: {}\n'.format(e))
 
     def _prompt_yes_no(self, prompt):
-        response = raw_input('{} [y/n]: '.format(prompt)).strip()
+        response = input('{} [y/n]: '.format(prompt)).strip()
         return response in YES_RESPONSES
