@@ -46,7 +46,7 @@ class CommandLineView(object):
             ModelAction.game_draw: self.on_game_draw,
         }
 
-        for action, response in responses.iteritems():
+        for action, response in responses.items():
             self.pubsub.subscribe(action, response)
 
     ###########################
