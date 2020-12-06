@@ -21,7 +21,7 @@ import '../stylesheets/styles';
 // Connect to WebSocket //
 //////////////////////////
 
-const WS_URL = `http://${document.domain}:${location.port}`;
+const WS_URL = `${location.protocol}//${document.domain}:${location.port}`;
 window.ws = wsClient(WS_URL);
 
 
