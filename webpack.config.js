@@ -1,31 +1,34 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const WebpackNotifierPlugin = require('webpack-notifier');
-
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './connectfour/web/static/js/src/connectfour.js',
+  entry: path.resolve(__dirname, './connectfour/web/static/src/js/connectfour.js'),
   output: {
-    path: './connectfour/web/static/js/bin',
-    filename: 'connectfour.bundle.js'
-  },
-  module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      exclude: [/node_modules/],
-      loader: 'babel-loader'
-    }, {
-      test: /\.sass$/,
-      exclude: [/node_modules/],
-      loader: ExtractTextPlugin.extract('css!sass')
-    }]
+    path: path.resolve(__dirname, './connectfour/web/static/dist'),
   },
   plugins: [
-    new ExtractTextPlugin('../../stylesheets/bin/styles.css', {
-      allChunks: true
-    }),
-    new WebpackNotifierPlugin()
+    new MiniCssExtractPlugin(),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: [
+          'babel-loader'
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+    ],
+  },
   resolve: {
-    extensions: ['', '.webpack.js', '.web.js', '.js', '.jsx', '.sass']
-  }
+    extensions: ['.js', '.jsx', '.sass'],
+  },
 };

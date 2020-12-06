@@ -14,7 +14,7 @@ import {
 } from './actions';
 
 // This is where webpack compiles my sass to css
-import '../../stylesheets/src/styles';
+import '../stylesheets/styles';
 
 
 //////////////////////////
